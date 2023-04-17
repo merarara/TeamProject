@@ -4,9 +4,22 @@
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	
-<mapper namespace="com.project.springboot.productlist.IProductlistService">
-	<select id="productlist_allsch"
-		resultType="com.project.springboot.productlist.ProductlistDTO">
-		select * from product_list
+<mapper namespace="com.project.springboot.pservice.PListDao">
+	<!-- 페이지설정 -->
+	<select id="articlePageDao" resultType="_int">
+		select count(*) as total from product_list
+	</select>
+	
+	<!-- 리스트뷰 -->
+	<select id="listDao" resultType="com.project.springboot.productlist.ProductlistDTO">
+		select *
+		  from (
+		  		select rownum num, A.*
+		  		  from (
+		  		        select *
+		  		          from product_list
+		  		         ) A
+		  		  where rownum <![CDATA[<=]]> #{param1} ) B
+		  where B.num <![CDATA[>=]]> #{param2}
 	</select>
 </mapper>

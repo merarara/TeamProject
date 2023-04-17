@@ -32,11 +32,71 @@
 			<td>제조사 : ${ i.p_company }</td>
 		</tr>
 		</c:forEach>
-	</table>
+		<tr>
+			<td colspan="5">
+			<!-- 처음 -->
+			<c:choose>
+			<c:when test="${(page.curPage - 1) < 1 }">
+				[ &lt;&lt; ]
+			</c:when>
+			<c:otherwise>
+				<a href="/product/productlist.do?page=1">[ &lt;&lt; ]</a>
+			</c:otherwise>
+			</c:choose>
+			<!-- 이전 -->
+			<c:choose>
+			<c:when test="${(page.curPage - 1) < 1 }">
+				[ &lt; ]
+			</c:when>
+			<c:otherwise>
+				<a href="/product/productlist.do?page=${page.curPage - 1 }">[ &lt; ]</a>
+			</c:otherwise>
+			</c:choose>
+			
+			<!-- 개별 페이지 -->
+			<c:forEach var="fEach" begin="${page.startPage }" end="${page.endPage }" step="1">
+				<c:choose>
+				<c:when test="${page.curPage == fEach }">
+					[ ${fEach} ] &nbsp;
+				</c:when>
+				<c:otherwise>
+					<a href="/product/productlist.do?page=${fEach }">[ ${fEach } ]</a> &nbsp;
+				</c:otherwise>
+				</c:choose>
+			</c:forEach>
+			
+			<!-- 다움 -->
+			<c:choose>
+			<c:when test="${(page.curPage + 1) > page.totalPage }">
+				[ &gt; ]
+			</c:when>
+			<c:otherwise>
+				<a href="/product/productlist.do?page=${page.curPage + 1 }">[ &gt; ]</a>
+			</c:otherwise>
+			</c:choose>
+			<!-- 끝 -->
+			<c:choose>
+			<c:when test="${page.curPage == page.totalPage }">
+				[ &gt;&gt; ]
+			</c:when>
+			<c:otherwise>
+				<a href="/product/productlist.do?page=${page.totalPage }">[ &gt;&gt; ]</a>
+			</c:otherwise>
+			</c:choose>
+			</td>
+		</tr>
+	</table>s
+	totalCount : ${page.totalCount }<br>
+	listCount : ${page.listCount }<br>
+	totalPage : ${page.totalPage }<br>
+	curPage : ${page.curPage }<br>
+	pageCount : ${page.pageCount }<br>
+	startPage : ${page.startPage }<br>
+	endPage : ${page.endPage }<br>
 </div>
 <%@ include file="../footer.jsp" %>
 
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
