@@ -10,4 +10,10 @@ public class MainController {
 	public String home() {
 		return "home";
 	}
+	
+	@RequestMapping("/product/productlist.do")
+	public String productlist1() {
+		
+		return "product/productlist";
+	}
 }

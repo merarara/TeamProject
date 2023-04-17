@@ -12,18 +12,18 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 </head>
 <body>
-<footer class="bg-dark text-white py-3 position-fixed bottom-0 w-100">
+<footer class="bg-dark text-white py-3 position-fixed bottom-0 w-100" style="position: fixed; bottom: 0; left: 0; right: 0;">
   <div class="container">
     <div class="row">
-      <div class="col-4">
+      <div class="col-4 text-center">
         <h5>회사소개</h5>
         <p>회사에 대한 소개 내용을 입력하세요.</p>
       </div>
-      <div class="col-4">
+      <div class="col-4 text-center">
         <h5>연락처</h5>
         <p>회사의 연락처 정보를 입력하세요.</p>
       </div>
-      <div class="col-4">
+      <div class="col-4 text-center">
         <h5>찾아오는길</h5>
         <p>회사의 위치나 찾아오는 길에 대한 정보를 입력하세요.</p>
       </div>
