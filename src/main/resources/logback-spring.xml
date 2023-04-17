@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- 어펜더를 통해 설정된 패턴에 의해 로그를 출력한다. -->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+            <Pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative] [%thread] %-5level %logger{36} - %msg%n</Pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 설정1:sql로그는 info레벨에서는 출력되지 않고, debug레벨부터 출력된다. -->
+	<!-- 설정2:추가설정에서 info로 변경한다. -->
+	<logger name="com.edu.springboot" level="info" />
+	
+	<!-- 설정2에서 추가되는 부분(디펜던시 설정 필요) -->
+	<!-- log4j2-jdbc4-->
+	<logger name="jdbc" level="OFF" />
+    <logger name="jdbc.sqlonly" level="OFF" />
+    <logger name="jdbc.sqltiming" level="DEBUG" />
+    <logger name="jdbc.resultset" level="OFF" />
+    <logger name="jdbc.resultsettable" level="DEBUG" />
+    <logger name="jdbc.connection" level="OFF" />
+	<!-- log4j2-jdbc4 -->
+	
+	<!-- 설정1:루트는 info레벨로 출력한다. -->
+	<!-- 설정2:추가설정에서 off로 변경한다. -->
+	<root level="info">
+		<appender-ref ref="console" />
+	</root>
+</configuration>
