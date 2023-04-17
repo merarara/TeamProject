@@ -9,5 +9,7 @@
 <body>
 <%@ include file="./header.jsp" %>
 메인화면
+
+<%@ include file="./footer.jsp" %>
 </body>
 </html>
