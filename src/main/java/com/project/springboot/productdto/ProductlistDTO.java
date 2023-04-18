@@ -11,4 +11,5 @@ public class ProductlistDTO {
 	private int p_num;
 	private double p_rating;
 	private int p_count;
+	private java.sql.Date p_rdate;
 }
