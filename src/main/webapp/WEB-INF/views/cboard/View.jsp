@@ -16,23 +16,23 @@
         <col width="15%"/> <col width="*"/>
     </colgroup> 
     <tr>
-        <td>번호</td> <td>${ dto.idx }</td>
-        <td>작성자</td> <td>${ dto.name }</td>
+        <td>번호</td> <td>${ dto.C_num }</td>
+        <td>작성자</td> <td>${ dto.C_name }</td>
     </tr>
     <tr>
-        <td>작성일</td> <td>${ dto.postdate }</td>
-        <td>조회수</td> <td>${ dto.visitcount }</td>
+        <td>작성일</td> <td>${ dto.C_postdate }</td>
+        <td>조회수</td> <td>${ dto.C_visitcount }</td>
     </tr>
     <tr>
         <td>제목</td>
-        <td colspan="3">${ dto.title }</td>
+        <td colspan="3">${ dto.C_title }</td>
     </tr>
     <tr>
         <td>내용</td>
-        <td colspan="3" height="100">${ dto.content }
+        <td colspan="3" height="100">${ dto.C_content }
         <c:if test="${ isImage eq true }">
         	<p>
-        		<img src="../Uploads/${dto.sfile }"
+        		<img src="../Uploads/${dto.C_sfile }"
         			style="max-width:500px;" />
         	</p>
         </c:if></td>
@@ -44,17 +44,17 @@
         <td>          
  	       	<c:if test="${ not empty dto.ofile }">
         	${ dto.ofile }
-        	<a href="../mvcboard/download.do?ofile=${ dto.ofile }&sfile=${ dto.sfile }$idx=${ dto.idx }">[다운로드]</a>
+        	<a href="/cboard/download.do?C_ofile=${ dto.C_ofile }&C_sfile=${ dto.C_sfile }$C_num=${ dto.C_num }">[다운로드]</a>
         	</c:if>                            
         </td>
          <td>다운로드수</td>
-        <td>${ dto.downcount }</td>
+        <td>${ dto.C_downcount }</td>
     </tr> 
     <tr>
         <td colspan="4" align="center">
-            <button type="button" onclick="location.href='../mvcboard/pass.do?mode=edit&idx=${ param.idx }';">수정하기</button>
-            <button type="button" onclick="location.href='../mvcboard/pass.do?mode=delete&idx=${ param.idx }';">삭제하기</button>
-            <button type="button" onclick="location.href='../mvcboard/list.do';">목록 바로가기</button>
+            <button type="button" onclick="location.href='/cboard/pass.do?mode=edit&C_num=${ param.C_num }';">수정하기</button>
+            <button type="button" onclick="location.href='/cboard/pass.do?mode=delete&C_num=${ param.C_num }';">삭제하기</button>
+            <button type="button" onclick="location.href='/cboard/list.do';">목록 바로가기</button>
         </td>
     </tr>
 </table>

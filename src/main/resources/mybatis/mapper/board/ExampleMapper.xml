@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.project.springboot.mapper.ExampleMapper">
-    <!-- 쿼리 문장 위치 -->
-    <select id="selectExample" parameterType="int" resultType="com.project.springboot.dto.ExampleDto">
-        SELECT * FROM EXAMPLE_TABLE WHERE EXAMPLE_ID = #{exampleId}
-    </select>
-</mapper>

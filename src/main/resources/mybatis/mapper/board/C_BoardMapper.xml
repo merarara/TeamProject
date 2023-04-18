@@ -1,77 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.springboot.cboard.C_BoardDAO">
-<select id="selectCount" parameterType="java.util.Map" resultType="int">
-    SELECT COUNT(*) FROM board
-    <!-- 
-    <where>
-        <if test="searchword != null">
-            AND ${searchField} LIKE CONCAT('%', #{searchword}, '%')
-        </if>
-    </where>
-     -->
-</select>
 
-<select id="selectListPage" parameterType="java.util.Map" resultType="com.project.springboot.cboard.C_BoardDTO">
-    SELECT *
+    <select id="selectCount" resultType="int">
+        SELECT COUNT(*) FROM C_Board
+        <where>
+            <if test="searchword != null">
+                AND ${searchField} LIKE CONCAT('%', #{searchword}, '%')
+            </if>
+        </where> 
+    </select>
+
+    <select id="selectListPage" parameterType="java.util.Map" resultType="com.project.springboot.cboard.C_BoardDTO">
+        SELECT * FROM (
+    SELECT ROWNUM RNUM, A.*
     FROM (
-        SELECT rownum rnum, A.*
-        FROM (
-            SELECT * FROM board
-            <where>
-                <if test="searchword != null">
-                    AND ${searchField} LIKE CONCAT('%', #{searchword}, '%')
-                </if>
-            </where>
-            ORDER BY num DESC
-        ) A
-        WHERE rownum &lt;= #{end}
-    ) B
-    WHERE rnum &gt;= #{start}
-</select>
+        SELECT * FROM C_Board
+        ORDER BY C_num DESC
+    ) A
+) B
+WHERE B.RNUM BETWEEN #{start} AND #{end}
+    </select>
 
-<insert id="insertWrite" parameterType="com.project.springboot.cboard.C_BoardDTO" useGeneratedKeys="true" keyProperty="num">
-    INSERT INTO board (
-        num, writer, subject, content, reg_date, ip, hit, filepath, filename
+    <insert id="insertWrite" parameterType="com.project.springboot.cboard.C_BoardDTO">
+        INSERT INTO C_Board (
+            C_title, C_content, C_visitcount, C_postdate, U_ID, U_Nick, C_ofile, C_sfile, C_downcount, C_Commend
+        )
+        VALUES (
+            #{C_title}, #{C_content}, #{C_visitcount}, #{C_postdate}, #{U_ID}, #{U_Nick}, #{C_ofile}, #{C_sfile}, #{C_downcount}, #{C_Commend}
+        )
+    </insert>
+
+    <update id="updateHit" parameterType="int">
+        UPDATE C_Board
+        SET C_visitcount = C_visitcount + 1
+        WHERE C_num = #{C_num}
+    </update>
+
+    <update id="updateBoard" parameterType="com.project.springboot.cboard.C_BoardDTO">
+        UPDATE C_Board
+        SET C_title = #{C_title},
+            C_content = #{C_content},
+            C_ofile = #{C_ofile},
+            C_sfile = #{C_sfile}
+        WHERE C_num = #{C_num}
+    </update>
+
+    <delete id="deleteBoard" parameterType="int">
+        DELETE FROM C_Board
+        WHERE C_num = #{C_num}
+    </delete>
+
+ <insert id="insertBoard" parameterType="com.project.springboot.cboard.C_BoardDTO">
+    INSERT INTO C_Board (
+        C_title, C_content, C_ofile, C_sfile, U_ID, C_postdate, C_downcount, C_pass, C_visitcount
     )
     VALUES (
-        board_seq.NEXTVAL, #{writer}, #{subject}, #{content}, SYSDATE, #{ip}, 0, #{filepath}, #{filename}
+        #{C_title}, #{C_content}, #{C_ofile}, #{C_sfile}, #{U_ID}, #{C_postdate}, #{C_downcount}, #{C_pass}, #{C_visitcount}
     )
 </insert>
 
-<select id="selectView" parameterType="int" resultType="com.project.springboot.cboard.C_BoardDTO">
-    SELECT *
-    FROM board
-    WHERE num = #{num}
-</select>
 
-<update id="updateHit" parameterType="int">
-    UPDATE board
-    SET hit = hit + 1
-    WHERE num = #{num}
-</update>
-
-<update id="updateBoard" parameterType="com.project.springboot.cboard.C_BoardDTO">
-    UPDATE board
-    SET subject = #{subject},
-        content = #{content},
-        filepath = #{filepath},
-        filename = #{filename}
-    WHERE num = #{num}
-</update>
-
-<delete id="deleteBoard" parameterType="int">
-    DELETE FROM board
-    WHERE num = #{num}
-</delete>
-
-<insert id="insertBoard" parameterType="com.project.springboot.cboard.C_BoardDTO">
-    INSERT INTO board (
-        name, pass, mail, title, content, oFile, sFile
-    )
-    VALUES (
-        #{name}, #{pass}, #{mail}, #{subject}, #{content}, #{ofile}, #{sfile}
-    )
-</insert>
 </mapper>
-<!-- C_BoardMapper.xml -->

@@ -18,7 +18,7 @@ public class ListController {
 
 	
     @Autowired
-    private C_BoardDAO dao;
+    C_BoardDAO dao;
 
     @Value("${posts_per_page}")
     private int pageSize;
@@ -47,7 +47,6 @@ public class ListController {
         map.put("end", end);
 
         List<C_BoardDTO> boardLists = dao.selectListPage(map);
-        dao.close();
 
         String pagingImg = BoardPage.pagingStr(totalCount, pageSize, blockPage, pageNum, "/list");
         map.put("pagingImg", pagingImg);

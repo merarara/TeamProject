@@ -11,22 +11,24 @@ import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface C_BoardDAO {
-    int selectCount(Map<String, Object> map);
+    
     List<C_BoardDTO> selectListPage(Map<String,Object> map);
-    @Select("SELECT * FROM C_BOARD WHERE IDX = #{idx}")
-	public C_BoardDTO selectView(@Param("idx") String idx);
-    void close();
+    @Select("SELECT * FROM C_BOARD WHERE C_NUM = #{C_num}")
+	public C_BoardDTO selectView(@Param("C_num") String C_num);
     
-    @Update("UPDATE board SET visitcount = visitcount+1 WHERE idx=#{idx}")
-	public void updateVisitCount(@Param("idx") String idx);
     
- public List<C_BoardDTO> selectAll();
+    @Update("UPDATE board SET C_visitcount = C_visitcount+1 WHERE C_num=#{C_num}")
+	public void updateVisitCount(@Param("C_num") String C_num);
     
-    public void insertWrite(C_BoardDTO dto);
+    public List<C_BoardDTO> selectAll();
+    
+ 	public int selectCount(Map<String, Object> map);
+    
+ 	public void insertWrite(C_BoardDTO dto);
     
     public void updateBoard(C_BoardDTO dto);
     
-    public void deleteBoard(@Param("idx") String idx, @Param("pass") String pass);
+    public void deleteBoard(@Param("C_num") String C_num, @Param("C_pass") String C_pass);
     
     public int selectListCount(HashMap<String, Object> hm);
     

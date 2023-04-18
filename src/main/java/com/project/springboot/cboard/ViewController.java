@@ -16,14 +16,14 @@ public class ViewController {
 	@Autowired
 	private C_BoardDAO dao;
 
-	@GetMapping("/templates/view/{idx}")
-	public ModelAndView view(@PathVariable("idx") String idx, HttpServletRequest request) {
-		dao.updateVisitCount(idx);
-		C_BoardDTO dto = dao.selectView(idx);
+	@GetMapping("/cboard/View/{C_num}")
+	public ModelAndView view(@PathVariable("C_num") String C_num, HttpServletRequest request) {
+		dao.updateVisitCount(C_num);
+		C_BoardDTO dto = dao.selectView(C_num);
 		
-		dto.setContent(dto.getContent().replace("\r\n", "<br/>"));
+		dto.setC_content(dto.getC_content().replace("\r\n", "<br/>"));
 		
-		String ext=null, fileName=dto.getSfile();
+		String ext=null, fileName=dto.getC_ofile();
 		if(fileName!=null) {
 			ext = fileName.substring(fileName.lastIndexOf(".")+1);			
 		}
@@ -35,7 +35,7 @@ public class ViewController {
 		}
 		request.setAttribute("isImage", isImage);
 		request.setAttribute("dto", dto);
-		return new ModelAndView("/resources/templates/view.html");
+		return new ModelAndView("/cboard/View.do");
 	}
 
 }

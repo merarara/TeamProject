@@ -1,17 +1,13 @@
 package com.project.springboot.cboard;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,13 +23,14 @@ public class WriteController {
     @Autowired
     private C_BoardDAO dao;
     
-    @GetMapping("/mvcboard/write")
+    @GetMapping("/cboard/Write")
     public String writeForm() {
-        return "/14MVCBoard/Write";
+        return "/cboard/Write";
     }
     
-    @PostMapping("/mvcboard/write/do")
-    public String write(C_BoardDTO dto, @RequestParam(name="ofile", required=false) MultipartFile multipartFile, RedirectAttributes redirectAttrs) {
+    @GetMapping("/cboard/Write.do")
+    @Transactional
+    public String write(C_BoardDTO dto, @RequestParam(name="C_ofile", required=false) MultipartFile multipartFile, RedirectAttributes redirectAttrs) {
         try {
             if(multipartFile != null && !multipartFile.isEmpty()) {
                 String fileName = multipartFile.getOriginalFilename();
@@ -43,14 +40,15 @@ public class WriteController {
                 File oldFile = new File(saveDirectory + File.separator + fileName); 
                 File newFile = new File(saveDirectory + File.separator + newFileName); 
                 oldFile.renameTo(newFile);
-                dto.setOfile(fileName);
-                dto.setSfile(newFileName);
+                dto.setC_ofile(fileName);
+                dto.setC_sfile(newFileName);
             }
             dao.insertWrite(dto);
-            return "redirect:/mvcboard/list";
+            return "redirect:/cboard/List";
         } catch (Exception e) {
             redirectAttrs.addFlashAttribute("errorMessage", "첨부파일이 제한 용량을 초과합니다.");
-            return "redirect:/mvcboard/write";
+            return "redirect:/cboard/Write";
         }
     }
+
 }
