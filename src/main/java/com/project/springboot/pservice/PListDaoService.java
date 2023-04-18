@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.project.springboot.ppageinfo.PPageInfo;
-import com.project.springboot.productlist.ProductlistDTO;
+import com.project.springboot.productdto.ProductlistDTO;
 
 @Service
 public class PListDaoService implements IPListDaoService {

@@ -11,7 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.project.springboot.ppageinfo.PPageInfo;
-import com.project.springboot.productlist.ProductlistDTO;
+import com.project.springboot.productdto.ProductlistDTO;
 import com.project.springboot.pservice.IPListDaoService;
 
 @Controller

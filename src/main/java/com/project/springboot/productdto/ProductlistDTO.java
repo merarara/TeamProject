@@ -1,4 +1,4 @@
-package com.project.springboot.productlist;
+package com.project.springboot.productdto;
 
 import lombok.Data;
 

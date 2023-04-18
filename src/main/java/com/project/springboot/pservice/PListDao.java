@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.project.springboot.productlist.ProductlistDTO;
+import com.project.springboot.productdto.ProductlistDTO;
 
 @Mapper
 public interface PListDao {
