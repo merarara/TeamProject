@@ -9,5 +9,8 @@
 <body>
 <%@ include file="./header.jsp" %>
 메인화면
+<br>
+<a href="/cboard/List.do">List</a>
+
 </body>
 </html>

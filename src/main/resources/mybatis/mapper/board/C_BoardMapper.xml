@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.springboot.cboard.C_BoardDAO">
+<select id="selectCount" parameterType="java.util.Map" resultType="int">
+    SELECT COUNT(*) FROM board
+    <!-- 
+    <where>
+        <if test="searchword != null">
+            AND ${searchField} LIKE CONCAT('%', #{searchword}, '%')
+        </if>
+    </where>
+     -->
+</select>
+
+<select id="selectListPage" parameterType="java.util.Map" resultType="com.project.springboot.cboard.C_BoardDTO">
+    SELECT *
+    FROM (
+        SELECT rownum rnum, A.*
+        FROM (
+            SELECT * FROM board
+            <where>
+                <if test="searchword != null">
+                    AND ${searchField} LIKE CONCAT('%', #{searchword}, '%')
+                </if>
+            </where>
+            ORDER BY num DESC
+        ) A
+        WHERE rownum &lt;= #{end}
+    ) B
+    WHERE rnum &gt;= #{start}
+</select>
+
+<insert id="insertWrite" parameterType="com.project.springboot.cboard.C_BoardDTO" useGeneratedKeys="true" keyProperty="num">
+    INSERT INTO board (
+        num, writer, subject, content, reg_date, ip, hit, filepath, filename
+    )
+    VALUES (
+        board_seq.NEXTVAL, #{writer}, #{subject}, #{content}, SYSDATE, #{ip}, 0, #{filepath}, #{filename}
+    )
+</insert>
+
+<select id="selectView" parameterType="int" resultType="com.project.springboot.cboard.C_BoardDTO">
+    SELECT *
+    FROM board
+    WHERE num = #{num}
+</select>
+
+<update id="updateHit" parameterType="int">
+    UPDATE board
+    SET hit = hit + 1
+    WHERE num = #{num}
+</update>
+
+<update id="updateBoard" parameterType="com.project.springboot.cboard.C_BoardDTO">
+    UPDATE board
+    SET subject = #{subject},
+        content = #{content},
+        filepath = #{filepath},
+        filename = #{filename}
+    WHERE num = #{num}
+</update>
+
+<delete id="deleteBoard" parameterType="int">
+    DELETE FROM board
+    WHERE num = #{num}
+</delete>
+
+<insert id="insertBoard" parameterType="com.project.springboot.cboard.C_BoardDTO">
+    INSERT INTO board (
+        name, pass, mail, title, content, oFile, sFile
+    )
+    VALUES (
+        #{name}, #{pass}, #{mail}, #{subject}, #{content}, #{ofile}, #{sfile}
+    )
+</insert>
+</mapper>
+<!-- C_BoardMapper.xml -->
