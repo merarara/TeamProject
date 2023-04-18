@@ -24,16 +24,16 @@ public class PListDaoService implements IPListDaoService {
 	/* 상품리스트 페이징 변수 end */
 	
 	// 상품리스트 service & dao
-		@Override
-		public ArrayList<ProductlistDTO> plist(int curpage)
-		{
-			int nStart = (curpage - 1) * plistPsize + 1;
-			int nEnd = (curpage - 1) * plistPsize + plistPsize;
-			
-			ArrayList<ProductlistDTO> dto = dao.listDao(nEnd, nStart);
+	@Override
+	public ArrayList<ProductlistDTO> plist(int curpage)
+	{
+		int nStart = (curpage - 1) * plistPsize + 1;
+		int nEnd = (curpage - 1) * plistPsize + plistPsize;
+		
+		ArrayList<ProductlistDTO> dto = dao.listDao(nEnd, nStart);
 
-			return dto;
-		}
+		return dto;
+	}
 	
 	// 페이지 설정 service & dao
 	@Override

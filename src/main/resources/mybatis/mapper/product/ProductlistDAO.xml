@@ -11,7 +11,7 @@
 	</select>
 	
 	<!-- 리스트뷰 -->
-	<select id="listDao" resultType="com.project.springboot.productlist.ProductlistDTO">
+	<select id="listDao" resultType="com.project.springboot.productdto.ProductlistDTO">
 		select *
 		  from (
 		  		select rownum num, A.*
