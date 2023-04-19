@@ -39,6 +39,7 @@ public class SecurityConfig {
 			.antMatchers("/user/**").permitAll()
 			.antMatchers("/member/**").hasAnyRole("USER", "ADMIN")
             .antMatchers("/admin/**").hasRole("ADMIN")
+            .antMatchers("/faq/**").permitAll()
             // 게시판
             .antMatchers("/cboard/**").permitAll()
             // 상품
