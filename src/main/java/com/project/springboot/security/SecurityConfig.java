@@ -17,12 +17,13 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 
 @Configuration
 @EnableWebSecurity
-
 public class SecurityConfig {
 	
 	@Autowired
 	public AuthenticationFailureHandler authenticationFailureHandler;
 
+	
+	
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration
 			authConfiguration) throws Exception {
@@ -37,7 +38,7 @@ public class SecurityConfig {
 			.antMatchers("/css/**","/js/**","/productimgs/**").permitAll()
 			.antMatchers("/guest/**").permitAll()
 			.antMatchers("/user/**").permitAll()
-			.antMatchers("/member/**").hasAnyRole("USER", "ADMIN")
+			.antMatchers("/member/**").hasAnyRole("USESR", "ADMIN")
             .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/faq/**").permitAll()
             // 게시판
@@ -48,15 +49,16 @@ public class SecurityConfig {
 			.anyRequest().authenticated();
 		
 		httpSecurity.formLogin()
-			.loginPage("/myLogin.do") 	// default : /login
-//			.loginPage("/main.jsp")    
-	        .loginProcessingUrl("/myLoginAction.do")
-	        .defaultSuccessUrl("/myLogin.do")
-	        //.failureUrl("/myError.do") 		// default : /login?error
-	        .failureHandler(authenticationFailureHandler) 
-	        .usernameParameter("my_id")		// default : username
-	        .passwordParameter("my_pass") 	// default : password
-        	.permitAll();
+	    .loginPage("/myLogin.do") // default: /login
+	    // .loginPage("/main.jsp")
+	    .loginProcessingUrl("/myLoginAction.do")
+	    .defaultSuccessUrl("/myLogin.do")
+	    // .failureUrl("/myError.do") // default: /login?error
+	    .failureHandler(authenticationFailureHandler)
+	    .usernameParameter("my_id") // default: username
+	    .passwordParameter("my_pass") // default: password
+	    .permitAll();
+
 		
 		httpSecurity.logout()
 			.logoutUrl("/myLogout.do") 			// default : /logout
@@ -110,6 +112,7 @@ public class SecurityConfig {
     }
     
     // passwordEncoder() 추가
+
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }

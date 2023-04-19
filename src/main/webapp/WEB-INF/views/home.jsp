@@ -14,7 +14,7 @@
 
 <%@ include file="./header.jsp" %>	
 <div id="content">
-
+<a href="/member/test.do">ssss</a>
 
 </div>
 <%@ include file="./footer.jsp" %>

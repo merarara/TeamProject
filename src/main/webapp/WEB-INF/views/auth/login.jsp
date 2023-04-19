@@ -6,12 +6,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="/css/content.css">
 </head>
 <body>
-	<h2>로그인 폼</h2>
-	<div style="width: 600px;" class="border border-2 border-success rounded p-5">
-	
+<%@ include file="../header.jsp" %>	
+<div id="content">
 	<c:if test="${empty user_id }" var="loginResult">
 		<c:if test="${param.error != null}">
 		<p>
@@ -35,11 +37,22 @@
 			</div>
 		</form>
 	</c:if>
-	<c:if test="${not loginResult }">
-		 ${user_id } 님, 좋은 아침입니다. <br />
-		<a href="/">Root</a>
-		<a href="/myLogout.do">Logout</a>	
-	</c:if>	
-	</div>
+
+<c:if test="${not empty user_id }">
+    <script type="text/javascript">
+      alert("로그인에 성공하였습니다.");
+      location.href = "/";
+    </script>
+</c:if>
+	
+</div>
+
+	
+<%@ include file="../footer.jsp" %>
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
 </body>
 </html>
