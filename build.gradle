@@ -22,6 +22,15 @@ repositories {
 }
 
 dependencies {
+	// 리캡챠
+	implementation 'net.tanesha.recaptcha4j:recaptcha4j:0.0.7'
+	
+	//	리캡차 사용을 위한 json
+	implementation 'javax.json:javax.json-api:1.1.2'
+	implementation 'org.glassfish:javax.json:1.1'
+	// 시큐리티 설정
+	implementation 'org.springframework.security:spring-security-taglibs'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.0'

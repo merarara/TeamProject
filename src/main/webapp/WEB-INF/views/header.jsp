@@ -10,7 +10,7 @@
 	    <div class="collapse navbar-collapse" id="navbarColor01">
 	      <ul class="navbar-nav me-auto">
 	        <li class="nav-item">
-	          <a class="nav-link" href="#">로그인</a>
+	          <a class="nav-link" href="/user/main.do">로그인</a>
 	        </li>
 	        <li class="nav-item">
 	          <a class="nav-link" href="/product/productlist.do">판매제품</a>
@@ -22,7 +22,7 @@
 	          <a class="nav-link" href="/cboard/List.do">커뮤니티</a>
 	        </li>
 	        <li class="nav-item">
-	          <a class="nav-link" href="#">FAQ</a>
+	          <a class="nav-link" href="/faq/faq_main.do">FAQ</a>
 	        </li>
 	      </ul>
 	      <form class="d-flex ml-auto">
@@ -33,4 +33,3 @@
 	  </div>
 	</nav>
 </div>
-
