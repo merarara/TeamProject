@@ -16,5 +16,5 @@ public interface FBoard_Service {
 	public int insert(FBoard_DTO fBoardDTO);
 	public FBoard_DTO selectOne(FBoard_DTO fBoardDTO);
 	public int update(FBoard_DTO fBoardDTO);
-//	public int delete(FBoard_DTO fBoardDTO);
+	public int delete(int f_num);
 }

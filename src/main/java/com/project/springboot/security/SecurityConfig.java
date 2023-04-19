@@ -40,6 +40,7 @@ public class SecurityConfig {
 			.antMatchers("/member/**").hasAnyRole("USER", "ADMIN")
             .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/faq/**").permitAll()
+            .antMatchers("/aboard/**").permitAll()
             // 게시판
             .antMatchers("/cboard/**").permitAll()
             // 상품

@@ -16,7 +16,7 @@
 	          <a class="nav-link" href="/product/productlist.do">판매제품</a>
 	        </li>
 	        <li class="nav-item">
-	          <a class="nav-link" href="#">공지사항</a>
+	          <a class="nav-link" href="/aboard/aboard_main.do">공지사항</a>
 	        </li>
 	        <li class="nav-item">
 	          <a class="nav-link" href="/cboard/List.do">커뮤니티</a>

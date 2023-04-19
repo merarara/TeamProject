@@ -5,6 +5,22 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.project.springboot.faq">
+<mapper namespace="com.project.springboot.jdbc.ABoard_Service">
+
+
+
+<select id="select" 
+	parameterType="com.project.springboot.jdbc.ABoard_DTO"
+	resultType="com.project.springboot.jdbc.ABoard_DTO"> 
+	select * from A_Board
+</select>
+
+
+
+
+
+
+
+
 
 </mapper>  
