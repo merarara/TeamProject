@@ -52,7 +52,7 @@
         opacity: 0.5;
         cursor: default;
     }
-    /* 사이드 메뉴 스타일 */
+    /* 간편선택 사이드 메뉴 스타일 */
     .side-menu {
         width: 200px;
         height: 400px;
@@ -85,6 +85,41 @@
     }
 
     .side-menu a:hover {
+        background-color: #e9ecef;
+    }
+    /* 구매가이드 사이드 메뉴 스타일 */
+    .side-menu2 {
+        width: 200px;
+        height: 400px;
+        background-color: #f8f9fa;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: dotted 1px #000;
+        padding: 20px;
+    }
+
+    .side-menu2 h5 {
+        margin-bottom: 20px;
+    }
+
+    .side-menu2 hr {
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border: none;
+        border-top: 1px solid #000;
+    }
+
+    .side-menu2 a {
+        border: none;
+        text-align: center;
+        padding: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .side-menu2 a:hover {
         background-color: #e9ecef;
     }
 </style>
@@ -229,8 +264,20 @@
 				</tr>
 			</table>
 		</div>
-		<div class="col-md-2">
-			이미지 박스
+		<div class="col-md-2 d-flex align-items-center justify-content-center">
+			<div class="side-menu">
+		        <h5>간편선택</h5>
+		        <hr>
+		        <div style="width: 100%; display: flex; flex-direction: column;">
+		            <a href="#" class="btn btn-link text-dark">노트북 전체</a>
+		            <hr> 
+		            <a href="#" class="btn btn-link text-dark">ASUS</a>
+		            <hr>
+		            <a href="#" class="btn btn-link text-dark">APPLE</a>
+		            <hr>
+		            <a href="#" class="btn btn-link text-dark">DELL</a>
+		        </div>  
+		    </div>
 		</div>
 	</div>
 </div>
