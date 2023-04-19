@@ -34,11 +34,16 @@ public class SecurityConfig {
 			throws Exception {
 		httpSecurity.authorizeRequests()
 			.antMatchers("/").permitAll()
-			.antMatchers("/css/**","/js/**","/images/**").permitAll()
+			.antMatchers("/css/**","/js/**","/productimgs/**").permitAll()
 			.antMatchers("/guest/**").permitAll()
 			.antMatchers("/user/**").permitAll()
 			.antMatchers("/member/**").hasAnyRole("USER", "ADMIN")
             .antMatchers("/admin/**").hasRole("ADMIN")
+            // 게시판
+            .antMatchers("/cboard/**").permitAll()
+            // 상품
+            .antMatchers("/product/**").permitAll()
+            .antMatchers("/static/**").permitAll()
 			.anyRequest().authenticated();
 		
 		httpSecurity.formLogin()
