@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -18,10 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class WriteController {
     
     @Value("${file.upload-dir}")
-    private String saveDirectory;
+    String saveDirectory;
     
     @Autowired
-    private C_BoardDAO dao;
+    C_BoardDAO dao;
     
     @GetMapping("/cboard/Write")
     public String writeForm() {
@@ -30,7 +29,7 @@ public class WriteController {
     
     @GetMapping("/cboard/Write.do")
     @Transactional
-    public String write(C_BoardDTO dto, @RequestParam(name="C_ofile", required=false) MultipartFile multipartFile, RedirectAttributes redirectAttrs) {
+    public String write(C_BoardDTO dto, @RequestParam(name="c_ofile", required=false) MultipartFile multipartFile, RedirectAttributes redirectAttrs) {
         try {
             if(multipartFile != null && !multipartFile.isEmpty()) {
                 String fileName = multipartFile.getOriginalFilename();

@@ -14,12 +14,12 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ViewController {
 	@Autowired
-	private C_BoardDAO dao;
+	C_BoardDAO dao;
 
-	@GetMapping("/cboard/View/{C_num}")
-	public ModelAndView view(@PathVariable("C_num") String C_num, HttpServletRequest request) {
-		dao.updateVisitCount(C_num);
-		C_BoardDTO dto = dao.selectView(C_num);
+	@GetMapping("/cboard/View/{c_num}")
+	public ModelAndView view(@PathVariable("c_num") String c_num, HttpServletRequest request) {
+		dao.updateVisitCount(c_num);
+		C_BoardDTO dto = dao.selectView(c_num);
 		
 		dto.setC_content(dto.getC_content().replace("\r\n", "<br/>"));
 		

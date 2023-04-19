@@ -8,7 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.springboot.utils.BoardPage;
@@ -26,12 +27,12 @@ public class ListController {
     @Value("${pages_per_block}")
     private int blockPage;
 
-    @GetMapping("/cboard/List.do")
+    @RequestMapping(value = "/cboard/List.do", method = RequestMethod.GET)
     public String list(@RequestParam(name = "searchField", required = false) String searchField,
-                       @RequestParam(name = "searchword", required = false) String searchword,
-                       @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
-                       Model model) {
-
+    					@RequestParam(name = "searchword", required = false) String searchword,
+    					@RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
+    						Model model) {
+    	
         Map<String, Object> map = new HashMap<>();
 
         if (searchword != null) {
@@ -59,4 +60,6 @@ public class ListController {
 
         return "cboard/List";
     }
+
+    
 }

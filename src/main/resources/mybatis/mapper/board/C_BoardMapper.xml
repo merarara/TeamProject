@@ -27,7 +27,7 @@ WHERE B.RNUM BETWEEN #{start} AND #{end}
             C_title, C_content, C_visitcount, C_postdate, U_ID, U_Nick, C_ofile, C_sfile, C_downcount, C_Commend
         )
         VALUES (
-            #{C_title}, #{C_content}, #{C_visitcount}, #{C_postdate}, #{U_ID}, #{U_Nick}, #{C_ofile}, #{C_sfile}, #{C_downcount}, #{C_Commend}
+            #{C_title, jdbcType=VARCHAR}, #{C_content, jdbcType=VARCHAR}, #{C_visitcount}, #{C_postdate, jdbcType=VARCHAR}, #{U_ID, jdbcType=VARCHAR}, #{U_Nick}, #{C_ofile}, #{C_sfile}, #{C_downcount}, #{C_Commend}
         )
     </insert>
 
@@ -51,7 +51,7 @@ WHERE B.RNUM BETWEEN #{start} AND #{end}
         WHERE C_num = #{C_num}
     </delete>
 
- <insert id="insertBoard" parameterType="com.project.springboot.cboard.C_BoardDTO">
+    <insert id="insertBoard" parameterType="com.project.springboot.cboard.C_BoardDTO">
     INSERT INTO C_Board (
         C_title, C_content, C_ofile, C_sfile, U_ID, C_postdate, C_downcount, C_pass, C_visitcount
     )
