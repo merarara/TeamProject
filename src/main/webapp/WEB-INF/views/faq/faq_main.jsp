@@ -1,62 +1,52 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-
-
-<meta charset="UTF-8">
-
-
-
-	<title>질문과 답변</title>
-	<style>
-		.answer {
-			display: none;
-		}
-		.question {
-			cursor: pointer;
-		}
-	</style>
-
-
-
-
-
-</head>
-<body>
-
-
-
-
-
-
-
-
-
-
-
-	<h1>질문과 답변</h1>
-	<div class="question" onclick="toggleAnswer(1)">질문 1. 이것은 무엇인가요?</div>
-	<div class="answer" id="answer1">이것은 HTML 코드 예시입니다. <a href="edit_question.html?id=1">질문 수정</a></div>
-	<div class="question" onclick="toggleAnswer(2)">질문 2. 어떻게 작동하나요?</div>
-	<div class="answer" id="answer2">질문을 클릭하면 해당 질문에 대한 답변이 펼쳐집니다. <a href="edit_question.html?id=2">질문 수정</a></div>
-	
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
 	<script>
-		function toggleAnswer(id) {
-			var answer = document.getElementById("answer" + id);
-			if (answer.style.display === "none") {
-				answer.style.display = "block";
+		function toggleContent(id) {
+			var content = document.getElementById("content-" + id);
+			if (content.style.display === "none") {
+				content.style.display = "block";
 			} else {
-				answer.style.display = "none";
+				content.style.display = "none";
 			}
 		}
 	</script>
-
-
-
-
-
-
+</head>
+<body>
+	<h2>fboard리스트</h2>
+	<table border="1">
+		<tr>
+			<th>F_num</th>
+			<th>F_title</th>
+			<th>F_content</th>
+			<th>U_ID</th>
+			<th></th>
+		</tr>
+		<c:forEach items="${FBoardList}" var="row" varStatus="loop">
+			<tr>
+				<td>${row.f_num}</td>
+				<td>
+					<a href="javascript:void(0);" onclick="toggleContent(${row.f_num});">${row.f_title}</a>
+				</td>
+				<td>
+					<div id="content-${row.f_num}" style="display: none;">
+						${row.f_content}
+					</div>
+				</td>
+				<td>${row.u_id}</td>
+				<td>
+					<%--  <a href="edit.do?id=${row.id }">수정</a> --%>
+					<%--  <a href="delete.do?id=${row.id }">삭제</a>  --%>
+					<%--  <a href="javascript:void(0);" onclick="memberDel('${row.id }');">삭제</a> --%>
+				</td>
+			</tr>
+		</c:forEach>
+	</table>
+	<a href="faq_regist.do">등록</a>
+	<a href="faq_edit.do">수정하기</a>
 </body>
 </html>
