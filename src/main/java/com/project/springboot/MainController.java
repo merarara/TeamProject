@@ -10,8 +10,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.project.springboot.cboard.ListController;
 
 @Controller
+<<<<<<< HEAD
 public class MainController {
 
+=======
+public class MainController {	
+	
+>>>>>>> 345f146571b02e0857fbd67d6575edec0ebfefd4
 	@RequestMapping("/")
 	public String home() {
 		return "home";

@@ -1,19 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-	<!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-</head>
-<body>
-	
+<div id="wrap">
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<<<<<<< HEAD
   <div class="container-fluid">
     <a class="navbar-brand" href="#">TJoeun NoteBook</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,3 +47,36 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
 </html>
+=======
+	  <div class="container-fluid">
+	    <a class="navbar-brand" href="/">TJoeun NoteBook</a>
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarColor01">
+	      <ul class="navbar-nav me-auto">
+	        <li class="nav-item">
+	          <a class="nav-link" href="#">로그인</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" href="/product/productlist.do">판매제품</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" href="#">공지사항</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" href="#">커뮤니티</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" href="#">FAQ</a>
+	        </li>
+	      </ul>
+	      <form class="d-flex ml-auto">
+	        <input class="form-control me-sm-2" type="search" placeholder="Search">
+	        <button class="btn btn-secondary my-2 my-sm-0" type="submit">검색</button>
+	      </form>
+	    </div>
+	  </div>
+	</nav>
+</div>
+>>>>>>> 345f146571b02e0857fbd67d6575edec0ebfefd4
