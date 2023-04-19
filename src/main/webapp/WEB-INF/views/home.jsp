@@ -11,13 +11,6 @@
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 </head>
 <body>
-<<<<<<< HEAD
-<%@ include file="./header.jsp" %>
-메인화면
-<br>
-<a href="/cboard/List.do">List</a>
-
-=======
 
 <%@ include file="./header.jsp" %>	
 <div id="content">
@@ -29,6 +22,5 @@
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
->>>>>>> 345f146571b02e0857fbd67d6575edec0ebfefd4
 </body>
 </html>
