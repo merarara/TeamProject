@@ -101,10 +101,6 @@
         padding: 20px;
     }
 
-    .side-menu2 h5 {
-        margin-bottom: 20px;
-    }
-
     .side-menu2 hr {
         width: 100%;
         margin-top: 10px;
@@ -116,7 +112,6 @@
     .side-menu2 a {
         border: none;
         text-align: center;
-        padding: 10px;
         transition: all 0.3s ease;
     }
 
@@ -197,7 +192,7 @@
 							        <c:set var="ratingImgPath" value="/productimgs/5.png" />
 							    </c:otherwise>
 							</c:choose>
-							<img src="${ratingImgPath}" alt="별점" style="width: 80px; height: 18px;"/>
+							<img src="${ratingImgPath}" alt="별점" style="width: 80px; height: 18px;"/> ${ i.p_rating }
 							<span style="display: block; text-align: right; font-size: 16px;">
 							    등록일 : ${fn:substring(i.p_rdate, 0, 7)}
 							</span>
@@ -269,8 +264,8 @@
 			<div class="side-menu2">
 		        <img src="/productimgs/cpuNumbering.jpg"/>
 		        <b>쇼핑가이드</b>
-		        > 한눈에 보는 노트북 CPU넘버링 가이드 <br><hr>
-		        > 대학생 새내기 주목! 슬기로운 대학생활 위한 최고의 노트북은? <br><hr>
+		        <a href="/product/buyguide/guide1.do" class="text-dark">> 한눈에 보는 노트북 CPU넘버링 가이드 </a><hr>
+		        > 대학생 새내기 주목! 슬기로운 대학생활 위한 최고의 노트북은? <hr>
 		        > 인텔 11~13세대, AMD 5000~7000번대. 나는 어떤 노트북을 골라야 될까?
 		    </div>
 		</div>

@@ -57,4 +57,9 @@ public class ProductController {
 		
 		return "product/productlist";
 	}
+	
+	@RequestMapping("/product/buyguide/guide1.do")
+	public String guide1() {
+		return "product/buyguide/guide1";
+	}
 }
