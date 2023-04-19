@@ -23,11 +23,7 @@
             form.c_content.focus();
             return false;
         }
-        if (form.pass.value == "") {
-            alert("비밀번호를 입력하세요.");
-            form.pass.focus();
-            return false;
-        }
+        
     }
 </script>
 </head>
@@ -61,12 +57,7 @@
             <input type="file" name="ofile" />
         </td>
     </tr>
-    <tr>
-        <td>비밀번호</td>
-        <td>
-            <input type="password" name="pass" style="width:100px;" />
-        </td>
-    </tr>
+    
     <tr>
         <td colspan="2" align="center">
             <button type="submit">작성 완료</button>

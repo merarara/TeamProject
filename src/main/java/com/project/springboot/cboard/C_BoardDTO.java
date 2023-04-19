@@ -10,11 +10,9 @@ public class C_BoardDTO {
     private Date C_postdate;
     private String C_ofile; 
     private String C_sfile;
-    private int C_downcount;
-    private String C_pass;
-    private int C_visitcount;
+    private int C_downcount;    
     
-	public String getC_num() {
+    public String getC_num() {
 		return C_num;
 	}
 	public void setC_num(String c_num) {
@@ -62,19 +60,15 @@ public class C_BoardDTO {
 	public void setC_downcount(int c_downcount) {
 		C_downcount = c_downcount;
 	}
-	public String getC_pass() {
-		return C_pass;
-	}
-	public void setC_pass(String c_pass) {
-		C_pass = c_pass;
-	}
 	public int getC_visitcount() {
 		return C_visitcount;
 	}
 	public void setC_visitcount(int c_visitcount) {
 		C_visitcount = c_visitcount;
 	}
+	private int C_visitcount;
     
+	
 }
 
     
