@@ -114,6 +114,9 @@
 					<img src="/productimgs/buyguide/guide1_2.png">
 					
 					<br><br>
+					
+					<a href="/product/productlist.do">돌아가기</a>
+					<br><br>
 				</div>
 	    	</div>
 	    <div class="col-md-2">

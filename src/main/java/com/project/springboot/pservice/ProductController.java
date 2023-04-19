@@ -62,4 +62,12 @@ public class ProductController {
 	public String guide1() {
 		return "product/buyguide/guide1";
 	}
+	
+	@RequestMapping("/product/productinfo.do")
+	public String pinfo1(HttpServletRequest req) {
+		int p_num = Integer.parseInt(req.getParameter("p_num"));
+		
+		
+		return "product/productinfo";
+	}
 }

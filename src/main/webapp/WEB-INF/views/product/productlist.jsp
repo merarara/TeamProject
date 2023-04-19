@@ -155,7 +155,7 @@
 				<c:forEach items="${plist}" var="i">
 					<tr>
 						<td style="text-align: center;"><img src="${i.p_listimg}"></td>
-						<td><h4>${i.p_name}</h4><br>
+						<td><h4><a href="/product/productinfo.do?p_num=${i.p_num}" class="text-dark">${i.p_name}</a></h4><br>
 							<c:set var="ratingImgPath" value="" />
 							<c:choose>
 							    <c:when test="${i.p_rating == 0}">
@@ -262,7 +262,7 @@
 		</div>
 		<div class="col-md-2 d-flex align-items-center justify-content-center">
 			<div class="side-menu2">
-		        <img src="/productimgs/cpuNumbering.jpg"/>
+		        <a href="/product/buyguide/guide1.do"><img src="/productimgs/cpuNumbering.jpg"/></a>
 		        <b>쇼핑가이드</b>
 		        <a href="/product/buyguide/guide1.do" class="text-dark">> 한눈에 보는 노트북 CPU넘버링 가이드 </a><hr>
 		        > 대학생 새내기 주목! 슬기로운 대학생활 위한 최고의 노트북은? <hr>
