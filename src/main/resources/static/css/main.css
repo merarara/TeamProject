@@ -1,9 +1,100 @@
 @charset "UTF-8";
 
-*{
-	font-size: 12px;font-familiy: verdana;
+
+.user-list{
+	max-width:1200px;
+	margin:0 auto;
+	display:flex;
+	justify-content:center;	
+	padding:100px 0;
 }
-.spring{
-	width: 100%; height: 187px;
-	background: url('../images/security.jpg') repeat;
+.user-list > li{
+	text-align:center;
+	width:340px;
+	padding:26px 0;
+	border:3px solid #95C8F9;
+	border-radius:10px;
+	color:#95C8F9;
 }
+.user-list > li:nth-child(2){
+	border-color:#E2CC71;
+	color:#E2CC71;
+	margin-left:20px;
+}
+
+.user-list > li > p{
+	font-size:14px;
+	font-weight:700;
+	margin-bottom:20px;
+	
+}
+.user-list > li > img{
+	display:block;
+	margin:0 auto;
+	max-width:100%;
+	margin-bottom:20px;
+}
+.user-list > li > a{
+	position:relative;
+	display:block;
+	font-size:26px;
+	font-weight:700; 
+	color:#000;
+	padding-right:24px;
+}
+.user-list > li > a:after{
+	content:'';
+	position:absolute;
+	top:50%;
+	transform:translateY(-50%);
+	width:24px;
+	height:24px;
+	background:url(../userimages/ico_arrow_right.png) no-repeat center / cover;
+}
+@media (max-width:768px){
+	.user-list{
+		flex-wrap:wrap;	
+	}
+	.user-list > li{
+		width:80%;
+		max-width:386px;
+	}
+	.user-list > li:nth-child(2){
+	margin:20px 0 0;
+}
+}
+
+/* 로그인 css */
+/* .login-link {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-link:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+    text-decoration: none;
+}
+
+.join-link {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.join-link:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+    text-decoration: none;
+} */
