@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+*{
+	font-size: 12px;font-familiy: verdana;
+}
+.spring{
+	width: 100%; height: 187px;
+	background: url('../images/security.jpg') repeat;
+}

@@ -10,7 +10,7 @@
 	    <div class="collapse navbar-collapse" id="navbarColor01">
 	      <ul class="navbar-nav me-auto">
 	        <li class="nav-item">
-	          <a class="nav-link" href="#">로그인</a>
+	          <a class="nav-link" href="/user/main.do">로그인</a>
 	        </li>
 	        <li class="nav-item">
 	          <a class="nav-link" href="/product/productlist.do">판매제품</a>
