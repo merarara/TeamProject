@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+#content {
+  	flex: 1; /* Flexbox 레이아웃에서 content가 남은 공간을 차지하도록 설정 */
+}
+body {
+    display: flex; /* Flexbox 레이아웃 사용 */
+    flex-direction: column; /* 컬럼 방향으로 아이템 배치 */
+    min-height: 100vh; /* 최소한의 높이를 100vh(뷰포트 높이)로 설정하여 footer가 항상 하단에 위치하도록 함 */
+}

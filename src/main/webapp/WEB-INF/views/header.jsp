@@ -28,7 +28,7 @@
           <a class="nav-link" href="#">내정보</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">로그인</a>
+          <a class="nav-link" href="/user/main.do">로그인</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">FAQ</a>

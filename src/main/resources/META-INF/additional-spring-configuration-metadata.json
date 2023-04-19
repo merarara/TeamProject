@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "productlist.POSTS_PER_PAGE",
+    "type": "java.lang.String",
+    "description": "A description for 'productlist.POSTS_PER_PAGE'"
+  },
+  {
+    "name": "productlist.POSTS_PER_PAGE",
+    "type": "java.lang.String",
+    "description": "A description for 'productlist.POSTS_PER_PAGE'"
+  },
+  {
+    "name": "productlist.POSTS_PER_PAGE",
+    "type": "java.lang.String",
+    "description": "A description for 'productlist.POSTS_PER_PAGE'"
+  },
+  {
+    "name": "productlist.POSTS_PER_PAGE",
+    "type": "java.lang.String",
+    "description": "A description for 'productlist.POSTS_PER_PAGE'"
+  }
+]}
