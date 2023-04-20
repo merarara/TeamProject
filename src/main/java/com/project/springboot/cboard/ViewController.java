@@ -35,7 +35,7 @@ public class ViewController {
 		}
 		request.setAttribute("isImage", isImage);
 		request.setAttribute("dto", dto);
-		return new ModelAndView("/cboard/View.do");
+		return new ModelAndView("cboard/View.do");
 	}
 
 }

@@ -29,17 +29,17 @@ public class ListController {
 
     @RequestMapping(value = "/cboard/List.do", method = RequestMethod.GET)
     public String list(@RequestParam(name = "searchField", required = false) String searchField,
-    					@RequestParam(name = "searchword", required = false) String searchword,
-    					@RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
-    						Model model) {
-    	
+                       @RequestParam(name = "searchword", required = false) String searchword,
+                       @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
+                       Model model) {
+
         Map<String, Object> map = new HashMap<>();
 
         if (searchword != null) {
             map.put("searchField", searchField);
             map.put("searchword", searchword);
+            // searchword가 null이 아닐 때만 해당 파라미터를 쿼리 실행에 사용합니다.
         }
-
         int totalCount = dao.selectCount(map);
 
         int start = (pageNum - 1) * pageSize + 1;
@@ -60,6 +60,7 @@ public class ListController {
 
         return "cboard/List";
     }
+
 
     
 }

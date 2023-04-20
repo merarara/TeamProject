@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -22,12 +23,12 @@ public class WriteController {
     @Autowired
     C_BoardDAO dao;
     
-    @GetMapping("/cboard/Write")
+    @GetMapping("/cboard/Write.do")
     public String writeForm() {
         return "/cboard/Write";
     }
     
-    @GetMapping("/cboard/Write.do")
+    @PostMapping("/cboard/Write.do")
     @Transactional
     public String write(C_BoardDTO dto, @RequestParam(name="c_ofile", required=false) MultipartFile multipartFile, RedirectAttributes redirectAttrs) {
         try {
