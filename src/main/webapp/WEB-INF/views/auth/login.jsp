@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>로그인 페이지</title>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -16,10 +16,9 @@
 <div id="content">
 	<c:if test="${empty user_id }" var="loginResult">
 		<c:if test="${param.error != null}">
-		<p>
-			Login Error! <br />
-			${errorMsg}
-		</p>
+   		 <script>
+    		   alert("로그인에 실패했습니다. 아이디와 비밀번호를 다시 확인해주세요.");
+  		  </script>
 		</c:if>
 		<form action="/myLoginAction.do" method="post">
 			<div class="form-floating mb-3 mt-3">
@@ -38,12 +37,14 @@
 		</form>
 	</c:if>
 
+<!--  로그인 성공시 home으로 가기 -->
 <c:if test="${not empty user_id }">
     <script type="text/javascript">
       alert("로그인에 성공하였습니다.");
-      location.href = "/";
+      location.href = "home";
     </script>
 </c:if>
+
 	
 </div>
 

@@ -15,6 +15,19 @@
 <%@ include file="./header.jsp" %>	
 <div id="content">
 
+<%-- userId 속성이 세션에 존재할 때에만 로그인한 사용자 아이디를 보이도록 함 --%>
+<c:if test="${not empty sessionScope.userId}">
+  <div>${sessionScope.userId}</div>
+</c:if>
+
+<!-- 회원 탈퇴 페이지로 이동하는 링크 -->
+<a href="user/delete.do">회원 탈퇴</a>
+
+<!-- 회원정보 수정  -->
+<a href="/user/edit.do">회원 수정</a>
+
+
+
 
 </div>
 <%@ include file="./footer.jsp" %>

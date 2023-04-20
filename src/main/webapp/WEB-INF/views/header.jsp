@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <div id="wrap">
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	  <div class="container-fluid">
@@ -9,9 +12,26 @@
 	    </button>
 	    <div class="collapse navbar-collapse" id="navbarColor01">
 	      <ul class="navbar-nav me-auto">
-	        <li class="nav-item">
-	          <a class="nav-link" href="/user/main.do">로그인</a>
-	        </li>
+	       <s:authorize access="!isAuthenticated()">
+            <li class="nav-item">
+              <a class="nav-link" href="/user/main.do">로그인</a>
+            </li>
+          </s:authorize>
+          <s:authorize access="hasRole('USER')">
+              <li class="nav-item">
+			<c:if test="${not empty sessionScope.userId}">
+			  <div>
+			    <div>${sessionScope.userId}</div>
+			  </div>
+			</c:if>
+
+              <!-- 로그아웃 버튼 -->
+				<form action="${pageContext.request.contextPath}/logout" method="post">
+				    <input type="submit" value="로그아웃">
+				</form>
+
+            </li>
+          </s:authorize>
 	        <li class="nav-item">
 	          <a class="nav-link" href="/product/productlist.do">판매제품</a>
 	        </li>

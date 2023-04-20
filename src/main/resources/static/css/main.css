@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-
+/* login / join CSS */
 .user-list{
 	max-width:1200px;
 	margin:0 auto;
@@ -64,37 +64,24 @@
 }
 }
 
-/* 로그인 css */
-/* .login-link {
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    text-decoration: none;
-    font-weight: bold;
+/* 프로필 CSS */
+/* .profile {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-.login-link:hover {
-    color: #fff;
-    background-color: #0069d9;
-    border-color: #0062cc;
-    text-decoration: none;
+.profile-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 5px;
 }
 
-.join-link {
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    text-decoration: none;
-    font-weight: bold;
+.profile-text {
+  font-size: 14px;
+  font-weight: bold;
 }
-
-.join-link:hover {
-    color: #fff;
-    background-color: #0069d9;
-    border-color: #0062cc;
-    text-decoration: none;
-} */
+ */
