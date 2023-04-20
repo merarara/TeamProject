@@ -29,13 +29,12 @@
 				아직 회원이 아니신가요?<br>
 				회원가입하고 모든 혜택을 누리세요!
 			</p>
-			<img src="/userimages/join.png">
+			<img src="/userimages/ico_join.png">
 			<a href="/user/join.do" class="login-link">회원가입 하기</a>
 		</li>
 	</Ul>
 </div>
 
-<img src="/userimages/ico_login.png">
 <%@ include file="../footer.jsp" %>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

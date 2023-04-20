@@ -22,8 +22,6 @@ public class SecurityConfig {
 	@Autowired
 	public AuthenticationFailureHandler authenticationFailureHandler;
 
-	
-	
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration
 			authConfiguration) throws Exception {
@@ -35,10 +33,10 @@ public class SecurityConfig {
 			throws Exception {
 		httpSecurity.authorizeRequests()
 			.antMatchers("/").permitAll()
-			.antMatchers("/css/**","/js/**","/productimgs/**").permitAll()
+			.antMatchers("/css/**","/js/**","/productimgs/**","/userimages/**").permitAll()
 			.antMatchers("/guest/**").permitAll()
 			.antMatchers("/user/**").permitAll()
-			.antMatchers("/member/**").hasAnyRole("USESR", "ADMIN")
+			.antMatchers("/member/**").hasAnyRole("USER", "ADMIN")
             .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/faq/**").permitAll()
             // 게시판
@@ -73,32 +71,9 @@ public class SecurityConfig {
 		return httpSecurity.build();
 	}
 	
-	// ROLE_ADMIN 에서 ROLE_는 자동으로 붙는다.
-//	@Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//		String passEncode = passwordEncoder().encode("1234");
-//        auth.inMemoryAuthentication()
-//        	.withUser("user").password(passEncode).roles("USER")
-//        	.and()
-//        	.withUser("admin").password(passEncode).roles("ADMIN");
-//        System.out.println("비밀번호:"+ passEncode);
-//    }
-	
-	/*
-	application.properties에 설정된 오라클 접속 정보를 통해 즉시 연결하고
-	자동으로 빈을 주입받는다. 
-	 */
     @Autowired
     private DataSource dataSource;
     
-    /*
-    usersByUsernameQuery()
-    	: 사용자의 아이디, 패스워드, 활성화여부를 판단하기 위한 쿼리를
-    	실행한다. 즉 인증을 진행한다. 
-    authoritiesByUsernameQuery()
-    	: 사용자의 권한을 확인하기 위한 쿼리를 실행한다. 
-    	즉 인가를 진행한다. 
-     */
     @Autowired
     protected void configure(AuthenticationManagerBuilder auth) 
     		throws Exception {
@@ -112,12 +87,9 @@ public class SecurityConfig {
     }
     
     // passwordEncoder() 추가
-
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-    
-    // 회원가입 기능
-    
+       
     
 }
