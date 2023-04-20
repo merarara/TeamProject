@@ -22,4 +22,14 @@
 		  		  where rownum <![CDATA[<=]]> #{param1} ) B
 		  where B.num <![CDATA[>=]]> #{param2}
 	</select>
+	
+	<!-- 상품 상세 페이지 -->
+	<select id="viewpinfoDao" 
+		parameterType="int"
+		resultType="com.project.springboot.productdto.ProductinfoDTO">
+		select f.*, l.p_price, l.p_rdate, l.p_rating
+		  from product_info f, product_list l
+		 where f.p_num = l.p_num
+		   and f.p_num = #{param1}
+	</select>
 </mapper>

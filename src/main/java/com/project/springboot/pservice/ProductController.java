@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.project.springboot.ppageinfo.PPageInfo;
+import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
 @Controller
@@ -64,10 +65,14 @@ public class ProductController {
 	}
 	
 	@RequestMapping("/product/productinfo.do")
-	public String pinfo1(HttpServletRequest req) {
+	public String pinfo1(HttpServletRequest req, Model model) {
 		int p_num = Integer.parseInt(req.getParameter("p_num"));
 		
+		System.out.println(p_num);
 		
+		ProductinfoDTO dto = pldao.viewpinfo(p_num);
+		
+		model.addAttribute("pinfo", dto);
 		return "product/productinfo";
 	}
 }

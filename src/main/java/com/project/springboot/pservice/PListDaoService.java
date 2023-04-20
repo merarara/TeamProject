@@ -36,6 +36,13 @@ public class PListDaoService implements IPListDaoService {
 		return dto;
 	}
 	
+	@Override
+	public ProductinfoDTO viewpinfo(int p_num) {
+		ProductinfoDTO dto = dao.viewpinfoDao(p_num);
+		
+		return dto;
+	}
+	
 	// 페이지 설정 service & dao
 	@Override
 	public PPageInfo articlePage(int curpage)

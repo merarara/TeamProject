@@ -17,5 +17,5 @@ public interface IPListDaoService {
 	public ArrayList<ProductlistDTO> plist(int curPage);
 	
 	// 상품 상세페이지
-//	public ArrayList<ProductinfoDTO> viewpinfo(int p_num);
+	public ProductinfoDTO viewpinfo(int p_num);
 }
