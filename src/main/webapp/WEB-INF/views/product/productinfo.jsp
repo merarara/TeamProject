@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,17 +34,31 @@ $(document).ready(function() {
 	color: #868e96;
 }
 
-#showimg {
-    width: 330px;
-    height: 330px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+.imgcon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.imgcon {
-    justify-content: center;
-    align-items: center;
+#showimg {
+  margin: 0 auto;
+  width: 330px;
+  height: 330px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.img-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-item {
+  margin: 5px;
 }
 </style>
 </head>
@@ -68,23 +83,24 @@ $(document).ready(function() {
 							/ <b>주요제원</b>: ${ pinfo.etc }
 						</c:if>
 						<br>
-						
-						<hr style="border: 1px solid #000;">
-						
-						<br>
-						<div class="container">
-							<div class="row">
-								<div class="col-md-6 imgcon">
-									<div id="showimg"></div>
+					</div>
+					<hr style="border: 1px solid #000;">
+					
+					<br>
+					<div class="container">
+						<div class="row">
+							<div class="col-md-5 imgcon text-center">
+								<div id="showimg"></div>
+								<div class="img-list">
 									<c:forEach items="${ pinfo.p_imgsrcs }" var="imgsrc">
-										<tr>
-											<td><img src="${ imgsrc }" width="50" height="50"></td>
-										</tr>
+										<div class="img-item">
+											<img src="${ imgsrc }" width="50" height="50">
+										</div>
 									</c:forEach>
 								</div>
-								<div class="col-md-6">
-									ddd
-								</div>
+							</div>
+							<div class="col-md-7">
+								가격 :                 ${ pinfo.p_price }
 							</div>
 						</div>
 					</div>
