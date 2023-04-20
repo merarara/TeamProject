@@ -9,6 +9,7 @@ public interface ABoard_Service {
 	
 	public List<ABoard_DTO> select();
 	public int insert(ABoard_DTO aBoardDTO);
+	public ABoard_DTO view(int a_num);
 	public ABoard_DTO selectOne(ABoard_DTO aBoardDTO);
 	public int update(ABoard_DTO aBoardDTO);
 	public int delete(int a_num);

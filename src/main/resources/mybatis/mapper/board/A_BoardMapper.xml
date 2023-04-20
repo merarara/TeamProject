@@ -16,11 +16,50 @@
 </select>
 
 
+<insert id="insert" 
+		parameterType="com.project.springboot.jdbc.ABoard_DTO"> 
+		insert into A_Board (A_num, A_title, A_content, U_ID, U_Nick, a_commend) values 
+			(#{a_num}, #{a_title}, #{a_content}, #{u_id}, #{u_nick}, #{a_commend})
+	</insert> 
 
 
 
+<select id="view" 
+	parameterType="int"
+	resultType="com.project.springboot.jdbc.ABoard_DTO"> 
+	
+		SELECT * FROM A_BOARD
+		WHERE A_NUM = #{param1}
+		
+		</select>
 
 
+	<select id="selectOne" 
+		parameterType="com.project.springboot.jdbc.ABoard_DTO"
+		resultType="com.project.springboot.jdbc.ABoard_DTO"> 
+		select * from A_Board where a_num=#{a_num}
+	</select>	 
+	
+	
+	
+	<!-- 회원 정보 수정. 파라미터는 DTO의 멤버변수를 사용한다. -->
+	<update id="update" 
+		parameterType="com.project.springboot.jdbc.ABoard_DTO"> 
+		update A_Board set a_title=#{a_title}, a_content=#{a_content} 
+		where a_num=#{a_num}
+	</update> 
+	
+	
+	<delete id="delete"> 
+		delete from A_Board where a_num=#{param1}
+		</delete>
+	
+	
+	<!--     <update id="increasevisitcount">
+        update A_Board set A_visitcount = A_visitcount + 1
+        where A_num = ?
+    </update>
 
-
+	--> 
+	
 </mapper>  

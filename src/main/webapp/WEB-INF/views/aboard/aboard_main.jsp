@@ -27,15 +27,25 @@
 			<tr>
 				<td>${row.a_num}</td>
 				<td>${row.a_title}</td>
-				<td>${row.a_content}	</td>
-				<td>${row.a_visitcount} </td>
-				<td>${row.a_postdate.time} </td>
+				
+				
+				
+				<td>
+      				<a href="aboard_main_detail.do?a_num=${row.a_num }">${row.a_content}</a>
+				</td>
+				<td>
+				${row.a_visitcount} 
+				</td>
+				<td>${row.a_postdate} </td>
 				<td>${row.u_id}</td>
 				<td>${row.u_nick}</td>
 				<td>${row.a_commend}</td>
 
+
+
 			</tr>
 		</c:forEach>
 	</table>
+		<a href="aboard_regist.do">등록</a>
 </body>
 </html>
