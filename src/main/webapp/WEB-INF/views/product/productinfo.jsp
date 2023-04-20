@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,6 +13,10 @@
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 <script>
 $(document).ready(function() {
+	var firstImgSrc = $('img').first().attr('src');
+	
+	$('#showimg').css('background-image', 'url(' + firstImgSrc + ')');
+	
     $('img').on('mouseenter', function() {
         var imgSrc = $(this).attr('src');
         $('#showimg').css('background-image', 'url(' + imgSrc + ')');
@@ -60,6 +64,11 @@ $(document).ready(function() {
 .img-item {
   margin: 5px;
 }
+.price {
+  margin-left: 300px;
+  color: #0067A3;
+  font-size: 20pt;
+}
 </style>
 </head>
 <body>
@@ -100,7 +109,8 @@ $(document).ready(function() {
 								</div>
 							</div>
 							<div class="col-md-7">
-								가격 :                 ${ pinfo.p_price }
+								<span style="font-size: 15pt"><b>가격 :</b></span>
+  								<span class="price"><b><fmt:formatNumber type="number" value="${pinfo.p_price}" pattern="#,###" />원</b></span>
 							</div>
 						</div>
 					</div>
