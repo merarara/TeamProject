@@ -1,7 +1,6 @@
 package com.project.springboot.common;
 
 import java.io.Reader;
-import java.sql.Connection;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -12,36 +11,44 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 public class DBConnPool {
-private static SqlSessionFactory sqlSessionFactory;
-private static Reader reader;
-private SqlSession session;
-private Connection conn;
-static {
-    try {
-        Context initCtx = new InitialContext();
-        Context ctx = (Context)initCtx.lookup("java:comp/env");
-        DataSource dataSource = (DataSource)ctx.lookup("dbcp_myoracle");
-        SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
-        sqlSessionFactory = builder.build((Reader) dataSource.getConnection().getMetaData().getConnection());
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
+    private static SqlSessionFactory sqlSessionFactory;
+    private SqlSession session;
 
-public SqlSession getSession() {
-    try {
-        session = sqlSessionFactory.openSession();
-    } catch (Exception e) {
-        e.printStackTrace();
+    public static DBConnPool getInstance() {
+        return new DBConnPool();
     }
-    return session;
-}
 
-public void close() {
-    try {
-        session.close();
-    } catch (Exception e) {
-        e.printStackTrace();
+    static {
+        try {
+            Context initCtx = new InitialContext();
+            Context ctx = (Context)initCtx.lookup("java:comp/env");
+            DataSource dataSource = (DataSource)ctx.lookup("dbcp_myoracle");
+            SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+            sqlSessionFactory = builder.build((Reader) dataSource.getConnection());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
+
+    public static SqlSession getSqlSession() throws Exception {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = sqlSessionFactory.openSession();
+        } catch (Exception e) {
+            throw new Exception("SqlSession 생성 중 예외 발생", e);
+        }
+        return sqlSession;
+    }
+
+    public void close() throws Exception {
+        if (session != null) {
+            try {
+                session.close();
+            } catch (Exception e) {
+                throw new Exception("SqlSession 종료 중 예외 발생", e);
+            } finally {
+                session = null;
+            }
+        }
+    }
 }
