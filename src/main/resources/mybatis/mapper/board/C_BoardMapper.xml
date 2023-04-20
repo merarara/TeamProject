@@ -7,6 +7,12 @@
   WHERE C_title LIKE '%' || #{searchword, jdbcType=VARCHAR} || '%'
 </select>
 
+<!-- C_Board 테이블의 모든 글 목록을 불러오는 SELECT 쿼리문 -->
+<select id="selectList" resultType="com.project.springboot.cboard.C_BoardDTO">
+  SELECT *
+  FROM C_Board
+  ORDER BY C_num DESC
+</select>
 
 
 <select id="selectListPage" resultType="com.project.springboot.cboard.C_BoardDTO">

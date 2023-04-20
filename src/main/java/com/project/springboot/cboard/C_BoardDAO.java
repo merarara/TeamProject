@@ -15,4 +15,5 @@ public interface C_BoardDAO {
     public void deleteWrite(int c_num);
     public int selectCount(Map<String, Object> map);
     public List<C_BoardDTO> selectListPage(Map<String, Object> map);
+    
 }

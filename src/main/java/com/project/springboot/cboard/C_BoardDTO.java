@@ -13,7 +13,6 @@ public class C_BoardDTO {
     private int C_visitcount;
     private Date C_postdate;
     private String U_ID;
-    private String U_Nick;
     private String C_ofile;
     private String C_sfile;
     private int C_downcount;

@@ -59,7 +59,7 @@
         <td colspan="4" align="center">
             <button type="button" onclick="location.href='/cboard/pass.do?mode=edit&C_num=${ param.C_num }';">수정하기</button>
             <button type="button" onclick="location.href='/cboard/pass.do?mode=delete&C_num=${ param.C_num }';">삭제하기</button>
-            <button type="button" onclick="location.href='/cboard/list.do';">목록 바로가기</button>
+            <button type="button" onclick="location.href='/cboard/List.do';">목록 바로가기</button>
         </td>
     </tr>
 </table>

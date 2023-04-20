@@ -61,7 +61,7 @@
             		+ loop.index)}
             </td>
             <td align="left">
-                <a href="/cboard/view.do?C_idx=${ row.C_num }">
+                <a href="/cboard/View.do?C_num=${ row.C_num }">
                 ${ row.C_title }</a>
             </td> 
             <td>${ row.C_ID }</td>

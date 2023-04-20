@@ -11,17 +11,17 @@
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 <script type="text/javascript">
     function validateForm(form) {  // 필수 항목 입력 확인
-        if (form.u_ID.value == "") {
+        if (form.u_ID.value.trim() == "") {
             alert("작성자를 입력하세요.");
             form.u_ID.focus();
             return false;
         }
-        if (form.c_title.value == "") {
+        if (form.c_title.value.trim() == "") {
             alert("제목을 입력하세요.");
             form.c_title.focus();
             return false;
         }
-        if (form.c_content.value == "") {
+        if (form.c_content.value.trim() == "") {
             alert("내용을 입력하세요.");
             form.c_content.focus();
             return false;
@@ -35,7 +35,7 @@
 <div id="content">
 <h2>파일 첨부형 게시판 - 글쓰기(Write)</h2>
 <!-- 파일 첨부를 해야하는 경우 method는 post, enctype이 아래와 같이 지정되어야 한다. -->
-<form name="writeFrm" method="get" enctype="multipart/form-data"
+<form name="writeFrm" method="post" enctype="multipart/form-data"
       action="/cboard/Write.do" onsubmit="return validateForm(this);">
 <table border="1" width="90%">
     <tr>
@@ -69,6 +69,7 @@
             <button type="reset">RESET</button>
             <button type="button" onclick="location.href='/cboard/List.do';">
                 목록 바로가기
+
             </button>
         </td>
     </tr>

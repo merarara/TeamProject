@@ -49,7 +49,7 @@ public class ListController {
 
         List<C_BoardDTO> boardLists = dao.selectListPage(map);
 
-        String pagingImg = BoardPage.pagingStr(totalCount, pageSize, blockPage, pageNum, "/list");
+        String pagingImg = BoardPage.pagingStr(totalCount, pageSize, blockPage, pageNum, "/List");
         map.put("pagingImg", pagingImg);
         map.put("totalCount", totalCount);
         map.put("pageSize", pageSize);
@@ -60,7 +60,5 @@ public class ListController {
 
         return "cboard/List";
     }
-
-
     
 }

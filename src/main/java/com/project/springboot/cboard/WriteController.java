@@ -44,10 +44,10 @@ public class WriteController {
                 dto.setC_sfile(newFileName);
             }
             dao.insertWrite(dto);
-            return "redirect:/cboard/List";
+            return "redirect:/cboard/List.do";
         } catch (Exception e) {
             redirectAttrs.addFlashAttribute("errorMessage", "첨부파일이 제한 용량을 초과합니다.");
-            return "redirect:/cboard/Write";
+            return "redirect:/cboard/Write.do";
         }
     }
 
