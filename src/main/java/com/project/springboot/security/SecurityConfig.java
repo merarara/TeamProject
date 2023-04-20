@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 
 @Configuration
 @EnableWebSecurity
-
 public class SecurityConfig {
 	
 	@Autowired
