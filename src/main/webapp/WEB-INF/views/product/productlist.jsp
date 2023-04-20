@@ -15,8 +15,10 @@
 <style>
     /* 테이블 스타일링 */
     table {
-        width: 100%;
+        width: 90%;
         border-collapse: collapse;
+        margin-left: auto;
+    	margin-right: auto;
     }
     th, td {
         border: 1px solid #ccc;
@@ -34,7 +36,7 @@
         background-color: #f0f0f0;
     }
     /* 버튼 스타일링 */
-    .btn {
+    .pagingbtn {
         display: inline-block;
         padding: 5px 10px;
         border: none;
@@ -45,10 +47,10 @@
         cursor: pointer;
         transition: background-color 0.3s ease;
     }
-    .btn:hover {
+    .pagingbtn:hover {
         background-color: #808080;
     }
-    .btn.disabled {
+    .pagingbtn.disabled {
         opacity: 0.5;
         cursor: default;
     }
@@ -90,18 +92,13 @@
     /* 구매가이드 사이드 메뉴 스타일 */
     .side-menu2 {
         width: 200px;
-        height: 400px;
+        height: 445px;
         background-color: #f8f9fa;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        border: dotted 1px #000;
         padding: 20px;
-    }
-
-    .side-menu2 h5 {
-        margin-bottom: 20px;
     }
 
     .side-menu2 hr {
@@ -115,7 +112,6 @@
     .side-menu2 a {
         border: none;
         text-align: center;
-        padding: 10px;
         transition: all 0.3s ease;
     }
 
@@ -159,7 +155,7 @@
 				<c:forEach items="${plist}" var="i">
 					<tr>
 						<td style="text-align: center;"><img src="${i.p_listimg}"></td>
-						<td><h3>${i.p_name}</h3><br>
+						<td><h4><a href="/product/productinfo.do?p_num=${i.p_num}" class="text-dark">${i.p_name}</a></h4><br>
 							<c:set var="ratingImgPath" value="" />
 							<c:choose>
 							    <c:when test="${i.p_rating == 0}">
@@ -196,7 +192,7 @@
 							        <c:set var="ratingImgPath" value="/productimgs/5.png" />
 							    </c:otherwise>
 							</c:choose>
-							<img src="${ratingImgPath}" alt="별점" style="width: 80px; height: 18px;"/>
+							<img src="${ratingImgPath}" alt="별점" style="width: 80px; height: 18px;"/> ${ i.p_rating }
 							<span style="display: block; text-align: right; font-size: 16px;">
 							    등록일 : ${fn:substring(i.p_rdate, 0, 7)}
 							</span>
@@ -222,10 +218,10 @@
 						<!-- 이전 -->
 						<c:choose>
 						    <c:when test="${(page.curPage - 1) < 1 }">
-						      	<button class="btn btn-link text-dark" disabled>&lt;</button>
+						      	<button class="btn btn-link text-dark pagingbtn" disabled>&lt;</button>
 						    </c:when>
 						    <c:otherwise>
-						      	<a href="/product/productlist.do?page=${page.curPage - 1}" class="btn btn-link text-dark">&lt;</a>
+						      	<a href="/product/productlist.do?page=${page.curPage - 1}" class="btn btn-link text-dark pagingbtn">&lt;</a>
 						    </c:otherwise>
 						</c:choose>
 						  
@@ -233,10 +229,10 @@
 						<c:forEach var="fEach" begin="${page.startPage}" end="${page.endPage}" step="1">
 						    <c:choose>
 						      	<c:when test="${page.curPage == fEach}">
-						        	<button class="btn btn-link text-dark" disabled>${fEach}</button>
+						        	<button class="btn btn-link text-dark pagingbtn" disabled>${fEach}</button>
 						      	</c:when>
 						      	<c:otherwise>
-						        	<a href="/product/productlist.do?page=${fEach}" class="btn btn-link text-dark">${fEach}</a>
+						        	<a href="/product/productlist.do?page=${fEach}" class="btn btn-link text-dark pagingbtn">${fEach}</a>
 						      	</c:otherwise>
 						    </c:choose>
 						</c:forEach>
@@ -244,20 +240,20 @@
 						<!-- 다음 -->
 						<c:choose>
 						    <c:when test="${(page.curPage + 1) > page.totalPage }">
-						      	<button class="btn btn-link text-dark" disabled>&gt;</button>
+						      	<button class="btn btn-link text-dark pagingbtn" disabled>&gt;</button>
 						    </c:when>
 						    <c:otherwise>
-						      	<a href="/product/productlist.do?page=${page.curPage + 1}" class="btn btn-link text-dark">&gt;</a>
+						      	<a href="/product/productlist.do?page=${page.curPage + 1}" class="btn btn-link text-dark pagingbtn">&gt;</a>
 						    </c:otherwise>
 						</c:choose>
 						  
 						<!-- 끝 -->
 						<c:choose>
 						    <c:when test="${page.curPage == page.totalPage }">
-						      	<button class="btn btn-link text-dark" disabled>&gt;&gt;</button>
+						      	<button class="btn btn-link text-dark pagingbtn" disabled>&gt;&gt;</button>
 						    </c:when>
 						    <c:otherwise>
-						      	<a href="/product/productlist.do?page=${page.totalPage}" class="btn btn-link text-dark">&gt;&gt;</a>
+						      	<a href="/product/productlist.do?page=${page.totalPage}" class="btn btn-link text-dark pagingbtn">&gt;&gt;</a>
 						    </c:otherwise>
 						</c:choose>
 					</td>
@@ -265,18 +261,12 @@
 			</table>
 		</div>
 		<div class="col-md-2 d-flex align-items-center justify-content-center">
-			<div class="side-menu">
-		        <h5>간편선택</h5>
-		        <hr>
-		        <div style="width: 100%; display: flex; flex-direction: column;">
-		            <a href="#" class="btn btn-link text-dark">노트북 전체</a>
-		            <hr> 
-		            <a href="#" class="btn btn-link text-dark">ASUS</a>
-		            <hr>
-		            <a href="#" class="btn btn-link text-dark">APPLE</a>
-		            <hr>
-		            <a href="#" class="btn btn-link text-dark">DELL</a>
-		        </div>  
+			<div class="side-menu2">
+		        <a href="/product/buyguide/guide1.do"><img src="/productimgs/cpuNumbering.jpg"/></a>
+		        <b>쇼핑가이드</b>
+		        <a href="/product/buyguide/guide1.do" class="text-dark">> 한눈에 보는 노트북 CPU넘버링 가이드 </a><hr>
+		        > 대학생 새내기 주목! 슬기로운 대학생활 위한 최고의 노트북은? <hr>
+		        > 인텔 11~13세대, AMD 5000~7000번대. 나는 어떤 노트북을 골라야 될까?
 		    </div>
 		</div>
 	</div>

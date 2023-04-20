@@ -19,16 +19,6 @@
 			(#{f_num}, #{f_title}, #{f_content}, #{u_id})
 	</insert> 
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	<select id="selectOne" 
 		parameterType="com.project.springboot.jdbc.FBoard_DTO"
 		resultType="com.project.springboot.jdbc.FBoard_DTO"> 
@@ -40,11 +30,13 @@
 	<!-- 회원 정보 수정. 파라미터는 DTO의 멤버변수를 사용한다. -->
 	<update id="update" 
 		parameterType="com.project.springboot.jdbc.FBoard_DTO"> 
-		update member set f_title=#{f_title}, f_content=#{f_content}, u_id=#{u_id} 
+		update F_Board set f_title=#{f_title}, f_content=#{f_content}, u_id=#{u_id} 
 		where f_num=#{f_num}
 	</update> 
 	
-	
+		<delete id="delete"> 
+		delete from F_Board where f_num=#{param1}
+		</delete>
 	
 	
 </mapper>  

@@ -57,4 +57,17 @@ public class ProductController {
 		
 		return "product/productlist";
 	}
+	
+	@RequestMapping("/product/buyguide/guide1.do")
+	public String guide1() {
+		return "product/buyguide/guide1";
+	}
+	
+	@RequestMapping("/product/productinfo.do")
+	public String pinfo1(HttpServletRequest req) {
+		int p_num = Integer.parseInt(req.getParameter("p_num"));
+		
+		
+		return "product/productinfo";
+	}
 }
