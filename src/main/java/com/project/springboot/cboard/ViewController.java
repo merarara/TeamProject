@@ -17,8 +17,8 @@ public class ViewController {
 	C_BoardDAO dao;
 
 	@GetMapping("/cboard/View/{c_num}")
-	public ModelAndView view(@PathVariable("c_num") String c_num, HttpServletRequest request) {
-		dao.updateVisitCount(c_num);
+	public ModelAndView view(@PathVariable("c_num") int c_num, HttpServletRequest request) {
+		dao.updatec_visitcount(c_num);
 		C_BoardDTO dto = dao.selectView(c_num);
 		
 		dto.setC_content(dto.getC_content().replace("\r\n", "<br/>"));

@@ -1,57 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.project.springboot.cboard.C_BoardDAO">
-
-    <select id="selectCount" resultType="int">
+<mapper namespace="com.project.springboot.cboard.C_BoardMapper">
+<select id="selectCount" resultType="int">
         SELECT COUNT(*) FROM C_Board
         <where>
             <if test="searchword != null">
                 AND ${searchField} LIKE CONCAT('%', #{searchword}, '%')
             </if>
         </where> 
-    </select>
+</select>
 
-    <select id="selectListPage" parameterType="java.util.Map" resultType="com.project.springboot.cboard.C_BoardDTO">
-        SELECT * FROM (
-    SELECT ROWNUM RNUM, A.*
+<select id="selectListPage" resultType="com.project.springboot.cboard.C_BoardDTO">
+  SELECT *
+  FROM (
+    SELECT Tb.*, ROWNUM rNum
     FROM (
-        SELECT * FROM C_Board
-        ORDER BY C_num DESC
-    ) A
-) B
-WHERE B.RNUM BETWEEN #{start} AND #{end}
-    </select>
+      SELECT *
+      FROM C_Board
+      <if test="searchWord != null">
+        WHERE ${searchField} LIKE '%' || #{searchWord} || '%'
+      </if>
+      ORDER BY c_num DESC
+    ) Tb
+  )
+  WHERE rNum BETWEEN #{startRow} AND #{endRow}
+</select>
 
-    <insert id="insertWrite" parameterType="com.project.springboot.cboard.C_BoardDTO">
+
+
+<insert id="insertWrite" parameterType="com.project.springboot.cboard.C_BoardDTO">
+  <selectKey keyProperty="C_num" resultType="int" order="BEFORE">
+    SELECT C_num_SEQ.NEXTVAL FROM DUAL
+  </selectKey>
+  INSERT INTO C_Board (
+      U_ID, C_title, C_content, C_ofile, C_sfile
+  )
+  VALUES (
+    #{U_ID, jdbcType=VARCHAR}, #{C_title, jdbcType=VARCHAR}, #{C_content, jdbcType=VARCHAR}, #{C_ofile, jdbcType=VARCHAR}, #{C_sfile, jdbcType=VARCHAR}
+  )
+</insert>
+
+
+
+
+
+<!--     <insert id="insertWrite" parameterType="com.project.springboot.cboard.C_BoardDTO">
         INSERT INTO C_Board (
             C_title, C_content, C_visitcount, C_postdate, U_ID, U_Nick, C_ofile, C_sfile, C_downcount, C_Commend
         )
         VALUES (
-            #{C_title, jdbcType=VARCHAR}, #{C_content, jdbcType=VARCHAR}, #{C_visitcount}, #{C_postdate, jdbcType=VARCHAR}, #{U_ID, jdbcType=VARCHAR}, #{U_Nick}, #{C_ofile}, #{C_sfile}, #{C_downcount}, #{C_Commend}
+            #{C_title, jdbcType=VARCHAR}, #{C_content, jdbcType=VARCHAR}, #{C_visitcount}, #{C_postdate, jdbcType=VARCHAR}, #{U_ID, jdbcType=VARCHAR}, #{U_Nick, jdbcType=VARCHAR}, #{C_ofile, jdbcType=VARCHAR}, #{C_sfile, jdbcType=VARCHAR}, #{C_downcount, jdbcType=VARCHAR}, #{C_Commend, jdbcType=VARCHAR}
         )
-    </insert>
+    </insert> -->
 
-    <update id="updateHit" parameterType="int">
+<update id="updateHit" parameterType="int">
         UPDATE C_Board
         SET C_visitcount = C_visitcount + 1
         WHERE C_num = #{C_num}
-    </update>
+</update>
 
-    <update id="updateBoard" parameterType="com.project.springboot.cboard.C_BoardDTO">
+<update id="updateBoard" parameterType="com.project.springboot.cboard.C_BoardDTO">
         UPDATE C_Board
         SET C_title = #{C_title},
             C_content = #{C_content},
             C_ofile = #{C_ofile},
             C_sfile = #{C_sfile}
         WHERE C_num = #{C_num}
-    </update>
+</update>
 
-    <delete id="deleteBoard" parameterType="int">
+<delete id="deleteBoard" parameterType="int">
         DELETE FROM C_Board
         WHERE C_num = #{C_num}
-    </delete>
+</delete>
 
-    <insert id="insertBoard" parameterType="com.project.springboot.cboard.C_BoardDTO">
+<insert id="insertBoard" parameterType="com.project.springboot.cboard.C_BoardDTO">
     INSERT INTO C_Board (
         C_title, C_content, C_ofile, C_sfile, U_ID, C_postdate, C_downcount, C_pass, C_visitcount
     )
