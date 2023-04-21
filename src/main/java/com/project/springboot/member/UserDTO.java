@@ -4,15 +4,15 @@ import lombok.Data;
 
 @Data
 public class UserDTO {
-	private Integer U_Num;
-	private String U_Id;
-	private String U_Pw;
-	private String U_Name;
-	private String U_Nick;
-	private String U_Phone;
-	private String U_Email;
-	private String U_Zip;
-	private String U_Addr1;
-	private String U_Addr2;
-	private String U_Type;
+	private Integer u_num;
+	private String u_id;
+	private String u_pw;
+	private String u_name;
+	private String u_nick;
+	private String u_phone;
+	private String u_email;
+	private String u_zip;
+	private String u_addr1;
+	private String u_addr2;
+	private String u_type;
 }

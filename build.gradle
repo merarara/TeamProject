@@ -24,7 +24,14 @@ repositories {
 dependencies {
 	// 리캡챠
 	
+<<<<<<< HEAD
 	
+=======
+	// sns 로그인 설정
+	//implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:2.6.2'
+
+
+>>>>>>> f0b36179d03253ef2dd6c46c74788833434f6eb1
 	// 시큐리티 설정
 	implementation 'org.springframework.security:spring-security-taglibs'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -41,6 +48,7 @@ dependencies {
 	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 	implementation 'commons-io:commons-io:2.11.0'
 	implementation 'commons-fileupload:commons-fileupload:1.5'
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 }
 
 tasks.named('test') {

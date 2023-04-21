@@ -36,12 +36,13 @@ public class SecurityConfig {
 			.antMatchers("/css/**","/js/**","/productimgs/**","/userimages/**").permitAll()
 			.antMatchers("/guest/**").permitAll()
 			.antMatchers("/user/**").permitAll()
+			.antMatchers("/views/**").permitAll()
 			.antMatchers("/member/**").hasAnyRole("USER", "ADMIN")
             .antMatchers("/admin/**").hasRole("ADMIN")
-            .antMatchers("/faq/**").permitAll()
-            .antMatchers("/aboard/**").permitAll()
             // 게시판
             .antMatchers("/cboard/**").permitAll()
+            .antMatchers("/faq/**").permitAll()
+            .antMatchers("/aboard/**").permitAll()
             // 상품
             .antMatchers("/product/**").permitAll()
             .antMatchers("/static/**").permitAll()
@@ -80,10 +81,10 @@ public class SecurityConfig {
     		throws Exception {
     	auth.jdbcAuthentication()
     		.dataSource(dataSource)
-    		.usersByUsernameQuery("select U_Id, U_Pw, U_Enabled"
-    					+ " from USER_INFO where U_Id = ?")
-    		.authoritiesByUsernameQuery("select U_Id, U_authority "
-    					+ " from USER_INFO where U_Id = ?")
+    		.usersByUsernameQuery("select u_id, u_pw, u_enabled"
+    					+ " from USER_INFO where u_id = ?")
+    		.authoritiesByUsernameQuery("select u_id, u_authority "
+    					+ " from USER_INFO where u_id = ?")
     		.passwordEncoder(passwordEncoder());
     }
     
