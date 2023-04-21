@@ -52,6 +52,14 @@ public class PListDaoService implements IPListDaoService {
 		return list;
 	}
 	
+	
+	@Override
+	public List<ProductlistDTO> plistWithBrands(String[] brands) {
+		List<ProductlistDTO> dto = dao.plistWithBrandsDao(brands);
+		
+		return dto;
+	}
+	
 	// 페이지 설정 service & dao
 	@Override
 	public PPageInfo articlePage(int curpage, String searchfield, String searchword, String type)

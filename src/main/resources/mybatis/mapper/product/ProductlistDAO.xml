@@ -45,6 +45,7 @@
 		   and f.p_num = #{param1}
 	</select>
 	
+	<!-- 상품 검색 자동완성 -->
 	<select id="wordSearchShowDao" parameterType="HashMap" resultType="String">
 		<choose>
     		<when test="searchfield eq 'p_name'">
@@ -68,10 +69,18 @@
 					from product_list
 					where ${searchfield} like '%${searchword.toUpperCase()}%'
 					)
-					
 				)
 				where rownum <![CDATA[<]]> 6
     		</otherwise>
     	</choose>   
 	</select>
+	
+	<select id="plistWithBrands" resultType="com.project.springboot.productdto.ProductlistDTO">
+        SELECT *
+        FROM product_list
+        WHERE p_company IN
+        <foreach collection="array" item="brand" open="(" separator="," close=")">
+            #{brand}
+        </foreach>
+    </select>
 </mapper>

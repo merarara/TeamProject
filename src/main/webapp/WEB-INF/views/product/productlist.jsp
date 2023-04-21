@@ -132,6 +132,7 @@
     }
 </style>
 <script>
+	// 상품 검색 자동완성 시작 //
 	$(document).ready(function() {
 		$("#displayList").hide();
 		$('#searchword').on('keyup', function() {
@@ -200,9 +201,32 @@
 	        hideDiv();
 	    }
 	});
+	// 상품 검색 자동완성 끝
+	
+	function getList() {
+	    var brands = [];
+	    $('.brand-checkbox:checked').each(function() {
+	        brands.push($(this).val());
+	    });
+	    var data = {
+	        brands: brands
+	    };
+	
+	    $.ajax({
+	        url: '/product/productlist.do',
+	        type: 'GET',
+	        data: data,
+	        success: function(data) {
+	            // 성공 시 처리할 내용
+	            console.log(data);
+	        },
+	        error: function(request, status, error) {
+	            // 실패 시 처리할 내용
+	            console.log(error);
+	        }
+	    });
+	}
 </script>
-
-
 </head>
 <body>
 <%@ include file="../header.jsp" %>
@@ -246,6 +270,11 @@
 		    </div>
 		</div>
 		<div class="col-md-8">
+			<div class="d-flex align-items-center justify-content-center">
+				<label title="ASUS"><input type="checkbox" class="brand-checkbox" value="ASUS" onclick="getList()">ASUS</label>
+				<label title="APPLE"><input type="checkbox" class="brand-checkbox" value="APPLE" onclick="getList()">APPLE</label>
+				<label title="DELL"><input type="checkbox" class="brand-checkbox" value="DELL" onclick="getList()">DELL</label>
+			</div>
 			<table>
 				<thead>
 				<tr>

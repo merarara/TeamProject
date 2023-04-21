@@ -15,8 +15,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.springboot.ppageinfo.PPageInfo;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
@@ -31,7 +34,7 @@ public class ProductController {
 	
 	@RequestMapping("/product/productlist.do")
 	public String productlist1(HttpServletRequest req, Model model) {
-		
+
 		int nPage = 1;
 		HttpSession session = req.getSession();
 		
@@ -94,10 +97,10 @@ public class ProductController {
 	
 	@ResponseBody
 	@RequestMapping(value="/product/wordSearchShow.do", method=RequestMethod.GET, produces="text/plain;charset=UTF-8")
-	public String wordSearchShow(HttpServletRequest request) {
+	public String wordSearchShow(HttpServletRequest req) {
 
-		String searchfield = request.getParameter("searchfield");
-		String searchword = request.getParameter("searchword");
+		String searchfield = req.getParameter("searchfield");
+		String searchword = req.getParameter("searchword");
 		
 		Map<String, String> paraMap = new HashMap<>();
 		paraMap.put("searchfield", searchfield);
@@ -113,5 +116,24 @@ public class ProductController {
 				}
 			}
 		return jsonArr.toString();
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/product/productchkbox.do", produces="application/json")
+	public String productcheckbox(HttpServletRequest req) {
+		
+		 // brands 정보 추출
+	    String[] brands = req.getParameterValues("brands");
+	    
+	    // JSON 형식으로 변환
+	    ObjectMapper mapper = new ObjectMapper();
+	    String json = null;
+	    try {
+	        json = mapper.writeValueAsString(brands);
+	    } catch (JsonProcessingException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return json;
 	}
 }
