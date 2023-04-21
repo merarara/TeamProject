@@ -12,7 +12,10 @@
 	parameterType="com.project.springboot.jdbc.ABoard_Comment_DTO"
 	resultType="com.project.springboot.jdbc.ABoard_Comment_DTO"> 
 	select * from A_Comment
+	where a_num=#{a_num}
 </select>
+
+
 
 
 

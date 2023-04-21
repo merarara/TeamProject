@@ -27,7 +27,7 @@ public class AboardController {
 	public String aboard_main(Model model) {
 		
 		
-		model.addAttribute("ABoardList", dao.select());
+	model.addAttribute("ABoardList", dao.select());
 		return "aboard/aboard_main";
 	}
 	
