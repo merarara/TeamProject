@@ -74,13 +74,4 @@
     		</otherwise>
     	</choose>   
 	</select>
-	
-	<select id="plistWithBrands" resultType="com.project.springboot.productdto.ProductlistDTO">
-        SELECT *
-        FROM product_list
-        WHERE p_company IN
-        <foreach collection="array" item="brand" open="(" separator="," close=")">
-            #{brand}
-        </foreach>
-    </select>
 </mapper>

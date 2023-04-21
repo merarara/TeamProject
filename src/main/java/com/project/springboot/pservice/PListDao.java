@@ -22,6 +22,4 @@ public interface PListDao {
 	
 	// 상품 검색 자동완성
 	public List<String> wordSearchShowDao(Map<String, String> paraMap);
-	
-	List<ProductlistDTO> plistWithBrandsDao(String[] brands);
 }

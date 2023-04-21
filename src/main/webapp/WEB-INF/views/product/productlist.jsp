@@ -13,6 +13,30 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 <style>
+	/* 카테고리 박스 숨기기 */
+	/* 숨길 영역을 초기에 숨기기 */
+	.hidden {
+	  display: none;
+	}
+	
+	/* 펼치기 버튼 스타일 설정 */
+	.btn-toggle {
+	  padding: 0;
+	  border: none;
+	  background: none;
+	  text-decoration: underline;
+	  cursor: pointer;
+	}
+	
+	/* 카테고리 박스 */
+	.categorybox {
+		border: 1px solid #ccc;
+		width: 90%; 
+		margin-left: auto; 
+		margin-right: auto;
+		margin-bottom: 20px;
+	}
+	
     /* 테이블 스타일링 */
     table {
         width: 90%;
@@ -130,6 +154,36 @@
     	z-index: 1;
     	background-color: #fff;
     }
+    
+    .cate {
+	  	table-layout: fixed;
+	  	width: 100%;
+	}
+
+	.catename {
+	  	white-space: nowrap;
+	  	width: 10%;
+	}
+	
+	.cate_value {
+		margin-right: 15px;
+		border: 1px solid #ccc;
+		text-align: center;
+		padding-right: 10px;
+		padding-left: 10px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+	
+	.matufacturer-list {
+	  	position: relative;
+	}
+	
+	.btn-toggle {
+	  	position: absolute;
+	  	right: 0;
+	  	bottom: 0;
+	}
 </style>
 <script>
 	// 상품 검색 자동완성 시작 //
@@ -203,29 +257,21 @@
 	});
 	// 상품 검색 자동완성 끝
 	
-	function getList() {
-	    var brands = [];
-	    $('.brand-checkbox:checked').each(function() {
-	        brands.push($(this).val());
-	    });
-	    var data = {
-	        brands: brands
-	    };
+	// 펼치기 버튼에 이벤트 리스너 등록
+	window.addEventListener('DOMContentLoaded', () => {
+	  const btnToggle = document.querySelector('.btn-toggle');
+	  btnToggle.addEventListener('click', () => {
+	    const hiddenSpan = document.querySelector('.hidden');
+	    if (hiddenSpan.style.display === 'none') {
+	      hiddenSpan.style.display = 'inline';
+	      btnToggle.textContent = '접기';
+	    } else {
+	      hiddenSpan.style.display = 'none';
+	      btnToggle.textContent = '펼치기';
+	    }
+	  });
+	});
 	
-	    $.ajax({
-	        url: '/product/productlist.do',
-	        type: 'GET',
-	        data: data,
-	        success: function(data) {
-	            // 성공 시 처리할 내용
-	            console.log(data);
-	        },
-	        error: function(request, status, error) {
-	            // 실패 시 처리할 내용
-	            console.log(error);
-	        }
-	    });
-	}
 </script>
 </head>
 <body>
@@ -247,7 +293,7 @@
 		        	<button class="btn btn-secondary" type="button" onclick="goSearch(this.form)">검색</button>
 		      	</div>
 		    </form>
-		    <%-- 검색어 자동완성이 보여질 구역 --%>
+		    <!-- 검색어 자동완성이 보여질 구역 -->
 			<div id="displayList" onclick="hideDiv()">
 			</div>
 		</div>
@@ -270,10 +316,47 @@
 		    </div>
 		</div>
 		<div class="col-md-8">
-			<div class="d-flex align-items-center justify-content-center">
-				<label title="ASUS"><input type="checkbox" class="brand-checkbox" value="ASUS" onclick="getList()">ASUS</label>
-				<label title="APPLE"><input type="checkbox" class="brand-checkbox" value="APPLE" onclick="getList()">APPLE</label>
-				<label title="DELL"><input type="checkbox" class="brand-checkbox" value="DELL" onclick="getList()">DELL</label>
+			<div class="d-flex align-items-center justify-content-center categorybox">
+				 <table style="font-size: 10pt;" class="cate">
+			        <tr>
+			            <td class="catename"><b>제조사별</b></td>
+			            <td>
+			            	<div class="matufacturer-list">
+					            <span class="cate_value">삼성전자</span>
+					            <span class="cate_value">GIGABYTE</span>
+					            <span class="cate_value">한성컴퓨터</span>
+					            <span class="cate_value">MSI</span>
+					            <span class="cate_value">에이서</span>
+					            <span class="cate_value">ASUS</span>
+					            <span class="cate_value">DELL</span>
+					            <span class="cate_value">Razer</span>
+					            <span class="cate_value">APPLE</span>			            
+					            <button class="btn-toggle">펼치기</button>
+			            	</div>
+		            	<span class="hidden">
+		            		<br>
+		            		<span class="cate_value">Microsoft</span>
+		            		<span class="cate_value">주연테크</span>
+				            <span class="cate_value">LG전자</span>
+				            <span class="cate_value">레노버</span>
+			            	<span class="cate_value">샤오미</span>
+			            	<span class="cate_value">디클</span>
+			            	<span class="cate_value">HP</span>
+		            	</span>
+			            </td>
+			        </tr>
+			        <tr>
+			            <td class="catename"><b>가격별</b></td>
+			            <td>
+			            <div class="matufacturer-list">
+			            가격대1
+			            가격대2
+			            가격대3
+			            가격대4
+			            </div>
+			            </td>
+			        </tr>
+			    </table>
 			</div>
 			<table>
 				<thead>
