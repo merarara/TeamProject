@@ -8,6 +8,12 @@
 	<!-- 페이지설정 -->
 	<select id="articlePageDao" resultType="_int">
 		select count(*) as total from product_list
+		 <if test="param2 != null and param3 != null and param2 != '' and param3 != '' and param4 == 'select'">
+		 	where ${param2} = #{param3}
+		 </if>
+		 <if test="param2 != null and param2 != '' and param3 != '' and param3 != '' and param4 == 'search'">
+          	where ${param2} like '%${param3}%'
+         </if>
 	</select>
 	
 	<!-- 리스트뷰 -->
@@ -18,6 +24,12 @@
 		  		  from (
 		  		        select *
 		  		          from product_list
+		  		          <if test="param3 != null and param4 != null and param3 != '' and param4 != '' and param5 == 'select'">
+		  		           	where ${param3} = #{param4}
+		  		          </if>
+		  		          <if test="param3 != null and param3 != '' and param3 != '' and param4 != '' and param5 == 'search'">
+		  		          	where ${param3} like '%${param4}%'
+		  		          </if>
 		  		         ) A
 		  		  where rownum <![CDATA[<=]]> #{param1} ) B
 		  where B.num <![CDATA[>=]]> #{param2}

@@ -124,7 +124,23 @@
 <%@ include file="../header.jsp" %>
 
 <div class="container-fluid">
-	<p style="text-align: center;">검색창</p>
+	<div class="row" style="padding-top: 30px; padding-bottom: 30px;">
+	  <div class="col-md-4 offset-md-4">
+	    <form method="get" action="/product/productlist.do">
+	    <input type="hidden" name="type" value="search">
+	      <div class="input-group">
+	        <select class="form-select" name="searchfield">
+	          <option value="p_name">상품명</option>
+	          <option value="p_company">제조시</option>
+	        </select>
+	        &nbsp;&nbsp;
+	        <input type="search" class="form-control" name="searchword" placeholder="검색어를 입력하세요">
+	        &nbsp;&nbsp;
+	        <button class="btn btn-secondary" type="submit">검색</button>
+	      </div>
+	    </form>
+	  </div>
+	</div>
 	<div class="row">
 		<div class="col-md-2 d-flex align-items-center justify-content-center">
 		    <!-- 카테고리 메뉴 내용 -->
@@ -132,13 +148,13 @@
 		        <h5>간편선택</h5>
 		        <hr>
 		        <div style="width: 100%; display: flex; flex-direction: column;">
-		            <a href="#" class="btn btn-link text-dark">노트북 전체</a>
+		            <a href="/product/productlist.do" class="btn btn-link text-dark">노트북 전체</a>
 		            <hr> 
-		            <a href="#" class="btn btn-link text-dark">ASUS</a>
+		            <a href="/product/productlist.do?searchfield=p_company&searchword=ASUS&type=select" class="btn btn-link text-dark">ASUS</a>
 		            <hr>
-		            <a href="#" class="btn btn-link text-dark">APPLE</a>
+		            <a href="/product/productlist.do?searchfield=p_company&searchword=APPLE&type=select" class="btn btn-link text-dark">APPLE</a>
 		            <hr>
-		            <a href="#" class="btn btn-link text-dark">DELL</a>
+		            <a href="/product/productlist.do?searchfield=p_company&searchword=DELL&type=select" class="btn btn-link text-dark">DELL</a>
 		        </div>  
 		    </div>
 		</div>
@@ -212,7 +228,7 @@
 					      		<button class="btn btn-link text-dark" disabled>&lt;&lt;</button>
 					    	</c:when>
 						    <c:otherwise>
-						      	<a href="/product/productlist.do?page=1" class="btn btn-link text-dark">&lt;&lt;</a>
+						      	<a href="/product/productlist.do?page=1&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}" class="btn btn-link text-dark">&lt;&lt;</a>
 						    </c:otherwise>
 						</c:choose>
 						  
@@ -222,7 +238,7 @@
 						      	<button class="btn btn-link text-dark pagingbtn" disabled>&lt;</button>
 						    </c:when>
 						    <c:otherwise>
-						      	<a href="/product/productlist.do?page=${page.curPage - 1}" class="btn btn-link text-dark pagingbtn">&lt;</a>
+						      	<a href="/product/productlist.do?page=${page.curPage - 1}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}" class="btn btn-link text-dark pagingbtn">&lt;</a>
 						    </c:otherwise>
 						</c:choose>
 						  
@@ -233,7 +249,7 @@
 						        	<button class="btn btn-link text-dark pagingbtn" disabled>${fEach}</button>
 						      	</c:when>
 						      	<c:otherwise>
-						        	<a href="/product/productlist.do?page=${fEach}" class="btn btn-link text-dark pagingbtn">${fEach}</a>
+						        	<a href="/product/productlist.do?page=${fEach}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}" class="btn btn-link text-dark pagingbtn">${fEach}</a>
 						      	</c:otherwise>
 						    </c:choose>
 						</c:forEach>
@@ -244,7 +260,7 @@
 						      	<button class="btn btn-link text-dark pagingbtn" disabled>&gt;</button>
 						    </c:when>
 						    <c:otherwise>
-						      	<a href="/product/productlist.do?page=${page.curPage + 1}" class="btn btn-link text-dark pagingbtn">&gt;</a>
+						      	<a href="/product/productlist.do?page=${page.curPage + 1}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}" class="btn btn-link text-dark pagingbtn">&gt;</a>
 						    </c:otherwise>
 						</c:choose>
 						  
@@ -254,7 +270,7 @@
 						      	<button class="btn btn-link text-dark pagingbtn" disabled>&gt;&gt;</button>
 						    </c:when>
 						    <c:otherwise>
-						      	<a href="/product/productlist.do?page=${page.totalPage}" class="btn btn-link text-dark pagingbtn">&gt;&gt;</a>
+						      	<a href="/product/productlist.do?page=${page.totalPage}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}" class="btn btn-link text-dark pagingbtn">&gt;&gt;</a>
 						    </c:otherwise>
 						</c:choose>
 					</td>

@@ -28,6 +28,10 @@ public class ProductController {
 		int nPage = 1;
 		HttpSession session = req.getSession();
 		
+		String searchfield = req.getParameter("searchfield");
+		String searchword = req.getParameter("searchword");
+		String type = req.getParameter("type");
+		
 		if (session.getAttribute("cpage") != null)
 		{
 			product_curPage = (int)session.getAttribute("cpage");
@@ -40,7 +44,7 @@ public class ProductController {
 		}
 		catch (Exception e) {} 
 		
-		PPageInfo pinfo = pldao.articlePage(nPage);
+		PPageInfo pinfo = pldao.articlePage(nPage, searchfield, searchword, type);
 		model.addAttribute("page", pinfo);
 		
 		nPage = pinfo.getCurPage();
@@ -50,10 +54,15 @@ public class ProductController {
 			nPage = 1;
 		}
 		
-		ArrayList<ProductlistDTO> dto = pldao.plist(nPage);
+		ArrayList<ProductlistDTO> dto = pldao.plist(nPage, searchfield ,searchword, type);
 		
 		session.setAttribute("cpage", nPage);
 		
+		if (searchfield != null && searchword != null) {
+			model.addAttribute("searchfield", searchfield);
+			model.addAttribute("searchword", searchword);
+			model.addAttribute("type", type);
+		}
 		model.addAttribute("plist", dto);
 		
 		return "product/productlist";

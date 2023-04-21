@@ -26,12 +26,12 @@ public class PListDaoService implements IPListDaoService {
 	
 	// 상품리스트 service & dao
 	@Override
-	public ArrayList<ProductlistDTO> plist(int curpage)
+	public ArrayList<ProductlistDTO> plist(int curpage, String searchfield, String searchword, String type)
 	{
 		int nStart = (curpage - 1) * plistPsize + 1;
 		int nEnd = (curpage - 1) * plistPsize + plistPsize;
 		
-		ArrayList<ProductlistDTO> dto = dao.listDao(nEnd, nStart);
+		ArrayList<ProductlistDTO> dto = dao.listDao(nEnd, nStart, searchfield, searchword, type);
 
 		return dto;
 	}
@@ -45,10 +45,10 @@ public class PListDaoService implements IPListDaoService {
 	
 	// 페이지 설정 service & dao
 	@Override
-	public PPageInfo articlePage(int curpage)
+	public PPageInfo articlePage(int curpage, String searchfield, String searchword, String type)
 	{
 		int totalCount = 0;
-		totalCount = dao.articlePageDao(curpage);
+		totalCount = dao.articlePageDao(curpage, searchfield, searchword, type);
 		
 		// 총 페이지 수
 		int totalPage = totalCount / plistPsize;

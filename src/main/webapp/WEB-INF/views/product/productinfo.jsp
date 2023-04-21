@@ -32,7 +32,7 @@ $(document).ready(function() {
 }
 
 .items {
-	width: 970;
+	width: 700;
 	height: 80;
 	font-size: 10pt;
 	color: #868e96;
@@ -65,7 +65,7 @@ $(document).ready(function() {
   margin: 5px;
 }
 .price {
-  margin-left: 300px;
+  margin-left: 340px;
   color: #0067A3;
   font-size: 20pt;
 }
@@ -82,8 +82,8 @@ $(document).ready(function() {
 				<div id="contentwrap">
 					<h2>${ pinfo.p_name }</h2>
 					<div class="items">
-						<b>운영체제</b>: ${ pinfo.os } / <b>화면정보</b>: ${ pinfo.monitor } / <b>CPU</b>: ${ pinfo.cpu } / <b>램</b>: ${ pinfo.r_storage } / <b>램 교체</b>: ${ pinfo.ram }<br>
-						<b>그래픽</b>: ${ pinfo.graphic } / <b>저장장치</b>: ${ pinfo.storage } / <b>네트워크</b>: ${ pinfo.network } / <b>영상입출력</b>: ${ pinfo.video_io } / <b>단자</b>: ${ pinfo.terminal } / <b>부가기능</b>: ${ pinfo.add_ons }<br>
+						<b>운영체제</b>: ${ pinfo.os } / <b>화면정보</b>: ${ pinfo.monitor } / <b>CPU</b>: ${ pinfo.cpu } / <b>램</b>: ${ pinfo.r_storage } / <b>램 교체</b>: ${ pinfo.ram }
+						<b>그래픽</b>: ${ pinfo.graphic } / <b>저장장치</b>: ${ pinfo.storage } / <b>네트워크</b>: ${ pinfo.network } / <b>영상입출력</b>: ${ pinfo.video_io } / <b>단자</b>: ${ pinfo.terminal } / <b>부가기능</b>: ${ pinfo.add_ons }
 						<b>입력장치</b>: ${ pinfo.io } / <b>파워</b>: ${ pinfo.power }  
 						<c:if test="${ not empty pinfo.hz }" >
 							/ <b>주사율</b>: ${ pinfo.hz }
@@ -111,6 +111,9 @@ $(document).ready(function() {
 							<div class="col-md-7">
 								<span style="font-size: 15pt"><b>가격 :</b></span>
   								<span class="price"><b><fmt:formatNumber type="number" value="${pinfo.p_price}" pattern="#,###" />원</b></span>
+  								<br>
+  								구매버튼 <br>
+  								장바구니 <br>
 							</div>
 						</div>
 					</div>
