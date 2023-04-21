@@ -11,5 +11,6 @@ public class ABoard_Comment_DTO {
 	private int comm_num;
 	private String u_id;
 	private int a_commend;
+	private int a_num;
 	
 }

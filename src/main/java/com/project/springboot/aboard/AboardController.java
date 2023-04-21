@@ -1,5 +1,7 @@
 package com.project.springboot.aboard;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,18 +10,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.project.springboot.jdbc.ABoard_Comment_DTO;
+import com.project.springboot.jdbc.ABoard_Comment_Service;
 import com.project.springboot.jdbc.ABoard_DTO;
 import com.project.springboot.jdbc.ABoard_Service;
-import com.project.springboot.jdbc.FBoard_DTO;
 
 @Controller
 public class AboardController {
 
 	@Autowired
 	ABoard_Service dao;
+	@Autowired
+	ABoard_Comment_Service dao2;
 	
 	@RequestMapping("/aboard/aboard_main.do")
 	public String aboard_main(Model model) {
+		
+		
 		model.addAttribute("ABoardList", dao.select());
 		return "aboard/aboard_main";
 	}
@@ -42,6 +49,11 @@ public class AboardController {
 		int a_num = Integer.parseInt(req.getParameter("a_num"));
 		ABoard_DTO dto = dao.view(a_num);
 		model.addAttribute("ABoardList2", dto);
+		
+		
+		List<ABoard_Comment_DTO> commentDto = dao2.select2(a_num);
+	    model.addAttribute("commentList", commentDto);
+		
 //		return "redirect:faq/faq_main.do";  
 		return "aboard/aboard_main_detail";   
 	}
