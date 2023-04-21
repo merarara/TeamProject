@@ -7,15 +7,15 @@ import lombok.Data;
 @Data
 public class C_BoardDTO {
 	
-    private int C_num;
-    private String C_title;
-    private String C_content;
-    private int C_visitcount;
-    private Date C_postdate;
-    private String U_ID;
-    private String C_ofile;
-    private String C_sfile;
-    private int C_downcount;
-    private int C_Commend;
+    private int c_num;
+    private String c_title;
+    private String c_content;
+    private int c_visitcount;
+    private Date c_postdate;
+    private String u_id;
+    private String c_ofile;
+    private String c_sfile;
+    private int c_downcount;
+    private int c_commend;
        
 }

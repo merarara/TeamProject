@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.springboot.cboard.C_BoardDAO">
-    
+
 <select id="selectCount" resultType="int">
   SELECT COUNT(*) FROM C_Board
   WHERE C_title LIKE '%' || #{searchword, jdbcType=VARCHAR} || '%'
 </select>
 
-<!-- C_Board 테이블의 모든 글 목록을 불러오는 SELECT 쿼리문 -->
-<select id="selectList" resultType="com.project.springboot.cboard.C_BoardDTO">
-  SELECT *
-  FROM C_Board
-  ORDER BY C_num DESC
-</select>
 
 
 <select id="selectListPage" resultType="com.project.springboot.cboard.C_BoardDTO">
@@ -22,16 +16,16 @@
         FROM (
             SELECT *
             FROM C_Board
-            <if test="searchword != null">
-                WHERE ${searchField} LIKE '%' || #{searchword, jdbcType=VARCHAR} || '%'
-            </if>
+            <where>
+                <if test="searchword != null">
+                    AND ${searchField} LIKE '%' || #{searchword, jdbcType=VARCHAR} || '%'
+                </if>
+            </where>
             ORDER BY C_num DESC
         ) Tb
     )
-    WHERE rNum BETWEEN #{startRow, jdbcType=INTEGER} AND #{endRow, jdbcType=INTEGER}
+    WHERE rNum BETWEEN ${start} AND ${end}
 </select>
-
-
     <insert id="insertWrite" parameterType="com.project.springboot.cboard.C_BoardDTO">
         <selectKey keyProperty="C_num" resultType="int" order="BEFORE">
             SELECT C_num_SEQ.NEXTVAL FROM DUAL

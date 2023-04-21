@@ -33,22 +33,29 @@ public class ListController {
                        @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
                        Model model) {
 
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<String, Object>();
 
         if (searchword != null) {
             map.put("searchField", searchField);
             map.put("searchword", searchword);
-            // searchword가 null이 아닐 때만 해당 파라미터를 쿼리 실행에 사용합니다.
         }
+
         int totalCount = dao.selectCount(map);
 
-        int start = (pageNum - 1) * pageSize + 1;
-        int end = pageNum * pageSize;
+        int start, end;
+        if (searchword == null) {
+            start = (pageNum - 1) * pageSize;
+            end = pageNum * pageSize;
+        } else {
+            start = 0;
+            end = 0;
+        }
         map.put("start", start);
         map.put("end", end);
 
-        List<C_BoardDTO> boardLists = dao.selectListPage(map);
 
+        List<C_BoardDTO> boardLists = dao.selectListPage(map);
+        
         String pagingImg = BoardPage.pagingStr(totalCount, pageSize, blockPage, pageNum, "/List");
         map.put("pagingImg", pagingImg);
         map.put("totalCount", totalCount);
@@ -59,6 +66,5 @@ public class ListController {
         model.addAttribute("map", map);
 
         return "cboard/List";
-    }
-    
+    }    
 }

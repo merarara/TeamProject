@@ -11,9 +11,9 @@
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 <script type="text/javascript">
     function validateForm(form) {  // 필수 항목 입력 확인
-        if (form.u_ID.value.trim() == "") {
+        if (form.u_id.value.trim() == "") {
             alert("작성자를 입력하세요.");
-            form.u_ID.focus();
+            form.u_id.focus();
             return false;
         }
         if (form.c_title.value.trim() == "") {
@@ -41,7 +41,7 @@
     <tr>
         <td>작성자</td>
         <td>
-            <input type="text" name="u_ID" style="width:150px;" />
+            <input type="text" name="u_id" style="width:150px;" />
         </td>
     </tr>
     <tr>
