@@ -27,9 +27,6 @@
 			<tr>
 				<td>${row.a_num}</td>
 				<td>${row.a_title}</td>
-				
-				
-				
 				<td>
       				<a href="aboard_main_detail.do?a_num=${row.a_num }">${row.a_content}</a>
 				</td>

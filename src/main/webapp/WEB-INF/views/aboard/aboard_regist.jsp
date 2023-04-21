@@ -21,7 +21,11 @@
 		<tr>
 			<th>a_content</th>
 			<td><input type="text" name="a_content" value="" /></td>			
-		</tr>
+		</tr>	
+		<tr>
+			<th>a_visitcount</th>
+			<td><input type="int" name="a_content" value="" /></td>			
+		</tr>	
 		<tr>
 			<th>u_id</th>
 			<td><input type="text" name="u_id" value="" /></td>			

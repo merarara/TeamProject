@@ -24,7 +24,6 @@ public class AboardController {
 		return "aboard/aboard_main";
 	}
 	
-
 	@RequestMapping(value="/aboard/aboard_regist.do", method=RequestMethod.GET)
 	public String member11() {				 
 		return "aboard/aboard_regist";       
@@ -47,9 +46,6 @@ public class AboardController {
 		return "aboard/aboard_main_detail";   
 	}
 
-	
-	
-	
 	@RequestMapping(value="/aboard/aboard_edit.do", method=RequestMethod.GET)
 	public String member23(ABoard_DTO aBoardDTO, Model model) {		
 		aBoardDTO = dao.selectOne(aBoardDTO);
@@ -64,8 +60,6 @@ public class AboardController {
 		return "redirect:aboard_main.do";          
 	}
 	
-
-
 	@RequestMapping(value="/aboard/aboard_delete.do", method=RequestMethod.GET)
 	public String member24(HttpServletRequest req) {
 		int a_num = Integer.parseInt(req.getParameter("a_num"));
@@ -73,12 +67,6 @@ public class AboardController {
 		if(result==1) System.out.println("삭제되었습니다.");
 		return "redirect:aboard_main.do";    
 	}	
-	
-	
 
-	
-	
-	
 }
-	
 	
