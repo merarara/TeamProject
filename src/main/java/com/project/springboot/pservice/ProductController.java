@@ -1,14 +1,21 @@
 package com.project.springboot.pservice;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.springboot.ppageinfo.PPageInfo;
 import com.project.springboot.productdto.ProductinfoDTO;
@@ -83,5 +90,28 @@ public class ProductController {
 		
 		model.addAttribute("pinfo", dto);
 		return "product/productinfo";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/product/wordSearchShow.do", method=RequestMethod.GET, produces="text/plain;charset=UTF-8")
+	public String wordSearchShow(HttpServletRequest request) {
+
+		String searchfield = request.getParameter("searchfield");
+		String searchword = request.getParameter("searchword");
+		
+		Map<String, String> paraMap = new HashMap<>();
+		paraMap.put("searchfield", searchfield);
+		paraMap.put("searchword", searchword);
+		
+		List<String> wordList = pldao.wordSearchShow(paraMap);
+		JSONArray jsonArr = new JSONArray(); 
+			if(wordList != null) {
+				for(String word : wordList) {
+					JSONObject jsonObj = new JSONObject();
+					jsonObj.put("word", word);			
+					jsonArr.add(jsonObj);
+				}
+			}
+		return jsonArr.toString();
 	}
 }

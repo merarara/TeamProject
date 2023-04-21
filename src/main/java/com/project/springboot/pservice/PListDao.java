@@ -1,6 +1,8 @@
 package com.project.springboot.pservice;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,4 +19,7 @@ public interface PListDao {
 	
 	// 상품 상세페이지
 	public ProductinfoDTO viewpinfoDao (int p_num);
+	
+	// 상품 검색 자동완성
+	public List<String> wordSearchShowDao(Map<String, String> paraMap);
 }

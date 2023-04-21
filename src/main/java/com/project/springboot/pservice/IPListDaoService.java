@@ -1,6 +1,8 @@
 package com.project.springboot.pservice;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -18,4 +20,7 @@ public interface IPListDaoService {
 	
 	// 상품 상세페이지
 	public ProductinfoDTO viewpinfo(int p_num);
+	
+	// 상품 검색 자동완성
+	public List<String> wordSearchShow(Map<String, String> paraMap);
 }

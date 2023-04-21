@@ -1,6 +1,8 @@
 package com.project.springboot.pservice;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +43,13 @@ public class PListDaoService implements IPListDaoService {
 		ProductinfoDTO dto = dao.viewpinfoDao(p_num);
 		
 		return dto;
+	}
+	
+	@Override
+	public List<String> wordSearchShow(Map<String, String> paraMap) {
+		List<String> list = dao.wordSearchShowDao(paraMap);
+		
+		return list;
 	}
 	
 	// 페이지 설정 service & dao

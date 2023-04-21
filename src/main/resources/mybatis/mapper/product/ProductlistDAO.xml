@@ -12,7 +12,7 @@
 		 	where ${param2} = #{param3}
 		 </if>
 		 <if test="param2 != null and param2 != '' and param3 != '' and param3 != '' and param4 == 'search'">
-          	where ${param2} like '%${param3}%'
+          	where upper(${param2}) like '%${param3.toUpperCase()}%'
          </if>
 	</select>
 	
@@ -28,7 +28,7 @@
 		  		           	where ${param3} = #{param4}
 		  		          </if>
 		  		          <if test="param3 != null and param3 != '' and param3 != '' and param4 != '' and param5 == 'search'">
-		  		          	where ${param3} like '%${param4}%'
+		  		          	where upper(${param3}) like '%${param4.toUpperCase()}%'
 		  		          </if>
 		  		         ) A
 		  		  where rownum <![CDATA[<=]]> #{param1} ) B
@@ -43,5 +43,35 @@
 		  from product_info f, product_list l
 		 where f.p_num = l.p_num
 		   and f.p_num = #{param1}
+	</select>
+	
+	<select id="wordSearchShowDao" parameterType="HashMap" resultType="String">
+		<choose>
+    		<when test="searchfield eq 'p_name'">
+    			select p_name
+    			from(
+    			select rownum as rnum, p_name
+				from(
+					select distinct p_name
+					from product_list
+					where p_name like '%${searchword.toUpperCase()}%'
+				)
+				where rownum <![CDATA[<]]> 6
+				)
+    		</when>
+    		<otherwise>
+    			select ${searchfield} 
+				from(
+					select ROWNUM as rnum, ${searchfield}
+					from (
+					select distinct ${searchfield}
+					from product_list
+					where ${searchfield} like '%${searchword.toUpperCase()}%'
+					)
+					
+				)
+				where rownum <![CDATA[<]]> 6
+    		</otherwise>
+    	</choose>   
 	</select>
 </mapper>
