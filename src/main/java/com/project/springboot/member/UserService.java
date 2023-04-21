@@ -1,6 +1,9 @@
 package com.project.springboot.member;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +29,7 @@ private UserMapper userMapper;
 	public void deleteUser(String u_id) {
 	    userMapper.deleteUser(u_id);
 	}
-
+	// 회원 조회
 	@Transactional
 	public UserDTO selectone(String u_id) {
 		UserDTO dto = userMapper.selectOne(u_id);

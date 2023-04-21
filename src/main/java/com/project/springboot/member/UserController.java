@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class UserController {
-	// 회원가입
+	
 	@Autowired
 	UserService userService;
 	@Autowired
@@ -62,7 +63,7 @@ public class UserController {
     
     // 회원가입 처리
     @PostMapping("/user/signUp.do")
-    public String signUp(@ModelAttribute UserDTO userDTO) {
+    public String signUp(@ModelAttribute UserDTO userDTO, HttpServletRequest req) {
     	System.out.println(1);
     	String passwd = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(userDTO.getU_pw());
     	userDTO.setU_pw(passwd);
@@ -94,6 +95,7 @@ public class UserController {
     public String logout(HttpServletRequest request) {
         request.getSession().invalidate(); // 세션 무효화
         SecurityContextHolder.clearContext(); // SecurityContext 제거
+        
         return "redirect:/user/login.do?logout=true"; // 로그인 페이지로 이동하며 로그아웃 메시지 전달
     }
     
@@ -105,15 +107,9 @@ public class UserController {
  		String userId = auth.getName();
  		System.out.println(userId);
  		// 회원 정보를 조회합니다.
-// 		UserDTO userDTO = userService.getUserById(userId);
-// 		model.addAttribute("userDTO", userDTO);
-//
-// 		return "user/edit";
- 		
  		UserDTO dto = userService.selectone(userId);
- 		
  		model.addAttribute("uinfo", dto);
-
+ 		
  		return "/user/edit";
  	}
 
@@ -121,13 +117,12 @@ public class UserController {
  	@PostMapping("/user/edit.do")
  	public String edit(@ModelAttribute UserDTO userDTO) {
  		// 수정된 회원 정보를 업데이트합니다.
+ 		String passwd = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(userDTO.getU_pw());
+    	userDTO.setU_pw(passwd);
  		userMapper.updateUser(userDTO);
 
  		return "redirect:/home.do";
- 	}
-    
-    
-    
+ 	} 
     
  // 회원탈퇴 페이지로 이동하는 매핑
     @RequestMapping("/user/delete.do")
@@ -160,11 +155,7 @@ public class UserController {
             return "/user/delete";
         }
     }
-
-
-
-	
-	
+    
 	@RequestMapping("/myError.do")
 	public String login2() {		
 		return "auth/error";

@@ -74,8 +74,6 @@
        	 </div>
        	</div>
         <button type="submit" class="btn btn-primary">회원정보 수정</button>
-         <!-- 리캡챠 표시 -->
-  		<div class="g-recaptcha" data-sitekey="6Le6S5glAAAAAJaTOGMnoWZJfRi57Ee6AKNWJduX"></div>
     </div>
     </div>
 </form>
@@ -100,27 +98,6 @@ function execution_daum_address() {
             document.getElementsByName('u_addr1')[0].value = addr1;
         }
     }).open();
-}
-
-/////////////////////////////////////////////////////////////
-// 리캡챠
-function onReCaptchaSuccess(response) {
-  // 토큰 생성 후, 서버로 전송
-  $.ajax({
-    type: "POST",
-    url: "/verify-recaptcha",
-    data: {recaptchaResponse: response},
-    success: function(data) {
-      // 토큰 검증 결과에 따라 회원가입 처리 또는 실패 메시지 출력
-      if (data.success) {
-        // 회원가입 처리
-        alert("회원가입이 완료되었습니다.");
-      } else {
-        // 실패 메시지 출력
-        alert("리캡챠 인증에 실패했습니다.");
-      }
-    }
-  });
 }
 
 </script>

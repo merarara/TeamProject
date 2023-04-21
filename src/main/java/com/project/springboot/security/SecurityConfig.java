@@ -92,6 +92,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-       
+    
+    // 회원정보수정 암호화
     
 }
