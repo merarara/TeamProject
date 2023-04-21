@@ -96,8 +96,8 @@ function execution_daum_address() {
             var zip = data.zonecode; // 우편번호
             var addr1 = data.roadAddress; // 도로명주소
             // 우편번호, 주소1, 주소2 입력필드에 값 채우기
-            document.getElementsByName('U_Zip')[0].value = zip;
-            document.getElementsByName('U_Addr1')[0].value = addr1;
+            document.getElementsByName('u_zip')[0].value = zip;
+            document.getElementsByName('u_addr1')[0].value = addr1;
         }
     }).open();
 }
@@ -125,7 +125,6 @@ function onReCaptchaSuccess(response) {
 
 </script>
 
-</div>
 <%@ include file="../footer.jsp" %>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

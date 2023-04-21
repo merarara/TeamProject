@@ -35,6 +35,12 @@ public class UserController {
 		return "/auth/login";
 	}
 	
+	// 내정보로 이동하는 맵핑
+	@RequestMapping("/user/myinfo.do")
+	public String myinfo() {
+		return "/user/myinfo";
+	}
+	
 	// 홈으로 이동하는 맵핑
 	@RequestMapping("/home.do")
 	public String home() {

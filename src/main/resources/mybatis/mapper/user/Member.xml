@@ -27,17 +27,17 @@
 			    u_zip = #{u_zip},
 			    u_addr1 = #{u_addr1},
 			    u_addr2 = #{u_addr2}
-			    WHERE u_num = #{u_num}
+			    WHERE u_id = #{u_id}
 			</when>
 			<otherwise>
 				UPDATE USER_INFO SET
-				    U_Nick = #{U_Nick},
-				    U_Phone = #{U_Phone},
-				    U_Email = #{U_Email},
-				    U_Zip = #{U_Zip},
-				    U_Addr1 = #{U_Addr1},
-				    U_Addr2 = #{U_Addr2}
-				    WHERE U_Num = #{U_Num}
+				    u_nick = #{u_nick},
+				    u_phone = #{u_phone},
+				    u_email = #{u_email},
+				    U_Zip = #{u_zip},
+				    u_addr1 = #{u_addr1},
+				    u_addr2 = #{u_addr2}
+				    WHERE u_id = #{u_id}
 			</otherwise>
 		</choose>
 	</update>
