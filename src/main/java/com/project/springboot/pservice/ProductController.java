@@ -38,6 +38,13 @@ public class ProductController {
 		String type = req.getParameter("type");
 		String selected = req.getParameter("selected");
 		
+		try
+		{
+			String sPage = req.getParameter("page");
+			nPage = Integer.parseInt(sPage);
+		}
+		catch (Exception e) {} 
+		
 		PPageInfo pinfo = pldao.articlePage(nPage, searchfield, searchword, type, selected);
 		model.addAttribute("page", pinfo);
 		
