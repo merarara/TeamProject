@@ -13,10 +13,10 @@ import com.project.springboot.productdto.ProductlistDTO;
 @Service
 public interface IPListDaoService {
 	// 페이지설정
-	public PPageInfo articlePage(int curPage, String searchfield, String searchword, String type);
+	public PPageInfo articlePage(int curPage, String searchfield, String searchword, String type, String selected);
 	
 	// 리스트
-	public ArrayList<ProductlistDTO> plist(int curPage, String searchfield, String searchword, String type);
+	public ArrayList<ProductlistDTO> plist(int curPage, String searchfield, String searchword, String type, String selected);
 	
 	// 상품 상세페이지
 	public ProductinfoDTO viewpinfo(int p_num);

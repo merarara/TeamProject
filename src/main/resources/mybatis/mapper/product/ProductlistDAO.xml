@@ -8,11 +8,35 @@
 	<!-- 페이지설정 -->
 	<select id="articlePageDao" resultType="_int">
 		select count(*) as total from product_list
-		 <if test="param2 != null and param3 != null and param2 != '' and param3 != '' and param4 == 'select'">
-		 	where ${param2} = #{param3}
+		 <if test="sField != 'p_price' and sField != null and sWord != null and sField != '' and sWord != '' and type == 'select'">
+		 	where ${sField} = #{sWord}
 		 </if>
-		 <if test="param2 != null and param2 != '' and param3 != '' and param3 != '' and param4 == 'search'">
-          	where upper(${param2}) like '%${param3.toUpperCase()}%'
+		 <if test="sField != 'p_price' and sField != null and sField != '' and sWord != '' and sWord != '' and type == 'search'">
+          	where upper(${sField}) like '%${sWord.toUpperCase()}%'
+         </if>
+         <if test="sField == 'p_price' and sWord == '500001'">
+         	where ${sField} <![CDATA[<]]> 500000
+        	<if test="selected != '' and selected != null">
+          	  and p_company = #{selected}
+            </if>
+         </if>
+         <if test="sField == 'p_price' and sWord == '500000' or sWord == '1000000' or sWord == '1500000'">
+         	where ${sField} between ${sWord} and ${sWord} + 500000
+       		<if test="selected != '' and selected != null">
+         	  and p_company = #{selected}
+         	</if>
+         </if>
+         <if test="sField == 'p_price' and sWord == '2000000' or sWord == '3000000' or sWord == '4000000'">
+         	where ${sField} between ${sWord} and ${sWord} + 1000000
+       		<if test="selected != '' and selected != null">
+         	  and p_company = #{selected}
+         	</if>
+         </if>
+         <if test="sField == 'p_price' and sWord == '5000000'">
+         	where ${sField} <![CDATA[>=]]> 5000000
+        	<if test="selected != '' and selected != null">
+          	  and p_company = #{selected}
+            </if>
          </if>
 	</select>
 	
@@ -24,15 +48,43 @@
 		  		  from (
 		  		        select *
 		  		          from product_list
-		  		          <if test="param3 != null and param4 != null and param3 != '' and param4 != '' and param5 == 'select'">
-		  		           	where ${param3} = #{param4}
+		  		          <if test="sField == 'p_price' and sWord == '500001'">
+		  		          	where ${sField} <![CDATA[<]]> 500000
+		  		          	<if test="selected != '' and selected != null">
+		  		          	  and p_company = #{selected}
+		  		          	</if>
+		  		          	order by ${sField}
 		  		          </if>
-		  		          <if test="param3 != null and param3 != '' and param3 != '' and param4 != '' and param5 == 'search'">
-		  		          	where upper(${param3}) like '%${param4.toUpperCase()}%'
+		  		          <if test="sField == 'p_price' and sWord == '500000' or sWord == '1000000' or sWord == '1500000'">
+		  		          	where ${sField} between ${sWord} and ${sWord} + 500000
+	  		          		<if test="selected != '' and selected != null">
+				          	  and p_company = #{selected}
+				          	</if>
+					        order by ${sField}
+		  		          </if>
+		  		          <if test="sField == 'p_price' and sWord == '2000000' or sWord == '3000000' or sWord == '4000000'">
+		  		          	where ${sField} between ${sWord} and ${sWord} + 500000
+	  		          		<if test="selected != '' and selected != null">
+				          	  and p_company = #{selected}
+				          	</if>
+					        order by ${sField}
+		  		          </if>
+		  		          <if test="sField == 'p_price' and sWord == '5000000'">
+		  		          	where ${sField} between ${sWord} and ${sWord} + 500000
+	  		          		<if test="selected != '' and selected != null">
+				          	  and p_company = #{selected}
+				          	</if>
+					        order by ${sField}
+		  		          </if>
+		  		          <if test="sField != 'p_price' and sField != null and sWord != null and sField != '' and sWord != '' and type == 'select'">
+		  		           	where ${sField} = #{sWord}
+		  		          </if>
+		  		          <if test="sField != 'p_price' and sField != null and sField != '' and sField != '' and sWord != '' and type == 'search'">
+		  		          	where upper(${sField}) like '%${sWord.toUpperCase()}%'
 		  		          </if>
 		  		         ) A
-		  		  where rownum <![CDATA[<=]]> #{param1} ) B
-		  where B.num <![CDATA[>=]]> #{param2}
+		  		  where rownum <![CDATA[<=]]> #{nEnd} ) B
+		  where B.num <![CDATA[>=]]> #{nStart}
 	</select>
 	
 	<!-- 상품 상세 페이지 -->

@@ -19,6 +19,10 @@
 	  display: none;
 	}
 	
+	.hidden2 {
+	  display: none;
+	}
+	
 	/* 펼치기 버튼 스타일 설정 */
 	.btn-toggle {
 	  padding: 0;
@@ -26,6 +30,20 @@
 	  background: none;
 	  text-decoration: underline;
 	  cursor: pointer;
+	  position: absolute;
+	  right: 0;
+	  bottom: 0;
+	}
+	
+	.btn-toggle2 {
+	  padding: 0;
+	  border: none;
+	  background: none;
+	  text-decoration: underline;
+	  cursor: pointer;
+	  position: absolute;
+	  right: 0;
+	  bottom: 0;
 	}
 	
 	/* 카테고리 박스 */
@@ -179,12 +197,6 @@
 	  	position: relative;
 	}
 	
-	.btn-toggle {
-	  	position: absolute;
-	  	right: 0;
-	  	bottom: 0;
-	}
-	
 	#wrap {
 		min-width: 1600px;
 	}
@@ -267,15 +279,29 @@
 	
 	// 펼치기 버튼에 이벤트 리스너 등록
 	window.addEventListener('DOMContentLoaded', () => {
-	  const btnToggle = document.querySelector('.btn-toggle');
-	  btnToggle.addEventListener('click', () => {
+	  	const btnToggle = document.querySelector('.btn-toggle');
+	  	btnToggle.addEventListener('click', () => {
 	    const hiddenSpan = document.querySelector('.hidden');
 	    if (hiddenSpan.style.display === 'none') {
-	      hiddenSpan.style.display = 'inline';
-	      btnToggle.textContent = '접기';
+	      	hiddenSpan.style.display = 'inline';
+	      	btnToggle.textContent = '접기';
 	    } else {
-	      hiddenSpan.style.display = 'none';
-	      btnToggle.textContent = '펼치기';
+	      	hiddenSpan.style.display = 'none';
+	      	btnToggle.textContent = '펼치기';
+	    }
+	  });
+	});
+	
+	window.addEventListener('DOMContentLoaded', () => {
+	  	const btnToggle2 = document.querySelector('.btn-toggle2');
+	  	btnToggle2.addEventListener('click', () => {
+	    const hiddenSpan2 = document.querySelector('.hidden2');
+	    if (hiddenSpan2.style.display === 'none') {
+	      	hiddenSpan2.style.display = 'inline';
+	      	btnToggle2.textContent = '접기';
+	    } else {
+	      	hiddenSpan2.style.display = 'none';
+	      	btnToggle2.textContent = '펼치기';
 	    }
 	  });
 	});
@@ -329,38 +355,46 @@
 			            <td class="catename"><b>제조사별</b></td>
 			            <td>
 			            	<div class="matufacturer-list">
-					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=삼성전자&type=select">삼성전자</a></span>
-					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=GIGABYTE&type=select">GIGABYTE</a></span>
-					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=한성컴퓨터&type=select">한성컴퓨터</a></span>
-					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=MSI&type=select">MSI</a></span>
-					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=에이서&type=select">에이서</a></span>
-					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=ASUS&type=select">ASUS</a></span>
-					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=DELL&type=select">DELL</a></span>
-					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=Razer&type=select">Razer</a></span>
-					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=APPLE&type=select">APPLE</a></span>			            
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=삼성전자&type=select&selected=삼성전자">삼성전자</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=GIGABYTE&type=select&selected=GIGABYTE">GIGABYTE</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=한성컴퓨터&type=select&selected=한성컴퓨터">한성컴퓨터</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=MSI&type=select&selected=MSI">MSI</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=에이서&type=select&selected=에이서">에이서</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=ASUS&type=select&selected=ASUS">ASUS</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=DELL&type=select&selected=DELL">DELL</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=Razer&type=select&selected=Razer">Razer</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=APPLE&type=select&selected=APPLE">APPLE</a></span>			            
 					            <button class="btn-toggle">펼치기</button>
 			            	</div>
 			            	<span class="hidden">
 			            		<br>
-			            		<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=Microsoft&type=select">Microsoft</a></span>
-			            		<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=주연테크&type=select">주연테크</a></span>
-					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=LG전자&type=select">LG전자</a></span>
-					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=레노버&type=select">레노버</a></span>
-				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=샤오미&type=select">샤오미</a></span>
-				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=디클&type=select">디클</a></span>
-				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=HP&type=select">HP</a></span>
+			            		<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=Microsoft&type=select&selected=Microsoft">Microsoft</a></span>
+			            		<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=주연테크&type=select&selected=주연테크">주연테크</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=LG전자&type=select&selected=LG전자">LG전자</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=레노버&type=select&selected=레노버">레노버</a></span>
+				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=샤오미&type=select&selected=샤오미">샤오미</a></span>
+				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=디클&type=select&selected=디클">디클</a></span>
+				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=HP&type=select&selected=HP">HP</a></span>
 			            	</span>
 			            </td>
 			        </tr>
 			        <tr>
 			            <td class="catename"><b>가격별</b></td>
 			            <td>
-			            <div class="matufacturer-list">
-			            가격대1
-			            가격대2
-			            가격대3
-			            가격대4
-			            </div>
+				            <div class="matufacturer-list">
+				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_price&searchword=500001&type=select&selected=${ param.selected }">50만원 이하</a></span>
+				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_price&searchword=500000&type=select&selected=${ param.selected }">50만원 ~ 100만원</a></span>
+				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_price&searchword=1000000&type=select&selected=${ param.selected }">100만원 ~ 150만원</a></span>
+				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_price&searchword=1500000&type=select&selected=${ param.selected }">150만원 ~ 200만원</a></span>
+				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_price&searchword=2000000&type=select&selected=${ param.selected }">200만원 ~ 300만원</a></span>
+				            	<button class="btn-toggle2">펼치기</button>
+				            </div>
+				            <span class="hidden2">
+				            	<br>
+				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_price&searchword=3000000&type=select&selected=${ param.selected }">300만원 ~ 400만원</a></span>
+				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_price&searchword=4000000&type=select&selected=${ param.selected }">400만원 ~ 500만원</a></span>
+				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_price&searchword=5000000&type=select&selected=${ param.selected }">500만원 이상</a></span>
+				            </span>
 			            </td>
 			        </tr>
 			    </table>
@@ -435,7 +469,7 @@
 					      		<button class="btn btn-link text-dark" disabled>&lt;&lt;</button>
 					    	</c:when>
 						    <c:otherwise>
-						      	<a href="/product/productlist.do?page=1&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}" class="btn btn-link text-dark">&lt;&lt;</a>
+						      	<a href="/product/productlist.do?page=1&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${ param.selected }" class="btn btn-link text-dark">&lt;&lt;</a>
 						    </c:otherwise>
 						</c:choose>
 						  
@@ -445,7 +479,7 @@
 						      	<button class="btn btn-link text-dark pagingbtn" disabled>&lt;</button>
 						    </c:when>
 						    <c:otherwise>
-						      	<a href="/product/productlist.do?page=${page.curPage - 1}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}" class="btn btn-link text-dark pagingbtn">&lt;</a>
+						      	<a href="/product/productlist.do?page=${page.curPage - 1}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${ param.selected }" class="btn btn-link text-dark pagingbtn">&lt;</a>
 						    </c:otherwise>
 						</c:choose>
 						  
@@ -456,7 +490,7 @@
 						        	<button class="btn btn-link text-dark pagingbtn" disabled>${fEach}</button>
 						      	</c:when>
 						      	<c:otherwise>
-						        	<a href="/product/productlist.do?page=${fEach}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}" class="btn btn-link text-dark pagingbtn">${fEach}</a>
+						        	<a href="/product/productlist.do?page=${fEach}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${ param.selected }" class="btn btn-link text-dark pagingbtn">${fEach}</a>
 						      	</c:otherwise>
 						    </c:choose>
 						</c:forEach>
@@ -467,7 +501,7 @@
 						      	<button class="btn btn-link text-dark pagingbtn" disabled>&gt;</button>
 						    </c:when>
 						    <c:otherwise>
-						      	<a href="/product/productlist.do?page=${page.curPage + 1}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}" class="btn btn-link text-dark pagingbtn">&gt;</a>
+						      	<a href="/product/productlist.do?page=${page.curPage + 1}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${ param.selected }" class="btn btn-link text-dark pagingbtn">&gt;</a>
 						    </c:otherwise>
 						</c:choose>
 						  
@@ -477,7 +511,7 @@
 						      	<button class="btn btn-link text-dark pagingbtn" disabled>&gt;&gt;</button>
 						    </c:when>
 						    <c:otherwise>
-						      	<a href="/product/productlist.do?page=${page.totalPage}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}" class="btn btn-link text-dark pagingbtn">&gt;&gt;</a>
+						      	<a href="/product/productlist.do?page=${page.totalPage}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${ param.selected }" class="btn btn-link text-dark pagingbtn">&gt;&gt;</a>
 						    </c:otherwise>
 						</c:choose>
 					</td>

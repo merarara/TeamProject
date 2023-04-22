@@ -32,42 +32,27 @@ public class ProductController {
 	public String productlist1(HttpServletRequest req, Model model) {
 		
 		int nPage = 1;
-		HttpSession session = req.getSession();
 		
 		String searchfield = req.getParameter("searchfield");
 		String searchword = req.getParameter("searchword");
 		String type = req.getParameter("type");
+		String selected = req.getParameter("selected");
 		
-		if (session.getAttribute("cpage") != null)
-		{
-			product_curPage = (int)session.getAttribute("cpage");
-		}
-		
-		try
-		{
-			String sPage = req.getParameter("page");
-			nPage = Integer.parseInt(sPage);
-		}
-		catch (Exception e) {} 
-		
-		PPageInfo pinfo = pldao.articlePage(nPage, searchfield, searchword, type);
+		PPageInfo pinfo = pldao.articlePage(nPage, searchfield, searchword, type, selected);
 		model.addAttribute("page", pinfo);
 		
 		nPage = pinfo.getCurPage();
 		
-		if (nPage == 0)
-		{
-			nPage = 1;
-		}
-		
-		ArrayList<ProductlistDTO> dto = pldao.plist(nPage, searchfield ,searchword, type);
-		
-		session.setAttribute("cpage", nPage);
+		ArrayList<ProductlistDTO> dto = pldao.plist(nPage, searchfield ,searchword, type, selected);
 		
 		if (searchfield != null && searchword != null) {
 			model.addAttribute("searchfield", searchfield);
 			model.addAttribute("searchword", searchword);
 			model.addAttribute("type", type);
+		}
+		
+		if (selected != null) {
+			model.addAttribute("selected", selected);
 		}
 		
 		model.addAttribute("plist", dto);
