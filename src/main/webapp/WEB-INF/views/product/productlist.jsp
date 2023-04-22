@@ -184,6 +184,14 @@
 	  	right: 0;
 	  	bottom: 0;
 	}
+	
+	#wrap {
+		min-width: 1600px;
+	}
+	
+	footer {
+		min-width: 1600px;
+	}
 </style>
 <script>
 	// 상품 검색 자동완성 시작 //
@@ -271,13 +279,12 @@
 	    }
 	  });
 	});
-	
 </script>
 </head>
 <body>
 <%@ include file="../header.jsp" %>
 
-<div class="container-fluid">
+<div class="container-fluid" style="min-width: 1600px;">
 	<div class="row" style="padding-top: 30px; padding-bottom: 30px;">
 		<div class="col-md-4 offset-md-4">
 		    <form action="/product/productlist.do" id="searchFrm" name="searchFrm">
@@ -322,27 +329,27 @@
 			            <td class="catename"><b>제조사별</b></td>
 			            <td>
 			            	<div class="matufacturer-list">
-					            <span class="cate_value">삼성전자</span>
-					            <span class="cate_value">GIGABYTE</span>
-					            <span class="cate_value">한성컴퓨터</span>
-					            <span class="cate_value">MSI</span>
-					            <span class="cate_value">에이서</span>
-					            <span class="cate_value">ASUS</span>
-					            <span class="cate_value">DELL</span>
-					            <span class="cate_value">Razer</span>
-					            <span class="cate_value">APPLE</span>			            
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=삼성전자&type=select">삼성전자</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=GIGABYTE&type=select">GIGABYTE</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=한성컴퓨터&type=select">한성컴퓨터</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=MSI&type=select">MSI</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=에이서&type=select">에이서</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=ASUS&type=select">ASUS</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=DELL&type=select">DELL</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=Razer&type=select">Razer</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=APPLE&type=select">APPLE</a></span>			            
 					            <button class="btn-toggle">펼치기</button>
 			            	</div>
-		            	<span class="hidden">
-		            		<br>
-		            		<span class="cate_value">Microsoft</span>
-		            		<span class="cate_value">주연테크</span>
-				            <span class="cate_value">LG전자</span>
-				            <span class="cate_value">레노버</span>
-			            	<span class="cate_value">샤오미</span>
-			            	<span class="cate_value">디클</span>
-			            	<span class="cate_value">HP</span>
-		            	</span>
+			            	<span class="hidden">
+			            		<br>
+			            		<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=Microsoft&type=select">Microsoft</a></span>
+			            		<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=주연테크&type=select">주연테크</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=LG전자&type=select">LG전자</a></span>
+					            <span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=레노버&type=select">레노버</a></span>
+				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=샤오미&type=select">샤오미</a></span>
+				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=디클&type=select">디클</a></span>
+				            	<span class="cate_value"><a href="/product/productlist.do?searchfield=p_company&searchword=HP&type=select">HP</a></span>
+			            	</span>
 			            </td>
 			        </tr>
 			        <tr>
@@ -358,6 +365,7 @@
 			        </tr>
 			    </table>
 			</div>
+			검색된 상품 수 : ${ page.totalCount }
 			<table>
 				<thead>
 				<tr>

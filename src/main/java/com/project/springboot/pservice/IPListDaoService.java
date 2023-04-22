@@ -23,5 +23,4 @@ public interface IPListDaoService {
 	
 	// 상품 검색 자동완성
 	public List<String> wordSearchShow(Map<String, String> paraMap);
-	
 }

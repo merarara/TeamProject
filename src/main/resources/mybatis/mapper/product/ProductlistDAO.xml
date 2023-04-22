@@ -73,5 +73,5 @@
 				where rownum <![CDATA[<]]> 6
     		</otherwise>
     	</choose>   
-	</select>
+	</select>	
 </mapper>

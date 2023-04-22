@@ -69,6 +69,7 @@ public class ProductController {
 			model.addAttribute("searchword", searchword);
 			model.addAttribute("type", type);
 		}
+		
 		model.addAttribute("plist", dto);
 		
 		return "product/productlist";
