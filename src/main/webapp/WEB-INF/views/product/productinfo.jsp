@@ -24,34 +24,58 @@ $(document).ready(function() {
 });
 
 function iamport(){
-	//가맹점 식별코드
-	IMP.init('imp08750518');
-	IMP.request_pay({
-	    pg : 'INIpayTest',
-	    pay_method : 'card',
-	    merchant_uid : 'merchant_' + new Date().getTime(),
-	    name : '${pinfo.p_name}' , //결제창에서 보여질 이름
-	    amount : 100, //실제 결제되는 가격
-	    buyer_email : 'iamport@siot.do',
-	    buyer_name : '구매자이름',
-	    buyer_tel : '010-1234-5678',
-	    buyer_addr : '서울 강남구 도곡동',
-	    buyer_postcode : '123-456'
-	}, function(rsp) {
-		console.log(rsp);
-	    if ( rsp.success ) {
-	    	var msg = '결제가 완료되었습니다.';
-	        msg += '고유ID : ' + rsp.imp_uid;
-	        msg += '상점 거래ID : ' + rsp.merchant_uid;
-	        msg += '결제 금액 : ' + rsp.paid_amount;
-	        msg += '카드 승인번호 : ' + rsp.apply_num;
-	        console.log(msg);
-	    } else {
-	    	 var msg = '결제에 실패하였습니다.';
-	         msg += '에러내용 : ' + rsp.error_msg;
-	    }
-	    alert(msg);
-	});
+    //가맹점 식별코드
+    IMP.init('imp08750518');
+    IMP.request_pay({
+        pg : 'INIpayTest',
+        pay_method : 'card',
+        merchant_uid : 'merchant_' + new Date().getTime(),
+        name : '${pinfo.p_name}' , //결제창에서 보여질 이름
+        amount : $("#amount").val(), //실제 결제되는 가격
+        buyer_email : '${uinfo.u_email}',
+        buyer_name : '${uinfo.u_name}',
+        buyer_tel : '${uinfo.u_phone}',
+        buyer_addr : '${uinfo.u_addr1}',
+        buyer_postcode : '${uinfo.u_zip}'
+    }, function(rsp) {
+        console.log(rsp);
+        if ( rsp.success ) {
+            var msg = '결제가 완료되었습니다.';
+            msg += '고유ID : ' + rsp.imp_uid;
+            msg += '상점 거래ID : ' + rsp.merchant_uid;
+            msg += '결제 금액 : ' + rsp.paid_amount;
+            msg += '카드 승인번호 : ' + rsp.apply_num;
+            console.log(msg);
+            
+            // 결제 정보를 order_info 테이블에 저장하는 로직 추가
+            $.ajax({
+                type: 'POST',
+                url: '/product/save_oinfo.do', // 저장하는 컨트롤러의 URL
+                data: {
+                    u_id: '${uinfo.u_id}', // 구매한 사용자의 아이디
+                    m_addr: '${uinfo.u_addr1}', // 사용자의 주소
+                    p_num: '${pinfo.p_num}', // 구매한 상품 번호
+                    m_price: $("#amount").val(), // 상품 가격
+                    m_qty: $("#quantity").val() // 상품 수량
+                },
+                success: function(result) {
+                    console.log(result); // 저장 결과 출력
+                }
+            });
+            
+        } else {
+             var msg = '결제에 실패하였습니다.';
+             msg += '에러내용 : ' + rsp.error_msg;
+        }
+        alert(msg);
+    });
+}
+
+function calculateAmount() {
+	  var quantity = parseInt(document.getElementById("quantity").value);
+	  var price = parseInt(document.getElementById("price").value);
+	  var amount = quantity * price;
+	  document.getElementById("amount").value = amount;
 }
 </script>
 <style>
@@ -95,6 +119,7 @@ function iamport(){
 .img-item {
   margin: 5px;
 }
+
 .price {
   margin-left: 340px;
   color: #0067A3;
@@ -143,10 +168,21 @@ function iamport(){
 								<span style="font-size: 15pt"><b>가격 :</b></span>
   								<span class="price"><b><fmt:formatNumber type="number" value="${pinfo.p_price}" pattern="#,###" />원</b></span>
   								<br>
-  								<button name="paymentButton" id="paymentButton" onclick="iamport();" class="w-100 btn btn-warning btn-lg"
-									type="submit">
-									결제하기
-								</button> <br>
+  								<form method="post">
+  									<input type="hidden" name="p_num" value="${ pinfo.p_num }">
+									<label for="quantity">주문 수량:</label>
+								  	<input type="number" name="quantity" id="quantity" min="1" value="1" required onchange="calculateAmount()">
+								  	<br>
+								  	<label for="price">상품 가격:</label>
+								  	<input type="text" name="price" id="price" value="100" readonly>
+								  	<br>
+								  	<label for="amount">결제 금액:</label>
+								  	<input type="text" name="amount" id="amount" value="100" readonly>
+								  	<br>
+								  	<button name="paymentButton" id="paymentButton" onclick="iamport(); return false;" class="w-100 btn btn-warning btn-lg" type="submit">
+								    	결제하기
+								  	</button>
+								</form>
   								장바구니 <br>
 							</div>
 						</div>

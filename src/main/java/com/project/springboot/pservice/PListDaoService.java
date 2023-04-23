@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.project.springboot.ppageinfo.PPageInfo;
+import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
@@ -50,6 +51,13 @@ public class PListDaoService implements IPListDaoService {
 		List<String> list = dao.wordSearchShowDao(paraMap);
 		
 		return list;
+	}
+	
+	@Override
+	public int insertOrder(OrderinfoDTO orderinfoDTO) {
+		int result = dao.insertOrderDao(orderinfoDTO);
+		
+		return result;
 	}
 	
 	// 페이지 설정 service & dao

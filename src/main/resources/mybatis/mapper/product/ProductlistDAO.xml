@@ -125,5 +125,11 @@
 				where rownum <![CDATA[<]]> 6
     		</otherwise>
     	</choose>   
-	</select>	
+	</select>
+	
+	<insert id="insertOrderDao"
+		parameterType="com.project.springboot.productdto.OrderinfoDTO">
+		insert into order_info (m_num, u_id, m_addr, p_num, m_price, m_qty) 
+		values (seq_o_num.nextval, #{u_id}, #{m_addr}, ${p_num}, ${m_price}, ${m_qty})
+	</insert>
 </mapper>
