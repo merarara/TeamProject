@@ -9,7 +9,7 @@
 <title>Insert title here</title>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 <script>
 $(document).ready(function() {
@@ -22,6 +22,37 @@ $(document).ready(function() {
         $('#showimg').css('background-image', 'url(' + imgSrc + ')');
     });
 });
+
+function iamport(){
+	//가맹점 식별코드
+	IMP.init('imp08750518');
+	IMP.request_pay({
+	    pg : 'INIpayTest',
+	    pay_method : 'card',
+	    merchant_uid : 'merchant_' + new Date().getTime(),
+	    name : '${pinfo.p_name}' , //결제창에서 보여질 이름
+	    amount : 100, //실제 결제되는 가격
+	    buyer_email : 'iamport@siot.do',
+	    buyer_name : '구매자이름',
+	    buyer_tel : '010-1234-5678',
+	    buyer_addr : '서울 강남구 도곡동',
+	    buyer_postcode : '123-456'
+	}, function(rsp) {
+		console.log(rsp);
+	    if ( rsp.success ) {
+	    	var msg = '결제가 완료되었습니다.';
+	        msg += '고유ID : ' + rsp.imp_uid;
+	        msg += '상점 거래ID : ' + rsp.merchant_uid;
+	        msg += '결제 금액 : ' + rsp.paid_amount;
+	        msg += '카드 승인번호 : ' + rsp.apply_num;
+	        console.log(msg);
+	    } else {
+	    	 var msg = '결제에 실패하였습니다.';
+	         msg += '에러내용 : ' + rsp.error_msg;
+	    }
+	    alert(msg);
+	});
+}
 </script>
 <style>
 #contentwrap {
@@ -112,7 +143,10 @@ $(document).ready(function() {
 								<span style="font-size: 15pt"><b>가격 :</b></span>
   								<span class="price"><b><fmt:formatNumber type="number" value="${pinfo.p_price}" pattern="#,###" />원</b></span>
   								<br>
-  								구매버튼 <br>
+  								<button name="paymentButton" id="paymentButton" onclick="iamport();" class="w-100 btn btn-warning btn-lg"
+									type="submit">
+									결제하기
+								</button> <br>
   								장바구니 <br>
 							</div>
 						</div>
@@ -127,5 +161,6 @@ $(document).ready(function() {
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 </body>
 </html>
