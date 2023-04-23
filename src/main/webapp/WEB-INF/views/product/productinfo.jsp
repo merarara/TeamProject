@@ -12,6 +12,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 <script>
+// 이미지 효과
 $(document).ready(function() {
 	var firstImgSrc = $('img').first().attr('src');
 	
@@ -23,6 +24,7 @@ $(document).ready(function() {
     });
 });
 
+// 결제 api
 function iamport(){
     //가맹점 식별코드
     IMP.init('imp08750518');
@@ -71,6 +73,7 @@ function iamport(){
     });
 }
 
+// 수량에 따른 가격 증가
 function calculateAmount() {
 	  var quantity = parseInt(document.getElementById("quantity").value);
 	  var price = parseInt(document.getElementById("price").value);
