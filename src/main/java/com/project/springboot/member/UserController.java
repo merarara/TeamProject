@@ -65,6 +65,11 @@ public class UserController {
     @PostMapping("/user/signUp.do")
     public String signUp(@ModelAttribute UserDTO userDTO, HttpServletRequest req) {
     	System.out.println(1);
+    	// 이메일 직접입력 시 파라미터로 받겨준다.
+    	String email1 = req.getParameter("email1");
+    	String email2 = req.getParameter("email2");
+    	String u_email = email1 + "@" + email2;
+    	userDTO.setU_email(u_email);
     	String passwd = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(userDTO.getU_pw());
     	userDTO.setU_pw(passwd);
     	System.out.println(userDTO.getU_pw());

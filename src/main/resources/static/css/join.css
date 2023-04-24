@@ -1,0 +1,15 @@
+#wrap{
+	background-color: #e5e5e5; width: 100%; height: 100%;}
+        .inner{max-width: 500px; padding: 100px 0; margin: 0 auto; }
+        .form_wrap{background-color: #fff; border-radius: 20px; padding: 40px 30px; box-shadow: rgba(0, 0, 0, 0.2) 0px 20px 30px;}
+        .form_wrap > h2{display: inline-block; font-size: 24px; font-weight: 700; color: #f17f6a; margin-bottom: 30px;}
+        .form_group{margin-bottom: 30px;}
+        .form_group label{display: inline-block; font-size: 16px; font-weight: 700; margin-bottom: 8px; column-span: #444;}
+        .form_group .input_group{display: flex; align-items: center;}
+        .form_group .input_group input{max-width: 238px; border: 1px solid #ccc; padding: 8px 15px; width: 80%; border-radius: 50px;}
+        .form_group .input_group select{border: 1px solid #ccc; padding: 10px 15px; width: 80%; border-radius: 50px; margin-left: 5px;}
+        .form_group .input_group button{display: inline-block; padding: 10px 15px; width: 30%; margin-left: 5px; border-radius: 50px; background-color: #f1953e; font-size: 14px; font-weight: 500; color: #fff;}
+        .form_group .input_group .dash{margin: 0 5px;}
+        .form_group .address_input_wrap{margin-bottom: 10px;}
+        .form_wrap .btn-submit{display: block; width: 150px; margin-top:20px; line-height: 38px; border-radius: 50px; margin: 0 auto; background-color: #f17f6a; color: #fff;}
+        .form_wrap .btn-certi{display: block; padding: 10px 15px; width: 30%; margin: 10px 0 0 auto; border-radius: 50px; background-color: #f1953e; font-size: 14px; font-weight: 500; color: #fff;}

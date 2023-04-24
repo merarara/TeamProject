@@ -29,9 +29,28 @@
         <div class="login">
             <h2>Log-in</h2>
             <div class="login_sns">
-            <li><a href=""><i class="fab fa-instagram"></i></a></li>
-            <li><a href=""><i class="fab fa-facebook-f"></i></a></li>
-            <li><a href=""><i class="fab fa-twitter"></i></a></li>
+			<li>
+			    <a href="/oauth2/authorization/google">
+			        <img src="/userimages/google.png" style="width: 24px; height: 24px;">
+			    </a>
+			</li>
+			<li>
+			    <a href="/oauth2/authorization/facebook">
+			        <img src="/userimages/facebook.png" style="width: 24px; height: 24px;">
+			    </a>
+			</li>
+			<li>
+			    <a href="/oauth2/authorization/kakao">
+			        <img src="/userimages/kakao.png" style="width: 24px; height: 24px;">
+			    </a>
+			</li>
+			<li>
+			    <a href="/oauth2/authorization/naver">
+			        <img src="/userimages/naver.png" style="width: 24px; height: 24px;">
+			    </a>
+			</li>
+
+			
             </div>
             <div class="login_id">
                 <h4>아이디</h4>

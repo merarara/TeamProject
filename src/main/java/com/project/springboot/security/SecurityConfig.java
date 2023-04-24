@@ -1,7 +1,5 @@
 package com.project.springboot.security;
-
 import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,14 +12,15 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-
+import com.project.springboot.oauth2.CustomOAuth2UserService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 	
 	@Autowired
 	public AuthenticationFailureHandler authenticationFailureHandler;
-
+	@Autowired
+	private CustomOAuth2UserService customOAuth2UserService;
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration
 			authConfiguration) throws Exception {
@@ -29,7 +28,7 @@ public class SecurityConfig {
 	}
 	
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) 
+	public SecurityFilterChain filterChain(HttpSecurity httpSecurity)
 			throws Exception {
 		httpSecurity.authorizeRequests()
 			.antMatchers("/").permitAll()
@@ -38,14 +37,14 @@ public class SecurityConfig {
 			.antMatchers("/user/**").permitAll()
 			.antMatchers("/views/**").permitAll()
 			.antMatchers("/member/**").hasAnyRole("USER", "ADMIN")
-            .antMatchers("/admin/**").hasRole("ADMIN")
-            // 게시판
-            .antMatchers("/cboard/**").permitAll()
-            .antMatchers("/faq/**").permitAll()
-            .antMatchers("/aboard/**").permitAll()
-            // 상품
-            .antMatchers("/product/**").permitAll()
-            .antMatchers("/static/**").permitAll()
+           .antMatchers("/admin/**").hasRole("ADMIN")
+           // 게시판
+           .antMatchers("/cboard/**").permitAll()
+           .antMatchers("/faq/**").permitAll()
+           .antMatchers("/aboard/**").permitAll()
+           // 상품
+           .antMatchers("/product/**").permitAll()
+           .antMatchers("/static/**").permitAll()
 			.anyRequest().authenticated();
 		
 		httpSecurity.formLogin()
@@ -58,41 +57,49 @@ public class SecurityConfig {
 	    .usernameParameter("my_id") // default: username
 	    .passwordParameter("my_pass") // default: password
 	    .permitAll();
-
 		
 		httpSecurity.logout()
 			.logoutUrl("/myLogout.do") 			// default : /logout
 	        .logoutSuccessUrl("/")
+	        .deleteCookies("JSESSIONID")
+	        .invalidateHttpSession(true)
 			.permitAll();
 	
 		httpSecurity.exceptionHandling().accessDeniedPage("/denied.do");
 		
 		// ssl을 사용하지 않으면 true로 사용
-		httpSecurity.csrf().disable();
+		httpSecurity.csrf().disable()
+			.headers().frameOptions().disable() // header 가 충돌 방지
+	        .and()
+	        .oauth2Login()
+	            .userInfoEndpoint()
+	                .userService(customOAuth2UserService);
 		
 		return httpSecurity.build();
+			
 	}
 	
-    @Autowired
-    private DataSource dataSource;
-    
-    @Autowired
-    protected void configure(AuthenticationManagerBuilder auth) 
-    		throws Exception {
-    	auth.jdbcAuthentication()
-    		.dataSource(dataSource)
-    		.usersByUsernameQuery("select u_id, u_pw, u_enabled"
-    					+ " from USER_INFO where u_id = ?")
-    		.authoritiesByUsernameQuery("select u_id, u_authority "
-    					+ " from USER_INFO where u_id = ?")
-    		.passwordEncoder(passwordEncoder());
-    }
-    
-    // passwordEncoder() 추가
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-    
-    // 회원정보수정 암호화
-    
+   @Autowired
+   private DataSource dataSource;
+  
+   @Autowired
+   protected void configure(AuthenticationManagerBuilder auth)
+   		throws Exception {
+   	auth.jdbcAuthentication()
+   		.dataSource(dataSource)
+   		.usersByUsernameQuery("select u_id, u_pw, u_enabled"
+   					+ " from USER_INFO where u_id = ?")
+   		.authoritiesByUsernameQuery("select u_id, u_authority "
+   					+ " from USER_INFO where u_id = ?")
+   		.passwordEncoder(passwordEncoder());
+   }
+  
+   // passwordEncoder() 추가
+   public PasswordEncoder passwordEncoder() {
+       return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+   }
+  
+   // 회원정보수정 암호화
+  
 }
+
