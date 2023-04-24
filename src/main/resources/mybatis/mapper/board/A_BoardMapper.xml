@@ -13,7 +13,6 @@
 	select * from A_Board
 </select>
 
-
 <insert id="insert" 
 		parameterType="com.project.springboot.jdbc.ABoard_DTO"> 
 		insert into A_Board (A_num, A_title, A_content, A_visitcount, U_ID, U_Nick, a_commend) values 
@@ -45,8 +44,5 @@
 		delete from A_Board where a_num=#{param1}
 		</delete>
 	
-	
 
-	
-	
 </mapper>  

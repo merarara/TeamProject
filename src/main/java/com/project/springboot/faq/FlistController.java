@@ -55,8 +55,6 @@ public class FlistController {
 		return "redirect:faq_main.do";          
 	}
 
-		
-	
 	@RequestMapping(value="/faq/faq_delete.do", method=RequestMethod.GET)
 	public String member4(HttpServletRequest req) {
 		int f_num = Integer.parseInt(req.getParameter("f_num"));

@@ -7,16 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ViewController {
 	@Autowired
 	C_BoardDAO dao;
-
-	@GetMapping("/cboard/View/{c_num}")
+	
+	@RequestMapping(value = "/cboard/View.do/{c_num}", method = RequestMethod.GET)
 	public ModelAndView view(@PathVariable("c_num") int c_num, HttpServletRequest request) {
 		dao.updatec_visitcount(c_num);
 		C_BoardDTO dto = dao.selectView(c_num);
@@ -35,7 +36,9 @@ public class ViewController {
 		}
 		request.setAttribute("isImage", isImage);
 		request.setAttribute("dto", dto);
-		return new ModelAndView("/cboard/View.do");
+		
+		return new ModelAndView("cboard/View");
 	}
+
 
 }

@@ -24,8 +24,10 @@ repositories {
 dependencies {
 	// 리캡챠
 	
+
 	// sns 로그인 설정
 	//implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:2.6.2'
+
 
 
 	// 시큐리티 설정
