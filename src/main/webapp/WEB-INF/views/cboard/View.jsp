@@ -21,23 +21,23 @@
         <col width="15%"/> <col width="*"/>
     </colgroup> 
     <tr>
-        <td>번호</td> <td>${ dto.C_num }</td>
-        <td>작성자</td> <td>${ dto.C_name }</td>
+        <td>번호</td> <td>${ dto.c_num }</td>
+        <td>작성자</td> <td>${ dto.c_name }</td>
     </tr>
     <tr>
-        <td>작성일</td> <td>${ dto.C_postdate }</td>
-        <td>조회수</td> <td>${ dto.C_visitcount }</td>
+        <td>작성일</td> <td>${ dto.c_postdate }</td>
+        <td>조회수</td> <td>${ dto.c_visitcount }</td>
     </tr>
     <tr>
         <td>제목</td>
-        <td colspan="3">${ dto.C_title }</td>
+        <td colspan="3">${ dto.c_title }</td>
     </tr>
     <tr>
         <td>내용</td>
-        <td colspan="3" height="100">${ dto.C_content }
+        <td colspan="3" height="100">${ dto.c_content }
         <c:if test="${ isImage eq true }">
         	<p>
-        		<img src="../Uploads/${dto.C_sfile }"
+        		<img src="../Uploads/${dto.c_sfile }"
         			style="max-width:500px;" />
         	</p>
         </c:if></td>
@@ -47,19 +47,19 @@
     <tr>
         <td>첨부파일</td>
         <td>          
- 	       	<c:if test="${ not empty dto.ofile }">
-        	${ dto.ofile }
-        	<a href="/cboard/download.do?C_ofile=${ dto.C_ofile }&C_sfile=${ dto.C_sfile }$C_num=${ dto.C_num }">[다운로드]</a>
+ 	       	<c:if test="${ not empty dto.c_ofile }">
+        	${ dto.c_ofile }
+        	<a href="/cboard/download.do?C_ofile=${ dto.c_ofile }&C_sfile=${ dto.c_sfile }$C_num=${ dto.c_num }">[다운로드]</a>
         	</c:if>                            
         </td>
          <td>다운로드수</td>
-        <td>${ dto.C_downcount }</td>
+        <td>${ dto.c_downcount }</td>
     </tr> 
     <tr>
         <td colspan="4" align="center">
-            <button type="button" onclick="location.href='/cboard/pass.do?mode=edit&C_num=${ param.C_num }';">수정하기</button>
-            <button type="button" onclick="location.href='/cboard/pass.do?mode=delete&C_num=${ param.C_num }';">삭제하기</button>
-            <button type="button" onclick="location.href='/cboard/list.do';">목록 바로가기</button>
+            <button type="button" onclick="location.href='/cboard/pass.do?mode=edit&C_num=${ param.c_num }';">수정하기</button>
+            <button type="button" onclick="location.href='/cboard/pass.do?mode=delete&C_num=${ param.c_num }';">삭제하기</button>
+            <button type="button" onclick="location.href='/cboard/List.do';">목록 바로가기</button>
         </td>
     </tr>
 </table>

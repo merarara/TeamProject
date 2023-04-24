@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.project.springboot.ppageinfo.PPageInfo;
+import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
@@ -28,12 +29,12 @@ public class PListDaoService implements IPListDaoService {
 	
 	// 상품리스트 service & dao
 	@Override
-	public ArrayList<ProductlistDTO> plist(int curpage, String searchfield, String searchword, String type)
+	public ArrayList<ProductlistDTO> plist(int curpage, String searchfield, String searchword, String type, String selected)
 	{
 		int nStart = (curpage - 1) * plistPsize + 1;
 		int nEnd = (curpage - 1) * plistPsize + plistPsize;
 		
-		ArrayList<ProductlistDTO> dto = dao.listDao(nEnd, nStart, searchfield, searchword, type);
+		ArrayList<ProductlistDTO> dto = dao.listDao(nEnd, nStart, searchfield, searchword, type, selected);
 
 		return dto;
 	}
@@ -52,12 +53,19 @@ public class PListDaoService implements IPListDaoService {
 		return list;
 	}
 	
+	@Override
+	public int insertOrder(OrderinfoDTO orderinfoDTO) {
+		int result = dao.insertOrderDao(orderinfoDTO);
+		
+		return result;
+	}
+	
 	// 페이지 설정 service & dao
 	@Override
-	public PPageInfo articlePage(int curpage, String searchfield, String searchword, String type)
+	public PPageInfo articlePage(int curpage, String searchfield, String searchword, String type, String selected)
 	{
 		int totalCount = 0;
-		totalCount = dao.articlePageDao(curpage, searchfield, searchword, type);
+		totalCount = dao.articlePageDao(searchfield, searchword, type, selected);
 		
 		// 총 페이지 수
 		int totalPage = totalCount / plistPsize;

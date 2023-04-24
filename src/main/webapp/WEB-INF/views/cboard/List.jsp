@@ -61,16 +61,16 @@
             		+ loop.index)}
             </td>
             <td align="left">
-                <a href="/cboard/view.do?C_idx=${ row.C_num }">
-                ${ row.C_title }</a>
+                <a href="/cboard/View.do?c_num=${ row.c_num }">
+                ${ row.c_title }</a>
             </td> 
-            <td>${ row.C_ID }</td>
-            <td>${ row.C_visitcount }</td>
-            <td>${ row.C_postdate }</td>
+            <td>${ row.u_id }</td>
+            <td>${ row.c_visitcount }</td>
+            <td>${ row.c_postdate }</td>
             <td>
-                <c:if test="${ not empty row.C_ofile }">
-                	<a href="/cboard/download.do?C_ofile=${ row.C_ofile }
-                	&C_sfile=${ row.C_sfile }&C_num=${ row.C_num }">[Down]</a>
+                <c:if test="${ not empty row.c_ofile }">
+                	<a href="/cboard/download.do?C_ofile=${ row.c_ofile }
+                	&C_sfile=${ row.c_sfile }&C_num=${ row.c_num }">[Down]</a>
                 </c:if>
             </td>
         </tr>    
