@@ -97,13 +97,13 @@ function doAddBascket() {
 			success: function(data) {
 				if (data.status === 'success') {
 					if (confirm('장바구니에 성공적으로 추가되었습니다. 장바구니 페이지로 이동하시겠습니까?')) {
-						
+						location.href = "/product/productbascket.do";
 					}
 				} else {
 					alert('장바구니 추가에 실패하였습니다.');
 				}
 			}
-		})
+		});
 	} else {
 			
 	}

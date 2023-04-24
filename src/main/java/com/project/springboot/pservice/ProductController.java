@@ -124,6 +124,40 @@ public class ProductController {
 		return response;
 	}
 	
+	// 장바구니 페이지
+	@RequestMapping("/product/productbascket.do")
+	public String showBascket (Model model) {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String u_id = authentication.getName();
+		
+	    List<ProductBascketDTO> list = pldao.get_bascketList(u_id);
+	    
+	    UserDTO udto = udao.selectone(u_id);
+	    
+	    model.addAttribute("uinfo", udto);
+	    model.addAttribute("blist", list);
+	    
+		return "product/productbascket";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/product/deletebascket.do", method=RequestMethod.POST)
+	public Map<String, String> deleteBascket (HttpServletRequest req) {
+		int b_num = Integer.parseInt(req.getParameter("b_num"));
+		
+		int result = pldao.deleteBascket(b_num);
+		
+		Map<String, String> response = new HashMap<String, String>();
+		if (result == 1) {
+			response.put("status", "success");
+		} else {
+			response.put("status", "failure");
+		}
+		
+		return response;
+	}
+	
 	// 검색 자동완성 기능
 	@ResponseBody
 	@RequestMapping(value="/product/wordSearchShow.do", method=RequestMethod.GET, produces="text/plain;charset=UTF-8")

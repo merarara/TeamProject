@@ -34,4 +34,10 @@ public interface PListDao {
 	
 	// 장바구니 추가
 	public int add_bascketDao(ProductBascketDTO bascketDTO);
+	
+	// 장바구니 목록 가져오기
+	public List<ProductBascketDTO> get_bascketListDao(String u_id);
+	
+	// 장바구니 삭제
+	public int deleteBascketDao(int b_num);
 }

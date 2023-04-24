@@ -64,9 +64,25 @@ public class PListDaoService implements IPListDaoService {
 		return result;
 	}
 	
+	// 장바구니 추가
 	@Override
 	public int add_bascket(ProductBascketDTO bascketDTO) {
 		int result = dao.add_bascketDao(bascketDTO);
+		
+		return result;
+	}
+	
+	// 장바구니 목록 가져오기
+	@Override
+	public List<ProductBascketDTO> get_bascketList(String u_id) {
+		List<ProductBascketDTO> bascketlist = dao.get_bascketListDao(u_id);
+		
+		return bascketlist;
+	}
+	
+	@Override
+	public int deleteBascket(int b_num) {
+		int result = dao.deleteBascketDao(b_num);
 		
 		return result;
 	}

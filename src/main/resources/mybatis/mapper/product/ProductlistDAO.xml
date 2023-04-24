@@ -138,4 +138,15 @@
 		insert into p_bascket
 		values (basc_b_num_seq.nextval, #{u_id}, #{p_num}, #{m_qty}, #{p_name}, #{p_listimg}, #{m_price})
 	</insert>
+	
+	<select id="get_bascketListDao"
+		resultType="com.project.springboot.productdto.ProductBascketDTO">
+		select * from p_bascket
+		 where u_id = #{param1}
+	</select>
+	
+	<delete id="deleteBascketDao">
+		delete from p_bascket
+		 where b_num = #{param1}
+	</delete>
 </mapper>
