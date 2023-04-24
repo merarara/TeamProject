@@ -1,6 +1,7 @@
 package com.project.springboot.cboard;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -30,22 +31,24 @@ public class WriteController {
     
     @PostMapping("/cboard/Write.do")
     @Transactional
-    public String write(C_BoardDTO dto, @RequestParam(name="c_ofile", required=false) MultipartFile multipartFile, RedirectAttributes redirectAttrs) {
-        try {
-            if(multipartFile != null && !multipartFile.isEmpty()) {
-                String fileName = multipartFile.getOriginalFilename();
-                String now = new SimpleDateFormat("yyyyMMdd_HmsS").format(new Date());
-                String ext= fileName.substring(fileName.lastIndexOf("."));
-                String newFileName = now + ext;
-                File oldFile = new File(saveDirectory + File.separator + fileName); 
-                File newFile = new File(saveDirectory + File.separator + newFileName); 
-                oldFile.renameTo(newFile);
-                dto.setC_ofile(fileName);
-                dto.setC_sfile(newFileName);
+    public String write(C_BoardDTO dto, RedirectAttributes redirectAttrs, @RequestParam("c_file") MultipartFile multipartFile) throws IOException {
+        try {        	
+        	 if(multipartFile != null && !multipartFile.isEmpty()) {
+                 String fileName = multipartFile.getOriginalFilename();
+                 String now = new SimpleDateFormat("yyyyMMdd_HmsS").format(new Date());
+                 String ext= fileName.substring(fileName.lastIndexOf("."));
+                 String newFileName = now + ext;
+                 File oldFile = new File(saveDirectory + File.separator + fileName); 
+                 File newFile = new File(saveDirectory + File.separator + newFileName); 
+                 multipartFile.transferTo(newFile);
+                 dto.setC_ofile(multipartFile.getOriginalFilename());
+                 dto.setC_sfile(newFileName);
+
             }
             dao.insertWrite(dto);
             return "redirect:/cboard/List.do";
         } catch (Exception e) {
+        	e.printStackTrace();
             redirectAttrs.addFlashAttribute("errorMessage", "첨부파일이 제한 용량을 초과합니다.");
             return "redirect:/cboard/Write.do";
         }

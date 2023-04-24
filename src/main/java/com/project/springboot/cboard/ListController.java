@@ -65,6 +65,7 @@ public class ListController {
         model.addAttribute("boardLists", boardLists);
         model.addAttribute("map", map);
 
+        
         return "cboard/List";
     }    
 }
