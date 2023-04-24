@@ -6,18 +6,23 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.project.springboot.member.UserDTO;
+import com.project.springboot.member.UserService;
 import com.project.springboot.ppageinfo.PPageInfo;
+import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
@@ -27,22 +32,20 @@ public class ProductController {
 	@Autowired
 	IPListDaoService pldao;
 	
+	@Autowired
+	UserService udao;
+	
 	int product_curPage = 1;
 	
 	@RequestMapping("/product/productlist.do")
 	public String productlist1(HttpServletRequest req, Model model) {
 		
 		int nPage = 1;
-		HttpSession session = req.getSession();
 		
 		String searchfield = req.getParameter("searchfield");
 		String searchword = req.getParameter("searchword");
 		String type = req.getParameter("type");
-		
-		if (session.getAttribute("cpage") != null)
-		{
-			product_curPage = (int)session.getAttribute("cpage");
-		}
+		String selected = req.getParameter("selected");
 		
 		try
 		{
@@ -51,25 +54,23 @@ public class ProductController {
 		}
 		catch (Exception e) {} 
 		
-		PPageInfo pinfo = pldao.articlePage(nPage, searchfield, searchword, type);
+		PPageInfo pinfo = pldao.articlePage(nPage, searchfield, searchword, type, selected);
 		model.addAttribute("page", pinfo);
 		
 		nPage = pinfo.getCurPage();
 		
-		if (nPage == 0)
-		{
-			nPage = 1;
-		}
-		
-		ArrayList<ProductlistDTO> dto = pldao.plist(nPage, searchfield ,searchword, type);
-		
-		session.setAttribute("cpage", nPage);
+		ArrayList<ProductlistDTO> dto = pldao.plist(nPage, searchfield ,searchword, type, selected);
 		
 		if (searchfield != null && searchword != null) {
 			model.addAttribute("searchfield", searchfield);
 			model.addAttribute("searchword", searchword);
 			model.addAttribute("type", type);
 		}
+		
+		if (selected != null) {
+			model.addAttribute("selected", selected);
+		}
+		
 		model.addAttribute("plist", dto);
 		
 		return "product/productlist";
@@ -84,12 +85,23 @@ public class ProductController {
 	public String pinfo1(HttpServletRequest req, Model model) {
 		int p_num = Integer.parseInt(req.getParameter("p_num"));
 		
-		System.out.println(p_num);
-		
 		ProductinfoDTO dto = pldao.viewpinfo(p_num);
 		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String u_id = authentication.getName(); // 사용자 id
+		
+	    UserDTO udto = udao.selectone(u_id);
+	    
+	    model.addAttribute("uinfo", udto);
 		model.addAttribute("pinfo", dto);
 		return "product/productinfo";
+	}
+	
+	@RequestMapping(value = "/product/save_oinfo.do", method = RequestMethod.POST)
+	public String save_order_info(OrderinfoDTO orderinfoDTO) {
+		int result = pldao.insertOrder(orderinfoDTO);
+		
+		return "redirect:product/productinfo.do";
 	}
 	
 	@ResponseBody
