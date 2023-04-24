@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.springboot.ppageinfo.PPageInfo;
 import com.project.springboot.productdto.OrderinfoDTO;
+import com.project.springboot.productdto.ProductBascketDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
@@ -39,6 +40,7 @@ public class PListDaoService implements IPListDaoService {
 		return dto;
 	}
 	
+	// 상품 상세페이지 뷰
 	@Override
 	public ProductinfoDTO viewpinfo(int p_num) {
 		ProductinfoDTO dto = dao.viewpinfoDao(p_num);
@@ -46,6 +48,7 @@ public class PListDaoService implements IPListDaoService {
 		return dto;
 	}
 	
+	// 상품 검색 자동완성
 	@Override
 	public List<String> wordSearchShow(Map<String, String> paraMap) {
 		List<String> list = dao.wordSearchShowDao(paraMap);
@@ -53,9 +56,17 @@ public class PListDaoService implements IPListDaoService {
 		return list;
 	}
 	
+	// 결제 DB처리
 	@Override
 	public int insertOrder(OrderinfoDTO orderinfoDTO) {
 		int result = dao.insertOrderDao(orderinfoDTO);
+		
+		return result;
+	}
+	
+	@Override
+	public int add_bascket(ProductBascketDTO bascketDTO) {
+		int result = dao.add_bascketDao(bascketDTO);
 		
 		return result;
 	}
