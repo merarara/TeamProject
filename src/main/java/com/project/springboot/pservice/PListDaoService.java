@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.project.springboot.ppageinfo.PPageInfo;
+import com.project.springboot.productdto.BascketOrderDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.ProductBascketDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
@@ -80,10 +81,32 @@ public class PListDaoService implements IPListDaoService {
 		return bascketlist;
 	}
 	
+	// 장바구니 삭제
 	@Override
 	public int deleteBascket(int b_num) {
 		int result = dao.deleteBascketDao(b_num);
 		
+		return result;
+	}
+	
+	// 장바구니 결제
+	@Override
+	public int insertBOrder(BascketOrderDTO bOrderDTO) {
+		int result = dao.insertBOrderDao(bOrderDTO);
+		
+		return result;
+	}
+	
+	@Override
+	public String checkO_Num(String u_id) {
+		String result = dao.checkO_NumDao(u_id);
+		
+		return result;
+	}
+	
+	@Override
+	public int insertBOinfo(String o_num, String u_id, String p_num, String p_name, String p_price, String bo_qty) {
+		int result = dao.insertBOinfoDao(o_num, u_id, p_num, p_name, p_price, bo_qty);
 		return result;
 	}
 	

@@ -9,4 +9,5 @@ public class OrderinfoDTO {
 	private int p_num;
 	private int m_price;
 	private int m_qty;
+	private String p_name;
 }

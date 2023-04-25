@@ -57,6 +57,7 @@ function iamport(){
                     u_id: '${uinfo.u_id}', // 구매한 사용자의 아이디
                     m_addr: '${uinfo.u_addr1}', // 사용자의 주소
                     p_num: '${pinfo.p_num}', // 구매한 상품 번호
+                    p_name: '${pinfo.p_name}',
                     m_price: $("#amount").val(), // 상품 가격
                     m_qty: $("#quantity").val() // 상품 수량
                 },

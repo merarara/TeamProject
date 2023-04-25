@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.project.springboot.member.UserDTO;
 import com.project.springboot.member.UserService;
 import com.project.springboot.ppageinfo.PPageInfo;
+import com.project.springboot.productdto.BascketOrderDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.ProductBascketDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
@@ -100,12 +101,57 @@ public class ProductController {
 		return "product/productinfo";
 	}
 	
-	// 결제 DB처리
+	// 단품 결제 DB처리
 	@RequestMapping(value = "/product/save_oinfo.do", method = RequestMethod.POST)
 	public String save_order_info(OrderinfoDTO orderinfoDTO) {
 		int result = pldao.insertOrder(orderinfoDTO);
 		
 		return "redirect:product/productinfo.do";
+	}
+	
+	// 장바구니 결제 DB처리
+	@ResponseBody
+	@RequestMapping(value = "/product/save_bascket_order.do", method = RequestMethod.POST)
+	public Map<String, String> save_bascket_order(BascketOrderDTO bOrderDTO) {
+		int result = pldao.insertBOrder(bOrderDTO);
+		
+		Map<String, String> response = new HashMap<String, String>();
+		if (result == 1) {
+			response.put("status", "success");
+		} else {
+			response.put("status", "fail");
+		}
+		
+		return response;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/product/save_bascket_oinfo.do", method = RequestMethod.POST)
+	public Map<String, String> save_bascket_oinfo(HttpServletRequest req) {
+		String u_id = req.getParameter("u_id");
+		String[] p_num = req.getParameterValues("p_num[]");
+		String[] p_name = req.getParameterValues("p_name[]");
+		String[] p_price = req.getParameterValues("p_price[]");
+		String[] bo_qty = req.getParameterValues("bo_qty[]");
+		
+		String o_num = pldao.checkO_Num(u_id);
+		
+		int result = 0;
+		
+		for (int i = 0; i < p_num.length; i++) {
+			result = result + pldao.insertBOinfo(o_num, u_id, p_num[i], p_name[i], p_price[i], bo_qty[i]);
+		}
+		
+		System.out.println(result);
+		Map<String, String> response = new HashMap<String, String>();
+		
+		if (result > 1) {
+			response.put("status", "success");
+		} else {
+			response.put("status", "fail");
+		}
+		
+		return response;
 	}
 	
 	// 장바구니 추가
@@ -141,6 +187,7 @@ public class ProductController {
 		return "product/productbascket";
 	}
 	
+	// 장바구니 삭제
 	@ResponseBody
 	@RequestMapping(value = "/product/deletebascket.do", method=RequestMethod.POST)
 	public Map<String, String> deleteBascket (HttpServletRequest req) {
