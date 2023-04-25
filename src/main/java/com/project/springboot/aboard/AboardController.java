@@ -17,7 +17,7 @@ import com.project.springboot.jdbc.ABoard_Service;
 
 @Controller
 public class AboardController {
-
+//테스트
 	@Autowired
 	ABoard_Service dao;
 	@Autowired
