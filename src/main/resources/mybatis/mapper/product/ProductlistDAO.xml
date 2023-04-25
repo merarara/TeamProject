@@ -130,15 +130,15 @@
 	<!-- 단품 결제 정보 입력 -->
 	<insert id="insertOrderDao"
 		parameterType="com.project.springboot.productdto.OrderinfoDTO">
-		insert into order_info (m_num, u_id, m_addr, p_num, m_price, m_qty, m_name) 
-		values (seq_o_num.nextval, #{u_id}, #{m_addr}, ${p_num}, ${m_price}, ${m_qty}, #{m_name})
+		insert into order_info (m_num, u_id, m_addr, p_num, m_price, m_qty, m_name, p_price) 
+		values (seq_o_num.nextval, #{u_id}, #{m_addr}, ${p_num}, ${m_price}, ${m_qty}, #{m_name}, #{p_price})
 	</insert>
 	
 	<!-- 장바구니 추가 -->
 	<insert id="add_bascketDao"
 		parameterType="com.project.springboot.productdto.ProductBascketDTO">
 		insert into p_bascket
-		values (basc_b_num_seq.nextval, #{u_id}, #{p_num}, #{m_qty}, #{p_name}, #{p_listimg}, #{m_price})
+		values (basc_b_num_seq.nextval, #{u_id}, #{p_num}, #{m_qty}, #{p_name}, #{p_listimg}, #{m_price}, #{p_price})
 	</insert>
 	
 	<!-- 장바구니 목록 가져오기 -->
@@ -178,4 +178,9 @@
 		insert into b_orderinfo
 		values (#{o_num}, #{u_id}, #{p_num}, #{p_name}, #{p_price}, #{bo_qty})
 	</insert>
+	
+	<delete id="deleteABascketDao">
+		delete from p_bascket
+		 where u_id = #{param1}
+	</delete>
 </mapper>

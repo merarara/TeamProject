@@ -47,4 +47,7 @@ public interface IPListDaoService {
 	
 	// 장바구니 결제 상세
 	public int insertBOinfo(String o_num, String u_id, String p_num, String p_name, String p_price, String bo_qty);
+	
+	// 장바구니 결제 후 삭제
+	public int deleteABascket(String u_id);
 }

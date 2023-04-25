@@ -125,6 +125,7 @@ public class ProductController {
 		return response;
 	}
 	
+	// 장바구니 결제 상세 DB처리
 	@ResponseBody
 	@RequestMapping(value = "/product/save_bascket_oinfo.do", method = RequestMethod.POST)
 	public Map<String, String> save_bascket_oinfo(HttpServletRequest req) {
@@ -152,6 +153,16 @@ public class ProductController {
 		}
 		
 		return response;
+	}
+	
+	// 장바구니 결제 후 장바구니 삭제
+	@RequestMapping("/product/bascketdeleteAll.do")
+	public String deleteBascketAll(HttpServletRequest req) {
+		String u_id = req.getParameter("u_id");
+		
+		int result = pldao.deleteABascket(u_id);
+		
+		return "redirect:/product/productbascket.do";
 	}
 	
 	// 장바구니 추가

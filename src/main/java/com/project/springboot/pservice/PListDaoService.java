@@ -97,6 +97,7 @@ public class PListDaoService implements IPListDaoService {
 		return result;
 	}
 	
+	// O_Num 체크
 	@Override
 	public String checkO_Num(String u_id) {
 		String result = dao.checkO_NumDao(u_id);
@@ -104,9 +105,18 @@ public class PListDaoService implements IPListDaoService {
 		return result;
 	}
 	
+	// 장바구니 결제 상세 DB처리
 	@Override
 	public int insertBOinfo(String o_num, String u_id, String p_num, String p_name, String p_price, String bo_qty) {
 		int result = dao.insertBOinfoDao(o_num, u_id, p_num, p_name, p_price, bo_qty);
+		return result;
+	}
+	
+	// 장바구니 결제 후 삭제
+	@Override
+	public int deleteABascket(String u_id) {
+		int result = dao.deleteABascketDao(u_id);
+		
 		return result;
 	}
 	

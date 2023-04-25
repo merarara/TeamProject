@@ -80,13 +80,6 @@ function doPayment() {
         total_qty += parseInt(qty);
     });
     
-    console.log(p_num);
-    console.log(p_name);
-    console.log(p_price);
-    console.log(bo_qty);
-    console.log(total_qty);
-    console.log(total_price);
-    
     IMP.init('imp08750518');
     IMP.request_pay({
         pg : 'INIpayTest',
@@ -131,9 +124,7 @@ function doPayment() {
                         	},
                         	success: function(result) {
                         		alert("정상적으로 구매되었습니다.");
-                        		/*
                         		location.href="/product/bascketdeleteAll.do?u_id=${uinfo.u_id}";
-                        		*/
                         	}
                         });
                 	} else {
@@ -176,11 +167,11 @@ function doPayment() {
           			<h5 class="mb-1">${i.p_name}</h5>
           			<small class="text-muted">상품 수량 : <input type="number" name="quantity" id="quantity_${i.b_num}" min="1" value="${i.m_qty}" onchange="calculateAmount(${i.b_num})"></small>
         		</div>
-        		<input type="hidden" name="price" id="price_${ i.b_num }" value="${ i.m_price }">
+        		<input type="hidden" name="price" id="price_${ i.b_num }" value="${ i.p_price }">
         		<input type="hidden" name="p_name" id="p_name_${ i.p_name }" value="${ i.p_name }">
         		<img src="${i.p_listimg}" alt="${i.p_name}" class="img-thumbnail mb-3" style="max-width: 500px;">
-        		<input type="hidden" name="amount" id="amount_${ i.b_num }" value="${i.m_qty * i.m_price }">
-        		<p class="mb-1"><b>가격 : </b><span id="showprice_${i.b_num}"><fmt:formatNumber type="number" value="${i.m_price}" pattern="#,###" />원</span></p>
+        		<input type="hidden" name="amount" id="amount_${ i.b_num }" value="${i.m_qty * i.p_price }">
+        		<p class="mb-1"><b>가격 : </b><span id="showprice_${i.b_num}"><fmt:formatNumber type="number" value="${i.p_price * i.m_qty}" pattern="#,###" />원</span></p>
         		<form id="deleteFrm">
           			<input type="hidden" name="b_num" value="${i.b_num}">
           			<button type="button" onclick="doDelete(this.form);" class="btn btn-danger">장바구니 삭제</button>
