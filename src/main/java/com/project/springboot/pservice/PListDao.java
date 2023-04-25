@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.project.springboot.productdto.OrderinfoDTO;
+import com.project.springboot.productdto.ProductBascketDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
@@ -28,6 +29,15 @@ public interface PListDao {
 	// 상품 검색 자동완성
 	public List<String> wordSearchShowDao(Map<String, String> paraMap);
 	
-	// 상품 구매
+	// 상품 구매 DB처리
 	public int insertOrderDao(OrderinfoDTO OrderinfoDTO);
+	
+	// 장바구니 추가
+	public int add_bascketDao(ProductBascketDTO bascketDTO);
+	
+	// 장바구니 목록 가져오기
+	public List<ProductBascketDTO> get_bascketListDao(String u_id);
+	
+	// 장바구니 삭제
+	public int deleteBascketDao(int b_num);
 }

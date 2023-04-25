@@ -16,13 +16,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.springboot.member.UserDTO;
 import com.project.springboot.member.UserService;
 import com.project.springboot.ppageinfo.PPageInfo;
 import com.project.springboot.productdto.OrderinfoDTO;
+import com.project.springboot.productdto.ProductBascketDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
@@ -37,6 +37,7 @@ public class ProductController {
 	
 	int product_curPage = 1;
 	
+	// 상품리스트
 	@RequestMapping("/product/productlist.do")
 	public String productlist1(HttpServletRequest req, Model model) {
 		
@@ -76,11 +77,13 @@ public class ProductController {
 		return "product/productlist";
 	}
 	
+	// 상품가이드 이동
 	@RequestMapping("/product/buyguide/guide1.do")
 	public String guide1() {
 		return "product/buyguide/guide1";
 	}
 	
+	// 상품 상세페이지 이동
 	@RequestMapping("/product/productinfo.do")
 	public String pinfo1(HttpServletRequest req, Model model) {
 		int p_num = Integer.parseInt(req.getParameter("p_num"));
@@ -97,6 +100,7 @@ public class ProductController {
 		return "product/productinfo";
 	}
 	
+	// 결제 DB처리
 	@RequestMapping(value = "/product/save_oinfo.do", method = RequestMethod.POST)
 	public String save_order_info(OrderinfoDTO orderinfoDTO) {
 		int result = pldao.insertOrder(orderinfoDTO);
@@ -104,6 +108,57 @@ public class ProductController {
 		return "redirect:product/productinfo.do";
 	}
 	
+	// 장바구니 추가
+	@ResponseBody
+	@RequestMapping(value = "/product/add_bascket.do", method=RequestMethod.POST)
+	public Map<String, String> add_bascket(ProductBascketDTO bascketDTO) {
+		int result = pldao.add_bascket(bascketDTO);
+		
+		Map<String, String> response = new HashMap<String, String>();
+		if (result == 1) {
+			response.put("status", "success");
+		} else {
+			response.put("status", "failure");
+		}
+		
+		return response;
+	}
+	
+	// 장바구니 페이지
+	@RequestMapping("/product/productbascket.do")
+	public String showBascket (Model model) {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String u_id = authentication.getName();
+		
+	    List<ProductBascketDTO> list = pldao.get_bascketList(u_id);
+	    
+	    UserDTO udto = udao.selectone(u_id);
+	    
+	    model.addAttribute("uinfo", udto);
+	    model.addAttribute("blist", list);
+	    
+		return "product/productbascket";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/product/deletebascket.do", method=RequestMethod.POST)
+	public Map<String, String> deleteBascket (HttpServletRequest req) {
+		int b_num = Integer.parseInt(req.getParameter("b_num"));
+		
+		int result = pldao.deleteBascket(b_num);
+		
+		Map<String, String> response = new HashMap<String, String>();
+		if (result == 1) {
+			response.put("status", "success");
+		} else {
+			response.put("status", "failure");
+		}
+		
+		return response;
+	}
+	
+	// 검색 자동완성 기능
 	@ResponseBody
 	@RequestMapping(value="/product/wordSearchShow.do", method=RequestMethod.GET, produces="text/plain;charset=UTF-8")
 	public String wordSearchShow(HttpServletRequest request) {

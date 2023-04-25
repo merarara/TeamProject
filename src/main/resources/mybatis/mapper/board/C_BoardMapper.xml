@@ -7,7 +7,9 @@
   WHERE C_title LIKE '%' || #{searchword, jdbcType=VARCHAR} || '%'
 </select>
 
-
+ <select id="selectView" parameterType="int" resultType="com.project.springboot.cboard.C_BoardDTO">
+    SELECT * FROM c_board WHERE c_num=#{c_num}
+  </select>
 
 <select id="selectListPage" resultType="com.project.springboot.cboard.C_BoardDTO">
     SELECT *
@@ -27,32 +29,19 @@
     WHERE rNum BETWEEN ${start} AND ${end}
 </select>
     <insert id="insertWrite" parameterType="com.project.springboot.cboard.C_BoardDTO">
-        <selectKey keyProperty="C_num" resultType="int" order="BEFORE">
-            SELECT C_num_SEQ.NEXTVAL FROM DUAL
-        </selectKey>
         INSERT INTO C_Board (
             C_num, U_ID, C_title, C_content, C_ofile, C_sfile
         )
         VALUES (
-            #{C_num, jdbcType=INTEGER}, #{U_ID, jdbcType=VARCHAR}, #{C_title, jdbcType=VARCHAR}, #{C_content, jdbcType=VARCHAR}, #{C_ofile, jdbcType=VARCHAR}, #{C_sfile, jdbcType=VARCHAR}
+            C_num_SEQ.NEXTVAL, #{u_id, jdbcType=VARCHAR}, #{c_title, jdbcType=VARCHAR}, #{c_content, jdbcType=VARCHAR}, #{c_ofile, jdbcType=VARCHAR}, #{c_sfile, jdbcType=VARCHAR}
         )
     </insert>
 
-    <update id="updateHit" parameterType="int">
+    <update id="updatec_visitcount" parameterType="int">
         UPDATE C_Board
         SET C_visitcount = C_visitcount + 1
-        WHERE C_num = #{C_num}
+        WHERE C_num = #{c_num}
     </update>
-
-    <update id="updateBoard" parameterType="com.project.springboot.cboard.C_BoardDTO">
-        UPDATE C_Board
-        SET C_title = #{C_title},
-            C_content = #{C_content},
-            C_ofile = #{C_ofile},
-            C_sfile = #{C_sfile}
-        WHERE C_num = #{C_num}
-    </update>
-
     <delete id="deleteBoard" parameterType="int">
         DELETE FROM C_Board
         WHERE C_num = #{C_num}
@@ -63,7 +52,7 @@
             C_title, C_content, C_ofile, C_sfile, U_ID, C_postdate, C_downcount, C_pass, C_visitcount
         )
         VALUES (
-            #{C_title}, #{C_content}, #{C_ofile}, #{C_sfile}, #{U_ID}, #{C_postdate}, #{C_downcount}, #{C_pass}, #{C_visitcount}
+            #{c_title}, #{c_content}, #{c_ofile}, #{c_sfile}, #{u_id}, #{c_postdate}, #{c_downcount}, #{c_pass}, #{c_visitcount}
         )
     </insert>
 <select id="selectSomeRows" resultType="hashmap">
@@ -71,11 +60,20 @@
         SELECT ROWNUM rnum, t.*
         FROM (
             SELECT * FROM table
-            WHERE id = #{id, jdbcType=VARCHAR}
+            WHERE u_id = #{u_id, jdbcType=VARCHAR}
             ORDER BY some_column ASC
         ) t
     ) WHERE rnum BETWEEN #{startRow, jdbcType=INTEGER} AND #{rowCount, jdbcType=INTEGER}
 </select>
+<!-- 수정 -->
+<update id="updateEdit" parameterType="com.project.springboot.cboard.C_BoardDTO">
+	UPDATE c_board
+	SET c_title = #{c_title},
+		c_content = #{c_content},
+		c_ofile = #{c_ofile},
+		c_sfile = #{c_sfile}
+	WHERE c_num = #{c_num}
+</update>
 
 
 </mapper>

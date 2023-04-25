@@ -22,7 +22,7 @@
     </colgroup> 
     <tr>
         <td>번호</td> <td>${ dto.c_num }</td>
-        <td>작성자</td> <td>${ dto.c_name }</td>
+        <td>작성자</td> <td>${ dto.u_id }</td>
     </tr>
     <tr>
         <td>작성일</td> <td>${ dto.c_postdate }</td>
@@ -37,8 +37,7 @@
         <td colspan="3" height="100">${ dto.c_content }
         <c:if test="${ isImage eq true }">
         	<p>
-        		<img src="../Uploads/${dto.c_sfile }"
-        			style="max-width:500px;" />
+        		<img src="../static/Uploads/${dto.c_sfile }" style="max-width:500px;" />
         	</p>
         </c:if></td>
         <!-- 첨부한 파일이 이미지라면 img태그로 화면에 출력한다. -->

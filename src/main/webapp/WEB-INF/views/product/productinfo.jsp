@@ -80,6 +80,34 @@ function calculateAmount() {
 	  var amount = quantity * price;
 	  document.getElementById("amount").value = amount;
 }
+
+function doAddBascket() {
+	if(confirm('장바구니에 담으시겠습니까?')) {
+		$.ajax({
+			type: 'POST',
+			url: '/product/add_bascket.do',
+			data: {
+				u_id: '${uinfo.u_id}',
+				p_num: '${pinfo.p_num}',
+				m_qty: $("#quantity").val(),
+				p_name: '${pinfo.p_name}',
+				p_listimg: '${pinfo.p_listimg}',
+				m_price: $("#amount").val()
+			},
+			success: function(data) {
+				if (data.status === 'success') {
+					if (confirm('장바구니에 성공적으로 추가되었습니다. 장바구니 페이지로 이동하시겠습니까?')) {
+						location.href = "/product/productbascket.do";
+					}
+				} else {
+					alert('장바구니 추가에 실패하였습니다.');
+				}
+			}
+		});
+	} else {
+			
+	}
+}
 </script>
 <style>
 #contentwrap {
@@ -185,8 +213,10 @@ function calculateAmount() {
 								  	<button name="paymentButton" id="paymentButton" onclick="iamport(); return false;" class="w-100 btn btn-warning btn-lg" type="submit">
 								    	결제하기
 								  	</button>
+								  	<button name="addBascket" id="addBascket" onclick="doAddBascket();" class="w-100 btn btn-primary btn-lg" type="button">
+								    	장바구니 추가
+								  	</button>
 								</form>
-  								장바구니 <br>
 							</div>
 						</div>
 					</div>
