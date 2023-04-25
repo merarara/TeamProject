@@ -91,7 +91,7 @@
 	<select id="viewpinfoDao" 
 		parameterType="int"
 		resultType="com.project.springboot.productdto.ProductinfoDTO">
-		select f.*, l.p_price, l.p_rdate, l.p_rating
+		select f.*, l.p_price, l.p_rdate, l.p_rating, l.p_listimg
 		  from product_info f, product_list l
 		 where f.p_num = l.p_num
 		   and f.p_num = #{param1}
@@ -132,4 +132,21 @@
 		insert into order_info (m_num, u_id, m_addr, p_num, m_price, m_qty) 
 		values (seq_o_num.nextval, #{u_id}, #{m_addr}, ${p_num}, ${m_price}, ${m_qty})
 	</insert>
+	
+	<insert id="add_bascketDao"
+		parameterType="com.project.springboot.productdto.ProductBascketDTO">
+		insert into p_bascket
+		values (basc_b_num_seq.nextval, #{u_id}, #{p_num}, #{m_qty}, #{p_name}, #{p_listimg}, #{m_price})
+	</insert>
+	
+	<select id="get_bascketListDao"
+		resultType="com.project.springboot.productdto.ProductBascketDTO">
+		select * from p_bascket
+		 where u_id = #{param1}
+	</select>
+	
+	<delete id="deleteBascketDao">
+		delete from p_bascket
+		 where b_num = #{param1}
+	</delete>
 </mapper>

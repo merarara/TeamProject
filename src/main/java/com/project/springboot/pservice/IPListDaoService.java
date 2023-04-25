@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.springboot.ppageinfo.PPageInfo;
 import com.project.springboot.productdto.OrderinfoDTO;
+import com.project.springboot.productdto.ProductBascketDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
@@ -27,4 +28,13 @@ public interface IPListDaoService {
 	
 	// 상품 구매
 	public int insertOrder(OrderinfoDTO orderinfoDTO);
+	
+	// 장바구니 추가
+	public int add_bascket(ProductBascketDTO bascketDTO);
+	
+	// 장바구니 목록 가져오기
+	public List<ProductBascketDTO> get_bascketList(String u_id);
+	
+	// 장바구니 삭제
+	public int deleteBascket(int b_num);
 }

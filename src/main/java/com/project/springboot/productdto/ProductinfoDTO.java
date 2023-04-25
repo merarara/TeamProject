@@ -31,4 +31,5 @@ public class ProductinfoDTO {
 	private java.sql.Date p_rdate;
 	private double p_rating;
 	private String r_storage;
+	private String p_listimg;
 }
