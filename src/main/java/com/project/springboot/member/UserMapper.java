@@ -8,4 +8,5 @@ public interface UserMapper {
     void updateUser(UserDTO userDTO);
     void deleteUser(String u_id);
     UserDTO selectOne(String u_id);
+    UserDTO selectUserByNickname(String u_nickname);
 }

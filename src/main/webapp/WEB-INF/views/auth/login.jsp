@@ -62,7 +62,6 @@
             </div>
             <div class="login_etc">
                 <div class="forgot_pw">
-                <a href="">Forgot Password?</a>
             </div>
             </div>
             <div class="submit">
