@@ -1,84 +1,62 @@
-package com.project.springboot.aboard;
-
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.project.springboot.jdbc.ABoard_Comment_DTO;
-import com.project.springboot.jdbc.ABoard_Comment_Service;
-import com.project.springboot.jdbc.ABoard_DTO;
-import com.project.springboot.jdbc.ABoard_Service;
-
-@Controller
-public class AboardController {
-//테스트
-	@Autowired
-	ABoard_Service dao;
-	@Autowired
-	ABoard_Comment_Service dao2;
-	
-	@RequestMapping("/aboard/aboard_main.do")
-	public String aboard_main(Model model) {
-		
-		
-	model.addAttribute("ABoardList", dao.select());
-		return "aboard/aboard_main";
-	}
-	
-	@RequestMapping(value="/aboard/aboard_regist.do", method=RequestMethod.GET)
-	public String member11() {				 
-		return "aboard/aboard_regist";       
-	}
-	//post방식인 경우 입력한 회원정보를 DB처리  
-	@RequestMapping(value="/aboard/aboard_regist.do", method=RequestMethod.POST)
-	public String member16(ABoard_DTO aBoardDTO) {
-		int result = dao.insert(aBoardDTO);
-		if(result==1) System.out.println("입력되었습니다.");
-//		return "redirect:faq/faq_main.do";  
-		return "redirect:aboard_main.do";   
-	}
-
-	@RequestMapping(value="/aboard/aboard_main_detail.do", method=RequestMethod.GET)
-	public String member26(HttpServletRequest req, Model model) {
-		int a_num = Integer.parseInt(req.getParameter("a_num"));
-		ABoard_DTO dto = dao.view(a_num);
-		model.addAttribute("ABoardList2", dto);
-		
-		
-		List<ABoard_Comment_DTO> commentDto = dao2.select2(a_num);
-	    model.addAttribute("commentList", commentDto);
-		
-//		return "redirect:faq/faq_main.do";  
-		return "aboard/aboard_main_detail";   
-	}
-
-	@RequestMapping(value="/aboard/aboard_edit.do", method=RequestMethod.GET)
-	public String member23(ABoard_DTO aBoardDTO, Model model) {		
-		aBoardDTO = dao.selectOne(aBoardDTO);
-		model.addAttribute("dto", aBoardDTO);		
-		return "aboard/aboard_edit";       
-	}
-	//post방식인 경우 레코드를 update 
-	@RequestMapping(value="/aboard/aboard_edit.do", method=RequestMethod.POST)
-	public String member27(ABoard_DTO aBoardDTO) {		
-		int result = dao.update(aBoardDTO);
-		if(result==1) System.out.println("수정되었습니다.");
-		return "redirect:aboard_main.do";          
-	}
-	
-	@RequestMapping(value="/aboard/aboard_delete.do", method=RequestMethod.GET)
-	public String member24(HttpServletRequest req) {
-		int a_num = Integer.parseInt(req.getParameter("a_num"));
-		int result = dao.delete(a_num);
-		if(result==1) System.out.println("삭제되었습니다.");
-		return "redirect:aboard_main.do";    
-	}	
-
-}
-	
+/*
+ * package com.project.springboot.fboard;
+ * 
+ * import org.springframework.beans.factory.annotation.Autowired; import
+ * org.springframework.security.core.Authentication; import
+ * org.springframework.security.core.context.SecurityContextHolder; import
+ * org.springframework.stereotype.Controller; import
+ * org.springframework.ui.Model; import
+ * org.springframework.web.bind.annotation.RequestMapping; import
+ * org.springframework.web.bind.annotation.RequestMethod;
+ * 
+ * import com.project.springboot.afbService.fboardService; import
+ * com.project.springboot.member.UserDTO; import
+ * com.project.springboot.member.UserService;
+ * 
+ * @Controller public class fboardController {
+ * 
+ * //Mybatis 사용을 위해 자동주입
+ * 
+ * @Autowired fboardService fdao;
+ * 
+ * @Autowired UserService udao;
+ * 
+ * //회원 목록
+ * 
+ * @RequestMapping("/fboard/fboardlist.do") public String fboard1(Model model) {
+ * //DAO(Mapper)의 select() 메서드를 호출해서 회원목록을 인출 model.addAttribute("fboardLists",
+ * fdao.selectF()); return "/fboard/fboardlist"; }
+ * 
+ * //FAQ 게시글 등록 - get방식인 경우 등록하기 페이지 진입
+ * 
+ * @RequestMapping(value="/fboard/fboardwrite.do", method=RequestMethod.GET)
+ * public String fboard2(Model model) { Authentication authentication =
+ * SecurityContextHolder.getContext().getAuthentication(); String u_id =
+ * authentication.getName(); UserDTO udto = udao.selectone(u_id);
+ * model.addAttribute("udto", udto);
+ * 
+ * return "fboard/fboardwrite"; }
+ * 
+ * //post방식인 경우 입력한 FAQ 게시글을 DB처리
+ * 
+ * @RequestMapping(value="/fboard/fboardwrite.do", method=RequestMethod.POST)
+ * public String fboard3(fboardDTO fboardDto) { int result =
+ * fdao.insertF(fboardDto); if(result==1) System.out.println("게시글이 등록되었습니다.");
+ * return "redirect:fboard/fboardlist"; }
+ * 
+ * //get방식인 경우 FAQ게시판 수정 페이지
+ * 
+ * @RequestMapping(value="/fboard/fboardedit.do", method=RequestMethod.GET)
+ * public String fboard4(fboardDTO fboardDto, Model model) { fboardDto =
+ * fdao.selectOneF(fboardDto); model.addAttribute("fdao", fboardDto); return
+ * "/fboard/fboardedit"; } //post방식인 경우 레코드를 update
+ * 
+ * @RequestMapping(value="/fboard/fboardedit.do", method=RequestMethod.POST)
+ * public String fboard5(fboardDTO fboardDto) { int result =
+ * fdao.updateF(fboardDto); if(result==1) System.out.println("수정되었습니다."); return
+ * "redirect:/fboard/fboardview.do"; } //회원정보 삭제. post방식으로 들어온 요청만 처리한다.
+ * 
+ * @RequestMapping(value="/fboarddelete.do", method=RequestMethod.POST) public
+ * String member4(fboardDTO fboardDto) { int result = fdao.deleteF(fboardDto);
+ * if(result==1) System.out.println("삭제되었습니다."); return "redirect:list.do"; } }
+ */

@@ -41,7 +41,7 @@
 	          <a class="nav-link" href="/cboard/List.do">커뮤니티</a>
 	        </li>
 	        <li class="nav-item">
-	          <a class="nav-link" href="/faq/faq_main.do">FAQ</a>
+	          <a class="nav-link" href="/fboard/fboardlist.do">FAQ</a>
 	        </li>
 	      </ul>
 	      

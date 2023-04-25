@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Mapper파일을 구성하기 위한 Doctype 설정 -->
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<!-- 서비스 인터페이스를 namespace로 지정한다. 컨트롤러에서 해당 인터페이스를
+통해 Mapper의 메서드를 호출하게된다. -->
+<mapper namespace="com.project.springboot.afbService.aboardService">
+<!-- 네임스페이스로 지정된 인터페이스의 select() 메서드를 통해 해당
+	엘리먼트가 실행된다. 파라미터와 결과셋 모두 MemberDTO객체를 사용하고있다. 
+	select엘리먼트는 쿼리를 실행한 후 List컬렉션으로 반환한다.
+	<select id="selectF" 
+		parameterType="com.project.springboot.fboard.fboardDTO" 
+		resultType="com.project.springboot.fboard.fboardDTO"> 
+		select * from f_board order by regdatef desc
+	</select>
+	
+
+	insertF 쿼리문에서 UserDTO 클래스를 참조하여 u_id 값을 가져옴
+	<insert id="insertF" 
+		parameterType="com.project.springboot.fboard.fboardDTO"> 
+	    INSERT INTO f_board (f_num, u_id, u_nick, f_title, f_content, visitcountf) 
+	    VALUES (seq_fboard_num.nextval, #{u_id}, #{u_nick}, #{f_title}, #{f_content}, 0)
+	</insert>
+	
+	FAQ게시글 인출	 
+	<select id="selectOneF" 
+		parameterType="com.project.springboot.fboard.fboardDTO"
+		resultType="com.project.springboot.fboard.fboardDTO"> 
+		select * from f_board where f_num=#{f_num}
+	</select>	 
+	
+	FAQ 게시글 수정. 파라미터는 DTO의 멤버변수를 사용한다.
+	<update id="updateF" 
+		parameterType="com.project.springboot.fboard.fboardDTO"> 
+		update f_board set f_title=#{f_title}, f_content=#{f_content} 
+		where f_num=#{f_num}
+	</update> 
+	
+	회원 삭제
+	<delete id="deleteF" 
+		parameterType="com.project.springboot.fboard.fboardDTO"> 
+		delete from f_board where f_num=#{f_num}
+	</delete>  -->
+	
+
+
+
+</mapper>
