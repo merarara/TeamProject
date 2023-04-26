@@ -1,9 +1,11 @@
 package com.project.springboot.pservice;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,9 +16,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.project.springboot.member.UserDTO;
 import com.project.springboot.member.UserService;
@@ -26,6 +31,8 @@ import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.ProductBascketDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
+import com.project.springboot.productdto.ReviewDTO;
+import com.project.springboot.productdto.ReviewImageDTO;
 
 @Controller
 public class ProductController {
@@ -93,9 +100,24 @@ public class ProductController {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String u_id = authentication.getName(); // 사용자 id
-		
-	    UserDTO udto = udao.selectOne(u_id);
 	    
+	    UserDTO udto = udao.selectOne(u_id);
+	    String bchk1 = pldao.buyCheck1(p_num);
+	    String bchk2 = pldao.buyCheck2(p_num);
+	    
+	    List<ReviewDTO> rdto = pldao.GetReview(p_num);
+	    List<ReviewImageDTO> ridto = pldao.getRevImgDao(p_num);
+	    
+	    System.out.println("u_id : " + u_id + "bchk1 : " + bchk1 + "bchk2 : " + bchk2);
+	    
+    	if (u_id.equals(bchk1) || u_id.equals(bchk2)) {
+    		model.addAttribute("bchk", "ok");
+    	} else {
+    		model.addAttribute("bchk", "no");
+    	}
+    	
+    	model.addAttribute("ridto", ridto);
+    	model.addAttribute("rdto", rdto);
 	    model.addAttribute("uinfo", udto);
 		model.addAttribute("pinfo", dto);
 		return "product/productinfo";
@@ -105,6 +127,8 @@ public class ProductController {
 	@RequestMapping(value = "/product/save_oinfo.do", method = RequestMethod.POST)
 	public String save_order_info(OrderinfoDTO orderinfoDTO) {
 		int result = pldao.insertOrder(orderinfoDTO);
+		
+		int result2 = pldao.update_SCount(orderinfoDTO.getP_num());
 		
 		return "redirect:product/productinfo.do";
 	}
@@ -138,9 +162,11 @@ public class ProductController {
 		String o_num = pldao.checkO_Num(u_id);
 		
 		int result = 0;
+		int result2;
 		
 		for (int i = 0; i < p_num.length; i++) {
 			result = result + pldao.insertBOinfo(o_num, u_id, p_num[i], p_name[i], p_price[i], bo_qty[i]);
+			result2 = pldao.update_SCount(Integer.parseInt(p_num[i]));
 		}
 		
 		System.out.println(result);
@@ -214,6 +240,52 @@ public class ProductController {
 		}
 		
 		return response;
+	}
+	
+	// 상품 리뷰 글
+	@RequestMapping(value="/product/reviewUpload.do", method=RequestMethod.POST)
+	public String reviewUpload(MultipartFile[] review_file, ReviewDTO rdto,
+			MultipartHttpServletRequest req) {
+		String path = "";
+		
+		System.out.println(rdto.getP_num());
+		System.out.println(rdto.getP_content());
+		System.out.println(rdto.getU_id());
+		System.out.println(rdto.getR_rating());
+		
+		int ireview = pldao.insertReview(rdto);
+		
+		int r_num = pldao.checkRnum(rdto.getP_num(), rdto.getU_id());
+		
+		for (MultipartFile f: review_file) {
+			System.out.println(f);
+			String originalName = f.getOriginalFilename();
+			System.out.println("originalName : " + originalName);
+			String ext = originalName.substring(originalName.lastIndexOf('.'));
+			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			String savedName = uuid + ext;
+			System.out.println("savedName:" + savedName);
+			
+			try {
+				path = ResourceUtils.getFile("classpath:static/revuploads")
+						.toPath().toString();
+				System.out.println("path : " + path);
+				File filePath = new File(path, savedName);
+				System.out.println("filePath : " + filePath);
+				f.transferTo(filePath);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			ReviewImageDTO ridto = new ReviewImageDTO();
+			ridto.setR_num(r_num);
+			ridto.setP_num(rdto.getP_num());
+			ridto.setR_ofile(originalName);
+			ridto.setR_sfile(savedName);
+			
+			pldao.insertRImg(ridto);
+		}
+		
+		return "redirect:/product/productinfo.do?p_num=" + rdto.getP_num();
 	}
 	
 	// 검색 자동완성 기능
