@@ -35,7 +35,7 @@ public class fboardController {
 	public String fboard2(Model model) {		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String u_id = authentication.getName();
-	    UserDTO udto = udao.selectone(u_id);
+	    UserDTO udto = udao.selectOne(u_id);
 	    model.addAttribute("udto", udto);
 
 		return "fboard/fboardwrite";
@@ -54,7 +54,7 @@ public class fboardController {
 	public String fboard4(fboardDTO fboardDto, Model model) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String u_id = authentication.getName();
-	    UserDTO udto = udao.selectone(u_id);
+	    UserDTO udto = udao.selectOne(u_id);
 	    model.addAttribute("udto", udto);
 	    
 	    // 게시물 번호를 통해 게시물 정보를 조회하여 fboardDto에 담아줌

@@ -50,4 +50,8 @@
 	<select id="selectOne" resultType="com.project.springboot.member.UserDTO">
 		SELECT * FROM USER_INFO WHERE u_id = #{param1}
 	</select>
+	
+	<select id="selectAll" resultType="com.project.springboot.member.UserDTO">
+       SELECT * FROM USER_INFO
+   </select>
 </mapper> 

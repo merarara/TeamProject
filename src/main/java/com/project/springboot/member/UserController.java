@@ -2,10 +2,10 @@ package com.project.springboot.member;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 
 @Controller
 public class UserController {
@@ -197,6 +194,26 @@ public class UserController {
             return "/user/delete";
         }
     }
+    
+    @GetMapping("/admin/adminPage.do")
+    public String showAdminPage(Model model) {
+        return "/admin/adminPage";
+    }
+    // ADMIN 회원관리
+    @GetMapping("/admin/userManagement.do")
+    public String userManagement(Model model) {
+
+        return "/admin/userManagement";
+    }
+    
+    // 회원전체조회
+    @GetMapping("/users")
+    @ResponseBody
+    public List<UserDTO> showAllUsers() {
+        List<UserDTO> userList = userService.selectAll();
+        return userList;
+    }
+
     
 	@RequestMapping("/myError.do")
 	public String login2() {		
