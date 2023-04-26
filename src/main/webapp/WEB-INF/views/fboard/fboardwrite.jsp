@@ -16,7 +16,7 @@
 
 <%@ include file="../header.jsp" %>	
 <div id="content">
-
+//
 <h2>FAQ게시판 - 글쓰기(write)</h2>
 <!-- 글쓰기 페이지를 그대로 사용하되 action 부분만 수정한다. 수정시에도
 파일첨부가 있으므로 enctype속성은 추가되어야한다. -->
