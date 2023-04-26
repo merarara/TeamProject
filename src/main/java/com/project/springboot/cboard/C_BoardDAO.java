@@ -18,5 +18,6 @@ public interface C_BoardDAO {
     public int selectCount(Map<String, Object> map);
     public List<C_BoardDTO> selectListPage(Map<String, Object> map);
     public int updateEdit(C_BoardDTO dto);
+    public int writeC_Board(C_BoardDTO c_boardDTO);
 
 }

@@ -55,21 +55,21 @@
         <td>
             <textarea name="c_content" style="width:90%;height:100px;"></textarea>
         </td>
-    </tr>
+    </tr>    
     <tr>
-        <td>첨부 파일</td>
+        <td>멀티 파일 업로드</td>
         <td>
-            <input type="file" name="c_originfile" />
+            <form action="multiFileUpload.do" method="post" enctype="multipart/form-data">                
+                <input type="file" name="c_file" multiple /><br />                
+            </form>
         </td>
     </tr>
-    
     <tr>
         <td colspan="2" align="center">
             <button type="submit">작성 완료</button>
             <button type="reset">RESET</button>
             <button type="button" onclick="location.href='/cboard/List.do';">
                 목록 바로가기
-
             </button>
         </td>
     </tr>
