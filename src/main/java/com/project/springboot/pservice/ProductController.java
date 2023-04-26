@@ -94,7 +94,7 @@ public class ProductController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String u_id = authentication.getName(); // 사용자 id
 		
-	    UserDTO udto = udao.selectone(u_id);
+	    UserDTO udto = udao.selectOne(u_id);
 	    
 	    model.addAttribute("uinfo", udto);
 		model.addAttribute("pinfo", dto);
@@ -190,7 +190,7 @@ public class ProductController {
 		
 	    List<ProductBascketDTO> list = pldao.get_bascketList(u_id);
 	    
-	    UserDTO udto = udao.selectone(u_id);
+	    UserDTO udto = udao.selectOne(u_id);
 	    
 	    model.addAttribute("uinfo", udto);
 	    model.addAttribute("blist", list);

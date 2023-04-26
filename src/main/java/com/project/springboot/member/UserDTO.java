@@ -20,6 +20,7 @@ public class UserDTO {
     private String u_addr2;
     private String u_type;
 
+    // 입력받은 각 필드에 입력 값 합침
 	public void setU_phone(String u_phone) {
 	    this.u_phone = u_phone;
 	    // 입력된 전화번호를 '-'으로 분리하여 변수에 저장합니다.
@@ -34,4 +35,6 @@ public class UserDTO {
 	    return u_phone1 + "-" + u_phone2 + "-" + u_phone3;
 	
 	}
+	
+	
 }
