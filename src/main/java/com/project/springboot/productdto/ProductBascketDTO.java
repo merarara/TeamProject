@@ -11,4 +11,5 @@ public class ProductBascketDTO {
 	private String p_name;
 	private String p_listimg;
 	private int m_price;
+	private int p_price;
 }

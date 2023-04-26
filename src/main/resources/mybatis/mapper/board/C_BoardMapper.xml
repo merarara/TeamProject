@@ -28,14 +28,17 @@
     )
     WHERE rNum BETWEEN ${start} AND ${end}
 </select>
-    <insert id="insertWrite" parameterType="com.project.springboot.cboard.C_BoardDTO">
-        INSERT INTO C_Board (
-            C_num, U_ID, C_title, C_content, C_ofile, C_sfile
-        )
-        VALUES (
-            C_num_SEQ.NEXTVAL, #{u_id, jdbcType=VARCHAR}, #{c_title, jdbcType=VARCHAR}, #{c_content, jdbcType=VARCHAR}, #{c_ofile, jdbcType=VARCHAR}, #{c_sfile, jdbcType=VARCHAR}
-        )
-    </insert>
+<insert id="insertWrite" parameterType="com.project.springboot.cboard.C_BoardDTO">
+    INSERT INTO C_Board (C_num, C_title, C_content, C_visitcount, C_postdate, U_ID, C_ofile, C_sfile, C_downcount, C_Commend)
+    VALUES (
+        C_num_SEQ.NEXTVAL, #{c_title, jdbcType=VARCHAR}, #{c_content}, 0, sysdate, #{u_id, jdbcType=VARCHAR}, #{c_ofile, jdbcType=VARCHAR}, #{c_sfile, jdbcType=VARCHAR}, 0, 0
+    )
+</insert>
+
+
+<select id="getInsertedNum" resultType="int">
+    select c_num_seq.currval from dual
+</select>
 
     <update id="updatec_visitcount" parameterType="int">
         UPDATE C_Board
