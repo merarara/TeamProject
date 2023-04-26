@@ -57,8 +57,10 @@ function iamport(){
                     u_id: '${uinfo.u_id}', // 구매한 사용자의 아이디
                     m_addr: '${uinfo.u_addr1}', // 사용자의 주소
                     p_num: '${pinfo.p_num}', // 구매한 상품 번호
+                    p_name: '${pinfo.p_name}',
                     m_price: $("#amount").val(), // 상품 가격
-                    m_qty: $("#quantity").val() // 상품 수량
+                    m_qty: $("#quantity").val(), // 상품 수량
+                    p_price: $("#price").val()	 // 상품 원래 가격
                 },
                 success: function(result) {
                     console.log(result); // 저장 결과 출력
@@ -92,7 +94,8 @@ function doAddBascket() {
 				m_qty: $("#quantity").val(),
 				p_name: '${pinfo.p_name}',
 				p_listimg: '${pinfo.p_listimg}',
-				m_price: $("#amount").val()
+				m_price: $("#amount").val(),
+				p_price: $("#price").val()
 			},
 			success: function(data) {
 				if (data.status === 'success') {
