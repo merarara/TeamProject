@@ -1,11 +1,11 @@
-package com.project.springboot.cboard;
+package com.project.springboot.cservice;
 
 import java.util.List;
 
+import com.project.springboot.cboard.*;
 
+public interface C_BoardService {
 
-public interface C_BoardDAO {
-	
 	// 게시물 목록
 	public List<C_BoardVO> list() throws Exception;
 	
@@ -13,18 +13,18 @@ public interface C_BoardDAO {
 	public void write(C_BoardVO vo) throws Exception;
 
 	// 게시물 조회
-	public C_BoardVO view(int c_num) throws Exception;
-	
+	public C_BoardVO view(int bno) throws Exception;
+
 	// 게시물 수정
 	public void modify(C_BoardVO vo) throws Exception;
 	
-	// 게시뮬 삭제
-	public void delete(int c_num) throws Exception;
-
+	// 게시물 삭제
+	public void delete(int bno) throws Exception;
+	
 	
 	
 	// 게시물 총 갯수
-	public int count() throws Exception;	
+	public int count() throws Exception;
 
 	
 	
@@ -39,8 +39,4 @@ public interface C_BoardDAO {
 	
 	// 게시물 총 갯수 + 검색 적용
 	public int searchCount(String searchType, String keyword) throws Exception;
-
-	
-		
-		
 }
