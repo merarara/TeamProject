@@ -116,7 +116,7 @@ details caption {
         	<details>
         		<summary>
         		${ row.f_num} : ${ row.f_title }&nbsp;&nbsp;&nbsp;
-        		<a href="edit.do?id=${row.u_id }">수정</a>&nbsp;&nbsp;
+        		<a href="/fboard/fboardedit.do?id=${row.u_id }">수정</a>&nbsp;&nbsp;
 				<a href="javascript:void(0);" onclick="memberDel('${row.u_id }');">삭제</a>
 				</summary>
            			<div>${ row.f_content }</div>

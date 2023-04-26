@@ -34,36 +34,28 @@
 <h2>FAQ게시판 - 수정하기(Edit)</h2>
 <!-- 글쓰기 페이지를 그대로 사용하되 action 부분만 수정한다. 수정시에도
 파일첨부가 있으므로 enctype속성은 추가되어야한다. -->
-<form name="writeFrm" method="post" action="/fboard/fboardedit.do" onsubmit="return validateForm(this);">
-<!-- 게시물 수정을 위한 일련번호 -->	
-<input type="hid den" name="idx" value="${ fdto.f_num }"/>
+<form name="editFrm" method="post" action="/fboard/fboardedit.do" onsubmit="return validateForm(this);">
 
-<table border="1" width="90%">
-    <tr>
-        <td>작성자</td>
-        <td>
-            <input type="text" name="name" style="width:150px;" 
-            	value="${ fdto.u_nick }" />
-        </td>
-    </tr>
-    <tr>
-        <td>제목</td>
-        <td>
-            <input type="text" name="title" style="width:90%;" 
-            	value="${ fdto.f_title }" />
-        </td>
-    </tr>
+<!-- 게시물 수정을 위한 일련번호 -->	
+<input type="hid den" name="u_id" value="${ udto.u_id }"/>
+<table align="center" border="1" width="60%">
+	<tr>
+	  <td>제목</td>
+	  <td>
+	    <input type="text" name="f_title" style="width:60%;" value="${fboardDto.getf_title}" />
+	  </td>
+	</tr>
     <tr>
         <td>내용</td>
         <td>
-            <textarea name="content" style="width:90%;height:100px;">${ fdto.f_content }</textarea>
+            <textarea name="f_content" style="width:90%;height:100px;" value="${ fboardDto.f_content }"></textarea>
         </td>
     </tr>
     <tr>
         <td colspan="2" align="center">
-            <button type="submit">작성 완료</button>
+            <button type="submit">수정 완료</button>
             <button type="reset">RESET</button>
-            <button type="button" onclick="location.href='../mvcboard/list.do';">
+            <button type="button" onclick="location.href='/fboard/fboardlist.do';">
                 목록 바로가기
             </button>
         </td>

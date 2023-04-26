@@ -23,7 +23,6 @@
 <form action="/fboard/fboardwrite.do" method="post">
 <!-- 게시물 수정을 위한 일련번호 -->	
 <input type="hid_den" name="u_id" value="${ udto.u_id }"/>
-
 <table border="1" width="90%">
     <tr>
         <td>작성자</td>
@@ -40,7 +39,7 @@
     <tr>
         <td>내용</td>
         <td>
-            <textarea name="f_content" style="width:90%;height:100px;"></textarea>
+            <textarea name="f_content" style="width:90%;height:100px;" ></textarea>
         </td>
     </tr>
     <tr>
