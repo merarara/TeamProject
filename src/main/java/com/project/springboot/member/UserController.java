@@ -213,6 +213,22 @@ public class UserController {
         List<UserDTO> userList = userService.selectAll();
         return userList;
     }
+    
+    // 블랙리스트조회
+    @GetMapping("/blackusers")
+    @ResponseBody
+    public List<UserDTO> selectBlacklist() {
+        List<UserDTO> userList = userService.selectBlacklist();
+        return userList;
+    }
+    // 일반리스트조회
+    @GetMapping("/basicusers")
+    @ResponseBody
+    public List<UserDTO> selectUserlist() {
+    	List<UserDTO> userList = userService.selectUserlist();
+    	return userList;
+    }
+
 
     
 	@RequestMapping("/myError.do")

@@ -49,5 +49,17 @@ public class UserService {
         List<UserDTO> list = userMapper.selectAll();
         return list;
     }
+    // 일반회원 조회
+    @Transactional
+    public List<UserDTO> selectUserlist() {
+    	List<UserDTO> list = userMapper.selectUserlist();
+    	return list;
+    }
+    // 블랙리스트 조회
+    @Transactional
+    public List<UserDTO> selectBlacklist() {
+        List<UserDTO> list = userMapper.selectBlacklist();
+        return list;
+    }
 
 }

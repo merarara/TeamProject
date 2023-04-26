@@ -12,4 +12,6 @@ public interface UserMapper {
     UserDTO selectOne(String u_id);
     UserDTO selectUserByNickname(String u_nickname);
     List<UserDTO> selectAll();
+    List<UserDTO> selectBlacklist();
+    List<UserDTO> selectUserlist();
 }
