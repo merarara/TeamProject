@@ -123,7 +123,6 @@ public class ProductController {
 	    	e.printStackTrace();
 	    }
 	    
-	    
 	    System.out.println("u_id : " + u_id + "bchk1 : " + bchk1 + "bchk2 : " + bchk2);
 	    
     	if (u_id.equals(bchk1) || u_id.equals(bchk2)) {
@@ -264,30 +263,20 @@ public class ProductController {
 			MultipartHttpServletRequest req) {
 		String path = "";
 		
-		System.out.println(rdto.getP_num());
-		System.out.println(rdto.getP_content());
-		System.out.println(rdto.getU_id());
-		System.out.println(rdto.getR_rating());
-		
 		int ireview = pldao.insertReview(rdto);
 		
 		int r_num = pldao.checkRnum(rdto.getP_num(), rdto.getU_id());
 		
 		for (MultipartFile f: review_file) {
-			System.out.println(f);
 			String originalName = f.getOriginalFilename();
-			System.out.println("originalName : " + originalName);
 			String ext = originalName.substring(originalName.lastIndexOf('.'));
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			String savedName = uuid + ext;
-			System.out.println("savedName:" + savedName);
 			
 			try {
-				path = ResourceUtils.getFile("classpath:static/revuploads")
+				path = ResourceUtils.getFile("classpath:static/revuploads/")
 						.toPath().toString();
-				System.out.println("path : " + path);
 				File filePath = new File(path, savedName);
-				System.out.println("filePath : " + filePath);
 				f.transferTo(filePath);
 			} catch (Exception e) {
 				e.printStackTrace();
