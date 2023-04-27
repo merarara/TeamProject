@@ -50,4 +50,19 @@
 	<select id="selectOne" resultType="com.project.springboot.member.UserDTO">
 		SELECT * FROM USER_INFO WHERE u_id = #{param1}
 	</select>
+	<!-- 전체조회  -->
+	<select id="selectAll" resultType="com.project.springboot.member.UserDTO">
+       SELECT * FROM USER_INFO
+   </select>
+   
+   <!-- 블랙리스트 조회 -->
+   <select id="selectBlacklist" resultType="com.project.springboot.member.UserDTO">
+    	SELECT * FROM USER_INFO WHERE u_authority = 'ROLE_BLACKLIST'
+	</select>
+   <!--  조회 -->
+   <select id="selectUserlist" resultType="com.project.springboot.member.UserDTO">
+    	SELECT * FROM USER_INFO WHERE u_authority = 'ROLE_USER'
+	</select>
+
+   
 </mapper> 

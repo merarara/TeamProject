@@ -606,7 +606,7 @@
 				<tbody>
 				<c:forEach items="${plist}" var="i">
 					<tr>
-						<td style="text-align: center;"><img src="${i.p_listimg}"></td>
+						<td style="text-align: center;" width="130" height="130"><img src="${i.p_listimg}"  width="130" height="130" style="object-fit: cover;"></td>
 						<td><h4><a href="/product/productinfo.do?p_num=${i.p_num}" class="text-dark">${i.p_name}</a></h4><br>
 							<c:set var="ratingImgPath" value="" />
 							<c:choose>
@@ -649,7 +649,8 @@
 							    등록일 : ${fn:substring(i.p_rdate, 0, 7)}
 							</span>
 						</td>
-						<td style="text-align: center;"><fmt:formatNumber type="number" value="${i.p_price}" pattern="#,###" />원</td>
+						<td style="text-align: center;"><fmt:formatNumber type="number" value="${i.p_price}" pattern="#,###" />원<br>
+						<c:if test="${ i.p_count < 3 }">매진임박</c:if></td>
 						<td style="text-align: center;">${i.p_company}</td>
 					</tr>
 				</c:forEach>

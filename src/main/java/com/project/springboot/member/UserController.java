@@ -1,6 +1,9 @@
 package com.project.springboot.member;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -64,20 +68,49 @@ public class UserController {
     // 회원가입 처리
     @PostMapping("/user/signUp.do")
     public String signUp(@ModelAttribute UserDTO userDTO, HttpServletRequest req) {
-    	System.out.println(1);
-    	// 이메일 직접입력 시 파라미터로 받겨준다.
-    	String email1 = req.getParameter("email1");
-    	String email2 = req.getParameter("email2");
-    	String u_email = email1 + "@" + email2;
-    	userDTO.setU_email(u_email);
-    	String passwd = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(userDTO.getU_pw());
-    	userDTO.setU_pw(passwd);
-    	System.out.println(userDTO.getU_pw());
-    	System.out.println(userDTO.getU_addr1());
+        // 이메일 직접입력 시 파라미터로 받겨준다.
+        String email1 = req.getParameter("email1");
+        String email2 = req.getParameter("email2");
+        String u_email = email1 + "@" + email2;
+        userDTO.setU_email(u_email);
+        String passwd = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(userDTO.getU_pw());
+        userDTO.setU_pw(passwd);
         userService.insertUser(userDTO);
-        return "/auth/login"; // 가입 완료 페이지로 이동
+        return "redirect:/auth/login"; // 가입 완료 페이지로 이동
     }
-	
+    
+    // 아이디 중복
+    @PostMapping("/user/checkId")
+    @ResponseBody
+    public Map<String, String> checkId(@RequestParam("u_id") String u_id) {
+        Map<String, String> resultMap = new HashMap<>();
+        UserDTO existingUser = userService.selectOne(u_id);
+        
+        if (existingUser == null) {
+        	resultMap.put("duplicate", "unexist");
+        } else {
+            resultMap.put("duplicate", "exist");
+            System.out.println(1);
+        }
+        return resultMap;
+    }
+    // 닉네임 중복
+    @PostMapping("/user/checkNick")
+    @ResponseBody
+    public Map<String, String> checkNick(@RequestParam("u_nick") String u_nick) {
+    	Map<String, String> resultMap = new HashMap<>();
+    	UserDTO existingUser = userService.selectOne(u_nick);
+    	
+    	if (existingUser == null) {
+    		resultMap.put("duplicate", "unexist");
+    	} else {
+    		resultMap.put("duplicate", "exist");
+    		System.out.println(1);
+    	}
+    	return resultMap;
+    }
+
+    // 로그인
     @RequestMapping("/myLogin.do")
     public String login1(Principal principal, Model model, HttpServletRequest request) {
     	try {
@@ -94,6 +127,7 @@ public class UserController {
     	}
     	return "auth/login";
     }
+
 
 	// 로그아웃 
     @RequestMapping("/logout")
@@ -112,7 +146,7 @@ public class UserController {
  		String userId = auth.getName();
  		System.out.println(userId);
  		// 회원 정보를 조회합니다.
- 		UserDTO dto = userService.selectone(userId);
+ 		UserDTO dto = userService.selectOne(userId);
  		model.addAttribute("uinfo", dto);
  		
  		return "/user/edit";
@@ -160,6 +194,42 @@ public class UserController {
             return "/user/delete";
         }
     }
+    
+    @GetMapping("/admin/adminPage.do")
+    public String showAdminPage(Model model) {
+        return "/admin/adminPage";
+    }
+    // ADMIN 회원관리
+    @GetMapping("/admin/userManagement.do")
+    public String userManagement(Model model) {
+
+        return "/admin/userManagement";
+    }
+    
+    // 회원전체조회
+    @GetMapping("/users")
+    @ResponseBody
+    public List<UserDTO> showAllUsers() {
+        List<UserDTO> userList = userService.selectAll();
+        return userList;
+    }
+    
+    // 블랙리스트조회
+    @GetMapping("/blackusers")
+    @ResponseBody
+    public List<UserDTO> selectBlacklist() {
+        List<UserDTO> userList = userService.selectBlacklist();
+        return userList;
+    }
+    // 일반리스트조회
+    @GetMapping("/basicusers")
+    @ResponseBody
+    public List<UserDTO> selectUserlist() {
+    	List<UserDTO> userList = userService.selectUserlist();
+    	return userList;
+    }
+
+
     
 	@RequestMapping("/myError.do")
 	public String login2() {		

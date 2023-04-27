@@ -40,12 +40,12 @@ public class SecurityConfig {
            .antMatchers("/admin/**").hasRole("ADMIN")
            // 게시판
            .antMatchers("/cboard/**").permitAll()
-           .antMatchers("/faq/**").permitAll()
+           .antMatchers("/fboard/**").permitAll()
            .antMatchers("/aboard/**").permitAll()
            // 상품
            .antMatchers("/product/**").permitAll()
            .antMatchers("/static/**").permitAll()
-			.anyRequest().authenticated();
+		   .anyRequest().authenticated();
 		
 		httpSecurity.formLogin()
 	    .loginPage("/myLogin.do") // default: /login
@@ -74,6 +74,7 @@ public class SecurityConfig {
 	        .oauth2Login()
 	            .userInfoEndpoint()
 	                .userService(customOAuth2UserService);
+
 		
 		return httpSecurity.build();
 			
@@ -97,9 +98,9 @@ public class SecurityConfig {
    // passwordEncoder() 추가
    public PasswordEncoder passwordEncoder() {
        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-   }
+   } 
   
-   // 회원정보수정 암호화
-  
+   
+   
 }
 

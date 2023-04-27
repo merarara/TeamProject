@@ -1,83 +1,144 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<!--  CSS (join) -->
+ <link rel="stylesheet"  href="/css/reset.css">
+ <link rel="stylesheet"  href="/css/join.css">
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+//닉네임 중복확인
+function checkNick() {
+    var u_nick = $("#inputNick").val();
+    if (u_nick == "") {
+        alert("닉네임을 입력해주세요.");
+    } else {
+    	$.ajax({
+    	    url: "/user/checkNick",
+    	    type: "POST",
+    	    data: { "u_nick": u_nick },
+    	    dataType: "json",
+    	    success: function(result) {
+    	        if (result.duplicate === "exist") {
+    	            $("#nickCheckMsg").html("이미 사용중인 닉네임입니다..");
+    	        } else if (result.duplicate === "unexist") {
+    	            $("#nickCheckMsg").html("사용 가능한 닉네임입니다.");
+    	        }
+    	    },
+    	    error: function(request, status, error) {
+    	        alert("ajax 에러발생.");
+    	    }
+    	});
+    }
+}
+</script>
 </head>
 <body>
 
 <%@ include file="../header.jsp" %>	
-<div id="content">
+<div id="wrap">
+            <div class="inner">
+                <div class="form_wrap">
+                    <!-- 회원가입 폼 시작 -->
+                    <h2>회원가입</h2>
+                    <form method="post" action="/user/signUp.do">
+					  <div class="form_group">
+					    <label for="inputId">아이디</label>
+						    <div class="input_group">
+						      <input type="text" class="" id="inputId" name="u_id" value=${ uinfo.u_id } readonly>
+						    </div>
+					  </div>
+                        <div class="form_group">
+                                    <label for="inputPw">비밀번호</label>
+                                    <div class="input_group">
+                                        <input type="password" class="" id="inputPw" name="u_pw" placeholder="비밀번호를 입력해주세요.">
+                                    </div>
+                        </div>
+                        <div class="form_group">
+                                    <label for="inputName">이름</label>
+                                    <div class="input_group">
+                                        <input type="text" class="" id="inputName" name="u_name" value=${ uinfo.u_name } readonly>
+                                    </div>
+                        </div>
+                        <div class="form_group">
+                                    <label for="inputNick">닉네임</label>
+                                    <div class="input_group">
+                                        <input type="text" class="" id="inputNick" name="u_nick" placeholder="닉네임을 입력해주세요">
+                                  	    <button type="button" id="checkNickBtn" onclick="checkNick()">중복확인</button>
+                                    </div>
+					  				<div id="nickCheckMsg"></div>
+                        </div>
+                        <div class="form_group">
+                                    <label for="inputPhone1">전화번호</label>
+                                    <div class="input_group">
+                                        <input type="tel" class="" id="inputPhone1" name="u_phone1" placeholder="010" pattern="[0-9]{3}" required>
+                                        <div class="input_group-prepend">
+                                            <span class="dash">-</span>
+                                        </div>
+                                        <input type="tel" class="" id="inputPhone2" name="u_phone2" placeholder="0000" pattern="[0-9]{4}" required>
+                                        <div class="input_group-prepend">
+                                            <span class="dash">-</span>
+                                        </div>
+                                        <input type="tel" class="" id="inputPhone3" name="u_phone3" placeholder="0000" pattern="[0-9]{4}" required>
+                                    </div>
+                        </div>
+                        <div class="form_group">
+                                    <label for="email1">이메일</label>
+                                    <div class="input_group">
+                                        <input type="text" class="w05" id="email1" name="email1" value="" />
+                                        <span class="dash">@</span>
+                                        <input type="text" class="w05" id="email2" name="email2" value="" />
+                                        <select name="email_domain" class="s01" onchange="inputEmail(this.form);">
+                                        <option value="">직접입력</option>
+                                            <option value="naver.com">naver.com</option>
+                                            <option value="daum.net">daum.net</option>
+                                            <option value="gmail.com">gmail.com</option>
+                                        </select>
+                                        <!-- 이메일 인증 버튼 -->
+                                    </div>
+                                    <button type="button" class="btn-certi " onclick="sendEmail()" >인증하기</button>
+                        </div>
+                        <div class="address_wrap form_group">
+                            <div class="address_input_wrap ">
+                                <label for="adress_num">우편번호</label>
+                                <div class="address_input_1_box input_group" >
+                                    <input class="adress_input_1" name="u_zip" id="adress_num">
+                                   <button class="address_button" onclick="execution_daum_address(event)">
+                                   		주소 찾기
+                                   </button>
+                                   
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="address_input_wrap">
+                                <label for="adress01">주소</label>
+                                <div class="address_input_2_box input_group">
+                                    <input class="adress_input_2" id="adress01" name="u_addr1" readonly>
+                                </div>
+                            </div>
 
-    <!-- 회원가입 폼 시작 -->
-<form method="post" action="/user/edit.do">
-    <div class="container">
-        <h1>회원정보 수정</h1>
-        <div class="form-group">
-            <label for="inputId">아이디</label>
-            <input type="text" class="form-control" id="inputId" name="u_id" value=${ uinfo.u_id } readonly>
+                            <div class="address_input_wrap ">
+                                <label for="adressdDetail">상세주소</label>
+                                <div class="address_input_3_box input_group">
+                                    <input class="adress_input_3" id="adressd02" name="u_addr2" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn_wrap">
+                            <button type="submit" class="btn-submit ">가입 완료</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="inputPw">비밀번호</label>
-            <input type="password" class="form-control" id="inputPw" name="u_pw" placeholder="비밀번호를 입력해주세요.">
-        </div>
-        <div class="form-group">
-            <label for="inputName">이름</label>
-            <input type="text" class="form-control" id="inputName" name="u_name" value=${ uinfo.u_name } readonly>
-        </div>
-        <div class="form-group">
-            <label for="inputNick">닉네임</label>
-            <input type="text" class="form-control" id="inputNick" name="u_nick" value=${ uinfo.u_nick }>
-        </div>
-		<div class="form-group">
- 			 <label for="inputPhone">전화번호</label>
- 			 <input type="text" class="form-control" id="inputPhone" name="u_phone" placeholder="전화번호를 입력해주세요" value=${ uinfo.u_phone }>
-		</div>
-		<div class="form-group">
-		    <label for="inputEmail">이메일</label>
-		    <div class="input-group">
-		        <input type="text" class="form-control" id="inputEmail" name="u_email" value=${ uinfo.u_email }>
-		        <div class="input-group-append">
-		            <select class="form-control" name="u_email">
-		                <option value="@gmail.com">@gmail.com</option>
-		                <option value="@naver.com">@naver.com</option>
-		                <option value="@daum.net">@daum.net</option>
-		                <option value="@hotmail.com">@hotmail.com</option>
-		            </select>
-		        </div>
-		    </div>
-		</div>
-       <div class="address_wrap">
-       	<div class="address_input_1_wrap">
-       		<div class="address_input_1_box">
-				<input class="adress_input_1" name="u_zip" value=${ uinfo.u_zip }>
-       		</div>
-       		<div class="address_button" onclick="execution_daum_address()">
-  					 주소 찾기
-  			</div>
-  			 	<div class="clearfix"></div>
-       	 <div class="address_input_2_wrap">
-       	 	<div class="address_input_2_box">
-       			<input class="adress_input_2" name="u_addr1" value=${ uinfo.u_addr1 } readonly>
-       		</div>
-       	 </div>
-       	 <div class="address_input_3_wrap">
-       	 	<div class="address_input_3_box">
-       			<input class="adress_input_3" name="u_addr2" value=${ uinfo.u_addr2 } >
-       		</div>
-       	 </div>
-       	</div>
-        <button type="submit" class="btn btn-primary">회원정보 수정</button>
-    </div>
-    </div>
-</form>
-</div>
 <%@ include file="../footer.jsp" %>
 
 

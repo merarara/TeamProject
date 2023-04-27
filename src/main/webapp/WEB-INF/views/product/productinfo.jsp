@@ -184,7 +184,6 @@ function doAddBascket() {
 						<br>
 					</div>
 					<hr style="border: 1px solid #000;">
-					
 					<br>
 					<div class="container">
 						<div class="row">
@@ -202,10 +201,17 @@ function doAddBascket() {
 								<span style="font-size: 15pt"><b>가격 :</b></span>
   								<span class="price"><b><fmt:formatNumber type="number" value="${pinfo.p_price}" pattern="#,###" />원</b></span>
   								<br>
+  								<br>
+  								<br>
+  								<br>
+  								<br>
   								<form method="post">
   									<input type="hidden" name="p_num" value="${ pinfo.p_num }">
+  									<label for="p_count">재고:</label>
+  									<input type="text" name="p_count" id="p_count" value="${ pinfo.p_count }" size="2" readonly>
+  									<br>
 									<label for="quantity">주문 수량:</label>
-								  	<input type="number" name="quantity" id="quantity" min="1" value="1" required onchange="calculateAmount()">
+								  	<input type="number" name="quantity" id="quantity" min="1" max="${ pinfo.p_count }" value="1" required onchange="calculateAmount()">
 								  	<br>
 								  	<label for="price">상품 가격:</label>
 								  	<input type="text" name="price" id="price" value="100" readonly>
@@ -223,6 +229,60 @@ function doAddBascket() {
 							</div>
 						</div>
 					</div>
+					<hr style="border: 1px solid #000;">
+					<div class="d-flex align-items-center justify-content-center">
+						<div class="col-md-12">
+					      	<c:if test="${ bchk == 'ok' }">
+					      	<div>
+							  <a class="btn btn-primary" data-toggle="collapse" href="#collapseReview" role="button" aria-expanded="false" aria-controls="collapseReview" style="margin-bottom: 20px;">
+							    리뷰 작성하기
+							  </a>
+							  	<div class="collapse" id="collapseReview" style="border: 1px solid #ccc;">
+								    <form action="/product/reviewUpload.do" method="post" enctype="multipart/form-data">
+								    	<input type="hidden" name="u_id" value="${uinfo.u_id }">
+								    	<input type="hidden" name="p_num" value="${pinfo.p_num }">
+								        <div class="form-group">
+								            <label for="FormControlTextarea1">리뷰를 작성해주세요.</label>
+								            <textarea name="p_content" class="form-control" id="formControlTextarea1" rows="3"></textarea>
+								        </div>
+								        <div class="form-group">
+								            <label for="formControlFile1">사진을 업로드해주세요.</label>
+								            <input type="file" name="review_file" class="form-control-file" id="formControlFile1" multiple>
+								        </div>
+								        <div class="form-group">
+								            <label for="formControlSelect1">별점을 매겨주세요.</label>
+								            <select name="r_rating" class="form-control" id="formControlSelect1">
+								                <option>1</option>
+								                <option>2</option>
+								                <option>3</option>
+								                <option>4</option>
+								                <option>5</option>
+								            </select>
+								        </div>
+								        <button type="submit" class="btn btn-primary">리뷰 작성</button>
+								    </form>
+								</div>
+							</div>
+					      	</c:if>
+					      	<c:if test="${ bchk == 'no' }">
+					      		<h1>구매하면 리뷰를 작성할 수 있습니다.</h1>
+					      	</c:if>
+					      	<hr>
+					      	
+					      	<c:forEach items="${ rdto }" var="i">
+					      		리뷰번호 : ${ i.r_num }<br>
+					      		상품번호 : ${ i.p_num }<br>
+					      		아이디 : ${ i.u_id }<br>
+					      		내용 : ${ i.p_content }<br>
+					      		<c:forEach items="${ ridto }" var="j">
+					      			<c:if test="${ i.r_num == j.r_num }">
+					      				<img src="revuploads/${ j.r_sfile }">
+					      			</c:if>
+					      		</c:forEach>
+					      	</c:forEach>
+					    </div>
+					</div>
+					<hr style="border: 1px solid #000;">
 				</div>
 			</div>
 		</div>

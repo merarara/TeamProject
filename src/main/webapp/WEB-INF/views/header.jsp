@@ -31,6 +31,16 @@
 
             </li>
           </s:authorize>
+          <s:authorize access="hasRole('ADMIN')">
+              <li class="nav-item">
+
+              <!-- 로그아웃 버튼 -->
+				<form action="${pageContext.request.contextPath}/logout" method="post">
+				    <input type="submit" value="로그아웃">
+				</form>
+
+            </li>
+          </s:authorize>
 	        <li class="nav-item">
 	          <a class="nav-link" href="/product/productlist.do">판매제품</a>
 	        </li>
@@ -41,10 +51,15 @@
 	          <a class="nav-link" href="/cboard/list.do">커뮤니티</a>
 	        </li>
 	        <li class="nav-item">
-	          <a class="nav-link" href="/faq/faq_main.do">FAQ</a>
+	          <a class="nav-link" href="/fboard/fboardlist.do">FAQ</a>
 	        </li>
+	        <s:authorize access="hasRole('ADMIN')">
+	        <li class="nav-item">
+	          <a class="nav-link" href="/admin/adminPage.do">관리자페이지</a>
+	        </li>
+	        </s:authorize>
 	      </ul>
-	      
+	      <!-- 일반유저 -->
 			<s:authorize access="hasRole('USER')">
 			  <li class="nav-item dropdown ml-auto">
 			    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -54,6 +69,17 @@
 			      <h6 class="dropdown-header">${sessionScope.userId}</h6>
 			      <a class="dropdown-item" href="${pageContext.request.contextPath}/user/myinfo.do">내 정보</a>
 			      <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">로그아웃</a>
+			    </div>
+			  </li>
+			</s:authorize>
+			<!-- 관리자 -->
+			<s:authorize access="hasRole('ADMIN')">
+			  <li class="nav-item dropdown ml-auto">
+			    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			      관리자계정입니다.
+			    </a>
+			    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+			      <h6 class="dropdown-header">${sessionScope.userId}</h6>
 			    </div>
 			  </li>
 			</s:authorize>

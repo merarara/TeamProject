@@ -10,6 +10,7 @@ public class ProductlistDTO {
 	private String p_company;
 	private int p_num;
 	private double p_rating;
-	private int p_count;
+	private int p_scount;
 	private java.sql.Date p_rdate;
+	private int p_count;
 }
