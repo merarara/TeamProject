@@ -27,10 +27,10 @@ public interface IPListDaoService {
 	public ProductinfoDTO viewpinfo(int p_num);
 	
 	// 상품 구매 체크
-	public String buyCheck1(int p_num);
+	public String buyCheck1(int p_num, String u_id);
 	
 	// 상품 구매 체크2
-	public String buyCheck2(int p_num);
+	public String buyCheck2(int p_num, String u_id);
 		
 	// 상품 검색 자동완성
 	public List<String> wordSearchShow(Map<String, String> paraMap);

@@ -102,17 +102,19 @@
 	<!-- 구매 확인 -->
 	<select id="buyCheckDao1"
 		resultType="String">
-		select u_id
+		select distinct u_id
 		  from order_info 
 		 where p_num = #{param1}
+		   and u_id = #{param2}
 	</select>
 	
 	<!-- 구매 확인 -->
 	<select id="buyCheckDao2"
 		resultType="String">
-		select u_id
+		select distinct u_id
 		  from b_orderinfo 
 		 where p_num = #{param1}
+		   and u_id = #{param2}
 	</select>
 	
 	<!-- 상품 검색 자동완성 -->

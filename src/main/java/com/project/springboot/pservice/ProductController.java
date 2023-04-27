@@ -101,11 +101,21 @@ public class ProductController {
 	    String u_id = authentication.getName(); // 사용자 id
 	    
 	    UserDTO udto = udao.selectOne(u_id);
-	    String bchk1 = pldao.buyCheck1(p_num);
-	    String bchk2 = pldao.buyCheck2(p_num);
+	    String bchk1 = pldao.buyCheck1(p_num, u_id);
+	    String bchk2 = pldao.buyCheck2(p_num, u_id);
 	    
 	    List<ReviewDTO> rdto = prdao.GetReview(p_num);
 	    List<ReviewImageDTO> ridto = prdao.getRevImgDao(p_num);
+	    
+	    String rchk = "no";
+	    
+	    for (ReviewDTO rd: rdto) {
+	    	if (rd.getU_id().equals(u_id)) {
+	    		rchk = "yes";
+	    	}
+	    }
+	    
+	    model.addAttribute("rchk", rchk);
 	    
 	    List<String> filepath = new ArrayList<String>();
 	    try {

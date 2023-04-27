@@ -49,4 +49,40 @@ public class PReviewDaoService implements IPReviewDaoService {
 		
 		return ridto;
 	}
+	
+	// 리뷰 좋아요 체크
+	@Override
+	public String revGoodChk(int r_num, String u_id) {
+		String idchk = dao.revGoodChkDao(r_num, u_id);
+		
+		return idchk;
+	}
+	
+	// 리뷰 좋아요 증가
+	@Override
+	public int revGoodPlus(int r_num) {
+		int result = dao.revGoodPlusDao(r_num);
+		
+		return result;
+	}
+	
+	@Override
+	public int revGoodinsert(int r_num, String u_id) {
+		int result2 = dao.revGoodinsertDao(r_num, u_id);
+		
+		return result2;
+	}
+	
+	@Override
+	public int revGoodUpdate(int p_num) {
+		int result = dao.revGoodUpdateDao(p_num);
+		
+		return result;
+	}
+	
+	@Override
+	public List<String> getImageName(int r_num, int p_num) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

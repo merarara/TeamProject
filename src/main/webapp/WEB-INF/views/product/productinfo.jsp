@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -69,7 +70,7 @@ function iamport(){
                 url: '/product/save_oinfo.do', // 저장하는 컨트롤러의 URL
                 data: {
                     u_id: '${uinfo.u_id}', // 구매한 사용자의 아이디
-                    m_addr: '${uinfo.u_addr1}', // 사용자의 주소
+                    m_addr: '${uinfo.u_addr1}' + '${uinfo.u_addr2}', // 사용자의 주소
                     p_num: '${pinfo.p_num}', // 구매한 상품 번호
                     p_name: '${pinfo.p_name}',
                     m_price: $("#amount").val(), // 상품 가격
@@ -78,6 +79,7 @@ function iamport(){
                 },
                 success: function(result) {
                     console.log(result); // 저장 결과 출력
+                    location.href = "/product/productinfo.do?p_num=${pinfo.p_num}"
                 }
             });
             
@@ -123,6 +125,56 @@ function doAddBascket() {
 		});
 	} else {
 			
+	}
+}
+
+function doGoodProcess(num, id) {
+	var r_num = num;
+	var u_id = id;
+	
+	if(confirm('이 리뷰에 추천을 하시겠습니까?')) {
+		$.ajax({
+			type: 'POST',
+			url: '/product/doRGood.do',
+			data: {
+				u_id: u_id,
+				r_num: r_num
+			},
+			success: function(data) {
+				if (data.status === 'success') {
+					alert('추천되었습니다.');
+					location.href = "/product/productinfo.do?p_num=${pinfo.p_num}";
+				} else {
+					alert('이미 추천한 리뷰입니다.');
+				}
+			}
+		});	
+	} else {
+		
+	}
+}
+
+function deleteReview(i, j) {
+	var r_num = i;
+	var p_num = j;
+	
+	if(confirm('정말 이 리뷰를 삭제하시겠습니까?')) {
+		$.ajax({
+			type: 'POST',
+			url: '/product/deleteReview.do',
+			data: {
+				r_num: r_num,
+				p_num: p_num
+			},
+			success: function(data) {
+				if (data.status === 'success') {
+					alert('삭제되었습니다.');
+					location.href = "/product/productinfo.do?p_num=${pinfo.p_num}";
+				} else {
+					alert('삭제에 실패하였습니다.');
+				}
+			}
+		})		
 	}
 }
 </script>
@@ -229,7 +281,7 @@ function doAddBascket() {
   margin-top: 10px;
 }
 
-#bchkNo {
+.chkNo {
   font-size: 24px;
   color: #666;
   text-align: center;
@@ -348,7 +400,7 @@ function doAddBascket() {
 							    	<!-- 상품 상세 정보를 담은 코드 -->
 							  	</div>
 							  	<div class="tab-pane" id="reviewSection">
-							    	<c:if test="${ bchk == 'ok' }">
+							    	<c:if test="${ bchk == 'ok' && rchk == 'no'}">
 							      		<div>
 							        	<!-- 리뷰 작성 폼을 담은 코드 -->
 							        		<div>
@@ -384,14 +436,55 @@ function doAddBascket() {
 							      		</div>
 							    	</c:if>
 								    <c:if test="${ bchk == 'no' }">
-								      	<h1 id="bchkNo">구매한 회원만 리뷰를 작성할 수 있습니다.</h1>
+								      	<h1 class="chkNo">구매한 회원만 리뷰를 작성하실 수 있습니다.</h1>
+								    </c:if>
+								    <c:if test="${ rchk == 'yes' }">
+								    	<h1 class="chkNo">이미 리뷰를 작성하신 상품입니다.</h1>
 								    </c:if>
 							    	<hr>
 							    	<!-- 리뷰를 보여주는 코드 -->
 						      		<c:forEach items="${ rdto }" var="i">
 						      			<div class="review-container">
 									  		<div class="review-header">
-									    		<div class="review-rating">${i.r_rating}점</div>
+									    		<div class="review-rating">
+													<c:set var="ratingImgPath" value="" />
+													<c:choose>
+													    <c:when test="${i.r_rating == 0}">
+													        <c:set var="ratingImgPath" value="/productimgs/0.png" />
+													    </c:when>
+													    <c:when test="${i.r_rating <= 0.99}">
+													        <c:set var="ratingImgPath" value="/productimgs/0_5.png" />
+													    </c:when>
+													    <c:when test="${i.r_rating >= 1 && i.r_rating <= 1.49}">
+													        <c:set var="ratingImgPath" value="/productimgs/1.png" />
+													    </c:when>
+													    <c:when test="${i.r_rating >= 1.5 && i.r_rating <= 1.99}">
+													        <c:set var="ratingImgPath" value="/productimgs/1_5.png" />
+													    </c:when>
+													    <c:when test="${i.r_rating >= 2 && i.r_rating <= 2.49}">
+													        <c:set var="ratingImgPath" value="/productimgs/2.png" />
+													    </c:when>
+													    <c:when test="${i.r_rating >= 2.5 && i.r_rating <= 2.99}">
+													        <c:set var="ratingImgPath" value="/productimgs/2_5.png" />
+													    </c:when>
+													    <c:when test="${i.r_rating >= 3 && i.r_rating <= 3.49}">
+													        <c:set var="ratingImgPath" value="/productimgs/3.png" />
+													    </c:when>
+													    <c:when test="${i.r_rating >= 3.5 && i.r_rating <= 3.99}">
+													        <c:set var="ratingImgPath" value="/productimgs/3_5.png" />
+													    </c:when>
+													    <c:when test="${i.r_rating >= 4 && i.r_rating <= 4.49}">
+													        <c:set var="ratingImgPath" value="/productimgs/4.png" />
+													    </c:when>
+													    <c:when test="${i.r_rating >= 4.5 && i.r_rating <= 4.99}">
+													        <c:set var="ratingImgPath" value="/productimgs/4_5.png" />
+													    </c:when>
+													    <c:otherwise>
+													        <c:set var="ratingImgPath" value="/productimgs/5.png" />
+													    </c:otherwise>
+													</c:choose>
+													<img src="${ratingImgPath}" alt="별점" style="width: 80px; height: 18px;"/>
+												</div>
 								    			<div class="review-info">
 								      				<div class="review-writer">${i.u_id}</div>
 								      				<div class="review-date">${i.r_date}</div>
@@ -416,10 +509,17 @@ function doAddBascket() {
 									  		<div class="review-text">${i.p_content}</div>
 									  		<div class="review-footer">
 										  		<div class="review-recommendation-container">
-										    		<div class="review-recommendation-button">
-										      			<button class="recommend-btn">추천</button>
-										    		</div>
+										  			<s:authorize access="isAuthenticated()">
+											    		<div class="review-recommendation-button">
+											      			<button class="recommend-btn" onclick="doGoodProcess('${i.r_num}', '${uinfo.u_id }');">추천</button>
+											    		</div>
+										    		</s:authorize>
 										    		<div class="review-recommendation">${i.r_good}명이 추천했습니다.</div>
+										    		<c:if test="${ i.u_id == uinfo.u_id}">
+										    			<div style="margin-left: auto;">
+										    				<button class="btn btn-danger" onclick="deleteReview('${i.r_num}', '${pinfo.p_num}');">삭제</button>
+										    			</div>
+										    		</c:if>
 										  		</div>
 											</div>
 										</div>

@@ -30,10 +30,10 @@ public interface PListDao {
 	public ProductinfoDTO viewpinfoDao (int p_num);
 	
 	// 상품 결제 체크
-	public String buyCheckDao1 (int p_num);
+	public String buyCheckDao1 (int p_num, String u_id);
 	
 	// 상품 결제 체크
-	public String buyCheckDao2 (int p_num);
+	public String buyCheckDao2 (int p_num, String u_id);
 	
 	// 상품 검색 자동완성
 	public List<String> wordSearchShowDao(Map<String, String> paraMap);

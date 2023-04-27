@@ -30,7 +30,9 @@
 	<!-- 리뷰 가져오기 -->
 	<select id="getReviewDao"
 		resultType="com.project.springboot.productdto.ReviewDTO">
-		select * from p_review where p_num = #{param1}
+		select * from p_review 
+		where p_num = #{param1}
+		order by r_good desc
 	</select>
 	
 	<!-- 리뷰 이미지 가져오기 -->
@@ -38,5 +40,62 @@
 		resultType="com.project.springboot.productdto.ReviewImageDTO">
 		select r_num, r_sfile from p_revImage
 		 where p_num = #{param1}
+	</select>
+	
+	<!-- 리뷰 좋아요 체크 -->
+	<select id="revGoodChkDao"
+		resultType="String">
+		select u_id
+		  from p_revlike
+		 where r_num = #{param1}
+		   and u_id = #{param2}
+	</select>
+	
+	<!-- 리뷰 좋아요 증가 -->
+	<update id="revGoodPlusDao">
+		update p_review
+		   set r_good = r_good + 1
+		 where r_num = #{param1}
+	</update>
+	
+	<!-- 리뷰 좋아요 저장 -->
+	<insert id="revGoodinsertDao">
+		insert into p_revlike
+		values (#{param1}, #{param2})
+	</insert>
+	
+	<!-- 리뷰 별점 갱신 -->
+	<update id="revGoodUpdateDao">
+		UPDATE product_list p
+		SET p.p_rating = (
+		  SELECT SUM(r.r_rating)/COUNT(*) AS avg_rating
+		  FROM p_review r
+		  WHERE r.p_num = p.p_num
+		    AND p_num = #{param1}
+		)
+		where p_num = #{param1}
+	</update>
+	
+	<!-- 리뷰 삭제 -->
+	<delete id="deleteReviewDao">
+		delete from p_review
+		 where r_num = #{param1}
+		   and p_num = #{param2}
+	</delete>
+	
+	<!-- 리뷰 이미지 삭제 -->
+	<delete id="deleteRevImgDao">
+		delete from p_revimage
+		 where r_num = #{param1}
+		   and p_num = #{param2}
+	</delete>
+	
+	<!-- 실제 파일 삭제를 위한 이미지 찾기 -->
+	<select id="getImageNameDao"
+		resultType="String">
+		select r_sfile
+		  from p_revimage
+		 where r_num = #{param1}
+		   and p_num = #{param2}
 	</select>
 </mapper>

@@ -58,16 +58,16 @@ public class PListDaoService implements IPListDaoService {
 	
 	// 상품 결제 체크
 	@Override
-	public String buyCheck1(int p_num) {
-		String bchk = dao.buyCheckDao1(p_num);
+	public String buyCheck1(int p_num, String u_id) {
+		String bchk = dao.buyCheckDao1(p_num, u_id);
 		
 		return bchk;
 	}
 	
 	// 상품 결제 체크
 	@Override
-	public String buyCheck2(int p_num) {
-		String bchk = dao.buyCheckDao2(p_num);
+	public String buyCheck2(int p_num, String u_id) {
+		String bchk = dao.buyCheckDao2(p_num, u_id);
 		
 		return bchk;
 	}

@@ -23,4 +23,16 @@ public interface PReviewDao {
 	
 	// 리뷰 이미지
 	public List<ReviewImageDTO> getRevImgDao (int p_num);
+	
+	// 리뷰 좋아요 체크
+	public String revGoodChkDao (int r_num, String u_id);
+	
+	// 리뷰 좋아요 증가
+	public int revGoodPlusDao (int r_num);
+	
+	// 리뷰 좋아요 저장
+	public int revGoodinsertDao (int r_num, String u_id);
+	
+	// 리뷰 별점 갱신
+	public int revGoodUpdateDao (int p_num);
 }
