@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" c_contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -16,14 +16,14 @@
 	<form method="post" action="/reply/modify">
 	
 		<p>
-			<label>댓글 작성자</label> <input type="text" name="writer" readonly="readonly" value="${reply.writer}">
+			<label>댓글 작성자</label> <input type="text" name="c_writer" readonly="readonly" value="${reply.u_id}">
 		</p>
 		<p>
-			<textarea rows="5" cols="50" name="content">${reply.content}</textarea>
+			<textarea rows="5" cols="50" name="c_content">${reply.c_content}</textarea>
 		</p>
 		<p>
-			<input type="hidden" name="bno" value="${reply.bno}">
-			<input type="hidden" name="rno" value="${reply.rno}">
+			<input type="hidden" name="c_num" value="${reply.c_num}">
+			<input type="hidden" name="c_rno" value="${reply.c_rno}">
 			
 			<button type="submit">댓글 수정</button>
 		</p>

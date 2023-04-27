@@ -21,6 +21,12 @@ public class C_ReplyController {
 	private C_ReplyService replyService;
 	
 	// 댓글 조회
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public void getList(@RequestParam("c_num") int c_num, Model model) throws Exception {
+	    List<C_ReplyVO> replyList = replyService.replyList(c_num);
+	    model.addAttribute("replyList", replyList);
+	}
+
 	
 	// 댓글 작성
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
@@ -28,7 +34,7 @@ public class C_ReplyController {
 		
 		replyService.write(vo);
 		
-		return "redirect:/board/view?c_num=" + vo.getC_num();
+		return "redirect:/cboard/view.do?c_num=" + vo.getC_num();
 	}
 	
 		
@@ -48,15 +54,21 @@ public class C_ReplyController {
 	
 	
 	// 댓글 수정
-	@RequestMapping(value = "/cboard/modify", method = RequestMethod.POST)
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public String postModify(C_ReplyVO vo) throws Exception {
 
 		replyService.modify(vo);
 		 
-		return "redirect:/board/view?c_num=" + vo.getC_num();
+		return "redirect:/cboard/view.do?c_num=" + vo.getC_num();
 	}
 	
 	
 	// 댓글 삭제
-	
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	public String postDelete(C_ReplyVO vo) throws Exception{
+	    replyService.delete(vo);
+	    return "redirect:/cboard/view.do?c_num=" + vo.getC_num();
+	}
+
+
 }

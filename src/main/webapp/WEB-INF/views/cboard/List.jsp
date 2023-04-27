@@ -45,7 +45,7 @@
         </tr>
 <!-- 게시물이 없을 때 -->
 <c:choose>
-	<c:when test="${ empty boardLists }">
+	<c:when test="${ empty list }">
         <tr>
             <td colspan="6" align="center">
                 등록된 게시물이 없습니다^^*
@@ -53,12 +53,11 @@
         </tr>
     </c:when>
     <c:otherwise>
-    	<c:forEach items="${ boardLists }" var="row" varStatus="loop">
+    	<c:forEach items="${ list }" var="row" varStatus="loop">
 <!-- 출력할 게시물이 있을때 -->           
         <tr align="center">
             <td>
-            	${ map.totalCount - (((map.pageNum-1) * map.pageSize)
-            		+ loop.index)}
+            	${row.c_num }
             </td>
             <td align="left">
                 <a href="/cboard/view.do?c_num=${ row.c_num }">

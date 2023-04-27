@@ -79,4 +79,11 @@ public class C_BoardServiceImpl implements C_BoardService {
 	public int searchCount(String searchType, String keyword) throws Exception {
 		return dao.searchCount(searchType, keyword);
 	}
+	
+	@Override
+	public void updateVisitCount(int c_num) {
+	    return;
+	}
+
+
 }

@@ -21,23 +21,23 @@
         <col width="15%"/> <col width="*"/>
     </colgroup> 
     <tr>
-        <td>번호</td> <td>${ dto.c_num }</td>
-        <td>작성자</td> <td>${ dto.u_id }</td>
+        <td>번호</td> <td>${ view.c_num }</td>
+        <td>작성자</td> <td>${ view.u_id }</td>
     </tr>
     <tr>
-        <td>작성일</td> <td>${ dto.c_postdate }</td>
-        <td>조회수</td> <td>${ dto.c_visitcount }</td>
+        <td>작성일</td> <td>${ view.c_postdate }</td>
+        <td>조회수</td> <td>${ view.c_visitcount }</td>
     </tr>
     <tr>
         <td>제목</td>
-        <td colspan="3">${ dto.c_title }</td>
+        <td colspan="3">${ view.c_title }</td>
     </tr>
     <tr>
         <td>내용</td>
-        <td colspan="3" height="100">${ dto.c_content }
+        <td colspan="3" height="100">${ view.c_content }
         <c:if test="${ isImage eq true }">
         	<p>
-        		<img src="../static/Uploads/${dto.c_sfile }" style="max-width:500px;" />
+        		<img src="../static/Uploads/${view.c_sfile }" style="max-width:500px;" />
         	</p>
         </c:if></td>
         <!-- 첨부한 파일이 이미지라면 img태그로 화면에 출력한다. -->
@@ -46,23 +46,82 @@
     <tr>
         <td>첨부파일</td>
         <td>          
- 	       	<c:if test="${ not empty dto.c_ofile }">
-        	${ dto.c_ofile }
-        	<a href="/cboard/download.do?C_ofile=${ dto.c_ofile }&C_sfile=${ dto.c_sfile }$C_num=${ dto.c_num }">[다운로드]</a>
+ 	       	<c:if test="${ not empty view.c_ofile }">
+        	${ view.c_ofile }
+        	<a href="/cboard/download.do?C_ofile=${ view.c_ofile }&C_sfile=${ view.c_sfile }$C_num=${ view.c_num }">[다운로드]</a>
         	</c:if>                            
         </td>
          <td>다운로드수</td>
-        <td>${ dto.c_downcount }</td>
+        <td>${ view.c_downcount }</td>
     </tr> 
     <tr>
         <td colspan="4" align="center">
-            <button type="button" onclick="location.href='/cboard/pass.do?mode=edit&C_num=${ param.c_num }';">수정하기</button>
-            <button type="button" onclick="location.href='/cboard/pass.do?mode=delete&C_num=${ param.c_num }';">삭제하기</button>
-            <button type="button" onclick="location.href='/cboard/List.do';">목록 바로가기</button>
+            <button type="button" onclick="location.href='/cboard/modify?c_num=${view.c_num}';">수정하기</button>
+            <button type="button" onclick="location.href='/cboard/delete?c_num=${view.c_num}';">삭제하기</button>
+            <button type="button" onclick="location.href='/cboard/list.do';">목록 바로가기</button>
         </td>
     </tr>
 </table>
 </div>
+<!-- 댓글 시작 -->
+
+<hr />
+
+<ul>
+	<!-- <li>
+		<div>
+			<p>첫번째 댓글 작성자</p>
+			<p>첫번째 댓글</p>
+		</div>
+	</li>
+	<li>
+		<div>
+			<p>두번째 댓글 작성자</p>
+			<p>두번째 댓글</p>
+		</div>
+	</li>
+	<li>
+		<div>
+			<p>세번째 댓글 작성자</p>
+			<p>세번째 댓글</p>
+		</div>
+	</li> -->
+	
+	<c:forEach items="${c_reply}" var="reply">
+	<li>
+		<div>
+			<p>${reply.u_id} / <fmt:formatDate value="${reply.c_postdate}" pattern="yyyy-MM-dd" />
+			<p>${reply.c_content }</p>
+						
+			<p>
+				<a href="/reply/modify?c_num=${view.c_num}&c_rno=${reply.c_rno}">수정</a> / <a href="/reply/delete?c_num=${view.c_num}&c_rno=${reply.c_rno}">삭제</a>
+			</p>
+			
+			<hr />
+			
+		</div>
+	</li>	
+	</c:forEach>
+</ul>
+
+<div>
+
+	<form method="post" action="/reply/write">
+	
+		<p>
+			<label>댓글 작성자</label> <input type="text" name="u_id">
+		</p>
+		<p>
+			<textarea rows="5" cols="50" name="c_content"></textarea>
+		</p>
+		<p>
+			<input type="hidden" name="c_num" value="${view.c_num}">
+			<button type="submit">댓글 작성</button>
+		</p>
+	</form>
+	
+</div>
+
 <%@ include file="../footer.jsp" %>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

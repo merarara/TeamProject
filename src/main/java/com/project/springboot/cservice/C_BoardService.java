@@ -39,4 +39,7 @@ public interface C_BoardService {
 	
 	// 게시물 총 갯수 + 검색 적용
 	public int searchCount(String searchType, String keyword) throws Exception;
+	
+	//조회수 증가
+	public void updateVisitCount(int c_num);
 }

@@ -2,7 +2,8 @@ package com.project.springboot.cboard;
 
 import java.util.List;
 
-
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 public interface C_ReplyDAO {
 
@@ -21,4 +22,6 @@ public interface C_ReplyDAO {
 
 	// 단일 댓글 조회
 	public C_ReplyVO replySelect(C_ReplyVO vo) throws Exception;
+
+	public List<C_ReplyVO> replyList(int c_num) throws Exception;
 }

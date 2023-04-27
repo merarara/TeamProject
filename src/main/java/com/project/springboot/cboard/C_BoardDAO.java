@@ -39,7 +39,10 @@ public interface C_BoardDAO {
 	
 	// 게시물 총 갯수 + 검색 적용
 	public int searchCount(String searchType, String keyword) throws Exception;
-
+	//조회수증가
+	public static void updateVisitCount(int c_num) {}
+	
+	
 	
 		
 		

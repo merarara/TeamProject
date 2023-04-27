@@ -28,11 +28,11 @@ END;
 
 	*/
 	
-	private int C_rno;
-	private int C_num;
-	private String U_ID;
-	private String C_content;
-	private Date C_postdate;
+	private int c_rno;
+	private int c_num;
+	private String u_id;
+	private String c_content;
+	private Date c_postdate;
 	
 
 	

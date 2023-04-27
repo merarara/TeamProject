@@ -2,90 +2,67 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.project.springboot.cboard.C_BoardMapper">
+<mapper namespace="com.project.springboot.cboard">
 
 	<!-- 게시물 목록 -->
-	<select id="list" resultType="com.project.springboot.cboard.C_BoardVO">
-		select
-			c_num, c_title, c_content, u_id, c_postdate, c_visitcount from c_board
-	</select>
-	
-	<!-- 게시물 작성 -->
-	<insert id="write" parameterType="com.project.springboot.cboard.C_BoardVO">
-		insert into
-			c_board(c_title, c_content, u_id, c_ofile, c_sfile)
-				values(#{c_title}, #{c_content}, #{u_id}, #{c_ofile}, #{c_sfile})
-	</insert>
-	
-	<!-- 게시물 조회 -->
-	<select id="view" parameterType="int" resultType="com.project.springboot.cboard.C_BoardVO">
-		select 
-			c_num, c_title, c_content, u_id, c_postdate, c_visitcount
-		from 
-			c_board
-		where
-			c_num = #{c_num}			
-	</select>
+<select id="list" resultType="com.project.springboot.cboard.C_BoardVO">
+	select
+		c_num, c_title, c_content, u_id, c_postdate, c_visitcount from c_board
+</select>
 
-	<!-- 게시물 수정 -->
-	<update id="modify" parameterType="com.project.springboot.cboard.C_BoardVO" >
-		update c_board
-			set
-				c_title = #{c_title},
-				c_content = #{c_content},
-				u_id = #{u_id}
-			where c_num = #{c_num}
-	</update>
-	
-	<!-- 게시물 삭제 -->
-	<delete id="delete" parameterType="int">
-		delete
-			from c_board
+<!-- 게시물 작성 -->
+<insert id="write" parameterType="com.project.springboot.cboard.C_BoardVO">
+	insert into
+		c_board(C_num, c_title, c_content, u_id, c_ofile, c_sfile)
+			values(C_num_SEQ.NEXTVAL,#{c_title}, #{c_content}, #{u_id}, #{c_ofile,jdbcType=VARCHAR}, #{c_sfile,jdbcType=VARCHAR})
+</insert>
+
+<!-- 게시물 조회 -->
+<select id="view" parameterType="int" resultType="com.project.springboot.cboard.C_BoardVO">
+	select 
+		c_num, c_title, c_content, u_id, c_postdate, c_visitcount
+	from 
+		c_board
+	where
+		c_num = #{c_num}			
+</select>
+
+<!-- 게시물 수정 -->
+<update id="modify" parameterType="com.project.springboot.cboard.C_BoardVO" >
+	update c_board
+		set
+			c_title = #{c_title},
+			c_content = #{c_content},
+			u_id = #{u_id}
 		where c_num = #{c_num}
-	</delete>
-	
-	<!-- 게시물 총 갯수 -->
-	<select id="count" resultType="int">
-		select count(c_num) from c_board
-	</select>
-	
-	<!-- 게시물 목록 + 페이징 -->
-	<select id="listPage" parameterType="hashMap" resultType="com.project.springboot.cboard.C_BoardVO">
-		select
-			c_num, c_title, u_id, c_postdate, c_visitcount
+</update>
+
+<!-- 게시물 삭제 -->
+<delete id="delete" parameterType="int">
+	delete
 		from c_board
-		order by c_num desc
-			limit #{displayPost}, #{postNum}
-	</select>	
-	
-	
-	
-	<!-- 게시물 목록 + 페이징 + 검색 -->
-<select id="listPageSearch" parameterType="hashMap" resultType="com.project.springboot.cboard.C_BoardVO">
-    select
-        C_num, C_title, U_ID, C_postdate, C_visitcount
-    from C_Board
+	where c_num = #{c_num}
+</delete>
 
-    <if test='searchType.equals("title")'>
-        WHERE C_title LIKE concat('%', #{keyword}, '%')
-    </if>
+<!-- 게시물 총 갯수 -->
+<select id="count" resultType="int">
+	select count(c_num) from c_board
+</select>
 
-    <if test='searchType.equals("content")'>
-        WHERE C_content LIKE concat('%', #{keyword}, '%')
-    </if>
+<!-- 게시물 목록 + 페이징 -->
+<select id="listPage" parameterType="com.project.springboot.cboard.C_Page" resultType="com.project.springboot.cboard.C_BoardVO">
+	select
+		c_num, c_title, u_id, c_postdate, c_visitcount
+	from c_board
+	order by c_num desc
+		limit #{displayPost, jdbcType=INTEGER}, #{postNum, jdbcType=INTEGER}
+</select>
 
-    <if test='searchType.equals("title_content")'>
-        WHERE C_title LIKE concat('%', #{keyword}, '%') 
-            or C_content LIKE concat('%', #{keyword}, '%')
-    </if>
+<!-- update visit count -->
+<update id="updateVisitCount" parameterType="int">
+UPDATE C_Board SET C_visitcount = C_visitcount + 1 WHERE C_num = #{c_num}
+</update>
 
-    <if test='searchType.equals("writer")'>
-        WHERE U_ID LIKE concat('%', #{keyword}, '%')
-    </if>
-
-    order by C_num desc
-    limit #{displayPost}, #{postNum}
-</select> 
 
 <!-- 게시물 총 갯수 + 검색 적용 -->
 <select id="searchCount" parameterType="hashMap" resultType="int">

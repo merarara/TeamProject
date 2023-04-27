@@ -1,6 +1,11 @@
 package com.project.springboot.cboard;
 
+import java.math.BigDecimal;
+
 public class C_Page {
+	
+	private BigDecimal c_num;
+    // Getter, Setter, 생략
 	
 	// 현재 페이지 번호
 	private int num;

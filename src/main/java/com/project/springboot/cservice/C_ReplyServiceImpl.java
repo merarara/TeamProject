@@ -15,8 +15,8 @@ public class C_ReplyServiceImpl implements C_ReplyService {
 	
 	// 댓글 조회
 	@Override
-	public List<C_ReplyVO> list(int c_num) throws Exception {
-		return dao.list(c_num);
+	public List<C_ReplyVO> list(int c_rno) throws Exception {
+		return dao.list(c_rno);
 	}
 
 	// 댓글 작성
@@ -32,7 +32,6 @@ public class C_ReplyServiceImpl implements C_ReplyService {
 	}
 
 	// 댓글 삭재
-	@Override
 	public void delete(C_ReplyVO vo) throws Exception {
 		dao.delete(vo);
 	}
@@ -42,6 +41,11 @@ public class C_ReplyServiceImpl implements C_ReplyService {
 	@Override
 	public C_ReplyVO replySelect(C_ReplyVO vo) throws Exception {
 		return dao.replySelect(vo);
+	}
+
+	@Override
+	public List<C_ReplyVO> replyList(int c_num) throws Exception {
+	    return dao.replyList(c_num);
 	}
 
 }

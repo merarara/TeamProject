@@ -7,7 +7,7 @@ import com.project.springboot.cboard.*;
 public interface C_ReplyService {
 	
 	// 댓글 조회
-	public List<C_ReplyVO> list(int bno) throws Exception;
+	public List<C_ReplyVO> list(int c_rno) throws Exception;
 	
 	// 댓글 작성
 	public void write(C_ReplyVO vo) throws Exception;
@@ -21,4 +21,7 @@ public interface C_ReplyService {
 
 	// 단일 댓글 조회
 	public C_ReplyVO replySelect(C_ReplyVO vo) throws Exception;
+
+	public List<C_ReplyVO> replyList(int c_num) throws Exception;
+
 }
