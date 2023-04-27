@@ -108,6 +108,22 @@ public class ProductController {
 	    List<ReviewDTO> rdto = pldao.GetReview(p_num);
 	    List<ReviewImageDTO> ridto = pldao.getRevImgDao(p_num);
 	    
+	    List<String> filepath = new ArrayList<String>();
+	    try {
+	    	String path = ResourceUtils
+	    			.getFile("classpath:static/revuploads/").toPath().toString();
+	    	File file = new File(path);
+	    	File[] fileArray = file.listFiles();
+	    	
+	    	for (File f : fileArray) {
+	    		filepath.add(f.getName());
+	    	}
+	    	model.addAttribute("file", filepath);
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	    }
+	    
+	    
 	    System.out.println("u_id : " + u_id + "bchk1 : " + bchk1 + "bchk2 : " + bchk2);
 	    
     	if (u_id.equals(bchk1) || u_id.equals(bchk2)) {
