@@ -19,6 +19,8 @@ public class UserDTO {
     private String u_addr1;
     private String u_addr2;
     private String u_type;
+    private java.sql.Date u_reg;
+    private String u_authority;
 
     // 입력받은 각 필드에 입력 값 합침
 	public void setU_phone(String u_phone) {

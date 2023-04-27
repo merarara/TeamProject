@@ -1,9 +1,8 @@
 package com.project.springboot.member;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,4 +42,24 @@ public class UserService {
         UserDTO dto = userMapper.selectUserByNickname(u_nickname);
         return dto;
     }
+    
+    // 전체 회원 조회
+    @Transactional
+    public List<UserDTO> selectAll() {
+        List<UserDTO> list = userMapper.selectAll();
+        return list;
+    }
+    // 일반회원 조회
+    @Transactional
+    public List<UserDTO> selectUserlist() {
+    	List<UserDTO> list = userMapper.selectUserlist();
+    	return list;
+    }
+    // 블랙리스트 조회
+    @Transactional
+    public List<UserDTO> selectBlacklist() {
+        List<UserDTO> list = userMapper.selectBlacklist();
+        return list;
+    }
+
 }
