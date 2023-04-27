@@ -63,6 +63,30 @@
    <select id="selectUserlist" resultType="com.project.springboot.member.UserDTO">
     	SELECT * FROM USER_INFO WHERE u_authority = 'ROLE_USER'
 	</select>
+	
+	<!-- 권한 업데이트 -->
+	<update id="updateAuthority">
+	    UPDATE USER_INFO SET u_authority = #{param2} WHERE u_id = #{param1}
+	</update>
+	
+	<!--  상품 재고 관련 -->
+	<insert id="addStock" parameterType="com.project.springboot.productdto.PCountDTO">
+	    INSERT INTO p_count (P_Barcode, P_Num, P_Sold)
+	    VALUES (
+	      #{barcode},
+	      (SELECT P_Num FROM product_list WHERE P_Barcode = #{barcode}),
+	      'N'
+	    )
+	    ON DUPLICATE KEY UPDATE
+	    P_Num = (SELECT P_Num FROM product_list WHERE P_Barcode = #{barcode}),
+	    P_Sold = 'N';
+	    
+	    UPDATE p_count
+	    SET P_Num = P_Num + #{quantity}
+	    WHERE P_Barcode = #{barcode};
+  </insert>
+	
+	
 
    
 </mapper> 

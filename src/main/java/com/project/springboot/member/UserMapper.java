@@ -14,4 +14,7 @@ public interface UserMapper {
     List<UserDTO> selectAll();
     List<UserDTO> selectBlacklist();
     List<UserDTO> selectUserlist();
+    void updateAuthority(String u_id, String u_authority);
+    void addStock(String p_barcode, int quantity);
+    
 }

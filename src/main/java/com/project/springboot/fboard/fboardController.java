@@ -1,5 +1,7 @@
 package com.project.springboot.fboard;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,38 +28,46 @@ public class fboardController {
 	@Autowired
 	UserService udao;
 	
-	//회원 목록
+	//  게시글
+	// 게시글
 	@RequestMapping("/fboard/fboardlist.do")
 	public String fboard1(HttpServletRequest request, Model model) {
-		int count = fdao.selectCount(); // 게시물 총 개수
-		int pagePerCount = 5; // 한 페이지에 보여질 게시물 수
-		int totalPage = (int) Math.ceil((double) count / pagePerCount); // 총 페이지 수
-		int pageNum = 1; // 현재 페이지 번호
-		if (request.getParameter("pageNum") != null) {
-			pageNum = Integer.parseInt(request.getParameter("pageNum"));
-		}
-		int startRow = (pageNum - 1) * pagePerCount + 1; // 시작 게시물 번호
-		int endRow = pageNum * pagePerCount; // 끝 게시물 번호
-		
-		model.addAttribute("fboardLists", fdao.selectFboardListByRange(startRow, endRow)); // 현재 페이지에 보여줄 게시물 목록
-		model.addAttribute("totalPage", totalPage); // 총 페이지 수
-		model.addAttribute("currentPage", pageNum); // 현재 페이지 번호
+	    int count = fdao.selectCount(); // 게시물 총 개수
+	    int pagePerCount = 5; // 한 페이지에 보여질 게시물 수
+	    int totalPage = (int) Math.ceil((double) count / pagePerCount); // 총 페이지 수
+	    int pageNum = 1; // 현재 페이지 번호
 
-		// 페이지 그룹에 대한 정보 계산
-		int pageGroupSize = 5; // 페이지 그룹의 크기
-		int startPageGroup = (int) Math.floor((double) (pageNum - 1) / pageGroupSize) * pageGroupSize + 1; // 페이지 그룹의 시작 페이지 번호
-		int endPageGroup = startPageGroup + pageGroupSize - 1; // 페이지 그룹의 끝 페이지 번호
-		if (endPageGroup > totalPage) { // 마지막 페이지 그룹의 끝 페이지 번호가 총 페이지 수를 넘으면 안됨
-			endPageGroup = totalPage;
-		}
+	    // pageNum 파라미터가 넘어온 경우에만 pageNum 값을 변경
+	    String pageNumParam = request.getParameter("pageNum");
+	    if (pageNumParam != null && !pageNumParam.isEmpty()) {
+	        pageNum = Integer.parseInt(pageNumParam);
+	        if (pageNum < 1) { // 페이지 번호가 1 미만인 경우
+	            pageNum = 1;
+	        } else if (pageNum > totalPage) { // 페이지 번호가 총 페이지 수보다 큰 경우
+	            pageNum = totalPage;
+	        }
+	    }
 
-		model.addAttribute("startPageGroup", startPageGroup); // 페이지 그룹의 시작 페이지 번호
-		model.addAttribute("endPageGroup", endPageGroup); // 페이지 그룹의 끝 페이지 번호
-		
-		//DAO(Mapper)의 select() 메서드를 호출해서 회원목록을 인출 
-//		model.addAttribute("fboardLists", fdao.selectF());		
-		return "/fboard/fboardlist";       
+	    int startRow = (pageNum - 1) * pagePerCount + 1; // 시작 게시물 번호
+	    int endRow = pageNum * pagePerCount; // 끝 게시물 번호
+
+	    List<fboardDTO> fboardList = fdao.selectFboardListByRange(startRow, endRow); // 현재 페이지에 보여줄 게시물 목록
+
+	    model.addAttribute("fboardLists", fboardList); // 현재 페이지에 보여줄 게시물 목록
+	    model.addAttribute("totalPage", totalPage); // 총 페이지 수
+	    model.addAttribute("currentPage", pageNum); // 현재 페이지 번호
+
+	    //페이징 처리를 위한 파라미터 생성
+	    String pageUrl = "/fboard/fboardlist.do";
+	    String searchParams = ""; //검색 조건이 있다면 이곳에 추가
+
+	    model.addAttribute("pageUrl", pageUrl); //페이징 처리를 위한 URL
+	    model.addAttribute("searchParams", searchParams); //검색 조건이 있다면 이곳에 추가
+
+	    return "/fboard/fboardlist";
 	}
+
+
 
 	//FAQ 게시글 등록 - get방식인 경우 등록하기 페이지 진입	
 	@RequestMapping(value="/fboard/fboardwrite.do", method=RequestMethod.GET)

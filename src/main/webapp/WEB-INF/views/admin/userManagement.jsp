@@ -11,6 +11,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- Ajax 안에 테이블에 대한 style css 설정 -->
 <style>
     table {
         border-collapse: collapse;
@@ -170,6 +171,7 @@ $(document).ready(function(){
   <button id="btn1">회원 전체 보기</button>
   <button id="btn2">일반 회원 보기</button>
   <button id="btn3">블랙리스트 회원 보기</button>
+  <button onclick="location.href='/admin/totalAuthority.do'">전체 관리</button>
 </div>
 
 
