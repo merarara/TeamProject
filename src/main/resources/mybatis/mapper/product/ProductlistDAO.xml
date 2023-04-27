@@ -152,91 +152,10 @@
 		values (seq_o_num.nextval, #{u_id}, #{m_addr}, ${p_num}, ${m_price}, ${m_qty}, #{p_name}, #{p_price})
 	</insert>
 	
-	<!-- 장바구니 추가 -->
-	<insert id="add_bascketDao"
-		parameterType="com.project.springboot.productdto.ProductBascketDTO">
-		insert into p_bascket
-		values (basc_b_num_seq.nextval, #{u_id}, #{p_num}, #{m_qty}, #{p_name}, #{p_listimg}, #{m_price}, #{p_price})
-	</insert>
-	
-	<!-- 장바구니 목록 가져오기 -->
-	<select id="get_bascketListDao"
-		resultType="com.project.springboot.productdto.ProductBascketDTO">
-		select * from p_bascket
-		 where u_id = #{param1}
-	</select>
-	
-	<!-- 장바구니 개별 삭제 -->
-	<delete id="deleteBascketDao">
-		delete from p_bascket
-		 where b_num = #{param1}
-	</delete>
-	
-	<!-- 장바구니 결제 상세 O_Num 확인 -->
-	<select id="checkO_NumDao"
-		resultType="String">
-		select *
-		  from (
-		        select o_num from bascket_order
-		         where u_id = #{param1}
-		         order by o_num desc
-		        )
-		where rownum = 1
-	</select>
-	
-	<!-- 장바구니 결제 -->
-	<insert id="insertBOrderDao"
-		parameterType="com.project.springboot.productdto.BascketOrderDTO">
-		insert into bascket_order (o_num, u_id, o_addr, o_price, o_qty)
-		values (bOrder_seq.nextval, #{u_id}, #{o_addr}, ${o_price}, ${o_qty})
-	</insert>
-	
-	<!-- 장바구니 결제 상세 -->
-	<insert id="insertBOinfoDao">
-		insert into b_orderinfo
-		values (#{o_num}, #{u_id}, #{p_num}, #{p_name}, #{p_price}, #{bo_qty})
-	</insert>
-	
-	<!-- 장바구니 결제 후 장바구니 삭제 -->
-	<delete id="deleteABascketDao">
-		delete from p_bascket
-		 where u_id = #{param1}
-	</delete>
-	
 	<!-- 구매 후 SCount 증가 -->
 	<update id="update_SCountDao">
 		update product_list
 		   set p_scount = p_scount + 1
 		 where p_num = #{param1}
 	</update>
-	
-	<insert id="insertReviewDao"
-		parameterType="com.project.springboot.productdto.ReviewDTO">
-		insert into p_review (r_num, p_num, u_id, p_content, r_rating)
-		values (r_num_seq.nextval, #{p_num}, #{u_id}, #{p_content}, #{r_rating})
-	</insert>
-	
-	<insert id="insertRImgDao"
-		parameterType="com.project.springboot.productdto.ReviewImageDTO">
-		insert into p_revImage (r_num, p_num, r_ofile, r_sfile)
-		values (#{r_num}, #{p_num},#{r_ofile}, #{r_sfile})	
-	</insert>
-	
-	<select id="checkRnumDao"
-		resultType="int">
-		select r_num from p_review
-		 where p_num = #{param1}
-		   and u_id = #{param2}	
-	</select>
-	
-	<select id="getReviewDao"
-		resultType="com.project.springboot.productdto.ReviewDTO">
-		select * from p_review where p_num = #{param1}
-	</select>
-	
-	<select id="getRevImgDao"
-		resultType="com.project.springboot.productdto.ReviewImageDTO">
-		select r_num, r_sfile from p_revImage
-		 where p_num = #{param1}
-	</select>
 </mapper>

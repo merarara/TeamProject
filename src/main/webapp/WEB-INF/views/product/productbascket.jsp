@@ -65,7 +65,7 @@ function doPayment() {
     var bo_qty = [];
     var total_qty = 0;
     var total_price = $("#total_price").text().replace(/,/g, '');
-    $("input[name='b_num']").each(function(index) {
+    $("input[name='p_num']").each(function(index) {
         p_num.push($(this).val());
     });
     $("input[name='p_name']").each(function(index) {
@@ -167,6 +167,7 @@ function doPayment() {
           			<h5 class="mb-1">${i.p_name}</h5>
           			<small class="text-muted">상품 수량 : <input type="number" name="quantity" id="quantity_${i.b_num}" min="1" value="${i.m_qty}" onchange="calculateAmount(${i.b_num})"></small>
         		</div>
+        		<input type="hidden" name="p_num" value="${ i.p_num }">
         		<input type="hidden" name="price" id="price_${ i.b_num }" value="${ i.p_price }">
         		<input type="hidden" name="p_name" id="p_name_${ i.p_name }" value="${ i.p_name }">
         		<img src="${i.p_listimg}" alt="${i.p_name}" class="img-thumbnail mb-3" style="max-width: 500px;">

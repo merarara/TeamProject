@@ -335,97 +335,96 @@ function doAddBascket() {
 					<div class="d-flex align-items-center justify-content-center">
 						<div class="col-md-12">
 							<ul class="nav nav-tabs">
-							  <li class="nav-item">
-							    <a class="nav-link active" data-toggle="tab" href="#productDetail">상품상세</a>
-							  </li>
-							  <li class="nav-item">
-							    <a class="nav-link" data-toggle="tab" href="#reviewSection">리뷰보기</a>
-							  </li>
+							  	<li class="nav-item">
+							    	<a class="nav-link active" data-toggle="tab" href="#productDetail">상품상세</a>
+							  	</li>
+							  	<li class="nav-item">
+							    	<a class="nav-link" data-toggle="tab" href="#reviewSection">리뷰보기</a>
+							  	</li>
 							</ul>
-							
 							<div class="tab-content">
-							  <div class="tab-pane active" id="productDetail">
-							    <div>상품상세</div>
-							    <!-- 상품 상세 정보를 담은 코드 -->
-							  </div>
-							  <div class="tab-pane" id="reviewSection">
-							    <c:if test="${ bchk == 'ok' }">
-							      <div>
-							        <!-- 리뷰 작성 폼을 담은 코드 -->
-							        <div>
-									  <a class="btn btn-primary" data-toggle="collapse" href="#collapseReview" role="button" aria-expanded="false" aria-controls="collapseReview" style="margin-bottom: 20px;">
-									    리뷰 작성하기
-									  </a>
-									  	<div class="collapse" id="collapseReview" style="border: 1px solid #ccc;">
-										    <form action="/product/reviewUpload.do" method="post" enctype="multipart/form-data">
-										    	<input type="hidden" name="u_id" value="${uinfo.u_id }">
-										    	<input type="hidden" name="p_num" value="${pinfo.p_num }">
-										        <div class="form-group">
-										            <label for="FormControlTextarea1">리뷰를 작성해주세요.</label>
-										            <textarea name="p_content" class="form-control" id="formControlTextarea1" rows="3"></textarea>
-										        </div>
-										        <div class="form-group">
-										            <label for="formControlFile1">사진을 업로드해주세요.</label>
-										            <input type="file" name="review_file" class="form-control-file" id="formControlFile1" multiple>
-										        </div>
-										        <div class="form-group">
-										            <label for="formControlSelect1">별점을 매겨주세요.</label>
-										            <select name="r_rating" class="form-control" id="formControlSelect1">
-										                <option>1</option>
-										                <option>2</option>
-										                <option>3</option>
-										                <option>4</option>
-										                <option>5</option>
-										            </select>
-										        </div>
-										        <button type="submit" class="btn btn-primary">리뷰 작성</button>
-										    </form>
+							  	<div class="tab-pane active" id="productDetail">
+							    	<div>상품상세</div>
+							    	<!-- 상품 상세 정보를 담은 코드 -->
+							  	</div>
+							  	<div class="tab-pane" id="reviewSection">
+							    	<c:if test="${ bchk == 'ok' }">
+							      		<div>
+							        	<!-- 리뷰 작성 폼을 담은 코드 -->
+							        		<div>
+									  			<a class="btn btn-primary" data-toggle="collapse" href="#collapseReview" role="button" aria-expanded="false" aria-controls="collapseReview" style="margin-bottom: 20px;">
+									    			리뷰 작성하기
+									  			</a>
+								  				<div class="collapse" id="collapseReview" style="border: 1px solid #ccc;">
+									    			<form action="/product/reviewUpload.do" method="post" enctype="multipart/form-data">
+									    				<input type="hidden" name="u_id" value="${uinfo.u_id }">
+									    				<input type="hidden" name="p_num" value="${pinfo.p_num }">
+									        			<div class="form-group">
+									            			<label for="FormControlTextarea1">리뷰를 작성해주세요.</label>
+									            			<textarea name="p_content" class="form-control" id="formControlTextarea1" rows="3"></textarea>
+									        			</div>
+									        			<div class="form-group">
+									            			<label for="formControlFile1">사진을 업로드해주세요.</label>
+									            			<input type="file" name="review_file" class="form-control-file" id="formControlFile1" multiple>
+									        			</div>
+									        			<div class="form-group">
+												            <label for="formControlSelect1">별점을 매겨주세요.</label>
+												            <select name="r_rating" class="form-control" id="formControlSelect1">
+												                <option>1</option>
+												                <option>2</option>
+												                <option>3</option>
+												                <option>4</option>
+												                <option>5</option>
+												            </select>
+									        			</div>
+									        			<button type="submit" class="btn btn-primary">리뷰 작성</button>
+									    			</form>
+												</div>
+											</div>
+							      		</div>
+							    	</c:if>
+								    <c:if test="${ bchk == 'no' }">
+								      	<h1 id="bchkNo">구매한 회원만 리뷰를 작성할 수 있습니다.</h1>
+								    </c:if>
+							    	<hr>
+							    	<!-- 리뷰를 보여주는 코드 -->
+						      		<c:forEach items="${ rdto }" var="i">
+						      			<div class="review-container">
+									  		<div class="review-header">
+									    		<div class="review-rating">${i.r_rating}점</div>
+								    			<div class="review-info">
+								      				<div class="review-writer">${i.u_id}</div>
+								      				<div class="review-date">${i.r_date}</div>
+								    			</div>
+									  		</div>
+									  		<div class="review-content">
+									    		<div class="review-image">
+									      			<c:forEach items="${ ridto }" var="j">
+									        			<c:if test="${ i.r_num == j.r_num }">
+									          				<c:forEach items="${ file }" var="f">
+									            				<c:if test="${ j.r_sfile == f }">
+									              					<a href="../revuploads/${f}" data-lightbox="image">
+												  						<img src="../revuploads/${f}" alt="리뷰 이미지" width="100px" height="100px">
+												  					</a>
+									            				</c:if>
+									          				</c:forEach>
+									        			</c:if>
+									      			</c:forEach>
+									      			<p style="font-size: 9px; color: #ccc">※ 클릭시 사진이 커집니다</p>
+									    		</div>
+									  		</div>
+									  		<div class="review-text">${i.p_content}</div>
+									  		<div class="review-footer">
+										  		<div class="review-recommendation-container">
+										    		<div class="review-recommendation-button">
+										      			<button class="recommend-btn">추천</button>
+										    		</div>
+										    		<div class="review-recommendation">${i.r_good}명이 추천했습니다.</div>
+										  		</div>
+											</div>
 										</div>
-									</div>
-							      </div>
-							    </c:if>
-							    <c:if test="${ bchk == 'no' }">
-							      <h1 id="bchkNo">구매한 회원만 리뷰를 작성할 수 있습니다.</h1>
-							    </c:if>
-							    <hr>
-							    <!-- 리뷰를 보여주는 코드 -->
-						      	<c:forEach items="${ rdto }" var="i">
-						      		<div class="review-container">
-									  <div class="review-header">
-									    <div class="review-rating">${i.r_rating}점</div>
-									    <div class="review-info">
-									      <div class="review-writer">${i.u_id}</div>
-									      <div class="review-date">${i.r_date}</div>
-									    </div>
-									  </div>
-									  <div class="review-content">
-									    <div class="review-image">
-									      <c:forEach items="${ ridto }" var="j">
-									        <c:if test="${ i.r_num == j.r_num }">
-									          <c:forEach items="${ file }" var="f">
-									            <c:if test="${ j.r_sfile == f }">
-									              <a href="../revuploads/${f}" data-lightbox="image">
-												  	<img src="../revuploads/${f}" alt="리뷰 이미지" width="100px" height="100px">
-												  </a>
-									            </c:if>
-									          </c:forEach>
-									        </c:if>
-									      </c:forEach>
-									      <p style="font-size: 9px; color: #ccc">※ 클릭시 사진이 커집니다</p>
-									    </div>
-									  </div>
-									  <div class="review-text">${i.p_content}</div>
-									  <div class="review-footer">
-										  <div class="review-recommendation-container">
-										    <div class="review-recommendation-button">
-										      <button class="recommend-btn">추천</button>
-										    </div>
-										    <div class="review-recommendation">${i.r_good}명이 추천했습니다.</div>
-										  </div>
-										</div>
-									</div>
-						      	</c:forEach>
-							  </div>
+						      		</c:forEach>
+							  	</div>
 							</div>
 					    </div>
 					</div>
