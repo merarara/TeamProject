@@ -9,7 +9,5 @@ public class fboardDTO {
 	private String u_nick;
 	private String f_title;
 	private String f_content;
-	private int visitcountf;
-	private String regdatef;
 }
 

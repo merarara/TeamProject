@@ -59,31 +59,105 @@ details caption {
 }
 </style>
 <script>
-	//함수명이 없는 무기명함수로 정의
-	let memberDel = function(userid){
-		if(confirm('삭제할까요?')){
-			//<form>태그의 DOM을 얻어온다. 
-			let frm = document.deleteForm;
-			//매개변수로 전달된 값을 input태그에 삽입한다. 
-			frm.id.value = userid;
-			//<form>태그에 속성을 부여한다. 
-			frm.method = "post";
-			frm.action = "delete.do";
-			//폼값을 전송한다. 
-			frm.submit();
-		}
-	}
+  //함수명이 없는 무기명함수로 정의
+  let memberDel = function(f_num){
+    if(confirm('삭제할까요?')){
+      //<form>태그의 DOM을 얻어온다. 
+      let frm = document.getElementById("deleteForm");
+      //매개변수로 전달된 값을 input태그에 삽입한다. 
+      frm.f_num.value = f_num;
+      //폼값을 전송한다. 
+      frm.submit();
+    }
+  }
+  
+  $(document).on('click', '.page-link', function(e) {
+	  e.preventDefault();
+	  var url = $(this).attr('href');
+	  $.ajax({
+	    url: url,
+	    type: 'GET',
+	    success: function(data) {
+	      $('#table-container').html(data); // 데이터를 받아와서 출력하는 부분을 적절히 수정해야 함
+	    },
+	    error: function() {
+	      console.log('Error occurred while fetching data.');
+	    }
+	  });
+	});
+
 </script>
 </head>
 <body>
-
+<form id="deleteForm" name="deleteForm" method="post" action="/fboard/fboarddelete.do">
+  <input type="hidden" name="f_num" value="">
+</form>
 <%@ include file="../header.jsp" %>	
 <div id="content">
-	<center>
-    <h2>FAQ</h2>
-	<center>
+<center>
+    <h2>FAQ 게시판</h2>
+</center>
+<div id="table-container">
+	<c:choose>
+    <c:when test="${ empty fboardLists }">  
+        <tr>
+            <td colspan="6" align="center">
+                등록된 FAQ게시물이 없습니다^^*
+            </td>
+    </c:when>
+    <c:otherwise>  
+    	<!-- 출력할 게시물이 있다면 저장된 갯수만큼 반복하여 출력한다. -->
+        <c:forEach items="${ fboardLists }" var="row" varStatus="loop">
+        <center>
+        	<details>
+        		<summary>
+        		${ row.f_num} : ${ row.f_title }&nbsp;&nbsp;&nbsp;
+        		<a href="/fboard/fboardedit.do?f_num=${row.f_num }">수정</a>&nbsp;&nbsp;
+				<a href="javascript:void(0);" onclick="memberDel('${row.f_num}');">삭제</a>
+				</summary>
+           			<div>${ row.f_content }</div>
+      		</details>
+      	</center>
+        </c:forEach>        
+    </c:otherwise>    
+</c:choose>
+</div>
+
+</div>
+<!-- 페이징 처리 시작 -->
+<c:if test="${totalPage gt 1}">
+  <div class="pagination justify-content-center">
+    <ul class="pagination">
+      <!-- 처음 페이지로 이동 -->
+      <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+        <a class="page-link" href="${pageUrl}?currentPage=1${searchParams}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+          <span class="sr-only">Previous</span>
+        </a>
+      </li>
+      
+      <!-- 이전 페이지로 이동 -->
+      <c:forEach var="i" begin="1" end="${totalPage}">
+        <c:if test="${i <= (currentPage + 2) && i >= (currentPage - 2)}">
+          <li class="page-item ${i == currentPage ? 'active' : ''}">
+            <a class="page-link" href="${pageUrl}?currentPage=${i}${searchParams}">${i}</a>
+          </li>
+        </c:if>
+      </c:forEach>
+      
+      <!-- 마지막 페이지로 이동 -->
+      <li class="page-item ${currentPage == totalPage ? 'disabled' : ''}">
+        <a class="page-link" href="${pageUrl}?currentPage=${totalPage}${searchParams}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+          <span class="sr-only">Next</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</c:if>
+<!-- 페이징 처리 끝 -->
 <!-- 검색폼 -->
-<div style="margin-top: 50px;">
+<div style="margin-bottom: 50px";>
     <form method="post">  
     <table align="center" border="1" width="30%">
     <tr>
@@ -100,34 +174,6 @@ details caption {
     </tr>
     </table>
     </form>
-
-<div id="container">
-	<c:choose>
-    <c:when test="${ empty fboardLists }">  
-        <tr>
-            <td colspan="6" align="center">
-                등록된 FAQ게시물이 없습니다^^*
-            </td>
-    </c:when>
-    <c:otherwise>  
-    	<!-- 출력할 게시물이 있다면 저장된 갯수만큼 반복하여 출력한다. -->
-        <c:forEach items="${ fboardLists }" var="row" varStatus="loop">
-        <center>
-        	<details>
-        		<summary>
-        		${ row.f_num} : ${ row.f_title }&nbsp;&nbsp;&nbsp;
-        		<a href="/fboard/fboardedit.do?id=${row.u_id }">수정</a>&nbsp;&nbsp;
-				<a href="javascript:void(0);" onclick="memberDel('${row.u_id }');">삭제</a>
-				</summary>
-           			<div>${ row.f_content }</div>
-      		</details>
-      	</center>
-        </c:forEach>        
-    </c:otherwise>    
-</c:choose>
-</div>
-</div>
-	
 </div>
 <%@ include file="../footer.jsp" %>
 

@@ -42,6 +42,8 @@ dependencies {
 	// sns security
 	implementation 'org.springframework.security:spring-security-taglibs'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    //validation 어노테이션을 위한 의존설정
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
     
 }
 

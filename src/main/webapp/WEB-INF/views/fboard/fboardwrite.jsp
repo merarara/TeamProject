@@ -12,6 +12,22 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 </head>
+<script type="text/javascript">
+	/* 패스워드 검증을 통해 수정페이지로 진입하므로 해당 페이지에서는
+	추가로 패스워드를 입력하지 않는다. */
+    function validateForm(form) {
+        if (form.title.value == "") {
+            alert("제목을 입력하세요.");
+            form.title.focus();
+            return false;
+        }
+        if (form.content.value == "") {
+            alert("내용을 입력하세요.");
+            form.content.focus();
+            return false;
+        }
+    }
+</script>
 <body>
 
 <%@ include file="../header.jsp" %>	
