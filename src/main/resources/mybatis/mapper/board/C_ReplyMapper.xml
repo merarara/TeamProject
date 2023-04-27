@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board.reply.C_ReplyMapper">
+
+	<!-- 댓글 조회 -->
+<select id="replyList" parameterType="int" resultType="com.project.springboot.cboard.C_ReplyVO">
+	select
+		c_rno, c_num, u_id, c_content, c_postdate
+	from tbl_reply
+		where c_num = #{c_num}		
+</select>
+
+<!-- 댓글 작성 -->
+<insert id="replyWrite" parameterType="com.project.springboot.cboard.C_ReplyVO">
+	insert into tbl_reply(c_num, u_id, c_content, c_postdate)
+		value(#{c_num}, #{u_id}, #{c_content}, #{c_postdate})
+</insert>
+	
+<!-- 댓글 수정 -->
+<update id="replyModify" parameterType="com.project.springboot.cboard.C_ReplyVO">
+	update tbl_reply set
+		u_id = #{u_id},
+		c_content = #{c_content}
+	where c_rno = #{c_rno}
+		and c_num = #{c_num}	
+</update>
+
+<!-- 댓글 삭제 -->
+<delete id="replyDelete" parameterType="com.project.springboot.cboard.C_ReplyVO">
+	delete from tbl_reply
+	where c_rno = #{c_rno}
+		and c_num = #{c_num}	
+</delete>
+
+<!-- 단일 댓글 조회 -->
+<select id="replySelect" parameterType="com.project.springboot.cboard.C_ReplyVO" resultType="com.project.springboot.cboard.C_ReplyVO">
+	select
+		c_rno, c_num, u_id, c_content, c_postdate
+	from tbl_reply
+		where c_num = #{c_num}
+		and c_rno = #{c_rno}					
+</select>
+
+	
+	
+</mapper>

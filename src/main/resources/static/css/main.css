@@ -16,7 +16,7 @@
 	border-radius:10px;
 	color:#95C8F9;
 }
-.user-list > li:nth-child(2){
+.user-list > li + li{
 	border-color:#E2CC71;
 	color:#E2CC71;
 	margin-left:20px;

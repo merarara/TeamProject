@@ -9,9 +9,12 @@ import org.springframework.stereotype.Service;
 import com.project.springboot.ppageinfo.PPageInfo;
 import com.project.springboot.productdto.BascketOrderDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
+import com.project.springboot.productdto.PCountVO;
 import com.project.springboot.productdto.ProductBascketDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
+import com.project.springboot.productdto.ReviewDTO;
+import com.project.springboot.productdto.ReviewImageDTO;
 
 @Service
 public interface IPListDaoService {
@@ -21,9 +24,18 @@ public interface IPListDaoService {
 	// 리스트
 	public ArrayList<ProductlistDTO> plist(int curPage, String searchfield, String searchword, String type, String selected);
 	
+	// 상품 재고 수량
+	public List<PCountVO> pCountChk(int p_num);
+	
 	// 상품 상세페이지
 	public ProductinfoDTO viewpinfo(int p_num);
 	
+	// 상품 구매 체크
+	public String buyCheck1(int p_num);
+	
+	// 상품 구매 체크2
+	public String buyCheck2(int p_num);
+		
 	// 상품 검색 자동완성
 	public List<String> wordSearchShow(Map<String, String> paraMap);
 	
@@ -50,4 +62,20 @@ public interface IPListDaoService {
 	
 	// 장바구니 결제 후 삭제
 	public int deleteABascket(String u_id);
+	
+	// 결제 후 sCount 증가
+	public int update_SCount(int p_num);
+	
+	// 리뷰 글 쓰기
+	public int insertReview(ReviewDTO rdto);
+	
+	// 리뷰 글 이미지 저장
+	public int insertRImg(ReviewImageDTO ridto);
+	
+	// 리뷰 번호 추적
+	public int checkRnum(int p_num, String u_id);
+	
+	public List<ReviewDTO> GetReview(int p_num);
+	
+	public List<ReviewImageDTO> getRevImgDao(int p_num);
 }

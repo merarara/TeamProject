@@ -11,9 +11,12 @@ import org.springframework.stereotype.Service;
 import com.project.springboot.ppageinfo.PPageInfo;
 import com.project.springboot.productdto.BascketOrderDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
+import com.project.springboot.productdto.PCountVO;
 import com.project.springboot.productdto.ProductBascketDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
+import com.project.springboot.productdto.ReviewDTO;
+import com.project.springboot.productdto.ReviewImageDTO;
 
 @Service
 public class PListDaoService implements IPListDaoService {
@@ -41,12 +44,36 @@ public class PListDaoService implements IPListDaoService {
 		return dto;
 	}
 	
+	// 상품 재고 확인
+	@Override
+	public List<PCountVO> pCountChk(int p_num) {
+		List<PCountVO> p_count = dao.pCountChkDao(p_num);
+		
+		return p_count;
+	}
+	
 	// 상품 상세페이지 뷰
 	@Override
 	public ProductinfoDTO viewpinfo(int p_num) {
 		ProductinfoDTO dto = dao.viewpinfoDao(p_num);
 		
 		return dto;
+	}
+	
+	// 상품 결제 체크
+	@Override
+	public String buyCheck1(int p_num) {
+		String bchk = dao.buyCheckDao1(p_num);
+		
+		return bchk;
+	}
+	
+	// 상품 결제 체크
+	@Override
+	public String buyCheck2(int p_num) {
+		String bchk = dao.buyCheckDao2(p_num);
+		
+		return bchk;
 	}
 	
 	// 상품 검색 자동완성
@@ -118,6 +145,45 @@ public class PListDaoService implements IPListDaoService {
 		int result = dao.deleteABascketDao(u_id);
 		
 		return result;
+	}
+	
+	// 결제 후 SCount증가
+	@Override
+	public int update_SCount(int p_num) {
+		int result = dao.update_SCountDao(p_num);
+		
+		return result;
+	}
+	
+	@Override
+	public int insertReview(ReviewDTO rdto) {
+		int result = dao.insertReviewDao(rdto);
+		return result;
+	}
+	
+	@Override
+	public int insertRImg(ReviewImageDTO ridto) {
+		int result = dao.insertRImgDao(ridto);
+		return result;
+	}
+	
+	@Override
+	public int checkRnum(int p_num, String u_id) {
+		int r_num = dao.checkRnumDao(p_num, u_id);
+		return r_num;
+	}
+	
+	@Override
+	public List<ReviewDTO> GetReview(int p_num) {
+		List<ReviewDTO> rdto = dao.getReviewDao(p_num);
+		return rdto;
+	}
+	
+	@Override
+	public List<ReviewImageDTO> getRevImgDao(int p_num) {
+		List<ReviewImageDTO> ridto = dao.getRevImgDao(p_num);
+		
+		return ridto;
 	}
 	
 	// 페이지 설정 service & dao

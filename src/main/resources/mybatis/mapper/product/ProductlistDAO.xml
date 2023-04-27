@@ -63,14 +63,14 @@
 					        order by ${sField}
 		  		          </if>
 		  		          <if test="sField == 'p_price' and sWord == '2000000' or sWord == '3000000' or sWord == '4000000'">
-		  		          	where ${sField} between ${sWord} and ${sWord} + 500000
+		  		          	where ${sField} between ${sWord} and ${sWord} + 1000000
 	  		          		<if test="selected != '' and selected != null">
 				          	  and p_company = #{selected}
 				          	</if>
 					        order by ${sField}
 		  		          </if>
 		  		          <if test="sField == 'p_price' and sWord == '5000000'">
-		  		          	where ${sField} between ${sWord} and ${sWord} + 500000
+		  		          	where ${sField} <![CDATA[>=]]> 5000000
 	  		          		<if test="selected != '' and selected != null">
 				          	  and p_company = #{selected}
 				          	</if>
@@ -87,14 +87,32 @@
 		  where B.num <![CDATA[>=]]> #{nStart}
 	</select>
 	
+	<!-- 상품 재고 업데이트 -->
+	
 	<!-- 상품 상세 페이지 -->
 	<select id="viewpinfoDao" 
 		parameterType="int"
 		resultType="com.project.springboot.productdto.ProductinfoDTO">
-		select f.*, l.p_price, l.p_rdate, l.p_rating, l.p_listimg
+		select f.*, l.p_price, l.p_rdate, l.p_rating, l.p_listimg, l.p_count
 		  from product_info f, product_list l
 		 where f.p_num = l.p_num
 		   and f.p_num = #{param1}
+	</select>
+	
+	<!-- 구매 확인 -->
+	<select id="buyCheckDao1"
+		resultType="String">
+		select u_id
+		  from order_info 
+		 where p_num = #{param1}
+	</select>
+	
+	<!-- 구매 확인 -->
+	<select id="buyCheckDao2"
+		resultType="String">
+		select u_id
+		  from b_orderinfo 
+		 where p_num = #{param1}
 	</select>
 	
 	<!-- 상품 검색 자동완성 -->
@@ -130,8 +148,8 @@
 	<!-- 단품 결제 정보 입력 -->
 	<insert id="insertOrderDao"
 		parameterType="com.project.springboot.productdto.OrderinfoDTO">
-		insert into order_info (m_num, u_id, m_addr, p_num, m_price, m_qty, m_name, p_price) 
-		values (seq_o_num.nextval, #{u_id}, #{m_addr}, ${p_num}, ${m_price}, ${m_qty}, #{m_name}, #{p_price})
+		insert into order_info (m_num, u_id, m_addr, p_num, m_price, m_qty, p_name, p_price) 
+		values (seq_o_num.nextval, #{u_id}, #{m_addr}, ${p_num}, ${m_price}, ${m_qty}, #{p_name}, #{p_price})
 	</insert>
 	
 	<!-- 장바구니 추가 -->
@@ -179,8 +197,46 @@
 		values (#{o_num}, #{u_id}, #{p_num}, #{p_name}, #{p_price}, #{bo_qty})
 	</insert>
 	
+	<!-- 장바구니 결제 후 장바구니 삭제 -->
 	<delete id="deleteABascketDao">
 		delete from p_bascket
 		 where u_id = #{param1}
 	</delete>
+	
+	<!-- 구매 후 SCount 증가 -->
+	<update id="update_SCountDao">
+		update product_list
+		   set p_scount = p_scount + 1
+		 where p_num = #{param1}
+	</update>
+	
+	<insert id="insertReviewDao"
+		parameterType="com.project.springboot.productdto.ReviewDTO">
+		insert into p_review (r_num, p_num, u_id, p_content, r_rating)
+		values (r_num_seq.nextval, #{p_num}, #{u_id}, #{p_content}, #{r_rating})
+	</insert>
+	
+	<insert id="insertRImgDao"
+		parameterType="com.project.springboot.productdto.ReviewImageDTO">
+		insert into p_revImage (r_num, p_num, r_ofile, r_sfile)
+		values (#{r_num}, #{p_num},#{r_ofile}, #{r_sfile})	
+	</insert>
+	
+	<select id="checkRnumDao"
+		resultType="int">
+		select r_num from p_review
+		 where p_num = #{param1}
+		   and u_id = #{param2}	
+	</select>
+	
+	<select id="getReviewDao"
+		resultType="com.project.springboot.productdto.ReviewDTO">
+		select * from p_review where p_num = #{param1}
+	</select>
+	
+	<select id="getRevImgDao"
+		resultType="com.project.springboot.productdto.ReviewImageDTO">
+		select r_num, r_sfile from p_revImage
+		 where p_num = #{param1}
+	</select>
 </mapper>

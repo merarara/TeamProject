@@ -3,7 +3,7 @@ package com.project.springboot.productdto;
 import lombok.Data;
 
 /*
- select f.*, l.p_price, l.p_rdate, l.p_rating
+ select f.*, l.p_price, l.p_rdate, l.p_rating l.p_count
    from product_info f, product_list l
   where f.p_num = l.p_num;
  테이블 join 사용 DTO
@@ -32,4 +32,5 @@ public class ProductinfoDTO {
 	private double p_rating;
 	private String r_storage;
 	private String p_listimg;
+	private int p_count;
 }

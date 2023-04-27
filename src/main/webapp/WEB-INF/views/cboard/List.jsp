@@ -61,7 +61,7 @@
             		+ loop.index)}
             </td>
             <td align="left">
-                <a href="/cboard/View.do?c_num=${ row.c_num }">
+                <a href="/cboard/view.do?c_num=${ row.c_num }">
                 ${ row.c_title }</a>
             </td> 
             <td>${ row.u_id }</td>
@@ -93,7 +93,7 @@
                 ${ map.pagingImg }
             </td>
             <td width="100"><button type="button"
-                onclick="location.href='/cboard/Write.do';">글쓰기</button></td>
+                onclick="location.href='/cboard/write.do';">글쓰기</button></td>
         </tr>
     </table>
 </div>
