@@ -1,9 +1,11 @@
 package com.project.springboot.prservice;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
 import com.project.springboot.productdto.ReviewDTO;
 import com.project.springboot.productdto.ReviewImageDTO;
@@ -81,8 +83,23 @@ public class PReviewDaoService implements IPReviewDaoService {
 	}
 	
 	@Override
-	public List<String> getImageName(int r_num, int p_num) {
-		// TODO Auto-generated method stub
-		return null;
+	public int deleteReview (int r_num, int p_num) {
+		List<String> img = dao.getImageNameDao(r_num, p_num);
+		
+		try {
+			for (String e: img) {
+				String path = ResourceUtils.getFile("classpath:static/revuploads/")
+						.toPath().toString();
+				File filePath = new File(path, e);
+				
+				if(filePath.exists()) {
+					filePath.delete();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return 0;
 	}
 }

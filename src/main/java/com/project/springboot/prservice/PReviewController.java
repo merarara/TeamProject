@@ -98,21 +98,7 @@ public class PReviewController {
 		int r_num = Integer.parseInt(req.getParameter("r_num"));
 		int p_num = Integer.parseInt(req.getParameter("p_num"));
 		
-		
-		try {
-			String path = ResourceUtils.getFile("classpath:static/revuploads/")
-					.toPath().toString();
-			
-			System.out.println(path);
-			File file = new File(path + "\\" + "");
-			
-			if(file.exists()) {
-				file.delete();
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		int result = prdao.deleteReview(r_num, p_num);
 		
 		Map<String, String> response = new HashMap<String, String>();
 		

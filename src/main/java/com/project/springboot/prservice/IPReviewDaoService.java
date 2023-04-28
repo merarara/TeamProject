@@ -36,6 +36,6 @@ public interface IPReviewDaoService {
 	// 리뷰 별점 갱신
 	public int revGoodUpdate (int p_num);
 	
-	// 리뷰 삭제전 이미지 가져오기
-	public List<String> getImageName (int r_num, int p_num);
+	// 리뷰 삭제
+	public int deleteReview (int r_num, int p_num);
 }

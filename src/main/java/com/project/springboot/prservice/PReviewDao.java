@@ -35,4 +35,13 @@ public interface PReviewDao {
 	
 	// 리뷰 별점 갱신
 	public int revGoodUpdateDao (int p_num);
+	
+	// 리뷰 삭제전 이미지 가져오기
+	public List<String> getImageNameDao (int r_num, int p_num);
+	
+	// 리뷰 삭제
+	public int deleteReviewDao (int r_num, int p_num);
+	
+	// 리뷰 이미지 삭제
+	public int deleteRevImgDao (int r_num, int p_num);
 }
