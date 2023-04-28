@@ -91,6 +91,7 @@ public class PReviewController {
 		return response;
 	}
 	
+	// 리뷰 삭제
 	@ResponseBody
 	@RequestMapping("/product/deleteReview.do")
 	public Map<String, String> deleteReview (HttpServletRequest req) {
@@ -101,6 +102,12 @@ public class PReviewController {
 		int result = prdao.deleteReview(r_num, p_num);
 		
 		Map<String, String> response = new HashMap<String, String>();
+		
+		if (result == 1) {
+			response.put("status", "success");
+		} else {
+			response.put("status", "fail");
+		}
 		
 		return response;
 	}
