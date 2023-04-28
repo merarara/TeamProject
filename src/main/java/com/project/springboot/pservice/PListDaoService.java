@@ -9,14 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.project.springboot.ppageinfo.PPageInfo;
-import com.project.springboot.productdto.BascketOrderDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountVO;
-import com.project.springboot.productdto.ProductBascketDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
-import com.project.springboot.productdto.ReviewDTO;
-import com.project.springboot.productdto.ReviewImageDTO;
 
 @Service
 public class PListDaoService implements IPListDaoService {
@@ -62,16 +58,16 @@ public class PListDaoService implements IPListDaoService {
 	
 	// 상품 결제 체크
 	@Override
-	public String buyCheck1(int p_num) {
-		String bchk = dao.buyCheckDao1(p_num);
+	public String buyCheck1(int p_num, String u_id) {
+		String bchk = dao.buyCheckDao1(p_num, u_id);
 		
 		return bchk;
 	}
 	
 	// 상품 결제 체크
 	@Override
-	public String buyCheck2(int p_num) {
-		String bchk = dao.buyCheckDao2(p_num);
+	public String buyCheck2(int p_num, String u_id) {
+		String bchk = dao.buyCheckDao2(p_num, u_id);
 		
 		return bchk;
 	}
@@ -92,98 +88,12 @@ public class PListDaoService implements IPListDaoService {
 		return result;
 	}
 	
-	// 장바구니 추가
-	@Override
-	public int add_bascket(ProductBascketDTO bascketDTO) {
-		int result = dao.add_bascketDao(bascketDTO);
-		
-		return result;
-	}
-	
-	// 장바구니 목록 가져오기
-	@Override
-	public List<ProductBascketDTO> get_bascketList(String u_id) {
-		List<ProductBascketDTO> bascketlist = dao.get_bascketListDao(u_id);
-		
-		return bascketlist;
-	}
-	
-	// 장바구니 삭제
-	@Override
-	public int deleteBascket(int b_num) {
-		int result = dao.deleteBascketDao(b_num);
-		
-		return result;
-	}
-	
-	// 장바구니 결제
-	@Override
-	public int insertBOrder(BascketOrderDTO bOrderDTO) {
-		int result = dao.insertBOrderDao(bOrderDTO);
-		
-		return result;
-	}
-	
-	// O_Num 체크
-	@Override
-	public String checkO_Num(String u_id) {
-		String result = dao.checkO_NumDao(u_id);
-		
-		return result;
-	}
-	
-	// 장바구니 결제 상세 DB처리
-	@Override
-	public int insertBOinfo(String o_num, String u_id, String p_num, String p_name, String p_price, String bo_qty) {
-		int result = dao.insertBOinfoDao(o_num, u_id, p_num, p_name, p_price, bo_qty);
-		return result;
-	}
-	
-	// 장바구니 결제 후 삭제
-	@Override
-	public int deleteABascket(String u_id) {
-		int result = dao.deleteABascketDao(u_id);
-		
-		return result;
-	}
-	
 	// 결제 후 SCount증가
 	@Override
 	public int update_SCount(int p_num) {
 		int result = dao.update_SCountDao(p_num);
 		
 		return result;
-	}
-	
-	@Override
-	public int insertReview(ReviewDTO rdto) {
-		int result = dao.insertReviewDao(rdto);
-		return result;
-	}
-	
-	@Override
-	public int insertRImg(ReviewImageDTO ridto) {
-		int result = dao.insertRImgDao(ridto);
-		return result;
-	}
-	
-	@Override
-	public int checkRnum(int p_num, String u_id) {
-		int r_num = dao.checkRnumDao(p_num, u_id);
-		return r_num;
-	}
-	
-	@Override
-	public List<ReviewDTO> GetReview(int p_num) {
-		List<ReviewDTO> rdto = dao.getReviewDao(p_num);
-		return rdto;
-	}
-	
-	@Override
-	public List<ReviewImageDTO> getRevImgDao(int p_num) {
-		List<ReviewImageDTO> ridto = dao.getRevImgDao(p_num);
-		
-		return ridto;
 	}
 	
 	// 페이지 설정 service & dao

@@ -7,14 +7,10 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.project.springboot.productdto.BascketOrderDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountVO;
-import com.project.springboot.productdto.ProductBascketDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
-import com.project.springboot.productdto.ReviewDTO;
-import com.project.springboot.productdto.ReviewImageDTO;
 
 @Mapper
 public interface PListDao {
@@ -34,10 +30,10 @@ public interface PListDao {
 	public ProductinfoDTO viewpinfoDao (int p_num);
 	
 	// 상품 결제 체크
-	public String buyCheckDao1 (int p_num);
+	public String buyCheckDao1 (int p_num, String u_id);
 	
 	// 상품 결제 체크
-	public String buyCheckDao2 (int p_num);
+	public String buyCheckDao2 (int p_num, String u_id);
 	
 	// 상품 검색 자동완성
 	public List<String> wordSearchShowDao(Map<String, String> paraMap);
@@ -45,43 +41,8 @@ public interface PListDao {
 	// 상품 구매 DB처리
 	public int insertOrderDao(OrderinfoDTO OrderinfoDTO);
 	
-	// 장바구니 추가
-	public int add_bascketDao(ProductBascketDTO bascketDTO);
-	
-	// 장바구니 목록 가져오기
-	public List<ProductBascketDTO> get_bascketListDao(String u_id);
-	
-	// 장바구니 삭제
-	public int deleteBascketDao(int b_num);
-	
-	// 장바구니 결제
-	public int insertBOrderDao(BascketOrderDTO bOrderDTO);
-	
-	// 장바구니 결제 상세 O_Num 확인
-	public String checkO_NumDao(String u_id);
-	
-	// 장바구니 결제 상세
-	public int insertBOinfoDao(@Param("o_num") String o_num, @Param("u_id") String u_id, @Param("p_num") String p_num, 
-			@Param("p_name") String p_name, @Param("p_price") String p_price, @Param("bo_qty") String bo_qty);
-	
-	// 장바구니 결제 후 삭제
-	public int deleteABascketDao(String u_id);
-	
 	// 결제 후 scount 증가
 	public int update_SCountDao(int p_num);
 	
-	// 리뷰 글작성
-	public int insertReviewDao(ReviewDTO rdto);
 	
-	// 리뷰 글작성 이미지 저장
-	public int insertRImgDao(ReviewImageDTO ridto);
-	
-	// 리뷰 번호 추적
-	public int checkRnumDao(int p_num, String u_id);
-	
-	// 리뷰 가져오기
-	public List<ReviewDTO> getReviewDao (int p_num);
-	
-	// 리뷰 이미지
-	public List<ReviewImageDTO> getRevImgDao (int p_num);
 }

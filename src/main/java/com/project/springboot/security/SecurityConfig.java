@@ -32,14 +32,14 @@ public class SecurityConfig {
 			throws Exception {
 		httpSecurity.authorizeRequests()
 			.antMatchers("/").permitAll()
-			.antMatchers("/css/**","/js/**","/productimgs/**","/userimages/**").permitAll()
+			.antMatchers("/css/**","/js/**","/productimgs/**","/userimages/**","/revuploads/**").permitAll()
 			.antMatchers("/guest/**").permitAll()
 			.antMatchers("/user/**").permitAll()
 			.antMatchers("/views/**").permitAll()
 			.antMatchers("/member/**").hasAnyRole("USER", "ADMIN")
            .antMatchers("/admin/**").hasRole("ADMIN")
            // 게시판
-           .antMatchers("/cboard/**").permitAll()
+           .antMatchers("/cboard/**").hasAnyRole("USER", "ADMIN")
            .antMatchers("/fboard/**").permitAll()
            .antMatchers("/aboard/**").permitAll()
            // 상품
@@ -52,7 +52,7 @@ public class SecurityConfig {
 	    // .loginPage("/main.jsp")
 	    .loginProcessingUrl("/myLoginAction.do")
 	    .defaultSuccessUrl("/myLogin.do")
-	    // .failureUrl("/myError.do") // default: /login?error
+	    .failureUrl("/myError.do") // default: /login?error
 	    .failureHandler(authenticationFailureHandler)
 	    .usernameParameter("my_id") // default: username
 	    .passwordParameter("my_pass") // default: password

@@ -82,6 +82,12 @@
     </script>
 </c:if>
 
+<c:if test="${param.error != null}">
+    <script>
+        alert("로그인에 실패했습니다. 아이디와 비밀번호를 다시 확인해주세요.");
+    </script>
+</c:if>
+
 	
 <%@ include file="../footer.jsp" %>
 
