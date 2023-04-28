@@ -12,19 +12,39 @@
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 <!-- CSS  -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/53a8c415f1.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/css/userLogin.css">
+<script src="https://kit.fontawesome.com/53a8c415f1.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="/css/userLogin.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+function validateForm() {
+  // 아이디와 비밀번호를 가져옵니다.
+  var id = document.getElementById("user_id").value;
+  var pass = document.getElementById("user_pwd").value;
+
+  // ajax를 이용하여 db에서 아이디와 비밀번호를 비동기적으로 검사합니다.
+  $.ajax({
+	type: 'POST',
+    url: "/user/checkUser.do",
+    data: {
+      u_id: id,
+      u_pw: pass
+    },
+    success: function(result) {
+      if (result.status === "success") {
+        alert("로그인 성공!");
+      } else {
+        alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+        
+        return false;
+      }
+    }
+  });
+}
+</script>
 </head>
 <body>
 <%@ include file="../header.jsp" %>	
-
- <c:if test="${empty user_id }" var="loginResult">
-		<c:if test="${param.error != null}">
-   		 <script>
-    		   alert("로그인에 실패했습니다. 아이디와 비밀번호를 다시 확인해주세요.");
-  		  </script>
-		</c:if>
-		<form action="/myLoginAction.do" method="post">
+<form action="/myLoginAction.do" method="post" onSubmit="return validateForm()">
  <div class="wrap">
         <div class="login">
             <h2>Log-in</h2>
@@ -49,8 +69,6 @@
 			        <img src="/userimages/naver.png" style="width: 24px; height: 24px;">
 			    </a>
 			</li>
-
-			
             </div>
             <div class="login_id">
                 <h4>아이디</h4>
@@ -69,26 +87,8 @@
             </div>
         </div>
     </div>
-       </form>
-	</c:if>
-   
+</form>   
 
-	
-<!--  로그인 성공시 home으로 가기 -->
-<c:if test="${not empty user_id }">
-    <script type="text/javascript">
-      alert("로그인에 성공하였습니다.");
-      location.href = "home";
-    </script>
-</c:if>
-
-<c:if test="${param.error != null}">
-    <script>
-        alert("로그인에 실패했습니다. 아이디와 비밀번호를 다시 확인해주세요.");
-    </script>
-</c:if>
-
-	
 <%@ include file="../footer.jsp" %>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

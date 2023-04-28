@@ -73,7 +73,10 @@ public class SecurityConfig {
 	        .and()
 	        .oauth2Login()
 	            .userInfoEndpoint()
-	                .userService(customOAuth2UserService);
+	            .userService(customOAuth2UserService)
+				.and()
+				.defaultSuccessUrl("/snsjoin", true);
+				
 
 		
 		return httpSecurity.build();

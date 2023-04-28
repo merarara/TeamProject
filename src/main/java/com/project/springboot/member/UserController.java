@@ -1,6 +1,11 @@
 package com.project.springboot.member;
 
+import java.beans.Statement;
 import java.security.Principal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,22 +118,47 @@ public class UserController {
 
     // 로그인
     @RequestMapping("/myLogin.do")
-    public String login1(Principal principal, Model model, HttpServletRequest request) {
-    	try {
-    		String user_id = principal.getName();
-    		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    	    String id = authentication.getName(); // 사용자 id
+    public String login1(Principal principal, Model model, HttpServletRequest request, 
+                         @RequestParam(value = "error", required = false) String error) {
+        try {
+            if (error != null) { // 로그인 실패 시
+                model.addAttribute("error", "아이디 또는 비밀번호가 일치하지 않습니다."); // 실패 메시지를 모델에 추가
+            }
 
-    	    request.getSession().setAttribute("userId", id); // 세션에 사용자 id 저장
-    		model.addAttribute("user_id", user_id);
-    		return "home"; // 로그인 성공 시 home.jsp로 이동
-    	}
-    	catch (Exception e) {
-    		System.out.println("로그인 전입니다.");
-    	}
-    	return "auth/login";
+            String user_id = principal.getName();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String id = authentication.getName(); // 사용자 id
+
+            request.getSession().setAttribute("userId", id); // 세션에 사용자 id 저장
+            model.addAttribute("user_id", user_id);
+            return "home"; // 로그인 성공 시 home.jsp로 이동
+        } catch (Exception e) {
+            System.out.println("로그인 전입니다.");
+        }
+        return "auth/login";
     }
-
+    
+    // 로그인 ajax 맵핑
+    @PostMapping("/user/checkUser.do")
+    @ResponseBody
+    public Map<String, String> checkUser(@RequestParam("u_id") String u_id,
+                            @RequestParam("u_pw") String u_pw) {
+        UserDTO user = userService.selectOne(u_id);
+        Map<String, String> response = new HashMap<>();
+        
+        if (user == null) { // 아이디가 없는 경우
+            response.put("status", "fail");
+        } else {
+            boolean encodedPw = PasswordEncoderFactories.createDelegatingPasswordEncoder().matches(u_pw, user.getU_pw());
+            if (encodedPw) { // 비밀번호가 일치하는 경우
+                response.put("status", "success");
+            } else { // 비밀번호가 일치하지 않는 경우
+                response.put("status", "fail");
+            }
+        }
+        
+        return response;
+    }
 
 	// 로그아웃 
     @RequestMapping("/logout")
@@ -271,7 +301,15 @@ public class UserController {
     model.addAttribute("message", "재고가 추가되었습니다.");
     return "admin/productManagement";
     }
-
+    
+    // sns facebook
+    @GetMapping("/login/oauth2/code/facebook")
+    public String facebookOAuth2Callback(Model model) {
+        // Additional information retrieval and processing logic
+        return "redirect:/snsjoin.jsp";
+    }
+    
+    
 
     
 	@RequestMapping("/myError.do")

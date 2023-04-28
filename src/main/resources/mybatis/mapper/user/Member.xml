@@ -86,6 +86,10 @@
 	    WHERE P_Barcode = #{barcode};
   </insert>
 	
+	<insert id="insertSnsUser" parameterType="com.project.springboot.oauth2.SnsDTO">
+        INSERT INTO USER_INFO (u_id, u_pw, u_name, u_nick, u_phone, u_zip, u_addr1, u_addr2, u_type )
+         VALUES (#{u_id}, #{u_pw}, #{u_name}, #{u_nick}, #{u_phone}, #{u_zip}, #{u_addr1}, #{u_addr2},'SNS')
+	</insert>
 	
 
    

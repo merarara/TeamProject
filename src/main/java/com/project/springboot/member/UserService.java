@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.project.springboot.oauth2.SnsDTO;
+
 @Service
 public class UserService {
     @Autowired
@@ -71,5 +73,11 @@ public class UserService {
     @Transactional
     public void addStock(String p_barcode, int quantity) {
         userMapper.addStock(p_barcode, quantity);
+    }
+    
+    // SNS 회원가입
+    @Transactional
+    public void insertSnsUser(SnsDTO snsDTO) {
+        userMapper.insertSnsUser(snsDTO);
     }
 }
