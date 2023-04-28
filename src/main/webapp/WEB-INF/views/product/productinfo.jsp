@@ -37,7 +37,76 @@ $(document).ready(function() {
           $("#productDetail").hide(); // 상품상세 영역을 숨김
         }
    });
+    
+   	$("#displayList").hide();
+	$('#searchword').on('keyup', function() {
+		checkLength();
+	});
 });
+
+// 상품 검색 자동완성
+function checkLength() {
+	var wordLength = $('#searchword').val().trim().length;
+	console.log(wordLength);
+	console.log($("#searchfield").val());
+	console.log($("#searchword").val());
+	if(wordLength == 0){
+		$("#displayList").hide();
+	} else {
+		$.ajax({
+			url:"/product/wordSearchShow.do",
+			type:"get",
+			data:{"searchfield": $("#searchfield").val(),
+				  "searchword": $("#searchword").val() },
+			dataType:"json",
+			success:function(json){
+				if(json.length > 0){
+					// 검색된 데이터가 있는 경우
+					var html = "";
+					$.each(json, function(indexs, item){
+						var word = item.word;
+	                    // 검색목록들과 검색단어를 모두 소문자로 바꾼 후 검색단어가 나타난 곳의 index를 표시.
+						var index = word.toLowerCase().indexOf( $("#searchword").val().toLowerCase() );
+						// jaVa -> java
+						var len = $("#searchword").val().length;
+						// 검색한 단어를 파랑색으로 표현
+						var result = word.substr(0, index) + "<span style='color:blue;'>"+word.substr(index, len)+"</span>" + word.substr(index+len);
+						html += "<span class='result' style='cursor:pointer;'>" + result + "</span><br>";
+					});
+					
+					var input_width = $("#searchword").css("width"); // 검색어 input 태그 width 알아오기
+					$("#displayList").css({"width":input_width}); // 검색 결과의 width와 일치시키기
+					$("#displayList").html(html);
+					$("#displayList").show();
+				}
+			},
+			error: function(request, status, error){
+	               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	        }
+		});
+	}
+}
+
+function goSearch(form) {
+	form.submit();
+}
+// 자동완성 목록을 클릭하면 검색하기
+$(document).on('click', ".result", function(){
+	var word = $(this).text();
+	$("#searchword").val(word);
+	goSearch($('#searchFrm')); // 검색기능
+});
+
+function hideDiv() {
+    $('#displayList').hide();
+}
+
+$(document).click(function(event) {
+    if (!$(event.target).closest('#displayList').length) {
+        hideDiv();
+    }
+});
+// 상품 검색 자동완성 끝
 
 // 결제 api
 function iamport(){
@@ -99,6 +168,7 @@ function calculateAmount() {
 	  document.getElementById("amount").value = amount;
 }
 
+// 장바구니 담기
 function doAddBascket() {
 	if(confirm('장바구니에 담으시겠습니까?')) {
 		$.ajax({
@@ -128,6 +198,7 @@ function doAddBascket() {
 	}
 }
 
+// 리뷰 좋아요
 function doGoodProcess(num, id) {
 	var r_num = num;
 	var u_id = id;
@@ -154,6 +225,7 @@ function doGoodProcess(num, id) {
 	}
 }
 
+// 리뷰 삭제
 function deleteReview(i, j) {
 	var r_num = i;
 	var p_num = j;
@@ -179,6 +251,7 @@ function deleteReview(i, j) {
 }
 </script>
 <style>
+/* 상품 메인 스타일 */
 #contentwrap {
 	width: 100%;
    	border-collapse: collapse;
@@ -221,10 +294,11 @@ function deleteReview(i, j) {
 }
 
 .price {
-  margin-left: 340px;
+  margin-left: 300px;
   color: #0067A3;
   font-size: 20pt;
 }
+/* 상품 메인 스타일 끝 */
 
 /* 리뷰 스타일 */
 .review-container {
@@ -313,13 +387,45 @@ function deleteReview(i, j) {
   display: flex;
   align-items: center;
 }
+/* 리뷰 스타일 끝 */
+
+/* 연관검색어 리스트 스타일 */
+#displayList {
+	border: solid 1px gray; 
+	height: 100px; 
+	overflow: auto; 
+	margin-left: 81px; margin-top; 1px ;
+	border-top: 0px;
+	position: absolute;
+	z-index: 1;
+	background-color: #fff;
+}
 </style>
 </head>
 <body>
 
 <%@ include file="../header.jsp" %>	
 <div id="content">
-	<p style="text-align: center;">검색창</p>
+	<div class="row" style="padding-top: 30px; padding-bottom: 30px;">
+		<div class="col-md-4 offset-md-4">
+		    <form action="/product/productlist.do" id="searchFrm" name="searchFrm">
+		    	<input type="hidden" name="type" value="search">
+		      	<div class="input-group">
+		        	<select class="form-select" name="searchfield" id="searchfield">
+		          		<option value="p_name">상품명</option>
+		          		<option value="p_company">제조사</option>
+		        	</select>
+		        	&nbsp;&nbsp;
+		        	<input type="search" class="form-control" name="searchword" id="searchword" placeholder="검색어를 입력하세요">
+		        	&nbsp;&nbsp;
+		        	<button class="btn btn-secondary" type="button" onclick="goSearch(this.form)">검색</button>
+		      	</div>
+		    </form>
+		    <!-- 검색어 자동완성이 보여질 구역 -->
+			<div id="displayList" onclick="hideDiv()">
+			</div>
+		</div>
+	</div>
 	<div class="container">
 		<div class="row">
 			<div class="d-flex align-items-center justify-content-center">
