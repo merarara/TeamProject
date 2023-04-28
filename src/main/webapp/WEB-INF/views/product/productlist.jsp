@@ -131,6 +131,7 @@
     .side-menu a:hover {
         background-color: #e9ecef;
     }
+    
     /* 구매가이드 사이드 메뉴 스타일 */
     .side-menu2 {
         width: 200px;
@@ -225,6 +226,13 @@
 	.cate_value a[data-value='${searchValue}'] {
 	  color: white;
 	}
+	/* 상단 카테고리 메뉴 스타일 끝*/
+	
+	.search-result {
+	    font-weight: bold;
+	    font-size: 18px;
+	    color: #1a1a1a;
+  	}
 </style>
 <script>
 	// 상품 검색 자동완성 시작 //
@@ -335,7 +343,10 @@
 	      	const hiddenSpan = document.querySelector('.hidden');
 	      	hiddenSpan.style.display = 'inline';
 	      	btnToggle.textContent = '접기';
-	    }
+	    } else {
+        	const hiddenSpan = document.querySelector('.hidden');
+        	hiddenSpan.style.display = 'none';
+      	}
 	});
 	
 	window.addEventListener('DOMContentLoaded', () => {
@@ -374,7 +385,10 @@
 		    const hiddenSpan2 = document.querySelector('.hidden2');
 		    hiddenSpan2.style.display = 'inline';
 		    btnToggle2.textContent = '접기';
-		}
+		} else {
+        	const hiddenSpan = document.querySelector('.hidden2');
+        	hiddenSpan.style.display = 'none';
+      	}
 	});
 </script>
 </head>
@@ -536,31 +550,31 @@
 			            <td>
 				            <div class="matufacturer-list">
 				            	<span class="cate_value" data-value="500001">
-					            	<a href="/product/productlist.do?searchfield=p_price&searchword=500001&type=select&selected=${ param.selected }" 
+					            	<a href="/product/productlist.do?searchfield=p_price&searchword=500001&type=select&selected=${ param.selected }&openchk2=&openchk=${param.openchk}" 
 						            	data-value="500001">
 						            	50만원 이하
 					            	</a>
 				            	</span>
 				            	<span class="cate_value" data-value="500000">
-					            	<a href="/product/productlist.do?searchfield=p_price&searchword=500000&type=select&selected=${ param.selected }" 
+					            	<a href="/product/productlist.do?searchfield=p_price&searchword=500000&type=select&selected=${ param.selected }&openchk2=&openchk=${param.openchk}" 
 						            	data-value="500000">
 						            	50만원 ~ 100만원
 					            	</a>
 				            	</span>
 				            	<span class="cate_value" data-value="1000000">
-					            	<a href="/product/productlist.do?searchfield=p_price&searchword=1000000&type=select&selected=${ param.selected }" 
+					            	<a href="/product/productlist.do?searchfield=p_price&searchword=1000000&type=select&selected=${ param.selected }&openchk2=&openchk=${param.openchk}" 
 						            	data-value="1000000">
 						            	100만원 ~ 150만원
 					            	</a>
 				            	</span>
 				            	<span class="cate_value" data-value="1500000">
-					            	<a href="/product/productlist.do?searchfield=p_price&searchword=1500000&type=select&selected=${ param.selected }" 
+					            	<a href="/product/productlist.do?searchfield=p_price&searchword=1500000&type=select&selected=${ param.selected }&openchk2=&openchk=${param.openchk}" 
 						            	data-value="1500000">
 						            	150만원 ~ 200만원
 					            	</a>
 				            	</span>
 				            	<span class="cate_value" data-value="2000000">
-					            	<a href="/product/productlist.do?searchfield=p_price&searchword=2000000&type=select&selected=${ param.selected }" 
+					            	<a href="/product/productlist.do?searchfield=p_price&searchword=2000000&type=select&selected=${ param.selected }&openchk2=&openchk=${param.openchk}" 
 						            	data-value="2000000">
 						            	200만원 ~ 300만원
 					            	</a>
@@ -592,7 +606,9 @@
 			        </tr>
 			    </table>
 			</div>
-			검색된 상품 수 : ${ page.totalCount }
+			<div class="search-result" style="width: 100%; text-align: center;">
+				검색된 상품 수 : ${ page.totalCount }
+			</div>
 			<!-- 상품 목록 -->
 			<table>
 				<thead>
@@ -644,10 +660,14 @@
 							        <c:set var="ratingImgPath" value="/productimgs/5.png" />
 							    </c:otherwise>
 							</c:choose>
-							<img src="${ratingImgPath}" alt="별점" style="width: 80px; height: 18px;"/> ${ i.p_rating }
-							<span style="display: block; text-align: right; font-size: 16px;">
-							    등록일 : ${fn:substring(i.p_rdate, 0, 7)}
-							</span>
+							<div style="display: flex; align-items: center;">
+							    <div style="flex: 1;">
+							        <img src="${ratingImgPath}" alt="별점" style="width: 80px; height: 18px;"/> ${ i.p_rating }
+							    </div>
+							    <div style="font-size: 16px;">
+							        등록일 : ${fn:substring(i.p_rdate, 0, 7)}
+							    </div>
+							</div>
 						</td>
 						<td style="text-align: center;"><fmt:formatNumber type="number" value="${i.p_price}" pattern="#,###" />원<br>
 						<c:if test="${ i.p_count < 3 }">매진임박</c:if></td>
