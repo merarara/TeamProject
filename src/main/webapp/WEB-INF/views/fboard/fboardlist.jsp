@@ -11,7 +11,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
 /* 부모 요소에 text-align: center 추가 */
 .parent-element {
@@ -61,7 +60,7 @@ details caption {
 </style>
 <script>
   //함수명이 없는 무기명함수로 정의
-  let memberDel = function(f_num){
+  let faqDel = function(f_num){
     if(confirm('삭제할까요?')){
       //<form>태그의 DOM을 얻어온다. 
       let frm = document.getElementById("deleteForm");
@@ -72,20 +71,6 @@ details caption {
     }
   }
   
-  $(document).on('click', '.page-link', function(e) {
-	  e.preventDefault();
-	  var url = $(this).attr('href');
-	  $.ajax({
-	    url: url,
-	    type: 'GET',
-	    success: function(data) {
-	      $('#table-container').html(data); // 데이터를 받아와서 출력하는 부분을 적절히 수정해야 함
-	    },
-	    error: function() {
-	      console.log('Error occurred while fetching data.');
-	    }
-	  });
-	});
 
 </script>
 </head>
@@ -113,8 +98,10 @@ details caption {
         	<details>
         		<summary>
         		${ row.f_num} : ${ row.f_title }&nbsp;&nbsp;&nbsp;
+        		<s:authorize access="hasRole('ADMIN')">
         		<a href="/fboard/fboardedit.do?f_num=${row.f_num }">수정</a>&nbsp;&nbsp;
-				<a href="javascript:void(0);" onclick="memberDel('${row.f_num}');">삭제</a>
+				<a href="javascript:void(0);" onclick="faqDel('${row.f_num}');">삭제</a>
+				</s:authorize>
 				</summary>
            			<div>${ row.f_content }</div>
       		</details>
@@ -123,58 +110,29 @@ details caption {
     </c:otherwise>    
 </c:choose>
 </div>
-
 </div>
-<!-- 페이징 처리 시작 -->
-<c:if test="${totalPage gt 1}">
-  <div class="pagination justify-content-center">
-    <ul class="pagination">
-      <!-- 처음 페이지로 이동 -->
-      <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-        <a class="page-link" href="${pageUrl}?currentPage=1${searchParams}" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-          <span class="sr-only">Previous</span>
-        </a>
-      </li>
-      
-      <!-- 이전 페이지로 이동 -->
-      <c:forEach var="i" begin="1" end="${totalPage}">
-        <c:if test="${i <= (currentPage + 2) && i >= (currentPage - 2)}">
-          <li class="page-item ${i == currentPage ? 'active' : ''}">
-            <a class="page-link" href="${pageUrl}?currentPage=${i}${searchParams}">${i}</a>
-          </li>
-        </c:if>
-      </c:forEach>
-      
-      <!-- 마지막 페이지로 이동 -->
-      <li class="page-item ${currentPage == totalPage ? 'disabled' : ''}">
-        <a class="page-link" href="${pageUrl}?currentPage=${totalPage}${searchParams}" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-          <span class="sr-only">Next</span>
-        </a>
-      </li>
-    </ul>
-  </div>
-</c:if>
-<!-- 페이징 처리 끝 -->
+
+<div align="center" style="margin-bottom: 50px";>
+	
 <!-- 검색폼 -->
 <div style="margin-bottom: 50px";>
-    <form method="post">  
+ <form action="/fboard/searchFboard.do" method="post">  
     <table align="center" border="1" width="30%">
-    <tr>
-        <td align="center">
-            <select name="searchField">
-                <option value="title">제목</option>
-                <option value="content">내용</option>
-            </select>
-            <input type="text" name="searchWord" />
-            <input type="submit" value="검색하기" />&nbsp;&nbsp;
-            <a href="/fboard/fboardwrite.do">글쓰기</a>
-        </td>
-        
-    </tr>
+        <tr>
+            <td align="center">
+                <select name="searchField">
+                    <option value="f_title">제목</option>
+                    <option value="f_content">내용</option>
+                </select>
+                <input type="text" name="searchWord" />
+                <input type="submit" value="검색하기" />&nbsp;&nbsp;
+                <s:authorize access="hasRole('ADMIN')">
+                    <a href="/fboard/fboardwrite.do">글쓰기</a>
+                </s:authorize>
+            </td>
+        </tr>
     </table>
-    </form>
+</form>
 </div>
 <%@ include file="../footer.jsp" %>
 

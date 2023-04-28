@@ -1,4 +1,4 @@
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -17,7 +17,7 @@
 
 <%@ include file="../header.jsp" %>	
 <div id="content">
-    <h2">FAQ 게시판 </h2>
+    <h2>공지사항 게시판 </h2>
 	
 	
 	
@@ -33,6 +33,9 @@
             </select>
             <input type="text" name="searchWord" />
             <input type="submit" value="검색하기" />
+            <s:authorize access="hasRole('ADMIN')">
+                    <a href="/aboard/aboardwrite.do">글쓰기</a>
+            </s:authorize>
         </td>
     </tr>
     </table>
@@ -44,9 +47,10 @@
             <th width="*">제목</th>
             <th width="15%">작성자</th>
             <th width="15%">작성일</th>
+            <th width="15%">조회수</th>
         </tr>
 <c:choose>
-    <c:when test="${ empty fboardLists }">  
+    <c:when test="${ empty aboardLists }">  
     	<!-- 게시물을 저장하고 있는 boardLists 컬렉션에 저장된 내용이 없다면
     	아래와 같이 출력한다. -->
         <tr>
@@ -57,22 +61,16 @@
     </c:when>
     <c:otherwise>  
     	<!-- 출력할 게시물이 있다면 저장된 갯수만큼 반복하여 출력한다. -->
-        <c:forEach items="${ fboardLists }" var="row" varStatus="loop">
+        <c:forEach items="${ aboardLists }" var="row" varStatus="loop">
         <tr align="center">
-        	<td>${ row.f_num }</td>
+        	<td>${ row.a_num }</td>
             <td align="center">
 <!-- 제목을 클릭할 경우 내용보기 페이지로 이동한다. -->            
-<a href="../fboard/fboardview.do?num=${ row.f_num }">${ row.f_title }</a>
+<a href="../aboard/aboardview.do?a_num=${ row.a_num }">${ row.a_title }</a>
 			</td>
             <td>${ row.u_id }</td>
-            <td>${ row.regdatef }</td> 
-               <details>
-        <summary>${ row.f_title }</summary>
-        <ul>
-            <li>${ row.f_content }</li>
-
-        </ul>
-      </details>
+            <td>${ row.a_regdate }</td> 
+            <td>${ row.a_visitcount }</td>
         </tr>
         </c:forEach>        
     </c:otherwise>    
@@ -80,9 +78,7 @@
     </table>
 
 </div>
-	<a href="/fboard/fboardwrite.do">글쓰기</a>
 </div>
-
 <%@ include file="../footer.jsp" %>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -90,4 +86,3 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
 </html>
- --%>

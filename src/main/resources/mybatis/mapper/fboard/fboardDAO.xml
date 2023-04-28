@@ -5,7 +5,6 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
-
 <!-- 서비스 인터페이스를 namespace로 지정한다. 컨트롤러에서 해당 인터페이스를
 통해 Mapper의 메서드를 호출하게된다. -->
 <mapper namespace="com.project.springboot.afbService.fboardService">
@@ -20,10 +19,9 @@
 	
 
 	<!-- insertF 쿼리문에서 UserDTO 클래스를 참조하여 u_id 값을 가져옴 -->
-	<insert id="insertF" 
-		parameterType="com.project.springboot.fboard.fboardDTO"> 
-	    INSERT INTO f_board (f_num, u_id, u_nick, f_title, f_content) 
-	    VALUES (seq_fboard_num.nextval, #{u_id}, #{u_nick}, #{f_title}, #{f_content})
+	<insert id="insertF" parameterType="com.project.springboot.fboard.fboardDTO">
+    	INSERT INTO f_board (f_num, u_id, u_nick, f_title, f_content)
+    		VALUES (seq_fboard_num.nextval, #{u_id}, #{u_nick}, #{f_title}, #{f_content})
 	</insert>
 	
 	<!-- FAQ게시글 인출 -->	 
@@ -37,7 +35,7 @@
 	<update id="updateF" 
 		parameterType="com.project.springboot.fboard.fboardDTO"> 
 		update f_board set f_title=#{f_title}, f_content=#{f_content} 
-		where f_num=#{f_num}
+			where f_num=#{f_num}
 	</update> 
 	
 	<!-- 회원 삭제 -->
@@ -47,25 +45,17 @@
 	</delete> 
 	
 	<!-- 전체 게시글 수 조회 -->
-	<parameterMap type="map" id="selectFboardList">
-    	<parameter property="startRow" javaType="int"/>
-    	<parameter property="endRow" javaType="int"/>
-	</parameterMap>
 	<select id="selectCount" resultType="int">
     	SELECT COUNT(*) FROM f_board
+		<if test="searchWord != null">
+			WHERE ${param1} LIKE '%' || #{param2} || '%'
+		</if>
 	</select>
 	
-	<select id="selectFboardListByRange" parameterType="java.util.Map" resultType="com.project.springboot.fboard.fboardDTO">
+	<select id="searchFboard" parameterType="hashmap" resultType="com.project.springboot.fboard.fboardDTO">
 	    SELECT *
-	    FROM (
-	        SELECT ROWNUM RNUM, A.*
-	        FROM (
-	            SELECT *
-	            FROM f_board
-	            ORDER BY f_num DESC
-	        ) A
-	        WHERE ROWNUM &lt;= #{endRow}
-	    ) B
-	    WHERE B.RNUM &gt;= #{startRow}
+	    FROM f_board
+	    WHERE ${param1} like '%'|| #{param2} || '%'
+	    ORDER BY f_num DESC
 	</select>
 </mapper>

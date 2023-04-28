@@ -1,10 +1,14 @@
-/*
- * package com.project.springboot.fboard;
- * 
- * import lombok.Data;
- * 
- * @Data public class fboardDTO { private int f_num; private String u_id;
- * private String u_nick; private String f_title; private String f_content;
- * private int visitcountf; private String regdatef; }
- * 
- */
+package com.project.springboot.aboard;
+ 
+import lombok.Data;
+
+@Data 
+public class aboardDTO { 
+	private int a_num; 
+	private String u_id;
+	private String u_nick; 
+	private String a_title; 
+	private String a_content;
+	private int a_visitcount; 
+	private String a_regdate; 
+}

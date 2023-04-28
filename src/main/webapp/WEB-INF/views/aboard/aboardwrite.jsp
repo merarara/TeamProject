@@ -1,4 +1,4 @@
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -20,7 +20,7 @@
 <h2>FAQ게시판 - 글쓰기(write)</h2>
 <!-- 글쓰기 페이지를 그대로 사용하되 action 부분만 수정한다. 수정시에도
 파일첨부가 있으므로 enctype속성은 추가되어야한다. -->
-<form action="/fboard/fboardwrite.do" method="post">
+<form action="/aboard/aboardwrite.do" method="post">
 <!-- 게시물 수정을 위한 일련번호 -->	
 <input type="hid_den" name="u_id" value="${ udto.u_id }"/>
 
@@ -34,13 +34,13 @@
     <tr>
         <td>제목</td>
         <td>
-            <input type="text" name="f_title" style="width:90%;" value="" />
+            <input type="text" name="a_title" style="width:90%;" value="" />
         </td>
     </tr>
     <tr>
         <td>내용</td>
         <td>
-            <textarea name="f_content" style="width:90%;height:100px;"></textarea>
+            <textarea name="a_content" style="width:90%;height:100px;"></textarea>
         </td>
     </tr>
     <tr>
@@ -48,13 +48,21 @@
             <button type="submit">작성 완료</button>
             <button type="reset">RESET</button>
             
-            <button type="button" onclick="location.href='../fboard/fboardlist.do';">
+            <button type="button" onclick="location.href='../aboard/aboardlist.do';">
                 목록 바로가기
             </button>
         </td>
     </tr>
 </table>    
 </form>
+	<h2>다중 파일 업로드</h2>
+	<form action="multiFileUpload.do" method="post" enctype="multipart/form-data">
+	    제목 : <input type="text" name="title" value="멀티파일업로드" /><br />
+		<!-- multiple 속성추가 : 하나의 input태그에서 여러개의 파일을
+		선택할 수 있다. 드레그 혹은 Ctrl키를 이용한다.  -->
+	    <input type="file" name="user_file" multiple /><br/>
+	    <input type="submit" value="전송하기">
+	</form>
 </div>
 <%@ include file="../footer.jsp" %>
 
@@ -63,4 +71,3 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
 </html>
- --%>
