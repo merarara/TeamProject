@@ -31,7 +31,7 @@
 				현재 상품 재고 확인하기
 			</p>
 			<img src="/admin/product_2.png" >
-			<a href="" class="login-link">재고 확인</a>
+			<a href="/admin/searchProduct.do" class="login-link">재고 확인</a>
 		</li>
 	</Ul>
 </div>
