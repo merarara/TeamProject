@@ -61,5 +61,15 @@ public class UserService {
         List<UserDTO> list = userMapper.selectBlacklist();
         return list;
     }
+    // 권한 수정
+    @Transactional
+    public void updateAuthority(String u_id, String u_authority) {
+        userMapper.updateAuthority(u_id, u_authority);
+    }
 
+    // 재고 추가
+    @Transactional
+    public void addStock(String p_barcode, int quantity) {
+        userMapper.addStock(p_barcode, quantity);
+    }
 }

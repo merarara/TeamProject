@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -206,6 +207,13 @@ public class UserController {
         return "/admin/userManagement";
     }
     
+    // ADMIN 재고관리
+    @GetMapping("/admin/productManagement.do")
+    public String productManagement(Model model) {
+    	
+    	return "/admin/productManagement";
+    }
+    
     // 회원전체조회
     @GetMapping("/users")
     @ResponseBody
@@ -227,6 +235,41 @@ public class UserController {
     public List<UserDTO> selectUserlist() {
     	List<UserDTO> userList = userService.selectUserlist();
     	return userList;
+    }
+    
+    // 전체권한관리 
+ 	@RequestMapping("/admin/totalAuthority.do")
+ 	public String totalAuthority() {
+ 		System.out.println(5);
+ 		return "/admin/totalAuthority";
+ 	}
+ 	
+ 	// 권한 수정
+    @RequestMapping(value="/updateAuthority", method=RequestMethod.POST)
+    public String updateAuthority(@RequestParam("u_id") String u_id, @RequestParam("u_authority") String u_authority, Model model) {
+    	System.out.println(u_authority);
+        userService.updateAuthority(u_id, u_authority);
+        // 권한 수정하고 관리 페이지로 넘어가서 확인하기.
+        return "redirect:/admin/userManagement.do";
+    }
+    
+    // 전체제고관리 맵핑 
+  	@RequestMapping("/admin/totalProduct.do")
+  	public String totalProduct() {
+  		System.out.println(5);
+  		return "/admin/totalProduct";
+  	}
+    
+    
+    // 재고 추가
+    @RequestMapping("/admin/addStock")
+    public String addStock(@RequestParam("barcode") String barcode,
+    @RequestParam("quantity") int quantity,
+    Model model) {
+    // 수량 증가 로직 구현
+    // ...
+    model.addAttribute("message", "재고가 추가되었습니다.");
+    return "admin/productManagement";
     }
 
 
