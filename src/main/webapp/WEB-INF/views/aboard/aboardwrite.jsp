@@ -44,6 +44,9 @@
         </td>
     </tr>
     <tr>
+    	<td>첨부파일</td>
+    </tr>
+    <tr>
         <td colspan="2" align="center">
             <button type="submit">작성 완료</button>
             <button type="reset">RESET</button>
@@ -55,14 +58,16 @@
     </tr>
 </table>    
 </form>
-	<h2>다중 파일 업로드</h2>
+<table>
+	<td>
 	<form action="multiFileUpload.do" method="post" enctype="multipart/form-data">
-	    제목 : <input type="text" name="title" value="멀티파일업로드" /><br />
 		<!-- multiple 속성추가 : 하나의 input태그에서 여러개의 파일을
 		선택할 수 있다. 드레그 혹은 Ctrl키를 이용한다.  -->
 	    <input type="file" name="user_file" multiple /><br/>
 	    <input type="submit" value="전송하기">
 	</form>
+	</td>
+</table>
 </div>
 <%@ include file="../footer.jsp" %>
 

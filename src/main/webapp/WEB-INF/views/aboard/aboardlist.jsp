@@ -18,21 +18,18 @@
 <%@ include file="../header.jsp" %>	
 <div id="content">
     <h2>공지사항 게시판 </h2>
-	
-	
-	
-<!-- 	<!-- 검색폼 -->
+<!-- 검색폼 -->
 <div style="margin-top: 50px;">
-    <form method="post">  
+    <form action="/aboard/searchAboard.do" method="post">  
     <table align="center" border="1" width="90%">
     <tr>
         <td align="center">
             <select name="searchField">
-                <option value="title">제목</option>
-                <option value="content">내용</option>
+                <option value="a_title">제목</option>
+                <option value="a_content">내용</option>
             </select>
             <input type="text" name="searchWord" />
-            <input type="submit" value="검색하기" />
+            <input type="submit" value="검색하기" />&nbsp;&nbsp;
             <s:authorize access="hasRole('ADMIN')">
                     <a href="/aboard/aboardwrite.do">글쓰기</a>
             </s:authorize>
@@ -77,6 +74,61 @@
 </c:choose>
     </table>
 
+</div>
+<div align="center" style="margin-bottom: 50px";>
+	<tr>
+		<td colspan="5">
+		<!-- 처음 -->
+		<c:choose>
+		<c:when test="${(page.curPage - 1) < 1 }">
+			[ &lt;&lt; ]
+		</c:when>
+		<c:otherwise>
+			<a href="/aboard/aboardlist.do??page=1&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${ param.selected }">[ &lt;&lt; ]</a>
+		</c:otherwise>
+		</c:choose>
+		<!-- 이전 -->
+		<c:choose>
+		<c:when test="${(page.curPage - 1) < 1 }">
+			[ &lt; ]
+		</c:when>
+		<c:otherwise>
+			<a href="/aboard/aboardlist.do?page=${page.curPage - 1 }&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${ param.selected }">[ &lt; ]</a>
+		</c:otherwise>
+		</c:choose>
+		
+		<!-- 개별 페이지 -->
+		<c:forEach var="fEach" begin="${page.startPage }" end="${page.endPage }" step="1">
+			<c:choose>
+			<c:when test="${page.curPage == fEach }">
+				[ ${fEach} ] &nbsp;
+			</c:when>
+			<c:otherwise>
+				<a href="/aboard/aboardlist.do?page=${fEach }&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${ param.selected }">[ ${fEach } ]</a> &nbsp;
+			</c:otherwise>
+			</c:choose>
+		</c:forEach>
+		
+		<!-- 다움 -->
+		<c:choose>
+		<c:when test="${(page.curPage + 1) > page.totalPage }">
+			[ &gt; ]
+		</c:when>
+		<c:otherwise>
+			<a href="/aboard/aboardlist.do?page=${page.curPage + 1 }">[ &gt; ]</a>
+		</c:otherwise>
+		</c:choose>
+		<!-- 끝 -->
+		<c:choose>
+		<c:when test="${page.curPage == page.totalPage }">
+			[ &gt;&gt; ]
+		</c:when>
+		<c:otherwise>
+			<a href="/aboard/aboardlist.do?page=${page.totalPage }">[ &gt;&gt; ]</a>
+		</c:otherwise>
+		</c:choose>
+		</td>
+	</tr>	
 </div>
 </div>
 <%@ include file="../footer.jsp" %>

@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -27,7 +28,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.project.springboot.afbService.aboardService;
+import com.project.springboot.afbService.IAboardService;
+import com.project.springboot.afbpageinfo.BpageInfo;
 import com.project.springboot.member.UserDTO;
 import com.project.springboot.member.UserService;
 
@@ -36,10 +38,10 @@ public class AboardController {
 	
 	//파일업로드 제한 용량(전체파일을 합친 용량) : 10M
 	int size = 1024 * 1024 * 10; 
-
+	
 	//Mybatis 사용을 위해 자동주입
 	@Autowired 
-	aboardService asv;
+	IAboardService asv;
 	
 	@Autowired 
 	UserService udao;
@@ -47,9 +49,49 @@ public class AboardController {
 	//회원 목록
 	@RequestMapping("/aboard/aboardlist.do") 
 	public String aboard1(HttpServletRequest req, Model model) {
+		
+		int curPage = 1;
+		int nPage = 1;
+		
+		try
+		{
+			String sPage = req.getParameter("page");
+			nPage = Integer.parseInt(sPage);
+		}
+		catch (Exception e)
+		{
+			
+		}
+		
+		BpageInfo pinfo = asv.articlePage(nPage);
+		model.addAttribute("page", pinfo);
+		
+		
+		//DAO(Mapper)의 select() 메서드를 호출해서 회원목록을 인출 
+		model.addAttribute("aboardLists", asv.selectA(nPage));		
 		//DAO(Mapper)의 select() 메서드를 호출해서 회원목록을 인출
-		model.addAttribute("aboardLists", asv.selectA()); 
+//		model.addAttribute("aboardLists", asv.selectA()); 
 		return "/aboard/aboardlist"; 
+	}
+	
+	@RequestMapping("/aboard/searchAboard.do")
+	public String searchAboard(HttpServletRequest request, Model model) {
+
+	    // 검색어와 검색 조건을 파라미터에서 가져옵니다.
+	    String searchField = request.getParameter("searchField");
+	    String searchWord = request.getParameter("searchWord");
+	    
+	    // 검색어와 검색 조건을 기준으로 게시글 목록을 조회합니다.
+	    List<aboardDTO> aboardLists = asv.searchAboard(searchField, searchWord);
+	    
+	    // 조회된 게시글 목록을 모델에 담아서 화면으로 전달합니다.
+	    model.addAttribute("aboardLists", aboardLists);
+	    
+	    // 검색 폼을 유지하기 위해 검색어와 검색 조건도 모델에 담아서 전달합니다.
+	    model.addAttribute("searchField", searchField);
+	    model.addAttribute("searchWord", searchWord);
+
+	    return "/aboard/aboardlist";
 	}
 
 	//공지사항 게시글 등록 - get방식인 경우 등록하기 페이지 진입
@@ -60,7 +102,7 @@ public class AboardController {
 		UserDTO udto = udao.selectOne(u_id);
 		model.addAttribute("udto", udto);
 
-		return "aboard/aboardwrite"; 
+		return "/aboard/aboardwrite"; 
 	}
 
 	//post방식인 경우 입력한 FAQ 게시글을 DB처리
@@ -74,8 +116,12 @@ public class AboardController {
 	
 	@RequestMapping(value="/aboard/aboardview.do", method=RequestMethod.GET)
 	public String aboard4(HttpServletRequest req, Model model) {
-	    String a_num = req.getParameter("a_num");
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String u_id = authentication.getName();
+	    UserDTO udto = udao.selectOne(u_id);
+		String a_num = req.getParameter("a_num");
 	    aboardDTO dto = asv.selectOneA(a_num);
+	    model.addAttribute("udto", udto);
 	    model.addAttribute("aboardDto", dto);
 	    return "aboard/aboardview";
 	}
@@ -92,33 +138,33 @@ public class AboardController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String u_id = authentication.getName();
 	    UserDTO udto = udao.selectOne(u_id);
-	    model.addAttribute("udto", udto);
-	    
-	    String a_num = req.getParameter("a_num");
-	    
-	    // 게시물 번호를 통해 게시물 정보를 조회하여 fboardDto에 담아줌
+		String a_num = req.getParameter("a_num");
 	    aboardDTO dto = asv.selectOneA(a_num);
+	    model.addAttribute("udto", udto);
+	    // 게시물 번호를 통해 게시물 정보를 조회하여 fboardDto에 담아줌
 	    model.addAttribute("aboardDto", dto);
 	    
-		return "/aboard/aboardedit"; 
+		return "aboard/aboardedit"; 
 	} 
 	
 	//post방식인 경우 레코드를 update
 	@RequestMapping(value="/aboard/aboardedit.do", method=RequestMethod.POST)
-	public String aboard7(aboardDTO aboardDto) { 
+	public String aboard7(aboardDTO aboardDto, HttpServletRequest req) {
+		String a_num = req.getParameter("a_num");
 		int result = asv.updateA(aboardDto); 
 		if(result==1) System.out.println("수정되었습니다."); 
 		
-		return "redirect:/aboard/aboardview.do"; 
+		return "redirect:/aboard/aboardedit.do?a_num=" + aboardDto.getA_num(); 
 	} 
 	
-	//회원정보 삭제. post방식으로 들어온 요청만 처리한다.
-	@RequestMapping(value="/aboarddelete.do", method=RequestMethod.POST) 
-	public String aboard8(aboardDTO aboardDto) { 
-		int result = asv.deleteA(aboardDto);
-		if(result==1) System.out.println("삭제되었습니다."); 
-		return "redirect:list.do"; 
-	} 
+	@RequestMapping(value="/aboard/aboarddelete.do", method=RequestMethod.GET)
+	public String deleteA(@RequestParam("a_num") String a_num) {
+	    int result = asv.deleteA(a_num);
+	    if (result == 1) {
+	      System.out.println("삭제되었습니다.");
+	    }
+	    return "redirect:/aboard/aboardlist.do";
+	}
 	
 	//파일업로드 폼 매핑
 		@GetMapping(value="/multiFileUpload.do")
