@@ -11,7 +11,7 @@
 <!-- 네임스페이스로 지정된 인터페이스의 select() 메서드를 통해 해당
 	엘리먼트가 실행된다. 파라미터와 결과셋 모두 MemberDTO객체를 사용하고있다. 
 	select엘리먼트는 쿼리를 실행한 후 List컬렉션으로 반환한다. -->
-<!-- 	<select id="selectA" 
+ 	<select id="selectA" 
 	    resultType="com.project.springboot.aboard.aboardDTO"> 
 	    select *
 		  from (
@@ -24,9 +24,9 @@
 		  		  where rownum <![CDATA[<=]]> #{param1} ) B
 		  where B.num <![CDATA[>=]]> #{param2}
 	</select>
-	 -->
-<select id="selectA" parameterType="HashMap" resultType="String">
-  <!-- 검색어(searchField)가 없는 경우 -->
+	
+<!-- <select id="selectA" parameterType="HashMap" resultType="String">
+  검색어(searchField)가 없는 경우
   <choose>
 	  <when test="searchField eq null">
 	    SELECT *
@@ -42,7 +42,7 @@
 	    WHERE B.rnum <![CDATA[>=]]> #{startRow}
 		</when>
 		<otherwise>	  
-	  <!-- 검색어(searchField)가 있는 경우 -->
+	  검색어(searchField)가 있는 경우
 	    SELECT *
 	    FROM (
 	      SELECT ROWNUM AS rnum, A.*
@@ -57,7 +57,7 @@
 	    WHERE B.rnum <![CDATA[>=]]> #{startRow}
 	    </otherwise>
  </choose>
-</select>
+</select> -->
 	 
 	<!-- 페이지설정 -->
 	<select id="articlePageDao" resultType="_int">

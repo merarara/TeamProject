@@ -47,7 +47,23 @@
         </td>
     </tr>
 <tr>
-        <td>첨부파일</td>
+      	<table border="1">
+		<tr>
+			<th>이미지</th>
+			<th>파일명</th>
+			<th>파일크기</th>
+			<th></th>
+		</tr>
+	<c:forEach items="${fileMap }" var="file" varStatus="vs">
+		<tr>
+			<td><img src="uploads/${file.key }" width="200" 
+					height="150" /></td>
+			<td>${file.key }</td>
+			<td>${file.value }Kb</td>
+			<td><a href="download.do?savedFile=${file.key }&oriFile=원본파일명${vs.count }.jpg">[다운로드]</a></td>
+		</tr>
+	</c:forEach>
+	</table> 	
     </tr>
     <!-- 하단 메뉴(버튼) -->
     <tr>
