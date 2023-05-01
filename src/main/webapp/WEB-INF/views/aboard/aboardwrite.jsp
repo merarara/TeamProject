@@ -20,7 +20,7 @@
 <h2>FAQ게시판 - 글쓰기(write)</h2>
 <!-- 글쓰기 페이지를 그대로 사용하되 action 부분만 수정한다. 수정시에도
 파일첨부가 있으므로 enctype속성은 추가되어야한다. -->
-<form action="/aboard/aboardwrite.do" method="post">
+<form action="/aboard/aboardwrite.do" method="post" modelAttribute="aboardDto" enctype="multipart/form-data">
 <!-- 게시물 수정을 위한 일련번호 -->	
 <input type="hid_den" name="u_id" value="${ udto.u_id }"/>
 
@@ -45,7 +45,7 @@
     </tr>
     <tr>
     	<td>첨부파일</td>
-    	<td><input type="file" name="user_file" multiple /></td>
+    	<td><input type="file" name="user_file"/></td>
     </tr>
     <tr>
         <td colspan="2" align="center">
