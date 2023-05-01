@@ -11,22 +11,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
-<script type="text/javascript">
-	/* 패스워드 검증을 통해 수정페이지로 진입하므로 해당 페이지에서는
-	추가로 패스워드를 입력하지 않는다. */
-    function validateForm(form) {
-        if (form.title.value == "") {
-            alert("제목을 입력하세요.");
-            form.title.focus();
-            return false;
-        }
-        if (form.content.value == "") {
-            alert("내용을 입력하세요.");
-            form.content.focus();
-            return false;
-        }
-    }
-</script>
 </head>
 <body>
 <%@ include file="../header.jsp" %>	
@@ -34,42 +18,58 @@
 <h2>공지사항 게시판 - 수정하기(Edit)</h2>
 <!-- 글쓰기 페이지를 그대로 사용하되 action 부분만 수정한다. 수정시에도
 파일첨부가 있으므로 enctype속성은 추가되어야한다. -->
-<form name="writeFrm" method="post" action="/fboard/fboardedit.do" onsubmit="return validateForm(this);">
+<form method="post" action="/aboard/aboardedit.do" >
 <!-- 게시물 수정을 위한 일련번호 -->	
-<input type="hid den" name="idx" value="${ adto.a_num }"/>
+	<input type="hidden" name="a_num" value="${ aboardDto.a_num }"/>
+	<input type="hidden" name="u_id" value="${udto.u_id}" />
 
-<table border="1" width="90%">
-    <tr>
-        <td>작성자</td>
-        <td>
-            <input type="text" name="name" style="width:150px;" 
-            	value="${ adto.u_nick }" />
-        </td>
-    </tr>
-    <tr>
-        <td>제목</td>
-        <td>
-            <input type="text" name="title" style="width:90%;" 
-            	value="${ adto.a_title }" />
-        </td>
-    </tr>
-    <tr>
-        <td>내용</td>
-        <td>
-            <textarea name="content" style="width:90%;height:100px;">${ adto.a_content }</textarea>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" align="center">
-            <button type="submit">작성 완료</button>
-            <button type="reset">RESET</button>
-            <button type="button" onclick="location.href='../aboard/aboardlist.do';">
-                목록 바로가기
-            </button>
-        </td>
-    </tr>
-</table>    
+	<table border="1" width="90%">
+	    <tr>
+	        <td>작성자</td>
+	        <td>
+	            <input type="text" name="u_nick" style="width:150px;" value="${aboardDto.u_nick }" readonly/>
+	        </td>
+	    </tr>
+	    <tr>
+	        <td>제목</td>
+	        <td>
+	            <input type="text" name="a_title" style="width:90%;" value="${ aboardDto.a_title }" />
+	        </td>
+	    </tr>
+	    <tr>
+	        <td>내용</td>
+	        <td>
+	            <textarea name="a_content" style="width:90%;height:100px;">${ aboardDto.a_content }</textarea>
+	        </td>
+	    </tr>
+	    <tr>
+	        <td colspan="2" align="center">
+	            <button type="submit">수정 완료</button>
+	            <button type="button" onclick="location.href='../aboard/aboardlist.do';">
+	                목록 바로가기
+	            </button>
+	        </td>
+	    </tr>
+	</table>    
 </form>
+<table border="1">
+		<tr>
+			<th>이미지</th>
+			<th>파일명</th>
+			<th>파일크기</th>
+			<th></th>
+		</tr>
+	<c:forEach items="${fileMap }" var="file" varStatus="vs">
+		<tr>
+			<td><img src="aUpload/${file.key }" width="200" 
+					height="150" /></td>
+			<td>${file.key }</td>
+			<td>${file.value }Kb</td>
+			<td><a href="download.do?savedFile=${file.key }&oriFile=원본파일명${vs.count }.jpg">[다운로드]</a></td>
+		</tr>
+	</c:forEach>
+</table>
+</div>
 </div>
 <%@ include file="../footer.jsp" %>
 

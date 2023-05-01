@@ -5,7 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -13,7 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.project.springboot.afbService.fboardService;
+import com.project.springboot.afbService.IFboardService;
+import com.project.springboot.afbpageinfo.BpageInfo;
 import com.project.springboot.member.UserDTO;
 import com.project.springboot.member.UserService;
 
@@ -22,24 +22,53 @@ public class fboardController {
 	
 	//Mybatis 사용을 위해 자동주입
 	@Autowired
-	@Qualifier("fboardService")
-	fboardService fdao;
+	IFboardService fdao;
 
 	@Autowired
 	UserService udao;
 	
-	//회원 목록
+	//FAQ 목록
 	@RequestMapping("/fboard/fboardlist.do")
 	public String fboard1(HttpServletRequest request, Model model) {
-
+		
+		int curPage = 1;
+		int nPage = 1;
+		
+		try
+		{
+			String sPage = request.getParameter("page");
+			nPage = Integer.parseInt(sPage);
+		}
+		catch (Exception e)
+		{
+			
+		}
+		
+		BpageInfo pinfo = fdao.articlePage(nPage);
+		model.addAttribute("page", pinfo);
+		
+		
 		//DAO(Mapper)의 select() 메서드를 호출해서 회원목록을 인출 
-		model.addAttribute("fboardLists", fdao.selectF());		
+		model.addAttribute("fboardLists", fdao.selectF(nPage));		
 		return "/fboard/fboardlist";       
 	}
 	
 	@RequestMapping("/fboard/searchFboard.do")
 	public String searchFboard(HttpServletRequest request, Model model) {
-
+		/*
+		 * int curPage = 1; int nPage = 1;
+		 * 
+		 * try { String sPage = request.getParameter("page"); nPage =
+		 * Integer.parseInt(sPage); } catch (Exception e) {
+		 * 
+		 * }
+		 * 
+		 * BpageInfo pinfo = fdao.articlePage(nPage); model.addAttribute("page", pinfo);
+		 * 
+		 * 
+		 * //DAO(Mapper)의 select() 메서드를 호출해서 회원목록을 인출 model.addAttribute("fboardLists",
+		 * fdao.selectF(nPage));
+		 */
 	    // 검색어와 검색 조건을 파라미터에서 가져옵니다.
 	    String searchField = request.getParameter("searchField");
 	    String searchWord = request.getParameter("searchWord");

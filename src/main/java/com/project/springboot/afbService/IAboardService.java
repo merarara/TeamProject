@@ -2,14 +2,14 @@ package com.project.springboot.afbService;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Service;
 
 import com.project.springboot.aboard.aboardDTO;
+import com.project.springboot.afbpageinfo.BpageInfo;
 
-@Mapper 
-public interface aboardService {
-
-	public List<aboardDTO> selectA(int nEnd, int nStart); 
+@Service
+public interface IAboardService {
+	public List<aboardDTO> selectA(int curPage); 
 	public int insertA(aboardDTO aboardDto);
 	public aboardDTO selectOneA(String a_num);
 	public int updateA(aboardDTO aboardDto);
@@ -17,5 +17,6 @@ public interface aboardService {
 	public List<aboardDTO> searchAboard(String searchField, String searchWord);
 	
 	// 페이지설정
-	public int articlePageDao(int curPage);
+	public BpageInfo articlePage(int curPage);
+	
 }
