@@ -67,11 +67,12 @@ function showBarcodes(elem) {
 	  <c:forEach items="${plist}" var="i">
 	    <li class="list-item">
 	      <h3 onclick="showBarcodes(this)">상품명: ${i.p_name}</h3>
+	      재고 : ${i.p_count }
 	      <div class="barcodes">
 	        <ul>
 	          <c:forEach items="${pcnt}" var="j">
 	            <c:if test="${i.p_num == j.p_num}">
-	              <li>${j.p_barcode}</li>
+	              <li>${j.p_barcode} ${j.p_sold }</li>
 	            </c:if>
 	          </c:forEach>
 	        </ul>
