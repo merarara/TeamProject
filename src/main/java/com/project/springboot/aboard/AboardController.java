@@ -125,7 +125,7 @@ public class AboardController {
 					String savedName = uuid + ext;
 					
 					try {
-						path = ResourceUtils.getFile("classpath:static/uploads/")
+						path = ResourceUtils.getFile("classpath:static/aUpload/")
 								.toPath().toString();
 						
 						File filePath = new File(path, savedName);
@@ -136,7 +136,7 @@ public class AboardController {
 						e.printStackTrace();
 					}
 				}
-				System.out.println("uploads폴더:"+ path);
+				System.out.println("aUpload폴더:"+ path);
 			}
 			
 			int result = asv.insertA(aboardDto); 
