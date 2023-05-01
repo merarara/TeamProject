@@ -20,7 +20,7 @@
 <h2>FAQ게시판 - 글쓰기(write)</h2>
 <!-- 글쓰기 페이지를 그대로 사용하되 action 부분만 수정한다. 수정시에도
 파일첨부가 있으므로 enctype속성은 추가되어야한다. -->
-<form action="/aboard/aboardwrite.do" method="post">
+<form action="/aboard/aboardwrite.do" method="post" modelAttribute="aboardDto" enctype="multipart/form-data">
 <!-- 게시물 수정을 위한 일련번호 -->	
 <input type="hid_den" name="u_id" value="${ udto.u_id }"/>
 
@@ -44,6 +44,10 @@
         </td>
     </tr>
     <tr>
+    	<td>첨부파일</td>
+    	<td><input type="file" name="user_file"/></td>
+    </tr>
+    <tr>
         <td colspan="2" align="center">
             <button type="submit">작성 완료</button>
             <button type="reset">RESET</button>
@@ -55,14 +59,6 @@
     </tr>
 </table>    
 </form>
-	<h2>다중 파일 업로드</h2>
-	<form action="multiFileUpload.do" method="post" enctype="multipart/form-data">
-	    제목 : <input type="text" name="title" value="멀티파일업로드" /><br />
-		<!-- multiple 속성추가 : 하나의 input태그에서 여러개의 파일을
-		선택할 수 있다. 드레그 혹은 Ctrl키를 이용한다.  -->
-	    <input type="file" name="user_file" multiple /><br/>
-	    <input type="submit" value="전송하기">
-	</form>
 </div>
 <%@ include file="../footer.jsp" %>
 

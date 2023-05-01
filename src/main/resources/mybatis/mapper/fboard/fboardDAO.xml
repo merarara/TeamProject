@@ -12,9 +12,22 @@
 	엘리먼트가 실행된다. 파라미터와 결과셋 모두 MemberDTO객체를 사용하고있다. 
 	select엘리먼트는 쿼리를 실행한 후 List컬렉션으로 반환한다. -->
 	<select id="selectF" 
-		parameterType="com.project.springboot.fboard.fboardDTO" 
 		resultType="com.project.springboot.fboard.fboardDTO"> 
-		select * from f_board order by f_num desc
+		select *
+		  from (
+		  		select rownum num, A.*
+		  		  from (
+		  		        select *
+		  		          from f_board
+		  		         order by f_num desc
+		  		          ) A
+		  		  where rownum <![CDATA[<=]]> #{param1} ) B
+		  where B.num <![CDATA[>=]]> #{param2}
+	</select>
+	
+	<!-- 페이지설정 -->
+	<select id="articlePageDao" resultType="_int">
+		select count(*) as total from f_board
 	</select>
 	
 
@@ -57,5 +70,18 @@
 	    FROM f_board
 	    WHERE ${param1} like '%'|| #{param2} || '%'
 	    ORDER BY f_num DESC
+	    
+	        <!-- select *
+		  from (
+		  		select rownum num, A.*
+		  		  from (
+		  		          SELECT *
+	   					  FROM f_board
+	                      WHERE ${param1} like '%'|| #{param2} || '%'
+	                      ORDER BY f_num DESC
+		  		          ) A
+		  		  where rownum <![CDATA[<=]]> #{param1} ) B
+		  where B.num <![CDATA[>=]]> #{param2} -->
+	    
 	</select>
 </mapper>

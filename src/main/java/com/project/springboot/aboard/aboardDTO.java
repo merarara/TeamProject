@@ -1,5 +1,7 @@
 package com.project.springboot.aboard;
  
+import java.sql.Timestamp;
+
 import lombok.Data;
 
 @Data 
@@ -10,5 +12,5 @@ public class aboardDTO {
 	private String a_title; 
 	private String a_content;
 	private int a_visitcount; 
-	private String a_regdate; 
+	private Timestamp a_regdate; 
 }

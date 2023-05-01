@@ -243,13 +243,6 @@ public class UserController {
         return "/admin/userManagement";
     }
     
-    // ADMIN 재고관리
-    @GetMapping("/admin/productManagement.do")
-    public String productManagement(Model model) {
-    	
-    	return "/admin/productManagement";
-    }
-    
     // 회원전체조회
     @GetMapping("/users")
     @ResponseBody
@@ -289,25 +282,7 @@ public class UserController {
         return "redirect:/admin/userManagement.do";
     }
     
-    // 전체제고관리 맵핑 
-  	@RequestMapping("/admin/totalProduct.do")
-  	public String totalProduct() {
-  		System.out.println(5);
-  		return "/admin/totalProduct";
-  	}
-    
-    
-    // 재고 추가
-    @RequestMapping("/admin/addStock")
-    public String addStock(@RequestParam("barcode") String barcode,
-    @RequestParam("quantity") int quantity,
-    Model model) {
-    // 수량 증가 로직 구현
-    // ...
-    model.addAttribute("message", "재고가 추가되었습니다.");
-    return "admin/productManagement";
-    }
-    
+        
     // sns facebook
     @GetMapping("/login/oauth2/code/facebook")
     public String facebookOAuth2Callback(Model model) {
@@ -322,4 +297,8 @@ public class UserController {
       return "denied";
     }
     
+	@RequestMapping("/myError.do")
+	public String login2() {		
+		return "auth/error";
+	}
 }

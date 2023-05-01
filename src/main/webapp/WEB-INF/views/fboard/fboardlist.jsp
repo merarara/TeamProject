@@ -113,7 +113,59 @@ details caption {
 </div>
 
 <div align="center" style="margin-bottom: 50px";>
-	
+<tr>
+			<td colspan="5">
+			<!-- 처음 -->
+			<c:choose>
+			<c:when test="${(page.curPage - 1) < 1 }">
+				[ &lt;&lt; ]
+			</c:when>
+			<c:otherwise>
+				<a href="/fboard/fboardlist.do?page=1">[ &lt;&lt; ]</a>
+			</c:otherwise>
+			</c:choose>
+			<!-- 이전 -->
+			<c:choose>
+			<c:when test="${(page.curPage - 1) < 1 }">
+				[ &lt; ]
+			</c:when>
+			<c:otherwise>
+				<a href="/fboard/fboardlist.do?page=${page.curPage - 1 }">[ &lt; ]</a>
+			</c:otherwise>
+			</c:choose>
+			
+			<!-- 개별 페이지 -->
+			<c:forEach var="fEach" begin="${page.startPage }" end="${page.endPage }" step="1">
+				<c:choose>
+				<c:when test="${page.curPage == fEach }">
+					[ ${fEach} ] &nbsp;
+				</c:when>
+				<c:otherwise>
+					<a href="/fboard/fboardlist.do?page=${fEach }">[ ${fEach } ]</a> &nbsp;
+				</c:otherwise>
+				</c:choose>
+			</c:forEach>
+			
+			<!-- 다움 -->
+			<c:choose>
+			<c:when test="${(page.curPage + 1) > page.totalPage }">
+				[ &gt; ]
+			</c:when>
+			<c:otherwise>
+				<a href="/fboard/fboardlist.do?page=${page.curPage + 1 }">[ &gt; ]</a>
+			</c:otherwise>
+			</c:choose>
+			<!-- 끝 -->
+			<c:choose>
+			<c:when test="${page.curPage == page.totalPage }">
+				[ &gt;&gt; ]
+			</c:when>
+			<c:otherwise>
+				<a href="/fboard/fboardlist.do?page=${page.totalPage }">[ &gt;&gt; ]</a>
+			</c:otherwise>
+			</c:choose>
+			</td>
+		</tr>	
 <!-- 검색폼 -->
 <div style="margin-bottom: 50px";>
  <form action="/fboard/searchFboard.do" method="post">  
@@ -133,6 +185,7 @@ details caption {
         </tr>
     </table>
 </form>
+</div>
 </div>
 <%@ include file="../footer.jsp" %>
 

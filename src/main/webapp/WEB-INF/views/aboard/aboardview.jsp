@@ -17,7 +17,6 @@
 <%@ include file="../header.jsp" %>	
 <div id="content">
 <h2>공지사항 게시판 - 상세 보기(View)</h2>
-
 <table border="1" width="90%">
     <colgroup>
         <col width="15%"/> <col width="35%"/>
@@ -27,40 +26,58 @@
     <!-- 게시글 정보 -->
     <tr>
         <td>번호</td> 
-        <td>${ asv.a_num }</td>
+        <td>${ aboardDto.a_num }</td>
         <td>작성자</td> 
-        <td>${ asv.u_nick }</td>
+        <td>${ aboardDto.u_nick }</td>
     </tr>
     <tr>
         <td>작성일</td> 
-        <td>${ asv.a_regdate }</td>
+        <td>${ aboardDto.a_regdate }</td>
         <td>조회수</td> 
-        <td>${ asv.a_visitcount }</td>
+        <td>${ aboardDto.a_visitcount }</td>
     </tr>
     <tr>
         <td>제목</td>
-        <td colspan="3">${ asv.a_title }</td>
+        <td colspan="3">${ aboardDto.a_title }</td>
     </tr>
     <tr>
         <td>내용</td>
         <td colspan="3" height="100">
-        	${ asv.a_content }
+        	${ aboardDto.a_content }
         </td>
     </tr>
 <tr>
-        <td>첨부파일</td>
+      	<table border="1">
+		<tr>
+			<th>이미지</th>
+			<th>파일명</th>
+			<th>파일크기</th>
+			<th></th>
+		</tr>
+	<c:forEach items="${fileMap }" var="file" varStatus="vs">
+		<tr>
+			<td><img src="uploads/${file.key }" width="200" 
+					height="150" /></td>
+			<td>${file.key }</td>
+			<td>${file.value }Kb</td>
+			<td><a href="download.do?savedFile=${file.key }&oriFile=원본파일명${vs.count }.jpg">[다운로드]</a></td>
+		</tr>
+	</c:forEach>
+	</table> 	
     </tr>
     <!-- 하단 메뉴(버튼) -->
     <tr>
         <td colspan="4" align="center">
+        	<s:authorize access="hasRole('ADMIN')">
             <button type="button" 
-            	onclick="location.href='../mvcboard/pass.do?mode=edit&a_num=${ param.a_num }';">
+            	onclick="location.href='../aboard/aboardedit.do?a_num=${ aboardDto.a_num }';">
                 수정하기
-            </button>
+            </button>&nbsp;&nbsp;
             <button type="button" 
-            	onclick="location.href='../mvcboard/pass.do?mode=delete&idx=${ param.a_num }';">
+            	onclick="location.href='../aboard/aboarddelete.do?a_num=${ aboardDto.a_num }';">
                 삭제하기
-            </button>
+            </button>&nbsp;&nbsp;
+          	</s:authorize>
             <button type="button" onclick="location.href='../aboard/aboardlist.do';">
                 목록 바로가기
             </button>

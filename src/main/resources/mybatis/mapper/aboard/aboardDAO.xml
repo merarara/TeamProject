@@ -11,40 +11,91 @@
 <!-- 네임스페이스로 지정된 인터페이스의 select() 메서드를 통해 해당
 	엘리먼트가 실행된다. 파라미터와 결과셋 모두 MemberDTO객체를 사용하고있다. 
 	select엘리먼트는 쿼리를 실행한 후 List컬렉션으로 반환한다. -->
-<select id="selectA" 
-    parameterType="java.lang.String" 
-    resultType="com.project.springboot.aboard.aboardDTO"> 
-    select * from a_board where a_num = #{a_num}
-</select>
+ 	<select id="selectA" 
+	    resultType="com.project.springboot.aboard.aboardDTO"> 
+	    select *
+		  from (
+		  		select rownum num, A.*
+		  		  from (
+		  		        select *
+		  		          from a_board
+		  		         order by a_num desc
+		  		          ) A
+		  		  where rownum <![CDATA[<=]]> #{param1} ) B
+		  where B.num <![CDATA[>=]]> #{param2}
+	</select>
 	
-	<!-- insertF 쿼리문에서 UserDTO 클래스를 참조하여 u_id 값을 가져옴 -->
+<!-- <select id="selectA" parameterType="HashMap" resultType="String">
+  검색어(searchField)가 없는 경우
+  <choose>
+	  <when test="searchField eq null">
+	    SELECT *
+	    FROM (
+	      SELECT ROWNUM AS num, A.*
+	      FROM (
+	        SELECT *
+	        FROM a_board
+	        ORDER BY a_num DESC
+	      ) A
+	      WHERE ROWNUM <![CDATA[<=]]> #{endRow}
+	    ) B
+	    WHERE B.rnum <![CDATA[>=]]> #{startRow}
+		</when>
+		<otherwise>	  
+	  검색어(searchField)가 있는 경우
+	    SELECT *
+	    FROM (
+	      SELECT ROWNUM AS rnum, A.*
+	      FROM (
+	        SELECT *
+	        FROM a_board
+	        WHERE ${searchField} LIKE '%' || #{searchWord} || '%'
+	        ORDER BY a_num DESC
+	      ) A
+	      WHERE ROWNUM <![CDATA[<=]]> #{endRow}
+	    ) B
+	    WHERE B.rnum <![CDATA[>=]]> #{startRow}
+	    </otherwise>
+ </choose>
+</select> -->
+	 
+	<!-- 페이지설정 -->
+	<select id="articlePageDao" resultType="_int">
+		select count(*) as total from a_board
+	</select>
+	
+	<!-- insertA 쿼리문에서 UserDTO 클래스를 참조하여 u_id 값을 가져옴 -->
 	<insert id="insertA" 
 	    parameterType="com.project.springboot.aboard.aboardDTO"> 
 	    INSERT INTO a_board (a_num, u_id, u_nick, a_title, a_content, a_visitcount) 
 	    VALUES (seq_aboard_num.nextval, #{u_id}, #{u_nick}, #{a_title}, #{a_content}, 0)
 	</insert>
 	
-	<!-- FAQ게시글 인출 -->	 
+	<!-- 공지사항 게시글 인출 -->	 
 	<select id="selectOneA" 
 		parameterType="com.project.springboot.aboard.aboardDTO"
 		resultType="com.project.springboot.aboard.aboardDTO"> 
-		select * from a_board where a_num=#{a_num}
+		select * from a_board where a_num=#{param1}
 	</select>	 
 	
-	<!-- FAQ 게시글 수정. 파라미터는 DTO의 멤버변수를 사용한다. -->
+	<!-- 공지사항 게시글 수정. 파라미터는 DTO의 멤버변수를 사용한다. -->
 	<update id="updateA" 
 		parameterType="com.project.springboot.aboard.aboardDTO"> 
 		update a_board set a_title=#{a_title}, a_content=#{a_content} 
 		where a_num=#{a_num}
 	</update> 
 	
-	<!-- 회원 삭제 -->
-	<delete id="deleteA" 
-		parameterType="com.project.springboot.aboard.aboardDTO"> 
-		delete from a_board where a_num=#{a_num}
+	<!-- 공지사항 게시글 삭제 -->
+	<delete id="deleteA" parameterType="string">
+  		delete from a_board where a_num=#{a_num}
 	</delete>
 	
-
-
-
+	<select id="searchAboard" parameterType="hashmap" resultType="com.project.springboot.aboard.aboardDTO">
+	    SELECT *
+	    FROM a_board
+	    WHERE ${param1} like '%'|| #{param2} || '%'
+	    ORDER BY a_num DESC
+	</select>	
+	
+	
 </mapper>

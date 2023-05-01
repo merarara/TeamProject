@@ -100,6 +100,9 @@ public class PReviewDaoService implements IPReviewDaoService {
 			e.printStackTrace();
 		}
 		
-		return 0;
+		int result1 = dao.deleteRevImgDao(r_num, p_num);
+		int result2 = dao.deleteReviewDao(r_num, p_num);
+		
+		return result2;
 	}
 }

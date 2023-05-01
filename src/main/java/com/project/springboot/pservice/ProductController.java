@@ -132,17 +132,19 @@ public class ProductController {
 	    	e.printStackTrace();
 	    }
 	    
-	    System.out.println("u_id : " + u_id + "bchk1 : " + bchk1 + "bchk2 : " + bchk2);
-	    
     	if (u_id.equals(bchk1) || u_id.equals(bchk2)) {
     		model.addAttribute("bchk", "ok");
     	} else {
     		model.addAttribute("bchk", "no");
     	}
     	
+    	// 리뷰 이미지
     	model.addAttribute("ridto", ridto);
+    	// 리뷰 내용
     	model.addAttribute("rdto", rdto);
+    	// 유저 정보
 	    model.addAttribute("uinfo", udto);
+	    // 상품 정보
 		model.addAttribute("pinfo", dto);
 		return "product/productinfo";
 	}
