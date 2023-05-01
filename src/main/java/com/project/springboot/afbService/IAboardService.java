@@ -18,5 +18,6 @@ public interface IAboardService {
 	
 	// 페이지설정
 	public BpageInfo articlePage(int curPage);
+	void updateVisitCount(String a_num);
 	
 }

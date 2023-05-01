@@ -71,6 +71,7 @@
 	    VALUES (seq_aboard_num.nextval, #{u_id}, #{u_nick}, #{a_title}, #{a_content}, 0)
 	</insert>
 	
+	
 	<!-- 공지사항 게시글 인출 -->	 
 	<select id="selectOneA" 
 		parameterType="com.project.springboot.aboard.aboardDTO"
@@ -96,6 +97,10 @@
 	    WHERE ${param1} like '%'|| #{param2} || '%'
 	    ORDER BY a_num DESC
 	</select>	
+	
+	<update id="updateVisitCount" parameterType="java.lang.String">
+    UPDATE a_board SET a_visitcount=a_visitcount+1 WHERE a_num=#{a_num}
+	</update>
 	
 	
 </mapper>

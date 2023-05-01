@@ -18,4 +18,5 @@ public interface aboardService {
 	
 	// 페이지설정
 	public int articlePageDao(int curPage);
+	public void updateVisitCount(String a_num);
 }

@@ -13,4 +13,13 @@ public class aboardDTO {
 	private String a_content;
 	private int a_visitcount; 
 	private Timestamp a_regdate; 
+	
+	 // Getter와 Setter 메소드 추가
+    public int getA_num() {
+        return a_num;
+    }
+
+    public void setA_num(int a_num) {
+        this.a_num = a_num;
+    }
 }

@@ -2,6 +2,7 @@ package com.project.springboot.afbService;
 
 
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -101,4 +102,10 @@ public class aboardServiceImpl implements IAboardService {
 		
 		return pinfo;
     }
+    
+    @Override
+    public void updateVisitCount(String a_num) {
+        abs.updateVisitCount(a_num);
+    }
+    
 }
