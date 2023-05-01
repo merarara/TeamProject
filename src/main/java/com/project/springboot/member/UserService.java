@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.project.springboot.oauth2.SnsDTO;
 
 @Service
 public class UserService {
@@ -45,34 +44,50 @@ public class UserService {
         return dto;
     }
     
-    // 전체 회원 조회
+    // 전체 회원 조회 (페이징 처리)
     @Transactional
-    public List<UserDTO> selectAll() {
-        List<UserDTO> list = userMapper.selectAll();
-        return list;
+    public List<UserDTO> selectAll(int offset, int limit) {
+        return userMapper.selectAll(offset, limit);
     }
+    @Transactional
+    public int selectTotalCount() {
+        return userMapper.selectTotalCount();
+    }
+    // 아이디로 회원 검색 (페이징 처리)
+    @Transactional
+    public List<UserDTO> searchById(String searchId, int offset, int limit) {
+    return userMapper.searchById(searchId, offset, limit);
+    }
+
+    // 아이디로 검색한 회원 수 조회
+    @Transactional
+    public int selectSearchIdCount(String searchId) {
+    return userMapper.selectSearchIdCount(searchId);
+    }
+
     // 일반회원 조회
     @Transactional
-    public List<UserDTO> selectUserlist() {
-    	List<UserDTO> list = userMapper.selectUserlist();
-    	return list;
+    public List<UserDTO> selectUserlist(int offset, int limit) {
+    	return userMapper.selectUserlist(offset, limit);
     }
+    @Transactional
+    public int selectUserCount() {
+        return userMapper.selectTotalCount();
+    }
+    
     // 블랙리스트 조회
     @Transactional
-    public List<UserDTO> selectBlacklist() {
-        List<UserDTO> list = userMapper.selectBlacklist();
-        return list;
+    public List<UserDTO> selectBlacklist(int offset, int limit) {
+    	return userMapper.selectBlacklist(offset, limit);
+    }
+    @Transactional
+    public int selectBlackCount() {
+        return userMapper.selectTotalCount();
     }
     // 권한 수정
     @Transactional
     public void updateAuthority(String u_id, String u_authority) {
         userMapper.updateAuthority(u_id, u_authority);
-    }
-
-    // 재고 추가
-    @Transactional
-    public void addStock(String p_barcode, int quantity) {
-        userMapper.addStock(p_barcode, quantity);
     }
     
     // SNS 회원가입

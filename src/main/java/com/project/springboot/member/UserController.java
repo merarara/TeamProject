@@ -1,11 +1,6 @@
 package com.project.springboot.member;
 
-import java.beans.Statement;
 import java.security.Principal;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -200,7 +195,7 @@ public class UserController {
  		return "redirect:/home.do";
  	} 
     
- // 회원탈퇴 페이지로 이동하는 매핑
+ 	// 회원탈퇴 페이지로 이동하는 매핑
     @RequestMapping("/user/delete.do")
     public String deleteForm() {
         return "/user/delete";
@@ -231,7 +226,7 @@ public class UserController {
             return "/user/delete";
         }
     }
-    
+    // 관리자페이지
     @GetMapping("/admin/adminPage.do")
     public String showAdminPage(Model model) {
         return "/admin/adminPage";
@@ -243,27 +238,83 @@ public class UserController {
         return "/admin/userManagement";
     }
     
-    // 회원전체조회
-    @GetMapping("/users")
-    @ResponseBody
-    public List<UserDTO> showAllUsers() {
-        List<UserDTO> userList = userService.selectAll();
-        return userList;
+    // 회원전체 조회 및 검색
+    @RequestMapping(value = "/admin/allUser.do", method = {RequestMethod.GET, RequestMethod.POST})
+    public String showAllUsers(Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String search_Id) {
+        int totalCount = userService.selectSearchIdCount(search_Id); // 전체 회원 수 조회
+        int limit = 10; // 페이지 당 보여줄 회원 수
+        int maxPage = (int) Math.ceil((double) totalCount / limit); // 전체 페이지 수 계산
+        int offset = (page - 1) * limit; // 조회 시작할 회원 번호
+
+        if (page > maxPage) { // 요청한 페이지 번호가 최대 페이지 수를 넘어갈 경우, 마지막 페이지로 이동
+            page = maxPage;
+            offset = (page - 1) * limit;
+        }
+
+        List<UserDTO> userList;
+        if (search_Id == null) { // 검색어가 없을 때 전체 회원 조회
+            userList = userService.selectAll(offset, limit);
+        } else { // 검색어가 있을 때 해당 검색어를 포함한 회원 조회
+        	search_Id = "%" + search_Id + "%"; // 검색어에 와일드카드 추가
+            userList = userService.searchById(search_Id, offset, limit);
+        }
+
+        model.addAttribute("userList", userList); // 조회 결과를 JSP 파일에 전달
+
+        model.addAttribute("totalCount", totalCount); // 전체 회원 수를 JSP 파일에 전달
+        model.addAttribute("currentPage", page); // 현재 페이지 번호를 JSP 파일에 전달
+        model.addAttribute("maxPage", maxPage); // 전체 페이지 수를 JSP 파일에 전달
+        model.addAttribute("searchId", search_Id); // 검색어를 JSP 파일에 전달
+
+        return "admin/allUser";
+    }
+
+
+    
+    // basic
+    @RequestMapping(value = "/admin/basicUser.do", method = RequestMethod.GET)
+    public String selectUserlist(Model model, @RequestParam(defaultValue = "1") int page) {
+    	int totalCount = userService.selectUserCount(); // 전체 회원 수 조회
+    	int limit = 10; // 페이지 당 보여줄 회원 수
+    	int maxPage = (int) Math.ceil((double) totalCount / limit); // 전체 페이지 수 계산
+    	int offset = (page - 1) * limit; // 조회 시작할 회원 번호
+    	
+    	if (page > maxPage) { // 요청한 페이지 번호가 최대 페이지 수를 넘어갈 경우, 마지막 페이지로 이동
+    		page = maxPage;
+    		offset = (page - 1) * limit;
+    	}
+    	
+    	List<UserDTO> userList = userService.selectUserlist(offset, limit); // 특정 범위 내의 회원 조회
+    	model.addAttribute("userList", userList); // 조회 결과를 JSP 파일에 전달
+    	
+    	model.addAttribute("totalCount", totalCount); // 전체 회원 수를 JSP 파일에 전달
+    	model.addAttribute("currentPage", page); // 현재 페이지 번호를 JSP 파일에 전달
+    	model.addAttribute("maxPage", maxPage); // 전체 페이지 수를 JSP 파일에 전달
+    	
+    	return "admin/basicUser";
     }
     
-    // 블랙리스트조회
-    @GetMapping("/blackusers")
-    @ResponseBody
-    public List<UserDTO> selectBlacklist() {
-        List<UserDTO> userList = userService.selectBlacklist();
-        return userList;
-    }
-    // 일반리스트조회
-    @GetMapping("/basicusers")
-    @ResponseBody
-    public List<UserDTO> selectUserlist() {
-    	List<UserDTO> userList = userService.selectUserlist();
-    	return userList;
+    // blacklist
+    @RequestMapping(value = "/admin/blackUser.do", method = RequestMethod.GET)
+    public String selectBlacklist(Model model, @RequestParam(defaultValue = "1") int page) {
+    	int totalCount = userService.selectBlackCount(); // 전체 회원 수 조회
+    	int limit = 10; // 페이지 당 보여줄 회원 수
+    	int maxPage = (int) Math.ceil((double) totalCount / limit); // 전체 페이지 수 계산
+    	int offset = (page - 1) * limit; // 조회 시작할 회원 번호
+    	
+    	if (page > maxPage) { // 요청한 페이지 번호가 최대 페이지 수를 넘어갈 경우, 마지막 페이지로 이동
+    		page = maxPage;
+    		offset = (page - 1) * limit;
+    	}
+    	
+    	List<UserDTO> userList = userService.selectBlacklist(offset, limit); // 특정 범위 내의 회원 조회
+    	model.addAttribute("userList", userList); // 조회 결과를 JSP 파일에 전달
+    	
+    	model.addAttribute("totalCount", totalCount); // 전체 회원 수를 JSP 파일에 전달
+    	model.addAttribute("currentPage", page); // 현재 페이지 번호를 JSP 파일에 전달
+    	model.addAttribute("maxPage", maxPage); // 전체 페이지 수를 JSP 파일에 전달
+    	
+    	return "admin/blackUser";
     }
     
     // 전체권한관리 
@@ -282,23 +333,4 @@ public class UserController {
         return "redirect:/admin/userManagement.do";
     }
     
-        
-    // sns facebook
-    @GetMapping("/login/oauth2/code/facebook")
-    public String facebookOAuth2Callback(Model model) {
-        // Additional information retrieval and processing logic
-        return "redirect:/snsjoin.jsp";
-    }
-    private static final String DENIED_PATH = "/denied.do";
-    // 예외처리
-    @RequestMapping(DENIED_PATH)
-    public String handleAccessDenied() {
-      // 접근 거부 처리 로직
-      return "denied";
-    }
-    
-	@RequestMapping("/myError.do")
-	public String login2() {		
-		return "auth/error";
-	}
 }

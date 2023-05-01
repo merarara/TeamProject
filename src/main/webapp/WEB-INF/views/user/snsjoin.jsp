@@ -67,7 +67,7 @@ function checkNick() {
                 <div class="form_wrap">
                     <!-- 회원가입 폼 시작 -->
                     <h2>회원가입</h2>
-                    <form method="post" action="/user/signUp.do">
+                    <form method="post" action="/sns/signUp.do">
                         <div class="form_group">
                                     <label for="inputNick">닉네임</label>
                                     <div class="input_group">

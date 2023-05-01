@@ -14,7 +14,11 @@
 
 <%@ include file="../header.jsp" %>	
 <div id="content">
-회원 블랙리스트 부여 
+
+<div>
+	<a href="/admin/userManagement.do" class="back">뒤로가기</a>
+</div>
+<h2>회원 블랙리스트 부여</h2>
 <form id="blacklistForm" action="/updateAuthority" method="post">
     <label for="u_id">아이디:</label>
     <input type="text" name="u_id" id="u_id">

@@ -22,7 +22,11 @@ public class SecurityConfig {
 	@Autowired
 	public AuthenticationFailureHandler authenticationFailureHandler;
 	@Autowired
+	public MyAuthenticationFailureHandler myAuthenticationFailureHandler; 
+	@Autowired
 	private CustomOAuth2UserService customOAuth2UserService;
+	@Autowired
+	private MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration
 			authConfiguration) throws Exception {
@@ -34,7 +38,7 @@ public class SecurityConfig {
 			throws Exception {
 		httpSecurity.authorizeRequests()
 			.antMatchers("/").permitAll()
-			.antMatchers("/css/**","/js/**","/productimgs/**","/userimages/**","/revuploads/**").permitAll()
+			.antMatchers("/css/**","/js/**","/productimgs/**","/userimages/**","/revuploads/**","/favicon.ico").permitAll()
 			.antMatchers("/guest/**").permitAll()
 			.antMatchers("/user/**").permitAll()
 			.antMatchers("/views/**").permitAll()
@@ -53,8 +57,9 @@ public class SecurityConfig {
 	    .loginPage("/myLogin.do") // default: /login
 	    // .loginPage("/main.jsp")
 	    .loginProcessingUrl("/myLoginAction.do")
-	    .defaultSuccessUrl("/myLogin.do")
+//	    .defaultSuccessUrl("/myLogin.do")
 	    .failureUrl("/myError.do") // default: /login?error
+	    .successHandler(myAuthenticationSuccessHandler)
 	    .failureHandler(authenticationFailureHandler)
 	    .usernameParameter("my_id") // default: username
 	    .passwordParameter("my_pass") // default: password

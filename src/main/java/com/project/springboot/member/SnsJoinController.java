@@ -1,4 +1,4 @@
-package com.project.springboot.oauth2;
+package com.project.springboot.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,7 +21,7 @@ public class SnsJoinController {
         String email = oauth2User.getAttribute("email");
         // SNS 제공자로부터 이메일을 가져와서 모델에 담아둔다.
         model.addAttribute("email", email);
-        return "user/snsjoin";
+        return "sns/snsjoin";
     }
     
     @PostMapping("/snsjoin")

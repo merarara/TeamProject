@@ -5,16 +5,14 @@
 <mapper namespace="com.project.springboot.member.UserMapper">
 
 
-    <!--  회원가입  -->
+    <!--  회원가입 일반 -->
     <insert id="insertUser" 
     	parameterType="com.project.springboot.member.UserDTO">
         INSERT INTO USER_INFO
         (u_num, u_id, u_pw, u_name, u_nick, u_phone, u_email, u_zip, u_addr1, u_addr2, u_type)
         VALUES(seq_user_num.nextval,#{u_id},#{u_pw},#{u_name},#{u_nick},#{u_phone},
         		#{u_email},#{u_zip},#{u_addr1},#{u_addr2},'일반')
-    </insert>
-    
-    
+    </insert>    
     <!-- 회원정보 수정 -->
 	<update id="updateUser" parameterType="com.project.springboot.member.UserDTO">
 	   <choose>
@@ -46,50 +44,87 @@
 	<delete id="deleteUser" parameterType="String">
 	    DELETE FROM USER_INFO WHERE u_id = #{u_id}
 	</delete>
-	
+	<!-- 아이디로 회원 검색 -->
 	<select id="selectOne" resultType="com.project.springboot.member.UserDTO">
 		SELECT * FROM USER_INFO WHERE u_id = #{param1}
 	</select>
-	<!-- 전체조회  -->
+	
+	<!-- 전체조회 (페이징 처리) -->
 	<select id="selectAll" resultType="com.project.springboot.member.UserDTO">
-       SELECT * FROM USER_INFO
-   </select>
-   
-   <!-- 블랙리스트 조회 -->
-   <select id="selectBlacklist" resultType="com.project.springboot.member.UserDTO">
-    	SELECT * FROM USER_INFO WHERE u_authority = 'ROLE_BLACKLIST'
+	   SELECT * FROM ( SELECT ROWNUM RN, A.*
+        FROM (
+            SELECT *
+            FROM USER_INFO
+            WHERE u_authority IN ('ROLE_BLACKLIST', 'ROLE_USER')
+            ORDER BY u_id DESC
+        ) A
+        WHERE ROWNUM &lt;= #{arg0} + #{arg1}
+    ) WHERE RN &gt; #{arg0} 
 	</select>
-   <!--  조회 -->
-   <select id="selectUserlist" resultType="com.project.springboot.member.UserDTO">
-    	SELECT * FROM USER_INFO WHERE u_authority = 'ROLE_USER'
+
+	<!-- 전체 회원 수 조회 -->
+	<select id="selectTotalCount" resultType="int">
+	  SELECT COUNT(*) FROM USER_INFO WHERE u_authority IN ('ROLE_BLACKLIST', 'ROLE_USER')
 	</select>
 	
+	<select id="selectUserlist" resultType="com.project.springboot.member.UserDTO">
+	  SELECT * FROM ( SELECT ROWNUM RN, A.*
+	    FROM (
+	      SELECT *
+	      FROM USER_INFO
+	      WHERE u_authority = 'ROLE_USER'
+	      ORDER BY u_id DESC
+	    ) A
+	    WHERE ROWNUM &lt;= #{arg0} + #{arg1}
+	  ) WHERE RN &gt; #{arg0}
+	</select>
+	<!--  일반 전체조회 -->
+	<select id="selectUserCount" resultType="int">
+	  SELECT COUNT(*) FROM USER_INFO WHERE u_authority ('ROLE_USER')
+	</select>
+
+	<!-- 블랙리스트 페이징처리 -->
+	<select id="selectBlacklist" resultType="com.project.springboot.member.UserDTO">
+		  SELECT * FROM ( SELECT ROWNUM RN, A.*
+		    FROM (
+		      SELECT *
+		      FROM USER_INFO
+		      WHERE u_authority = 'ROLE_BLACKLIST'
+		      ORDER BY u_id DESC
+		    ) A
+		    WHERE ROWNUM &lt;= #{arg0} + #{arg1}
+		  ) WHERE RN &gt; #{arg0}
+	</select>
+	<!-- 블랙 전체조회 -->
+	<select id="selectBlackCount" resultType="int">
+	  SELECT COUNT(*) FROM USER_INFO WHERE u_authority ('ROLE_BLACKLIST')
+	</select>
+	
+	<!-- 검색 및 페이징 -->
+	<!-- 아이디로 회원 검색 -->
+	<select id="searchById" parameterType="java.lang.String" resultType="com.project.springboot.member.UserDTO">
+	    SELECT *
+	    FROM (SELECT ROW_NUMBER() OVER (ORDER BY u_num DESC) RN, u_num, u_id, u_name, u_email, u_address, u_enabled, u_authority
+	          FROM user_info
+	          WHERE u_id LIKE '%' || #{searchId} || '%'
+	          ORDER BY u_num DESC)
+	    WHERE RN BETWEEN #{start} AND #{end}
+	</select>
+
+
+	<!-- 아이디 조회 -->
+	<select id="selectSearchIdCount" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM user_info WHERE u_id LIKE '%' || searchId || '%'
+	</select>
+
+
+
 	<!-- 권한 업데이트 -->
 	<update id="updateAuthority">
 	    UPDATE USER_INFO SET u_authority = #{param2} WHERE u_id = #{param1}
 	</update>
 	
-	<!--  상품 재고 관련 -->
-	<insert id="addStock" parameterType="com.project.springboot.productdto.PCountDTO">
-	    INSERT INTO p_count (P_Barcode, P_Num, P_Sold)
-	    VALUES (
-	      #{barcode},
-	      (SELECT P_Num FROM product_list WHERE P_Barcode = #{barcode}),
-	      'N'
-	    )
-	    ON DUPLICATE KEY UPDATE
-	    P_Num = (SELECT P_Num FROM product_list WHERE P_Barcode = #{barcode}),
-	    P_Sold = 'N';
-	    
-	    UPDATE p_count
-	    SET P_Num = P_Num + #{quantity}
-	    WHERE P_Barcode = #{barcode};
-  </insert>
 	
-	<insert id="insertSnsUser" parameterType="com.project.springboot.oauth2.SnsDTO">
-        INSERT INTO USER_INFO (u_id, u_pw, u_name, u_nick, u_phone, u_zip, u_addr1, u_addr2, u_type )
-         VALUES (#{u_id}, #{u_pw}, #{u_name}, #{u_nick}, #{u_phone}, #{u_zip}, #{u_addr1}, #{u_addr2},'SNS')
-	</insert>
 	
 
    
