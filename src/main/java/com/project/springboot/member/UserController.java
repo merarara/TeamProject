@@ -72,9 +72,12 @@ public class UserController {
     }
     
     // 회원가입 처리
+    @ResponseBody
     @PostMapping("/user/signUp.do")
-    public String signUp(@ModelAttribute UserDTO userDTO, HttpServletRequest req) {
+    public Map<String, String> signUp(@ModelAttribute UserDTO userDTO, HttpServletRequest req) {
         // 이메일 직접입력 시 파라미터로 받겨준다.
+    	Map<String, String> response = new HashMap<>();
+    	System.out.println(userDTO.getU_name());
         String email1 = req.getParameter("email1");
         String email2 = req.getParameter("email2");
         String u_email = email1 + "@" + email2;
@@ -82,7 +85,10 @@ public class UserController {
         String passwd = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(userDTO.getU_pw());
         userDTO.setU_pw(passwd);
         userService.insertUser(userDTO);
-        return "redirect:/auth/login"; // 가입 완료 페이지로 이동
+        
+        response.put("status", "success");
+        
+        return response; // 가입 완료 페이지로 이동
     }
     
     // 아이디 중복
@@ -308,12 +314,12 @@ public class UserController {
         // Additional information retrieval and processing logic
         return "redirect:/snsjoin.jsp";
     }
+    private static final String DENIED_PATH = "/denied.do";
+    // 예외처리
+    @RequestMapping(DENIED_PATH)
+    public String handleAccessDenied() {
+      // 접근 거부 처리 로직
+      return "denied";
+    }
     
-    
-
-    
-	@RequestMapping("/myError.do")
-	public String login2() {		
-		return "auth/error";
-	}
 }

@@ -1,5 +1,6 @@
 package com.project.springboot.security;
 import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+
 import com.project.springboot.oauth2.CustomOAuth2UserService;
 @Configuration
 @EnableWebSecurity
@@ -56,6 +58,7 @@ public class SecurityConfig {
 	    .failureHandler(authenticationFailureHandler)
 	    .usernameParameter("my_id") // default: username
 	    .passwordParameter("my_pass") // default: password
+	    
 	    .permitAll();
 		
 		httpSecurity.logout()
@@ -65,6 +68,7 @@ public class SecurityConfig {
 	        .invalidateHttpSession(true)
 			.permitAll();
 	
+		// 예외처리
 		httpSecurity.exceptionHandling().accessDeniedPage("/denied.do");
 		
 		// ssl을 사용하지 않으면 true로 사용
@@ -82,7 +86,7 @@ public class SecurityConfig {
 		return httpSecurity.build();
 			
 	}
-	
+
    @Autowired
    private DataSource dataSource;
   
@@ -102,7 +106,6 @@ public class SecurityConfig {
    public PasswordEncoder passwordEncoder() {
        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
    } 
-  
    
    
 }
