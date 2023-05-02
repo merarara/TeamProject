@@ -34,7 +34,7 @@ public class SecurityConfig {
 			throws Exception {
 		httpSecurity.authorizeRequests()
 			.antMatchers("/").permitAll()
-			.antMatchers("/css/**","/js/**","/productimgs/**","/userimages/**","/revuploads/**").permitAll()
+			.antMatchers("/css/**","/js/**","/productimgs/**","/userimages/**","/revuploads/**", "/aUpload/**").permitAll()
 			.antMatchers("/guest/**").permitAll()
 			.antMatchers("/user/**").permitAll()
 			.antMatchers("/views/**").permitAll()
