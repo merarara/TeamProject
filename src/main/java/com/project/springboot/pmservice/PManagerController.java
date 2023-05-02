@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.springboot.ppageinfo.MProductPageinfo;
+import com.project.springboot.productdto.BOrderinfoDTO;
+import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
@@ -135,8 +137,33 @@ public class PManagerController {
     
     // 판매관리 페이지 이동
     @RequestMapping("/admin/sellManage.do")
-    public String sellManage(Model model) {
+    public String sellManage(HttpServletRequest req, Model model) {
     	
+    	int nPage = 1;
+    	
+    	String searchword = req.getParameter("searchword");
+    	String searchfield = req.getParameter("searchfield");
+    	
+    	try {
+    		String sPage = req.getParameter("page");
+    		nPage = Integer.parseInt(sPage);
+    	} catch (Exception e) {}
+    	
+    	MProductPageinfo pinfo = pmdao.articleSPage(nPage, searchword, searchfield);
+    	model.addAttribute("page", pinfo);
+    	
+    	nPage = pinfo.getCurPage();
+    	
+    	if (searchword != null && searchword != "") {
+    		model.addAttribute("searchword", searchword);
+    		model.addAttribute("searchfield", searchfield);
+    	}
+    	
+    	List<OrderinfoDTO> list = pmdao.searchSList(nPage, searchword, searchfield);
+    	List<BOrderinfoDTO> blist = pmdao.getBOrder();
+    	
+    	model.addAttribute("orderlist", list);
+    	model.addAttribute("blist", blist);
     	
     	return "admin/sellManage";
     }

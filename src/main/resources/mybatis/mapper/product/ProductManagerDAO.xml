@@ -78,13 +78,25 @@
 	</insert>
 	
 	<!-- 판매 목록 페이징 -->
-	<select id="articleSPageDao">
+	<select id="articleSPageDao" resultType="_int">
 		select count(*) as total from order_info
 	</select>
 	
 	<!-- 판매 목록 -->
-	<select id="searchSListDao">
-		select * from order_info
-		 order by m_num desc
+	<select id="searchSlistDao" resultType="com.project.springboot.productdto.OrderinfoDTO">
+		select * 
+		  from (
+		  		select rownum num, A.*
+		  		  from (
+		  		  		select *
+		  		  		  from order_info
+		  		  		 order by m_num desc
+		  		  		) A
+		  		  where rownum <![CDATA[<=]]> #{nEnd} ) B
+		  where B.num <![CDATA[>=]]> #{nStart}
+	</select>
+	
+	<select id="getBOrderDao" resultType="com.project.springboot.productdto.BOrderinfoDTO">
+		select * from b_orderinfo
 	</select>
 </mapper>
