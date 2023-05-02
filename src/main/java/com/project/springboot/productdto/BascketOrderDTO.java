@@ -8,4 +8,7 @@ public class BascketOrderDTO {
 	private String o_addr;
 	private int o_price;
 	private int o_qty;
+	private int o_num;
+	private String o_payment;
+	private java.sql.Date o_bdate;
 }

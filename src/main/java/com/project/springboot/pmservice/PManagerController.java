@@ -109,4 +109,27 @@ public class PManagerController {
     	
     	return barcodeList;
     }
+    
+    // 바코드번호 추가
+    @ResponseBody
+    @RequestMapping("/admin/addBarcode.do")
+    public Map<String, String> addBarcode (HttpServletRequest req) {
+    	int p_num = Integer.parseInt(req.getParameter("p_num"));
+    	String barcode = req.getParameter("barcode");
+    	
+    	System.out.println(p_num);
+    	System.out.println(barcode);
+    	
+    	int result = pmdao.addBarcode(p_num, barcode);
+    	
+    	Map<String, String> response = new HashMap<>();
+    	
+    	if (result == 1) {
+    		response.put("status", "success");
+    	} else {
+    		response.put("status", "fail");
+    	}
+    	
+    	return response;
+    }
 }

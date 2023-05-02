@@ -27,4 +27,7 @@ public interface PManagerDao {
 	
 	// 바코드번호 가져오기
 	public List<String> getBarcodeListDao(int p_num);
+	
+	// 바코드번호 추가
+	public int addBarcodeDao(int p_num, String barcode);
 }

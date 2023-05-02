@@ -11,4 +11,7 @@ public class OrderinfoDTO {
 	private int m_qty;
 	private String p_name;
 	private int p_price;
+	private int m_num;
+	private java.sql.Date m_bdate;
+	private String m_payment;
 }

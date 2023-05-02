@@ -70,4 +70,10 @@
 		 where p_sold = 'N'
 		   and p_num = #{param1}
 	</select>
+	
+	<!-- 바코드 번호 추가 -->
+	<insert id="addBarcodeDao">
+		insert into p_count (p_num, p_barcode)
+		values (#{param1}, #{param2})
+	</insert>
 </mapper>

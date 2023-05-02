@@ -25,4 +25,7 @@ public interface IPManagerDaoService {
 	
 	// 바코드번호 가져오기
 	public List<String> getBarcodeList(int p_num);
+	
+	// 바코드 번호 추가
+	public int addBarcode(int p_num, String barcode);
 }

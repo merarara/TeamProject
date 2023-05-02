@@ -58,6 +58,17 @@ public class PManagerDaoService implements IPManagerDaoService {
 	}
 	
 	@Override
+	public int addBarcode(int p_num, String barcode) {
+		int result = dao.addBarcodeDao(p_num, barcode);
+		
+		if (result == 1) {
+			dao.updateCountDao(p_num);
+		}
+		
+		return result;
+	}
+	
+	@Override
 	public MProductPageinfo articleMPage(int curpage, String searchword, String searchfield) {
 		int totalCount = 0;
 		totalCount = dao.articleMPageDao(searchword, searchfield);
