@@ -21,7 +21,7 @@ public interface C_BoardService {
 	// 게시물 삭제
 	public void delete(int bno) throws Exception;
 	
-	
+	public String c_sfile(int c_num) throws Exception;
 	
 	// 게시물 총 갯수
 	public int count() throws Exception;
@@ -42,4 +42,6 @@ public interface C_BoardService {
 	
 	//조회수 증가
 	public void updateVisitCount(int c_num);
+
+	public void c_sfile(C_BoardVO vo) throws Exception;
 }

@@ -52,7 +52,7 @@
 	          <a class="nav-link" href="/aboard/aboardlist.do">공지사항</a>
 	        </li>
 	        <li class="nav-item">
-	          <a class="nav-link" href="/cboard/list.do">커뮤니티</a>
+	          <a class="nav-link" href="/cboard/list.do?num=1">커뮤니티</a>
 	        </li>
 	        <li class="nav-item">
 	          <a class="nav-link" href="/fboard/fboardlist.do">FAQ</a>

@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 <style>
 <style>
@@ -57,30 +57,93 @@ function showBarcodes(elem) {
 	  } else {
 	    barcodes.style.display = "none";
 	  }
+}
+
+function doDeleteCnt(barcode, p_num) {
+	if (confirm("정말 제거하시겠습니까?")) {
+		$.ajax({
+			type: 'POST',
+			url: '/admin/deleteCount.do',
+			data: {
+				barcode: barcode,
+				p_num: p_num
+			},
+			success: function (data) {
+				if (data.status == "success") {
+					alert(barcode + " 상품이 제거 되었습니다.");
+
+					 // 삭제 대상 요소 찾기
+                    var targetElem = $('td:contains(' + barcode + ')').closest('tr');
+
+                    // 해당 요소 삭제
+                    targetElem.remove();
+                    
+                 	// 재고 수량 업데이트
+					var countElem = document.getElementById("count_" + p_num);
+					countElem.innerHTML = parseInt(countElem.innerHTML) - 1;
+				} else {
+					alert("삭제하는도중 오류가 발생하였습니다.");
+				}
+			}
+		});	
 	}
+}
 </script>
 </head>
 <body>
 <%@ include file="../header.jsp" %>	
 <div id="content">
-	<ul class="list" style="width: 70%; margin: 0 auto;">
-	  <c:forEach items="${plist}" var="i">
-	    <li class="list-item">
-	      <h3 onclick="showBarcodes(this)">상품명: ${i.p_name}</h3>
-	      재고 : ${i.p_count }
-	      <div class="barcodes">
-	        <ul>
-	          <c:forEach items="${pcnt}" var="j">
-	            <c:if test="${i.p_num == j.p_num}">
-	              <li>${j.p_barcode} ${j.p_sold }</li>
-	            </c:if>
-	          </c:forEach>
-	        </ul>
-	      </div>
-	      <p>상품번호: ${i.p_num}</p>
-	    </li>
-	  </c:forEach>
-	</ul>
+	<div class="col-md-4 offset-md-4" style="margin-top: 10px; margin-bottom: 10px;">
+		<form action="/admin/searchProduct.do" id="searchFrm" name="searchFrm">
+	    	<input type="hidden" name="type" value="search">
+	      	<div class="input-group">
+	      		<a href="/admin/productManagement.do">
+	      			<button class="btn btn-outline-primary float-left">돌아가기</button>
+	      		</a>
+	      		&nbsp;&nbsp;
+	        	<select class="form-select" name="searchfield" id="searchfield">
+	          		<option value="p_name">상품명</option>
+	          		<option value="p_num">상품번호</option>
+	        	</select>
+	        	&nbsp;&nbsp;
+	        	<input type="search" class="form-control" name="searchword" id="searchword" placeholder="검색어를 입력하세요">
+	        	&nbsp;&nbsp;
+	        	<button class="btn btn-secondary" type="submit">검색</button>
+	      	</div>
+	    </form>
+	</div>
+	<dl class="list" style="width: 70%; margin: 0 auto;">
+	  	<c:forEach items="${plist}" var="i">
+	    	<dd class="list-item">
+	      		<h3 onclick="showBarcodes(this)" style="color: #0067A3;">상품명: ${i.p_name}</h3>
+	      		<div class="barcodes">
+	      			재고: <span id="count_${i.p_num}">${i.p_count}</span>
+			  		<table class="table" style="margin-top: 10px; margin-bottom: 10px;">
+			    		<thead>
+			      			<tr>
+			        			<th>코드번호</th>
+			      			</tr>
+			    		</thead>
+			    		<tbody>
+			      		<c:forEach items="${pcnt}" var="j">
+			        		<c:if test="${i.p_num == j.p_num}">
+			          		<tr>
+			            		<td>
+			            			${j.p_barcode}
+			            			<span class="float-right">
+			            				<button class="btn btn-outline-danger" onclick="doDeleteCnt('${j.p_barcode }', '${i.p_num }');">삭제</button>
+			            			</span>
+			            		</td>
+			          		</tr>
+			        		</c:if>
+			      		</c:forEach>
+			    		</tbody>
+			  		</table>
+				</div>
+	      		<h6 style="color: #800010;">상품번호: ${i.p_num}</h6>
+	    	</dd>
+	  	</c:forEach>
+	</dl>
 	<table style="margin: 0 auto;">
 		<tr>
 			<td colspan="5" style="text-align: center;">
@@ -90,7 +153,7 @@ function showBarcodes(elem) {
 			      		<button class="btn btn-link text-dark" disabled>&lt;&lt;</button>
 			    	</c:when>
 				    <c:otherwise>
-				      	<a href="/admin/searchProduct.do?page=1" 
+				      	<a href="/admin/searchProduct.do?page=1&searchword=${ searchword }&searchfield=${ searchfield }" 
 				      		class="btn btn-link text-dark">
 				      		&lt;&lt;
 				      	</a>
@@ -103,7 +166,7 @@ function showBarcodes(elem) {
 				      	<button class="btn btn-link text-dark pagingbtn" disabled>&lt;</button>
 				    </c:when>
 				    <c:otherwise>
-				      	<a href="/admin/searchProduct.do?page=${page.curPage - 1}" 
+				      	<a href="/admin/searchProduct.do?page=${page.curPage - 1}&searchword=${ searchword }&searchfield=${ searchfield }" 
 				      		class="btn btn-link text-dark pagingbtn">
 				      		&lt;
 				      	</a>
@@ -117,7 +180,7 @@ function showBarcodes(elem) {
 				        	<button class="btn btn-link text-dark pagingbtn" disabled>${fEach}</button>
 				      	</c:when>
 				      	<c:otherwise>
-				        	<a href="/admin/searchProduct.do?page=${fEach}" 
+				        	<a href="/admin/searchProduct.do?page=${fEach}&searchword=${ searchword }&searchfield=${ searchfield }" 
 				        		class="btn btn-link text-dark pagingbtn">
 				        		${fEach}
 				        	</a>
@@ -131,7 +194,7 @@ function showBarcodes(elem) {
 				      	<button class="btn btn-link text-dark pagingbtn" disabled>&gt;</button>
 				    </c:when>
 				    <c:otherwise>
-				      	<a href="/admin/searchProduct.do?page=${page.curPage + 1}" 
+				      	<a href="/admin/searchProduct.do?page=${page.curPage + 1}&searchword=${ searchword }&searchfield=${ searchfield }" 
 					      	class="btn btn-link text-dark pagingbtn">
 					      	&gt;
 				      	</a>
@@ -144,7 +207,7 @@ function showBarcodes(elem) {
 				      	<button class="btn btn-link text-dark pagingbtn" disabled>&gt;&gt;</button>
 				    </c:when>
 				    <c:otherwise>
-				      	<a href="/admin/searchProduct.do?page=${page.totalPage}" 
+				      	<a href="/admin/searchProduct.do?page=${page.totalPage}&searchword=${ searchword }&searchfield=${ searchfield }" 
 				      		class="btn btn-link text-dark pagingbtn">
 				      		&gt;&gt;
 				      	</a>

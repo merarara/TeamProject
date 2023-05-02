@@ -39,6 +39,11 @@ public class SecurityConfig {
 		httpSecurity.authorizeRequests()
 			.antMatchers("/").permitAll()
 			.antMatchers("/css/**","/js/**","/productimgs/**","/userimages/**","/revuploads/**","/favicon.ico").permitAll()
+
+			.antMatchers("/css/**","/js/**","/productimgs/**","/userimages/**","/revuploads/**","/uploads/**").permitAll()
+
+			.antMatchers("/css/**","/js/**","/productimgs/**","/userimages/**","/revuploads/**", "/aUpload/**").permitAll()
+
 			.antMatchers("/guest/**").permitAll()
 			.antMatchers("/user/**").permitAll()
 			.antMatchers("/views/**").permitAll()

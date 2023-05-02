@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.springboot.ppageinfo.MProductPageinfo;
-import com.project.springboot.ppageinfo.PPageInfo;
 import com.project.springboot.productdto.PCountDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
@@ -21,11 +20,11 @@ public class PManagerDaoService implements IPManagerDaoService {
 	private int plistMPblock = 5;
 	
 	@Override
-	public List<ProductlistDTO> searchPlist(int curpage) {
+	public List<ProductlistDTO> searchPlist(int curpage, String searchword, String searchfield) {
 		int nStart = (curpage - 1) * plistMPsize + 1;
 		int nEnd = (curpage - 1) * plistMPsize + plistMPsize;
 		
-		List<ProductlistDTO> plist = dao.searchPlistDao(nEnd, nStart); 
+		List<ProductlistDTO> plist = dao.searchPlistDao(nEnd, nStart, searchword, searchfield); 
 		
 		return plist;
 	}
@@ -38,9 +37,30 @@ public class PManagerDaoService implements IPManagerDaoService {
 	}
 	
 	@Override
-	public MProductPageinfo articleMPage(int curpage) {
+	public int deleteCount(String barcode, int p_num) {
+		int result = dao.deleteCountDao(barcode);
+		
+		System.out.println(result);
+		
+		if (result == 1) {
+			dao.updateCountDao(p_num);
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public List<String> getBarcodeList(int p_num) {
+		
+		List<String> barcodeList = dao.getBarcodeListDao(p_num);
+		
+		return barcodeList;
+	}
+	
+	@Override
+	public MProductPageinfo articleMPage(int curpage, String searchword, String searchfield) {
 		int totalCount = 0;
-		totalCount = dao.articleMPageDao();
+		totalCount = dao.articleMPageDao(searchword, searchfield);
 		
 		// 총 페이지 수
 		int totalPage = totalCount / plistMPsize;
