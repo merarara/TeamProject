@@ -79,7 +79,6 @@ function toggleLike() {
 				<img src="../aUpload/${file.key }" width="200" height="150" />
 				<tr><a href="/aboard/download.do?savedFile=${file.key }&oriFile=원본파일명${vs.count }.jpg">[다운로드]</a></tr>
 			</c:forEach>
-			<button type="button" onclick="toggleLike()">좋아요</button>
         </td>
     </tr>
     <!-- 하단 메뉴(버튼) -->
@@ -101,6 +100,12 @@ function toggleLike() {
         </td>
     </tr>
 </table>
+<form action="/aboard/like.do?a_num=${aboardDto.a_num}" method="post">
+    <input type="submit" value="좋아요">
+</form>
+<form action="/aboard/unlike.do?a_num=${aboardDto.a_num}" method="post">
+    <input type="submit" value="싫어요">
+</form>
 <%-- <table border="1">
 		<tr>
 			<th>이미지</th>

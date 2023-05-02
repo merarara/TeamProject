@@ -20,10 +20,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
@@ -68,7 +68,6 @@ public class AboardController {
 		
 		BpageInfo pinfo = asv.articlePage(nPage);
 		model.addAttribute("page", pinfo);
-		
 		
 		//DAO(Mapper)의 select() 메서드를 호출해서 회원목록을 인출 
 		model.addAttribute("aboardLists", asv.selectA(nPage));		
@@ -281,22 +280,41 @@ public class AboardController {
 	        e.printStackTrace();
 	    }
 	}
-	// 좋아요 기능
-	@RequestMapping(value = "/aboard/toggleLike.do", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> toggleLike(@RequestParam("a_num") int a_num, HttpSession session) {
-
-	    UserDTO user = (UserDTO)session.getAttribute("user");
-	    if(user == null) {
-	        Map<String, Object> result = new HashMap<String, Object>();
-	        result.put("loginRequired", true);
-	        return result;
-	    }
-
-	    Map<String, Object> result = asv.toggleLike(a_num, user.getU_id());
-
-	    return result;
-	}
+	
+	 @PostMapping("/aboard/like.do")
+	 public String addLike(HttpServletRequest req, HttpSession session) {
+		 int a_num = Integer.parseInt(req.getParameter("a_num"));
+		  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+          String u_id = authentication.getName(); // 사용자 id
+ 		 if (u_id == null) {
+ 			return "redirect:/auth/login.do";
+	     }
+	 	 int result = asv.addLike(a_num, u_id);
+         if (result == 1) {
+        	 return "redirect:/aboard/aboardview.do?a_num=" + a_num;
+         } else {
+        	 return "redirect:/aboard/aboardview.do?a_num=" + a_num;
+         }
+     }
+	 
+	 @PostMapping("/aboard/unlike.do")
+	 public String removeLike(HttpServletRequest req, HttpSession session) {
+	     // HttpSession에서 로그인 정보인 user_id를 가져온다.
+		 int a_num = Integer.parseInt(req.getParameter("a_num"));
+		 
+		  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+          String u_id = authentication.getName(); // 사용자 id
+	     if (u_id == null) {
+	         // 로그인하지 않은 경우 처리
+	         return "redirect:/auth/login.do";
+	     } else {
+	         // 좋아요 정보를 삭제한다.
+	         asv.removeLike(a_num, u_id);
+	         // 게시글의 좋아요 수를 갱신한다.
+	         int a_like = asv.getLikeCount(a_num);
+	         return "redirect:/aboard/aboardview.do?a_num=" + a_num;
+	     }
+	 }
 
 }
 	

@@ -104,10 +104,25 @@
     UPDATE a_board SET a_visitcount=a_visitcount+1 WHERE a_num=#{a_num}
 	</update>
 	
-	<!-- 좋아요 증가 -->
-	<update id="updateLikeCount" parameterType="string">
-	    UPDATE a_board SET a_likecount=a_likecount+1 WHERE a_num=#{a_num}
-	</update>
+	<!-- 좋아요 삽입 -->
+	<insert id="insertLike" parameterType="map">
+	  INSERT INTO a_board_like (a_num, u_id) VALUES (#{a_num}, #{u_id})
+	</insert>
 	
+	<!-- 좋아요 삭제 -->
+	<delete id="deleteLike" parameterType="map">
+	  DELETE FROM a_board_like WHERE a_num = #{a_num} AND u_id = #{u_id}
+	</delete>
+	
+	<!-- 해당 게시글의 좋아요 개수 조회 -->
+	<!-- <select id="getLikeCount" resultType="int" parameterType="int">
+	  SELECT COUNT(*) FROM a_board_like WHERE a_num = #{a_num}
+	</select> -->
+	
+	<update id="getLikeCount"  parameterType="int">
+	  UPDATE a_board SET a_like = (
+    SELECT COUNT(*) FROM a_board_like WHERE a_num = #{a_num}
+	) WHERE a_num = #{a_num}
+	</update>
 	
 </mapper>

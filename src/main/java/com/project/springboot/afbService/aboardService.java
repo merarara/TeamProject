@@ -3,6 +3,7 @@ package com.project.springboot.afbService;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.project.springboot.aboard.aboardDTO;
 
@@ -20,16 +21,13 @@ public interface aboardService {
 	public int articlePageDao(int curPage);
 	// 조회수 증가
 	public void updateVisitCount(String a_num);
-	// 좋아요 증가
-    public void updateLikeCount(String a_num);
-    
-    public int insertLike(int a_num, String u_id);
-    public int deleteLike(String a_num, String u_id);
-	public int selectLikeCount(int a_num);
-	public Object selectLike(int a_num, String u_id);
-	public int deleteLike(int a_num, String u_id);
-	public void updateLikeCount(int a_num, int updatedLikeCount);
 	
+	public int insertLike(@Param("a_num") int a_num, @Param("u_id") String u_id) ;
+	public int deleteLike(@Param("a_num") int a_num, @Param("u_id") String u_id);
 	
+	// 좋아요 수 가져오기
+	public int getLikeCount(@Param("a_num") int a_num);
+	
+	aboardDTO getAboard(int a_num);
 
 }
