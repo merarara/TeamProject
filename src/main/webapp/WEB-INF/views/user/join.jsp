@@ -16,7 +16,14 @@
 <!--  API기능  -->
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://www.google.com/recaptcha/enterprise.js?render=6Lfd49MlAAAAANS-AmiQi_nazkcpIKwod-M9Q4eB"></script>
 <script>
+// 리캡챠
+grecaptcha.enterprise.ready(function() {
+    grecaptcha.enterprise.execute('6Lfd49MlAAAAANS-AmiQi_nazkcpIKwod-M9Q4eB', {action: 'login'}).then(function(token) {
+       ...
+    });
+});
 /* 주소 API를 통해 DB에 값 넣는 기능 */
 function execution_daum_address(e) {
 	 e.preventDefault(); // 기본 이벤트 발생 방지
@@ -235,7 +242,7 @@ function validateForm(event) {
                                    </select>
                                    <!-- 이메일 인증 버튼 -->
                                </div>
-                               <button type="button" class="btn-certi " onclick="sendEmail()" >인증하기</button>
+                               <!-- <button type="button" class="btn-certi " onclick="sendEmail()" >인증하기</button> -->
                    </div>
                    <div class="address_wrap form_group">
                        <div class="address_input_wrap ">
@@ -263,6 +270,10 @@ function validateForm(event) {
                            </div>
                        </div>
                    </div>
+					<div id="google_recaptha">
+					<script src='https://www.google.com/recaptcha/api.js'></script>
+					<div class="g-recaptcha" data-sitekey="6LeDHNQlAAAAAFS1lpWcwEd4WMADWCVMEgOM7-Qx"></div>
+					</div>
                    <div class="btn_wrap">
                        <button type="button" id ="signupBtn" class="btn-submit " onclick="signUp()">가입 완료</button>
                    </div>

@@ -49,17 +49,24 @@
 		SELECT * FROM USER_INFO WHERE u_id = #{param1}
 	</select>
 	
+	<select id="searchUser" resultType="com.project.springboot.member.UserDTO">
+		SELECT * FROM USER_IFN WHERE u_id LIKE '%${searchId}%'
+	</select>
+	
 	<!-- 전체조회 (페이징 처리) -->
 	<select id="selectAll" resultType="com.project.springboot.member.UserDTO">
 	   SELECT * FROM ( SELECT ROWNUM RN, A.*
         FROM (
             SELECT *
             FROM USER_INFO
-            WHERE u_authority IN ('ROLE_BLACKLIST', 'ROLE_USER')
+            WHERE u_authority IN ('ROLE_BLACKLIST', 'ROLE_USER') 
+            <if test="searchId != null and searchId != ''">
+            and u_id LIKE '%${searchId}%'
+            </if>
             ORDER BY u_id DESC
         ) A
-        WHERE ROWNUM &lt;= #{arg0} + #{arg1}
-    ) WHERE RN &gt; #{arg0} 
+        WHERE ROWNUM &lt;= #{offset} + #{limit}
+    ) WHERE RN &gt; #{offset} 
 	</select>
 
 	<!-- 전체 회원 수 조회 -->
@@ -69,14 +76,17 @@
 	
 	<select id="selectUserlist" resultType="com.project.springboot.member.UserDTO">
 	  SELECT * FROM ( SELECT ROWNUM RN, A.*
-	    FROM (
-	      SELECT *
-	      FROM USER_INFO
-	      WHERE u_authority = 'ROLE_USER'
-	      ORDER BY u_id DESC
-	    ) A
-	    WHERE ROWNUM &lt;= #{arg0} + #{arg1}
-	  ) WHERE RN &gt; #{arg0}
+        FROM (
+            SELECT *
+            FROM USER_INFO
+            WHERE u_authority = 'ROLE_USER' 
+            <if test="searchId != null and searchId != ''">
+            and u_id LIKE '%${searchId}%'
+            </if>
+            ORDER BY u_id DESC
+        ) A
+        WHERE ROWNUM &lt;= #{offset} + #{limit}
+    ) WHERE RN &gt; #{offset}
 	</select>
 	<!--  일반 전체조회 -->
 	<select id="selectUserCount" resultType="int">
@@ -86,45 +96,27 @@
 	<!-- 블랙리스트 페이징처리 -->
 	<select id="selectBlacklist" resultType="com.project.springboot.member.UserDTO">
 		  SELECT * FROM ( SELECT ROWNUM RN, A.*
-		    FROM (
-		      SELECT *
-		      FROM USER_INFO
-		      WHERE u_authority = 'ROLE_BLACKLIST'
-		      ORDER BY u_id DESC
-		    ) A
-		    WHERE ROWNUM &lt;= #{arg0} + #{arg1}
-		  ) WHERE RN &gt; #{arg0}
+        FROM (
+            SELECT *
+            FROM USER_INFO
+            WHERE u_authority = 'ROLE_BLACKLIST' 
+            <if test="searchId != null and searchId != ''">
+            and u_id LIKE '%${searchId}%'
+            </if>
+            ORDER BY u_id DESC
+        ) A
+        WHERE ROWNUM &lt;= #{offset} + #{limit}
+    ) WHERE RN &gt; #{offset}
 	</select>
 	<!-- 블랙 전체조회 -->
 	<select id="selectBlackCount" resultType="int">
 	  SELECT COUNT(*) FROM USER_INFO WHERE u_authority ('ROLE_BLACKLIST')
 	</select>
 	
-	<!-- 검색 및 페이징 -->
-	<!-- 아이디로 회원 검색 -->
-	<select id="searchById" parameterType="java.lang.String" resultType="com.project.springboot.member.UserDTO">
-	    SELECT *
-	    FROM (SELECT ROW_NUMBER() OVER (ORDER BY u_num DESC) RN, u_num, u_id, u_name, u_email, u_address, u_enabled, u_authority
-	          FROM user_info
-	          WHERE u_id LIKE '%' || #{searchId} || '%'
-	          ORDER BY u_num DESC)
-	    WHERE RN BETWEEN #{start} AND #{end}
-	</select>
-
-
-	<!-- 아이디 조회 -->
-	<select id="selectSearchIdCount" parameterType="String" resultType="int">
-		SELECT COUNT(*) FROM user_info WHERE u_id LIKE '%' || searchId || '%'
-	</select>
-
-
-
 	<!-- 권한 업데이트 -->
 	<update id="updateAuthority">
 	    UPDATE USER_INFO SET u_authority = #{param2} WHERE u_id = #{param1}
 	</update>
-	
-	
 	
 
    

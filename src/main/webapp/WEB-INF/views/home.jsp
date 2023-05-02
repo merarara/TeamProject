@@ -19,7 +19,6 @@
 <c:if test="${not empty sessionScope.userId}">
   <div>${sessionScope.userId}</div>
 </c:if>
-
 </div>
 <%@ include file="./footer.jsp" %>
 

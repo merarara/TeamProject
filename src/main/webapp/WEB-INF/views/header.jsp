@@ -25,26 +25,16 @@
               <a class="nav-link" href="/user/main.do">로그인</a>
             </li>
           </s:authorize>
-          <s:authorize access="hasRole('USER')">
-              <li class="nav-item">
+			<s:authorize access="hasAnyRole('USER', 'BLACKLIST', 'ADMIN')">
+			    <li class="nav-item">
+			        <!-- 로그아웃 버튼 -->
+			        <form action="${pageContext.request.contextPath}/logout" method="post">
+			            <input type="submit" value="로그아웃">
+			        </form>
+			    </li>
+			</s:authorize>
 
-              <!-- 로그아웃 버튼 -->
-				<form action="${pageContext.request.contextPath}/logout" method="post">
-				    <input type="submit" value="로그아웃">
-				</form>
 
-            </li>
-          </s:authorize>
-          <s:authorize access="hasRole('ADMIN')">
-              <li class="nav-item">
-
-              <!-- 로그아웃 버튼 -->
-				<form action="${pageContext.request.contextPath}/logout" method="post">
-				    <input type="submit" value="로그아웃">
-				</form>
-
-            </li>
-          </s:authorize>
 	        <li class="nav-item">
 	          <a class="nav-link" href="/product/productlist.do">판매제품</a>
 	        </li>
@@ -57,6 +47,11 @@
 	        <li class="nav-item">
 	          <a class="nav-link" href="/fboard/fboardlist.do">FAQ</a>
 	        </li>
+	        <s:authorize access="hasAnyRole('USER', 'BLACKLIST')">
+              <li class="nav-item">
+               <a class="nav-link" href="/product/productbascket.do">장바구니</a>
+           	  </li>
+          </s:authorize>
 	        <s:authorize access="hasRole('ADMIN')">
 	        <li class="nav-item">
 	          <a class="nav-link" href="/admin/adminPage.do">관리자페이지</a>

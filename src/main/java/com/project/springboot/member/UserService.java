@@ -36,6 +36,13 @@ public class UserService {
         UserDTO dto = userMapper.selectOne(u_id);
         return dto;
     }
+    // 회원 검색 
+    @Transactional(readOnly = true)
+    public List<UserDTO> searchUser(String searchId) {
+        List<UserDTO> userList = userMapper.searchUser(searchId);
+        return userList;
+    }
+
 
     // 닉네임 조회
     @Transactional
@@ -46,29 +53,18 @@ public class UserService {
     
     // 전체 회원 조회 (페이징 처리)
     @Transactional
-    public List<UserDTO> selectAll(int offset, int limit) {
-        return userMapper.selectAll(offset, limit);
+    public List<UserDTO> selectAll(int offset, int limit, String searchId) {
+        return userMapper.selectAll(offset, limit, searchId);
     }
     @Transactional
     public int selectTotalCount() {
         return userMapper.selectTotalCount();
     }
-    // 아이디로 회원 검색 (페이징 처리)
-    @Transactional
-    public List<UserDTO> searchById(String searchId, int offset, int limit) {
-    return userMapper.searchById(searchId, offset, limit);
-    }
-
-    // 아이디로 검색한 회원 수 조회
-    @Transactional
-    public int selectSearchIdCount(String searchId) {
-    return userMapper.selectSearchIdCount(searchId);
-    }
 
     // 일반회원 조회
     @Transactional
-    public List<UserDTO> selectUserlist(int offset, int limit) {
-    	return userMapper.selectUserlist(offset, limit);
+    public List<UserDTO> selectUserlist(int offset, int limit, String searchId) {
+    	return userMapper.selectUserlist(offset, limit, searchId);
     }
     @Transactional
     public int selectUserCount() {
@@ -77,8 +73,8 @@ public class UserService {
     
     // 블랙리스트 조회
     @Transactional
-    public List<UserDTO> selectBlacklist(int offset, int limit) {
-    	return userMapper.selectBlacklist(offset, limit);
+    public List<UserDTO> selectBlacklist(int offset, int limit, String searchId) {
+    	return userMapper.selectBlacklist(offset, limit, searchId);
     }
     @Transactional
     public int selectBlackCount() {
@@ -95,4 +91,7 @@ public class UserService {
     public void insertSnsUser(SnsDTO snsDTO) {
         userMapper.insertSnsUser(snsDTO);
     }
+    
+
+    
 }
