@@ -3,6 +3,8 @@ package com.project.springboot.member;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +13,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     @Autowired
     private UserMapper userMapper;
+    // 이메일 인증
+    @Autowired
+    private JavaMailSender javaMailSender;
+    
+    public void sendEmail(String toEmail, String subject, String body) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("sender-email@example.com"); // 발신자 이메일 주소
+        message.setTo(toEmail); // 수신자 이메일 주소
+        message.setSubject(subject); // 이메일 제목
+        message.setText(body); // 이메일 본문
+
+        javaMailSender.send(message); // 이메일 보내기
+    }
 
     // 회원가입
     @Transactional
