@@ -35,22 +35,24 @@
     <tr>
         <td>내용</td>
         <td colspan="3" height="100">${ view.c_content }
-        <c:if test="${ isImage eq true }">
-        	<p>
-        		<img src="../static/Uploads/${view.c_sfile }" style="max-width:500px;" />
-        	</p>
-        </c:if></td>
+        <c:forEach items="${fileMap }" var="file" varStatus="vs">
+	        <c:if test="${ isImage eq true }">
+	        	<p>
+	        		<img src="/static/Uploads/${file.key }" style="max-width:500px;" />
+	        	</p>
+	        </c:if>
+        </c:forEach>
+        </td>
         <!-- 첨부한 파일이 이미지라면 img태그로 화면에 출력한다. -->
         
     </tr> 
     <tr>
         <td>첨부파일</td>
-        <td>          
- 	       	<c:if test="${ not empty view.c_ofile }">
-        	${ view.c_ofile }
-        	<a href="/cboard/download.do?C_ofile=${ view.c_ofile }&C_sfile=${ view.c_sfile }$C_num=${ view.c_num }">[다운로드]</a>
-        	</c:if>                            
-        </td>
+        <c:forEach items="${fileMap }" var="file" varStatus="vs">
+		<tr>
+			<td><a href="cboard/?savedFile=${file.key }&oriFile=원본파일명${vs.count }.jpg">[다운로드]</a></td>
+		</tr>
+		</c:forEach>
          <td>다운로드수</td>
         <td>${ view.c_downcount }</td>
     </tr> 

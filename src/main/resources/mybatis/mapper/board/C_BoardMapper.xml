@@ -6,8 +6,10 @@
 
 	<!-- 게시물 목록 -->
 <select id="list" resultType="com.project.springboot.cboard.C_BoardVO">
+	/* list */
 	select
 		c_num, c_title, c_content, u_id, c_postdate, c_visitcount from c_board
+	order by c_num desc
 </select>
 
 <!-- 게시물 작성 -->
@@ -51,12 +53,16 @@
 
 <!-- 게시물 목록 + 페이징 -->
 <select id="listPage" parameterType="com.project.springboot.cboard.C_Page" resultType="com.project.springboot.cboard.C_BoardVO">
-	select
-		c_num, c_title, u_id, c_postdate, c_visitcount
-	from c_board
-	order by c_num desc
-		limit #{displayPost, jdbcType=INTEGER}, #{postNum, jdbcType=INTEGER}
+  SELECT rn, c_num, c_title, u_id, c_postdate, c_visitcount
+  FROM (
+    SELECT 
+      ROWNUM rn c_num, c_title, u_id, c_postdate, c_visitcount
+    FROM
+      C_BOARD
+    WHERE ROWNUM <![CDATA[ <= ]]>20
+  ) WHERE rn > 10;
 </select>
+
 
 <!-- update visit count -->
 <update id="updateVisitCount" parameterType="int">

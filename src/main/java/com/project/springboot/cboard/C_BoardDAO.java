@@ -41,6 +41,8 @@ public interface C_BoardDAO {
 	public int searchCount(String searchType, String keyword) throws Exception;
 	//조회수증가
 	public static void updateVisitCount(int c_num) {}
+
+	public void c_sfile(C_BoardVO vo);
 	
 	
 	

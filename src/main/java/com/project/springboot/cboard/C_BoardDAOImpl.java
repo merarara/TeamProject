@@ -100,6 +100,12 @@ public class C_BoardDAOImpl implements C_BoardDAO {
 		return sql.selectOne(namespace + ".searchCount", data);	
 	}
 
+	@Override
+	public void c_sfile(C_BoardVO vo)
+	{
+		
+	}
+
 	
 
 

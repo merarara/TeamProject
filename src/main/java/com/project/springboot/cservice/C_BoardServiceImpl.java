@@ -45,8 +45,8 @@ public class C_BoardServiceImpl implements C_BoardService {
 
 	// 게시물 삭제
 	@Override
-	public void delete(int bno) throws Exception {
-		dao.delete(bno);
+	public void delete(int c_num) throws Exception {
+		dao.delete(c_num);
 	}
 
 	
@@ -85,5 +85,17 @@ public class C_BoardServiceImpl implements C_BoardService {
 	    return;
 	}
 
+	@Override
+	public void c_sfile(C_BoardVO vo) throws Exception {
+	    dao.c_sfile(vo);
+	}
+
+	@Override
+	public String c_sfile(int c_num) throws Exception
+	{
+		return null;
+	}
+
+	
 
 }
