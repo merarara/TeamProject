@@ -71,6 +71,7 @@
 	    VALUES (seq_aboard_num.nextval, #{u_id}, #{u_nick}, #{a_title}, #{a_content}, 0)
 	</insert>
 	
+	
 	<!-- 공지사항 게시글 인출 -->	 
 	<select id="selectOneA" 
 		parameterType="com.project.springboot.aboard.aboardDTO"
@@ -90,12 +91,23 @@
   		delete from a_board where a_num=#{a_num}
 	</delete>
 	
+	<!-- 검색 기능 -->
 	<select id="searchAboard" parameterType="hashmap" resultType="com.project.springboot.aboard.aboardDTO">
 	    SELECT *
 	    FROM a_board
 	    WHERE ${param1} like '%'|| #{param2} || '%'
 	    ORDER BY a_num DESC
 	</select>	
+	
+	<!-- 조회수 증가 -->
+	<update id="updateVisitCount" parameterType="java.lang.String">
+    UPDATE a_board SET a_visitcount=a_visitcount+1 WHERE a_num=#{a_num}
+	</update>
+	
+	<!-- 좋아요 증가 -->
+	<update id="updateLikeCount" parameterType="string">
+	    UPDATE a_board SET a_likecount=a_likecount+1 WHERE a_num=#{a_num}
+	</update>
 	
 	
 </mapper>

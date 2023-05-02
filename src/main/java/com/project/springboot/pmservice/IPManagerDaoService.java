@@ -12,11 +12,17 @@ import com.project.springboot.productdto.ProductlistDTO;
 public interface IPManagerDaoService {
 	
 	// 재고 관리 페이지 설정
-	public MProductPageinfo articleMPage(int curPage);
+	public MProductPageinfo articleMPage(int curPage, String searchword, String searchfield);
 	
 	// 상품 검색
-	public List<ProductlistDTO> searchPlist(int curPage);
+	public List<ProductlistDTO> searchPlist(int curPage, String searchword, String searchfield);
 	
 	// 상품 재고 검색
 	public List<PCountDTO> searchPcount ();
+	
+	// 재고 삭제
+	public int deleteCount(String barcode, int p_num);
+	
+	// 바코드번호 가져오기
+	public List<String> getBarcodeList(int p_num);
 }

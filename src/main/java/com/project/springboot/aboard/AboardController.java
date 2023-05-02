@@ -5,11 +5,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -20,6 +23,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
@@ -96,12 +100,12 @@ public class AboardController {
 	//공지사항 게시글 등록 - get방식인 경우 등록하기 페이지 진입
 	@RequestMapping(value="/aboard/aboardwrite.do", method=RequestMethod.GET)
 	public String aboard2(Model model) { 
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String u_id = authentication.getName(); 
-	    UserDTO udto = udao.selectOne(u_id);
-	    model.addAttribute("udto", udto);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String u_id = authentication.getName(); 
+		UserDTO udto = udao.selectOne(u_id);
+		model.addAttribute("udto", udto);
 
-	    return "/aboard/aboardwrite"; 
+		return "/aboard/aboardwrite"; 
 	}
 
 	//post방식인 경우 입력한 FAQ 게시글을 DB처리
@@ -109,42 +113,49 @@ public class AboardController {
 	public String aboard3(aboardDTO aboardDto, MultipartFile[] user_file, 
 			Model model, 
 			MultipartHttpServletRequest req) { 
-			
+		
 		if (multipartResolver.isMultipart(req)) {
-			MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
-			String a_title = multipartRequest.getParameter("a_title");
-			System.out.println("제목:"+ a_title);
+	        MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
+	      //파일외 폼값을 받는다. MultipartHttpServletRequest객체를 사용.	
+			String title = req.getParameter("title");
+			System.out.println("제목:"+ title);
 			
+			//파일을 처리한다. 
 			String path = "";
-			if (user_file != null) { // user_file이 null인 경우 처리
-				for(MultipartFile f: user_file) {
-					String originalName = f.getOriginalFilename();
-					String ext = originalName.substring(
-							originalName.lastIndexOf('.'));
-					String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-					String savedName = uuid + ext;
-					
-					try {
-						path = ResourceUtils.getFile("classpath:static/uploads/")
-								.toPath().toString();
-						
-						File filePath = new File(path, savedName);
-						
-						f.transferTo(filePath);
-					}
-					catch (Exception e) {
-						e.printStackTrace();
-					}
+			for(MultipartFile f: user_file) {
+				//전송된 원본파일명을 얻어온다. 
+				String originalName = f.getOriginalFilename();
+				//파일명에서 확장자를 잘라낸다. 
+				String ext = originalName.substring(
+						originalName.lastIndexOf('.'));
+				//범용고유식별자를 통해 파일명으로 사용할 문자열 생성
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				//문자열을 결합하여 새로운 파일명을 생성한다.
+				String savedName = uuid + ext;
+				
+				try {
+					//디렉토리의 물리적 경로
+					path = ResourceUtils.getFile("classpath:static/aUpload/")
+							.toPath().toString();
+					//경로와 파일명을 통해 File객체를 생성
+					File filePath = new File(path, savedName);
+					//해당 경로에 파일을 전송한다. 
+					f.transferTo(filePath);
 				}
-				System.out.println("uploads폴더:"+ path);
+				catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-			
-			int result = asv.insertA(aboardDto); 
-			if(result==1) System.out.println("게시글이 등록되었습니다.");
-		} else {
-			int result = asv.insertA(aboardDto); 
-			if(result==1) System.out.println("게시글이 등록되었습니다.");
-		}
+			System.out.println("aUpload폴더:"+ path);
+	    } else {
+	        // Multipart 요청이 아닌 경우 처리
+	    }
+		int result = asv.insertA(aboardDto); 
+		
+		
+		
+		
+		if(result==1) System.out.println("게시글이 등록되었습니다.");
 		
 		return "redirect:/aboard/aboardlist.do"; 
 	}
@@ -175,9 +186,27 @@ public class AboardController {
 	    String u_id = authentication.getName();
 	    UserDTO udto = udao.selectOne(u_id);
 		String a_num = req.getParameter("a_num");
+		// 조회수 증가 처리
+	    asv.updateVisitCount(a_num);
 	    aboardDTO dto = asv.selectOneA(a_num);
 	    model.addAttribute("udto", udto);
 	    model.addAttribute("aboardDto", dto);
+	    
+	    try {
+			String path = ResourceUtils
+				.getFile("classpath:static/aUpload/").toPath().toString();
+			Map<String, Integer> fileMap = new HashMap<String, Integer>();
+
+			File file = new File(path);
+			File[] fileArray = file.listFiles();
+			for(File f : fileArray){
+				//저장된 파일명, 파일 용량을 Map에 저장한다. 
+				fileMap.put(f.getName(), (int)Math.ceil(f.length()/1024.0));
+			}
+			model.addAttribute("fileMap", fileMap);		
+		}
+		catch (Exception e) {}
+		
 	    return "aboard/aboardview";
 	}
 	
@@ -252,5 +281,22 @@ public class AboardController {
 	        e.printStackTrace();
 	    }
 	}
-	
+	// 좋아요 기능
+	@RequestMapping(value = "/aboard/toggleLike.do", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> toggleLike(@RequestParam("a_num") int a_num, HttpSession session) {
+
+	    UserDTO user = (UserDTO)session.getAttribute("user");
+	    if(user == null) {
+	        Map<String, Object> result = new HashMap<String, Object>();
+	        result.put("loginRequired", true);
+	        return result;
+	    }
+
+	    Map<String, Object> result = asv.toggleLike(a_num, user.getU_id());
+
+	    return result;
+	}
+
 }
+	

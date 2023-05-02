@@ -8,6 +8,9 @@
 	<!-- 페이지설정 -->
 	<select id="articleMPageDao" resultType="_int">
 		select count(*) as total from product_list
+			<if test="searchWord != null and searchWord != ''">
+				where upper(${searchField}) like '%${searchWord.toUpperCase()}%'
+			</if>
 	</select>
 	
 	<!-- 상품 목록 -->
@@ -19,6 +22,9 @@
 		  		  from (
 		  		  		select *
 		  		  		  from product_list
+		  		  		  <if test="searchWord != null and searchWord != ''">
+		  		  		  	where upper(${searchField}) like '%${searchWord.toUpperCase()}%'
+		  		  		  </if>
 		  		  		) A
 		  		  where rownum <![CDATA[<=]]> #{nEnd} ) B
 		  where B.num <![CDATA[>=]]> #{nStart} 
@@ -29,4 +35,39 @@
 		resultType="com.project.springboot.productdto.PCountDTO">
 		select * from p_count
 	</select> 
+	
+	<!-- 상품 재고 삭제 -->
+	<delete id="deleteCountDao">
+		delete from p_count
+		 where p_barcode = #{param1}
+	</delete>
+	
+	<!-- 상품 재고량 변경시 업데이트 -->
+	<update id="updateCountDao">
+		UPDATE product_list
+			SET p_count = (
+			    SELECT A.cnt - NVL(B.cnt, 0) AS p_count
+			    FROM 
+			        (SELECT p_num, COUNT(*) cnt 
+			         FROM p_count 
+			         GROUP BY p_num) A 
+			        LEFT OUTER JOIN 
+			        (SELECT p_num, COUNT(*) cnt 
+			         FROM p_count 
+			         WHERE p_sold = 'Y' 
+			         GROUP BY p_num) B 
+			        ON A.p_num = B.p_num 
+			    WHERE A.p_num = product_list.p_num
+			)
+		 WHERE p_num = #{param1}
+	</update>
+	
+	<!-- 바코드 번호 가져오기 -->
+	<select id="getBarcodeListDao"
+		resultType="String">
+		select p_barcode
+		  from p_count
+		 where p_sold = 'N'
+		   and p_num = #{param1}
+	</select>
 </mapper>
