@@ -18,27 +18,7 @@
 <%@ include file="../header.jsp" %>	
 <div id="content">
     <h2>공지사항 게시판 </h2>
-<!-- 검색폼 -->
-<div style="margin-top: 50px;">
-    <form action="/aboard/aboardlist.do" method="post">  
-    <table align="center" border="1" width="90%">
-    <tr>
-        <td align="center">
-            <select name="searchField">
-                <option value="a_title">제목</option>
-                <option value="a_content">내용</option>
-            </select>
-            <input type="text" name="searchWord" />
-            <input type="submit" value="검색하기" />&nbsp;&nbsp;
-            <s:authorize access="hasRole('ADMIN')">
-                    <a href="/aboard/aboardwrite.do">글쓰기</a>
-            </s:authorize>
-        </td>
-    </tr>
-    </table>
-    </form>
-
-    <table align="center" border="1" width="90%">
+<table align="center" border="1" width="90%">
         <tr>
             <th width="10%">번호</th>
             <th width="*">제목</th>
@@ -131,7 +111,28 @@
 		</c:choose>
 		</td>
 	</tr>	
+	<!-- 검색폼 -->
+<div style="margin-top: 50px;">
+    <form action="/aboard/aboardlist.do" method="post">  
+    <table align="center" border="1" width="30%">
+    <tr>
+        <td align="center">
+            <select name="searchField">
+                <option value="a_title">제목</option>
+                <option value="a_content">내용</option>
+            </select>
+            <input type="text" name="searchWord" />
+            <input type="submit" value="검색하기" />&nbsp;&nbsp;
+            <s:authorize access="hasRole('ADMIN')">
+                    <a href="/aboard/aboardwrite.do">글쓰기</a>
+            </s:authorize>
+        </td>
+    </tr>
+    </table>
+    </form>
+	
 </div>
+
 </div>
 <%@ include file="../footer.jsp" %>
 

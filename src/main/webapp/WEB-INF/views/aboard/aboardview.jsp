@@ -109,10 +109,10 @@ function toggleLike() {
 </form>
 </s:authorize>
 <h3>댓글</h3>
-    <form action="/aboard/acomment/acwrite.do" method="post">
+    <form action="/aboard/acomment/insertac" method="post">
         <input type="hidden" name="a_num" value="${aboardDto.a_num}">
-        <textarea name="a_content" rows="5" cols="60"></textarea>
-        <inputtype="submit" value="작성">
+        <textarea name="ac_comment" rows="1" cols="100"></textarea>
+        <button type="submit">댓글 입력</button>
 </form>
 </div>
 <%@ include file="../footer.jsp" %>

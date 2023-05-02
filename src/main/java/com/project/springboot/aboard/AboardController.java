@@ -49,7 +49,7 @@ public class AboardController {
 	@Autowired 
 	UserService udao;
 	
-	//회원 목록
+	//공지사항 게시글 목록
 	@RequestMapping("/aboard/aboardlist.do") 
 	public String aboard1(HttpServletRequest req, Model model) {
 		
@@ -78,16 +78,9 @@ public class AboardController {
 		model.addAttribute("page", pinfo);
 		
 		//DAO(Mapper)의 select() 메서드를 호출해서 회원목록을 인출 
-		model.addAttribute("aboardLists", asv.selectA(nPage, searchField, searchWord));		
+		model.addAttribute("aboardLists", asv.selectA(nPage, searchField, searchWord));	
+		
 		return "/aboard/aboardlist"; 
-	}
-	
-	@RequestMapping("/aboard/searchAboard.do")
-	public String searchAboard(HttpServletRequest request, Model model) {
-
-	
-
-	    return "/aboard/aboardlist";
 	}
 
 	//공지사항 게시글 등록 - get방식인 경우 등록하기 페이지 진입

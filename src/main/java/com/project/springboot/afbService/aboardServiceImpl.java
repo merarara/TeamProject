@@ -20,7 +20,7 @@ public class aboardServiceImpl implements IAboardService {
 	@Autowired
 	private aboardService abs;
 	
-	int listCount = 5;		// 한 페이지당 보여줄 게시물의 갯수
+	int listCount = 15;		// 한 페이지당 보여줄 게시물의 갯수
 	int pageCount = 5;		// 하단에 보여줄 페이지 리스트의 갯수
 	
     @Override

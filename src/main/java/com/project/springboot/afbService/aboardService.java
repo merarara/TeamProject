@@ -29,7 +29,7 @@ public interface aboardService {
 	// 조회수 증가
 	public void updateVisitCount(String a_num);
 	
-	public int insertLike(@Param("a_num") int a_num, @Param("u_id") String u_id) ;
+	public int insertLike(@Param("a_num") int a_num, @Param("u_id") String u_id);
 	public int deleteLike(@Param("a_num") int a_num, @Param("u_id") String u_id);
 	
 	// 좋아요 수 가져오기
