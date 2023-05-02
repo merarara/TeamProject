@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Mapper파일을 구성하기 위한 Doctype 설정 -->
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<!-- 서비스 인터페이스를 namespace로 지정한다. 컨트롤러에서 해당 인터페이스를
+통해 Mapper의 메서드를 호출하게된다. -->
+<mapper namespace="com.project.springboot.cboard.cboardService">
+<!-- 네임스페이스로 지정된 인터페이스의 select() 메서드를 통해 해당
+	엘리먼트가 실행된다. 파라미터와 결과셋 모두 MemberDTO객체를 사용하고있다. 
+	select엘리먼트는 쿼리를 실행한 후 List컬렉션으로 반환한다. -->
+ 	<select id="select" 
+	    resultType="com.project.springboot.cboard.cboardDTO"> 
+	    select *
+		  from (
+		  		select rownum num, A.*
+		  		  from (
+		  		        select *
+		  		          from c_board
+		  		         order by c_num desc
+		  		          ) A
+		  		  where rownum <![CDATA[<=]]> #{param1} ) B
+		  where B.num <![CDATA[>=]]> #{param2}
+	</select>
+	
+<!-- <select id="selectA" parameterType="HashMap" resultType="String">
+  검색어(searchField)가 없는 경우
+  <choose>
+	  <when test="searchField eq null">
+	    SELECT *
+	    FROM (
+	      SELECT ROWNUM AS num, A.*
+	      FROM (
+	        SELECT *
+	        FROM c_board
+	        ORDER BY c_num DESC
+	      ) A
+	      WHERE ROWNUM <![CDATA[<=]]> #{endRow}
+	    ) B
+	    WHERE B.rnum <![CDATA[>=]]> #{startRow}
+		</when>
+		<otherwise>	  
+	  검색어(searchField)가 있는 경우
+	    SELECT *
+	    FROM (
+	      SELECT ROWNUM AS rnum, A.*
+	      FROM (
+	        SELECT *
+	        FROM c_board
+	        WHERE ${searchField} LIKE '%' || #{searchWord} || '%'
+	        ORDER BY c_num DESC
+	      ) A
+	      WHERE ROWNUM <![CDATA[<=]]> #{endRow}
+	    ) B
+	    WHERE B.rnum <![CDATA[>=]]> #{startRow}
+	    </otherwise>
+ </choose>
+</select> -->
+	 
+	<!-- 페이지설정 -->
+	<select id="articlePageDao" resultType="_int">
+		select count(*) as total from c_board
+	</select>
+	
+	<!-- insertA 쿼리문에서 UserDTO 클래스를 참조하여 u_id 값을 가져옴 -->
+	<insert id="insert" 
+	    parameterType="com.project.springboot.cboard.cboardDTO"> 
+	    INSERT INTO c_board (c_num, u_id, u_nick, c_title, c_content, c_visitcount) 
+	    VALUES (C_num_SEQ.NEXTVAL, #{u_id}, #{u_nick}, #{c_title}, #{c_content}, 0)
+	</insert>
+	
+	
+	<!-- 공지사항 게시글 인출 -->	 
+	<select id="selectOne" 
+		parameterType="com.project.springboot.cboard.cboardDTO"
+		resultType="com.project.springboot.cboard.cboardDTO"> 
+		select * from c_board where c_num=#{param1}
+	</select>	 
+	
+	<!-- 공지사항 게시글 수정. 파라미터는 DTO의 멤버변수를 사용한다. -->
+	<update id="update" 
+		parameterType="com.project.springboot.cboard.cboardDTO"> 
+		update c_board set c_title=#{c_title}, c_content=#{c_content} 
+		where c_num=#{c_num}
+	</update> 
+	
+	<!-- 공지사항 게시글 삭제 -->
+	<delete id="delete" parameterType="string">
+  		delete from c_board where c_num=#{c_num}
+	</delete>
+	
+	<!-- 검색 기능 -->
+	<select id="searchboard" parameterType="hashmap" resultType="com.project.springboot.cboard.cboardDTO">
+	    SELECT *
+	    FROM c_board
+	    WHERE ${param1} like '%'|| #{param2} || '%'
+	    ORDER BY c_num DESC
+	</select>	
+	
+	<!-- 조회수 증가 -->
+	<update id="updateVisitCount" parameterType="java.lang.String">
+    UPDATE c_board SET c_visitcount=c_visitcount+1 WHERE c_num=#{c_num}
+	</update>
+	
+	<!-- 좋아요 증가 -->
+	<update id="updateLikeCount" parameterType="string">
+	    UPDATE c_board SET c_likecount=c_likecount+1 WHERE c_num=#{c_num}
+	</update>
+	
+	
+</mapper>

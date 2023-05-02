@@ -21,46 +21,45 @@
         <col width="15%"/> <col width="*"/>
     </colgroup> 
     <tr>
-        <td>번호</td> <td>${ view.c_num }</td>
-        <td>작성자</td> <td>${ view.u_id }</td>
+        <td>번호</td> <td>${ cboardDto.c_num }</td>
+        <td>작성자</td> <td>${ cboardDto.u_nick }</td>
     </tr>
     <tr>
-        <td>작성일</td> <td>${ view.c_postdate }</td>
-        <td>조회수</td> <td>${ view.c_visitcount }</td>
+        <td>작성일</td> <td>${ cboardDto.c_regdate }</td>
+        <td>조회수</td> <td>${ cboardDto.c_visitcount }</td>
     </tr>
     <tr>
         <td>제목</td>
-        <td colspan="3">${ view.c_title }</td>
+        <td colspan="3">${ cboardDto.c_title }</td>
     </tr>
     <tr>
         <td>내용</td>
         <td colspan="3" height="100">${ view.c_content }
-        <c:forEach items="${fileMap }" var="file" varStatus="vs">
-	        <c:if test="${ isImage eq true }">
-	        	<p>
-	        		<img src="/static/Uploads/${file.key }" style="max-width:500px;" />
-	        	</p>
-	        </c:if>
-        </c:forEach>
-        </td>
+        <c:if test="${ isImage eq true }">
+        	<p>
+        		<img src="uploads/${file.key }" width="200" height="150" />
+        	</p>
+        </c:if></td>
         <!-- 첨부한 파일이 이미지라면 img태그로 화면에 출력한다. -->
         
     </tr> 
     <tr>
         <td>첨부파일</td>
-        <c:forEach items="${fileMap }" var="file" varStatus="vs">
+        <td>          
+ 	       <c:forEach items="${fileMap }" var="file" varStatus="vs">
 		<tr>
-			<td><a href="cboard/?savedFile=${file.key }&oriFile=원본파일명${vs.count }.jpg">[다운로드]</a></td>
+			<td><a href="cdownload.do?savedFile=${file.key }&oriFile=원본파일명${vs.count }.jpg">[다운로드]</a></td>
 		</tr>
-		</c:forEach>
+	</c:forEach>                           
+        </td>
          <td>다운로드수</td>
         <td>${ view.c_downcount }</td>
     </tr> 
     <tr>
         <td colspan="4" align="center">
-            <button type="button" onclick="location.href='/cboard/modify?c_num=${view.c_num}';">수정하기</button>
+            <button type="button" onclick="location.href='/cboard/cboardedit.do?c_num=${view.c_num}';">수정하기</button>
             <button type="button" onclick="location.href='/cboard/delete?c_num=${view.c_num}';">삭제하기</button>
-            <button type="button" onclick="location.href='/cboard/list.do';">목록 바로가기</button>
+            <button type="button" onclick="location.href='/cboard/cboardlist.do';">목록 바로가기</button>
         </td>
     </tr>
 </table>
@@ -96,7 +95,7 @@
 			<p>${reply.c_content }</p>
 						
 			<p>
-				<a href="/reply/modify?c_num=${view.c_num}&c_rno=${reply.c_rno}">수정</a> / <a href="/reply/delete?c_num=${view.c_num}&c_rno=${reply.c_rno}">삭제</a>
+				<a href="/reply/modify?c_num=${cboardDto.c_num}&c_rno=${reply.c_rno}">수정</a> / <a href="/reply/delete?c_num=${cboardDto.c_num}&c_rno=${reply.c_rno}">삭제</a>
 			</p>
 			
 			<hr />
@@ -117,7 +116,7 @@
 			<textarea rows="5" cols="50" name="c_content"></textarea>
 		</p>
 		<p>
-			<input type="hidden" name="c_num" value="${view.c_num}">
+			<input type="hidden" name="c_num" value="${cboardDto.c_num}">
 			<button type="submit">댓글 작성</button>
 		</p>
 	</form>
