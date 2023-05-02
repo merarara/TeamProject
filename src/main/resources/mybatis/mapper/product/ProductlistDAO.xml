@@ -100,16 +100,7 @@
 	</select>
 	
 	<!-- 구매 확인 -->
-	<select id="buyCheckDao1"
-		resultType="String">
-		select distinct u_id
-		  from order_info 
-		 where p_num = #{param1}
-		   and u_id = #{param2}
-	</select>
-	
-	<!-- 구매 확인 -->
-	<select id="buyCheckDao2"
+	<select id="buyCheckDao"
 		resultType="String">
 		select distinct u_id
 		  from b_orderinfo 
@@ -146,13 +137,6 @@
     		</otherwise>
     	</choose>   
 	</select>
-	
-	<!-- 단품 결제 정보 입력 -->
-	<insert id="insertOrderDao"
-		parameterType="com.project.springboot.productdto.OrderinfoDTO">
-		insert into order_info (m_num, u_id, m_addr, p_num, m_price, m_qty, p_name, p_price) 
-		values (seq_o_num.nextval, #{u_id}, #{m_addr}, ${p_num}, ${m_price}, ${m_qty}, #{p_name}, #{p_price})
-	</insert>
 	
 	<!-- 구매 후 SCount 증가 -->
 	<update id="update_SCountDao">

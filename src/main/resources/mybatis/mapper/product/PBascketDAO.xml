@@ -25,29 +25,29 @@
 		 where b_num = #{param1}
 	</delete>
 	
-	<!-- 장바구니 결제 상세 O_Num 확인 -->
-	<select id="checkO_NumDao"
+	<!-- 상품 결제 정보 입력 -->
+	<insert id="insertOrderDao"
+		parameterType="com.project.springboot.productdto.OrderinfoDTO">
+		insert into order_info (m_num, u_id, m_addr, m_price, m_qty) 
+		values (seq_o_num.nextval, #{u_id}, #{m_addr}, ${m_price}, ${m_qty})
+	</insert>
+	
+	<!-- 결제 상세 M_Num 확인 -->
+	<select id="checkM_NumDao"
 		resultType="String">
 		select *
 		  from (
-		        select o_num from bascket_order
+		        select m_num from order_info
 		         where u_id = #{param1}
-		         order by o_num desc
+		         order by m_num desc
 		        )
 		where rownum = 1
 	</select>
 	
-	<!-- 장바구니 결제 -->
-	<insert id="insertBOrderDao"
-		parameterType="com.project.springboot.productdto.BascketOrderDTO">
-		insert into bascket_order (o_num, u_id, o_addr, o_price, o_qty)
-		values (bOrder_seq.nextval, #{u_id}, #{o_addr}, ${o_price}, ${o_qty})
-	</insert>
-	
-	<!-- 장바구니 결제 상세 -->
+	<!-- 결제 상세 정보 입력-->
 	<insert id="insertBOinfoDao">
 		insert into b_orderinfo
-		values (#{o_num}, #{u_id}, #{p_num}, #{p_name}, #{p_price}, #{bo_qty})
+		values (#{m_num}, #{u_id}, #{p_num}, #{p_name}, #{p_price}, #{bo_qty})
 	</insert>
 	
 	<!-- 장바구니 결제 후 장바구니 삭제 -->
