@@ -44,6 +44,7 @@
             <th width="*">제목</th>
             <th width="15%">작성자</th>
             <th width="15%">작성일</th>
+            <th width="15%">좋아요</th>
             <th width="15%">조회수</th>
         </tr>
 <c:choose>
@@ -66,7 +67,8 @@
 <a href="../aboard/aboardview.do?a_num=${ row.a_num }">${ row.a_title }</a>
 			</td>
             <td>${ row.u_id }</td>
-            <td>${ row.a_regdate }</td> 
+            <td>${ row.a_regdate }</td>
+            <td>${ row.a_like }</td> 
             <td>${ row.a_visitcount }</td>
         </tr>
         </c:forEach>        

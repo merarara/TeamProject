@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
@@ -279,5 +281,22 @@ public class AboardController {
 	        e.printStackTrace();
 	    }
 	}
-	
+	// 좋아요 기능
+	@RequestMapping(value = "/aboard/toggleLike.do", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> toggleLike(@RequestParam("a_num") int a_num, HttpSession session) {
+
+	    UserDTO user = (UserDTO)session.getAttribute("user");
+	    if(user == null) {
+	        Map<String, Object> result = new HashMap<String, Object>();
+	        result.put("loginRequired", true);
+	        return result;
+	    }
+
+	    Map<String, Object> result = asv.toggleLike(a_num, user.getU_id());
+
+	    return result;
+	}
+
 }
+	

@@ -2,6 +2,7 @@
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +12,34 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+function toggleLike() {
+    $.ajax({
+        type: 'POST',
+        url: '/aboard/toggleLike.do',
+        data: {"a_num": a_num},
+        dataType: 'json',
+        success: function(result) {
+            if (result.success) {
+                // 좋아요 상태가 변경되면 버튼의 색상을 변경합니다.
+                if (result.liked) {
+                    $('#likeButton_' + a_num).addClass('liked');
+                } else {
+                    $('#likeButton_' + a_num).removeClass('liked');
+                }
+                // 좋아요 개수를 갱신합니다.
+                $('#likeCount_' + a_num).text(result.likeCount);
+            } else {
+                alert(result.errorMessage);
+            }
+        },
+        error: function(xhr, status, error) {
+            alert(error);
+        }
+    });
+}
+</script>
 </head>
 <body>
 
@@ -33,6 +62,8 @@
     <tr>
         <td>작성일</td> 
         <td>${ aboardDto.a_regdate }</td>
+        <td>좋아요</td>
+        <td>${ aboardDto.a_like }</td>
         <td>조회수</td> 
         <td>${ aboardDto.a_visitcount }</td>
     </tr>
@@ -48,6 +79,7 @@
 				<img src="../aUpload/${file.key }" width="200" height="150" />
 				<tr><a href="/aboard/download.do?savedFile=${file.key }&oriFile=원본파일명${vs.count }.jpg">[다운로드]</a></tr>
 			</c:forEach>
+			<button type="button" onclick="toggleLike()">좋아요</button>
         </td>
     </tr>
     <!-- 하단 메뉴(버튼) -->

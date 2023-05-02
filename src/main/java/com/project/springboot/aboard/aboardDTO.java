@@ -13,6 +13,7 @@ public class aboardDTO {
 	private String a_content;
 	private int a_visitcount; 
 	private Timestamp a_regdate; 
+	private int a_like; // 추가됨
 	
 	 // Getter와 Setter 메소드 추가
     public int getA_num() {
@@ -21,5 +22,14 @@ public class aboardDTO {
 
     public void setA_num(int a_num) {
         this.a_num = a_num;
+    }
+    
+    // getter/setter 메소드
+    public int getA_like() {
+        return a_like;
+    }
+
+    public void setA_like(int a_like) {
+        this.a_like = a_like;
     }
 }

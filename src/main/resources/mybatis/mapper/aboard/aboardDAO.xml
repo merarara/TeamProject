@@ -91,6 +91,7 @@
   		delete from a_board where a_num=#{a_num}
 	</delete>
 	
+	<!-- 검색 기능 -->
 	<select id="searchAboard" parameterType="hashmap" resultType="com.project.springboot.aboard.aboardDTO">
 	    SELECT *
 	    FROM a_board
@@ -98,8 +99,14 @@
 	    ORDER BY a_num DESC
 	</select>	
 	
+	<!-- 조회수 증가 -->
 	<update id="updateVisitCount" parameterType="java.lang.String">
     UPDATE a_board SET a_visitcount=a_visitcount+1 WHERE a_num=#{a_num}
+	</update>
+	
+	<!-- 좋아요 증가 -->
+	<update id="updateLikeCount" parameterType="string">
+	    UPDATE a_board SET a_likecount=a_likecount+1 WHERE a_num=#{a_num}
 	</update>
 	
 	
