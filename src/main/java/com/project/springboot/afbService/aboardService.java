@@ -10,15 +10,22 @@ import com.project.springboot.aboard.aboardDTO;
 @Mapper 
 public interface aboardService {
 
-	public List<aboardDTO> selectA(int nEnd, int nStart); 
+	public List<aboardDTO> selectA(
+			@Param("nEnd") int nEnd, 
+			@Param("nStart") int nStart, 
+			@Param("searchField") String searchField, 
+			@Param("searchWord") String searchWord); 
 	public int insertA(aboardDTO aboardDto);
 	public aboardDTO selectOneA(String a_num);
 	public int updateA(aboardDTO aboardDto);
 	public int deleteA(String a_num);
-	public List<aboardDTO> searchAboard(String searchField, String searchWord);
 	
 	// 페이지설정
-	public int articlePageDao(int curPage);
+	public int articlePageDao(
+			@Param("curPage") int curPage, 
+			@Param("searchField") String searchField, 
+			@Param("searchWord") String searchWord);
+	
 	// 조회수 증가
 	public void updateVisitCount(String a_num);
 	

@@ -19,49 +19,21 @@
 		  		  from (
 		  		        select *
 		  		          from a_board
+		  		          <if test="searchField != null and searchField != ''">
+							  where ${searchField} like '%${searchWord}%'
+						  </if>
 		  		         order by a_num desc
 		  		          ) A
 		  		  where rownum <![CDATA[<=]]> #{param1} ) B
 		  where B.num <![CDATA[>=]]> #{param2}
 	</select>
-	
-<!-- <select id="selectA" parameterType="HashMap" resultType="String">
-  검색어(searchField)가 없는 경우
-  <choose>
-	  <when test="searchField eq null">
-	    SELECT *
-	    FROM (
-	      SELECT ROWNUM AS num, A.*
-	      FROM (
-	        SELECT *
-	        FROM a_board
-	        ORDER BY a_num DESC
-	      ) A
-	      WHERE ROWNUM <![CDATA[<=]]> #{endRow}
-	    ) B
-	    WHERE B.rnum <![CDATA[>=]]> #{startRow}
-		</when>
-		<otherwise>	  
-	  검색어(searchField)가 있는 경우
-	    SELECT *
-	    FROM (
-	      SELECT ROWNUM AS rnum, A.*
-	      FROM (
-	        SELECT *
-	        FROM a_board
-	        WHERE ${searchField} LIKE '%' || #{searchWord} || '%'
-	        ORDER BY a_num DESC
-	      ) A
-	      WHERE ROWNUM <![CDATA[<=]]> #{endRow}
-	    ) B
-	    WHERE B.rnum <![CDATA[>=]]> #{startRow}
-	    </otherwise>
- </choose>
-</select> -->
 	 
 	<!-- 페이지설정 -->
 	<select id="articlePageDao" resultType="_int">
 		select count(*) as total from a_board
+		<if test="searchField != null and searchField != ''">
+			where ${searchField} like '%${searchWord}%'
+		</if>
 	</select>
 	
 	<!-- insertA 쿼리문에서 UserDTO 클래스를 참조하여 u_id 값을 가져옴 -->
@@ -70,7 +42,6 @@
 	    INSERT INTO a_board (a_num, u_id, u_nick, a_title, a_content, a_visitcount) 
 	    VALUES (seq_aboard_num.nextval, #{u_id}, #{u_nick}, #{a_title}, #{a_content}, 0)
 	</insert>
-	
 	
 	<!-- 공지사항 게시글 인출 -->	 
 	<select id="selectOneA" 
@@ -91,14 +62,6 @@
   		delete from a_board where a_num=#{a_num}
 	</delete>
 	
-	<!-- 검색 기능 -->
-	<select id="searchAboard" parameterType="hashmap" resultType="com.project.springboot.aboard.aboardDTO">
-	    SELECT *
-	    FROM a_board
-	    WHERE ${param1} like '%'|| #{param2} || '%'
-	    ORDER BY a_num DESC
-	</select>	
-	
 	<!-- 조회수 증가 -->
 	<update id="updateVisitCount" parameterType="java.lang.String">
     UPDATE a_board SET a_visitcount=a_visitcount+1 WHERE a_num=#{a_num}
@@ -114,15 +77,11 @@
 	  DELETE FROM a_board_like WHERE a_num = #{a_num} AND u_id = #{u_id}
 	</delete>
 	
-	<!-- 해당 게시글의 좋아요 개수 조회 -->
-	<!-- <select id="getLikeCount" resultType="int" parameterType="int">
-	  SELECT COUNT(*) FROM a_board_like WHERE a_num = #{a_num}
-	</select> -->
-	
+	<!-- 좋아요 등록 -->
 	<update id="getLikeCount"  parameterType="int">
 	  UPDATE a_board SET a_like = (
-    SELECT COUNT(*) FROM a_board_like WHERE a_num = #{a_num}
-	) WHERE a_num = #{a_num}
+      SELECT COUNT(*) FROM a_board_like WHERE a_num = #{a_num}
+      ) WHERE a_num = #{a_num}
 	</update>
 	
 </mapper>

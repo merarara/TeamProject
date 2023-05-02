@@ -24,11 +24,11 @@ public class aboardServiceImpl implements IAboardService {
 	int pageCount = 5;		// 하단에 보여줄 페이지 리스트의 갯수
 	
     @Override
-    public List<aboardDTO> selectA(int curpage) {
+    public List<aboardDTO> selectA(int curpage, String searchField, String searchWord) {
     	int nStart = (curpage - 1) * listCount + 1;
 		int nEnd = (curpage - 1) * listCount + listCount;
     	
-        return abs.selectA(nEnd, nStart);
+        return abs.selectA(nEnd, nStart, searchField, searchWord);
     }
 
     @Override
@@ -47,19 +47,14 @@ public class aboardServiceImpl implements IAboardService {
     }
     
     @Override
-    public List<aboardDTO> searchAboard(String searchField, String searchWord) {
-        return abs.searchAboard(searchField, searchWord);
-    }
-    
-    @Override
     public int deleteA(String a_num) {
 	    return sqlSession.delete("deleteA", a_num);
     }
 
     @Override
-    public BpageInfo articlePage(int curPage) {
+    public BpageInfo articlePage(int curPage, String searchField, String searchWord) {
     	int totalCount = 0;
-		totalCount = abs.articlePageDao(curPage);
+		totalCount = abs.articlePageDao(curPage, searchField, searchWord);
 		
 		// 총 페이지 수
 		int totalPage = totalCount / listCount;

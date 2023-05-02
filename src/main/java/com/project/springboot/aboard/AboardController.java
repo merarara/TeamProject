@@ -56,6 +56,14 @@ public class AboardController {
 		int curPage = 1;
 		int nPage = 1;
 		
+	    // 검색어와 검색 조건을 파라미터에서 가져옵니다.
+	    String searchField = req.getParameter("searchField");
+	    String searchWord = req.getParameter("searchWord");
+	    
+	    // 검색 폼을 유지하기 위해 검색어와 검색 조건도 모델에 담아서 전달합니다.
+	    model.addAttribute("searchField", searchField);
+	    model.addAttribute("searchWord", searchWord);
+		
 		try
 		{
 			String sPage = req.getParameter("page");
@@ -66,32 +74,18 @@ public class AboardController {
 			
 		}
 		
-		BpageInfo pinfo = asv.articlePage(nPage);
+		BpageInfo pinfo = asv.articlePage(nPage, searchField, searchWord);
 		model.addAttribute("page", pinfo);
 		
 		//DAO(Mapper)의 select() 메서드를 호출해서 회원목록을 인출 
-		model.addAttribute("aboardLists", asv.selectA(nPage));		
-		//DAO(Mapper)의 select() 메서드를 호출해서 회원목록을 인출
-//		model.addAttribute("aboardLists", asv.selectA()); 
+		model.addAttribute("aboardLists", asv.selectA(nPage, searchField, searchWord));		
 		return "/aboard/aboardlist"; 
 	}
 	
 	@RequestMapping("/aboard/searchAboard.do")
 	public String searchAboard(HttpServletRequest request, Model model) {
 
-	    // 검색어와 검색 조건을 파라미터에서 가져옵니다.
-	    String searchField = request.getParameter("searchField");
-	    String searchWord = request.getParameter("searchWord");
-	    
-	    // 검색어와 검색 조건을 기준으로 게시글 목록을 조회합니다.
-	    List<aboardDTO> aboardLists = asv.searchAboard(searchField, searchWord);
-	    
-	    // 조회된 게시글 목록을 모델에 담아서 화면으로 전달합니다.
-	    model.addAttribute("aboardLists", aboardLists);
-	    
-	    // 검색 폼을 유지하기 위해 검색어와 검색 조건도 모델에 담아서 전달합니다.
-	    model.addAttribute("searchField", searchField);
-	    model.addAttribute("searchWord", searchWord);
+	
 
 	    return "/aboard/aboardlist";
 	}
@@ -291,6 +285,7 @@ public class AboardController {
 	     }
 	 	 int result = asv.addLike(a_num, u_id);
          if (result == 1) {
+        	 int a_like = asv.getLikeCount(a_num);
         	 return "redirect:/aboard/aboardview.do?a_num=" + a_num;
          } else {
         	 return "redirect:/aboard/aboardview.do?a_num=" + a_num;
@@ -306,7 +301,8 @@ public class AboardController {
           String u_id = authentication.getName(); // 사용자 id
 	     if (u_id == null) {
 	         // 로그인하지 않은 경우 처리
-	         return "redirect:/auth/login.do";
+	    	 
+	         return "redirect:/user/login.do";
 	     } else {
 	         // 좋아요 정보를 삭제한다.
 	         asv.removeLike(a_num, u_id);

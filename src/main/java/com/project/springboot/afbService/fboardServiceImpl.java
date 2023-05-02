@@ -20,11 +20,11 @@ public class fboardServiceImpl implements IFboardService {
 	int pageCount = 5;		// 하단에 보여줄 페이지 리스트의 갯수
 	
     @Override
-    public List<fboardDTO> selectF(int curpage) {
+    public List<fboardDTO> selectF(int curpage, String searchField, String searchWord) {
     	int nStart = (curpage - 1) * listCount + 1;
 		int nEnd = (curpage - 1) * listCount + listCount;
     	
-        return fsv.selectF(nEnd, nStart);
+        return fsv.selectF(nEnd, nStart, searchField, searchWord);
     }
 
     @Override
@@ -48,14 +48,9 @@ public class fboardServiceImpl implements IFboardService {
     }
     
     @Override
-    public List<fboardDTO> searchFboard(String searchField, String searchWord) {
-        return fsv.searchFboard(searchField, searchWord);
-    }
-    
-    @Override
-    public BpageInfo articlePage(int curPage) {
+    public BpageInfo articlePage(int curPage, String searchField, String searchWord) {
     	int totalCount = 0;
-		totalCount = fsv.articlePageDao(curPage);
+		totalCount = fsv.articlePageDao(curPage, searchField, searchWord);
 		
 		// 총 페이지 수
 		int totalPage = totalCount / listCount;

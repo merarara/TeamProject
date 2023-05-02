@@ -20,7 +20,7 @@
     <h2>공지사항 게시판 </h2>
 <!-- 검색폼 -->
 <div style="margin-top: 50px;">
-    <form action="/aboard/searchAboard.do" method="post">  
+    <form action="/aboard/aboardlist.do" method="post">  
     <table align="center" border="1" width="90%">
     <tr>
         <td align="center">
@@ -86,7 +86,7 @@
 			[ &lt;&lt; ]
 		</c:when>
 		<c:otherwise>
-			<a href="/aboard/aboardlist.do??page=1&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${ param.selected }">[ &lt;&lt; ]</a>
+			<a href="/aboard/aboardlist.do??page=1&searchField=${searchField}&searchWord=${searchWord}">[ &lt;&lt; ]</a>
 		</c:otherwise>
 		</c:choose>
 		<!-- 이전 -->
@@ -95,7 +95,7 @@
 			[ &lt; ]
 		</c:when>
 		<c:otherwise>
-			<a href="/aboard/aboardlist.do?page=${page.curPage - 1 }&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${ param.selected }">[ &lt; ]</a>
+			<a href="/aboard/aboardlist.do?page=${page.curPage - 1 }&searchField=${searchField}&searchWord=${searchWord}">[ &lt; ]</a>
 		</c:otherwise>
 		</c:choose>
 		
@@ -106,7 +106,7 @@
 				[ ${fEach} ] &nbsp;
 			</c:when>
 			<c:otherwise>
-				<a href="/aboard/aboardlist.do?page=${fEach }&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${ param.selected }">[ ${fEach } ]</a> &nbsp;
+				<a href="/aboard/aboardlist.do?page=${fEach }&searchField=${searchField}&searchWord=${searchWord}">[ ${fEach } ]</a> &nbsp;
 			</c:otherwise>
 			</c:choose>
 		</c:forEach>
@@ -117,7 +117,7 @@
 			[ &gt; ]
 		</c:when>
 		<c:otherwise>
-			<a href="/aboard/aboardlist.do?page=${page.curPage + 1 }">[ &gt; ]</a>
+			<a href="/aboard/aboardlist.do?page=${page.curPage + 1 }&searchField=${searchField}&searchWord=${searchWord}">[ &gt; ]</a>
 		</c:otherwise>
 		</c:choose>
 		<!-- 끝 -->
@@ -126,7 +126,7 @@
 			[ &gt;&gt; ]
 		</c:when>
 		<c:otherwise>
-			<a href="/aboard/aboardlist.do?page=${page.totalPage }">[ &gt;&gt; ]</a>
+			<a href="/aboard/aboardlist.do?page=${page.totalPage }&searchField=${searchField}&searchWord=${searchWord}">[ &gt;&gt; ]</a>
 		</c:otherwise>
 		</c:choose>
 		</td>
