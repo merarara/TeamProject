@@ -5,7 +5,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	
 <mapper namespace="com.project.springboot.pmservice.PManagerDao">
-	<!-- 페이지설정 -->
+	<!-- 상품 페이지설정 -->
 	<select id="articleMPageDao" resultType="_int">
 		select count(*) as total from product_list
 			<if test="searchWord != null and searchWord != ''">
@@ -76,4 +76,15 @@
 		insert into p_count (p_num, p_barcode)
 		values (#{param1}, #{param2})
 	</insert>
+	
+	<!-- 판매 목록 페이징 -->
+	<select id="articleSPageDao">
+		select count(*) as total from order_info
+	</select>
+	
+	<!-- 판매 목록 -->
+	<select id="searchSListDao">
+		select * from order_info
+		 order by m_num desc
+	</select>
 </mapper>

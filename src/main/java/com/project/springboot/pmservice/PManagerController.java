@@ -132,4 +132,12 @@ public class PManagerController {
     	
     	return response;
     }
+    
+    // 판매관리 페이지 이동
+    @RequestMapping("/admin/sellManage.do")
+    public String sellManage(Model model) {
+    	
+    	
+    	return "admin/sellManage";
+    }
 }
