@@ -48,7 +48,7 @@
 				재고관리
 			</p>
 			<img src="/admin/inventoryMng.png">
-			<a href="/admin/productManagement.do" class="login-link">재고관리</a>
+			<a href="/admin/searchProduct.do" class="login-link">재고관리</a>
 		</li>
 		<li>
 			<p>

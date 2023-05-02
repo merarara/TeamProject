@@ -12,7 +12,6 @@
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 <style>
 <style>
-<style>
 .list {
   list-style: none;
   margin: 0;
