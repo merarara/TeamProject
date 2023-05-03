@@ -39,9 +39,23 @@
 	    <tr>
 	        <td>내용</td>
 	        <td>
-	            <textarea name="a_content" style="width:90%;height:100px;">${ aboardDto.a_content }</textarea>
+	            <textarea name="a_content" style="width:90%;height:100px;">${ aboardDto.a_content }
+		             <c:forEach items="${file}" var="f">
+		        		<c:forEach items="${aupDto }" var="i">
+		  					<c:if test="${i.sfile == f}">
+		   				 		<a href="../aUpload/${f}" data-lightbox="image">
+		     			 		<img src="../aUpload/${f}" width="100px" height="100px">
+		    			 		</a>
+		  					</c:if>
+						</c:forEach>	
+					</c:forEach>
+	            </textarea>
 	        </td>
 	    </tr>
+	    <tr>
+   <!--  	<td>첨부파일</td>
+    	<td><input type="file" name="user_file" multiple/></td> -->
+    	</tr>
 	    <tr>
 	        <td colspan="2" align="center">
 	            <button type="submit">수정 완료</button>
@@ -53,21 +67,7 @@
 	</table>    
 </form>
 <table border="1">
-		<tr>
-			<th>이미지</th>
-			<th>파일명</th>
-			<th>파일크기</th>
-			<th></th>
-		</tr>
-	<c:forEach items="${fileMap }" var="file" varStatus="vs">
-		<tr>
-			<td><img src="aUpload/${file.key }" width="200" 
-					height="150" /></td>
-			<td>${file.key }</td>
-			<td>${file.value }Kb</td>
-			<td><a href="download.do?savedFile=${file.key }&oriFile=원본파일명${vs.count }.jpg">[다운로드]</a></td>
-		</tr>
-	</c:forEach>
+
 </table>
 </div>
 </div>

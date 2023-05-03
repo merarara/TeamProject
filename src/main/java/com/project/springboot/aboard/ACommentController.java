@@ -54,27 +54,30 @@ public class ACommentController {
 	    }
 
 	    // 댓글 작성
-	    @PostMapping("/aboard/acomment/insertac")
+	    @PostMapping("/aboard/acomment/insertac.do")
 	    public String insertAC(ACommentDTO acDto, Model model) {
 	    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			String u_id = authentication.getName();
 			UserDTO udto = udao.selectOne(u_id);
+			model.addAttribute("udto", udto);
 			acDto.setU_id(u_id);
 			String u_nick = udto.getU_nick();
 			model.addAttribute("u_nick", u_nick);
+			System.out.println(u_nick);
+			acDto.setU_nick(u_nick);
 	        acs.insertAC(acDto);
 	        return "redirect:/aboard/aboardview.do?a_num=" + acDto.getA_num();
 	    }
 
 	    // 댓글 수정
-	    @PostMapping("/aboard/acomment/updateac")
+	    @PostMapping("/aboard/acomment/updateac.do")
 	    public String updateAC(ACommentDTO acDto, HttpServletRequest req) {
 	        acs.updateAC(acDto);
 	        return "redirect:/aboard/aboardview.do?a_num=" + acDto.getA_num();
 	    }
 
 	    // 댓글 삭제
-	    @PostMapping("/aboard/acomment/deleteac")
+	    @PostMapping("/aboard/acomment/deleteac.do")
 	    public String deleteAC(@RequestParam("ac_num") String ac_num, @RequestParam("a_num") String a_num) {
 	        acs.deleteAC(ac_num);
 	        return "redirect:/aboard/aboardview.do?a_num=" + a_num;

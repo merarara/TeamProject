@@ -114,13 +114,19 @@ function toggleLike() {
 <form action="/aboard/unlike.do?a_num=${aboardDto.a_num}" method="post">
     <input type="submit" value="싫어요">
 </form>
-</s:authorize>
 <h3>댓글</h3>
-    <form action="/aboard/acomment/insertac" method="post">
+<table>
+	<tr>
+	<td>${ acDto.u_nick }</td>
+	<td>${ acDto.ac_comment }</td>
+	</tr>
+</table>
+    <form action="/aboard/acomment/insertac.do" method="post">
         <input type="hidden" name="a_num" value="${aboardDto.a_num}">
         <textarea name="ac_comment" rows="1" cols="100"></textarea>
         <button type="submit">댓글 입력</button>
 </form>
+</s:authorize>
 </div>
 <%@ include file="../footer.jsp" %>
 
