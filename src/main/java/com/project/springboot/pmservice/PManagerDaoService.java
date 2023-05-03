@@ -21,7 +21,7 @@ public class PManagerDaoService implements IPManagerDaoService {
 	
 	private int plistMPblock = 5;
 	
-	private int plistSPsize = 10;
+	private int plistSPsize = 3;
 	
 	private int plistSPblock = 5;
 	
