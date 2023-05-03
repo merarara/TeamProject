@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.project.springboot.aboard.ACommentDTO;
+import com.project.springboot.aboard.AupDTO;
 import com.project.springboot.afbpageinfo.BpageInfo;
 
 @Service

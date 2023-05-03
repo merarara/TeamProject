@@ -83,5 +83,21 @@
       SELECT COUNT(*) FROM a_board_like WHERE a_num = #{a_num}
       ) WHERE a_num = #{a_num}
 	</update>
+
+	<insert id="upload" parameterType="com.project.springboot.aboard.AupDTO">
+		insert into aup (a_num, ofile, sfile)
+			values (#{a_num}, #{ofile}, #{sfile})
+	</insert> 
+	
+	<select id="uploadnum" parameterType="com.project.springboot.aboard.aboardDTO" resultType="int">
+		select a_num from a_board
+ 			where u_id = #{u_id}
+   			and rownum = 1
+		order by a_num desc
+	</select>
+	
+	<select id="uploadview" parameterType="int" resultType="com.project.springboot.aboard.AupDTO">
+	    select * from aup where a_num = #{a_num, jdbcType=INTEGER}
+	</select>
 	
 </mapper>

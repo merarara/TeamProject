@@ -5,9 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -99,6 +98,9 @@ public class AboardController {
 	public String aboard3(aboardDTO aboardDto, MultipartFile[] user_file, 
 			Model model, 
 			MultipartHttpServletRequest req) { 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String u_id = authentication.getName();
+		int a_num = asv.uploadnum(aboardDto);
 		
 		if (multipartResolver.isMultipart(req)) {
 	        MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
@@ -131,6 +133,13 @@ public class AboardController {
 				catch (Exception e) {
 					e.printStackTrace();
 				}
+				
+				AupDTO aupDto = new AupDTO();
+				aupDto.setA_num(a_num);
+				aupDto.setOfile(originalName);
+				aupDto.setSfile(savedName);
+				
+				asv.upload(aupDto);
 			}
 			System.out.println("aUpload폴더:"+ path);
 	    } else {
@@ -145,27 +154,7 @@ public class AboardController {
 		
 		return "redirect:/aboard/aboardlist.do"; 
 	}
-	
-	/*
-	 * //공지사항 게시글 등록 - get방식인 경우 등록하기 페이지 진입
-	 * 
-	 * @RequestMapping(value="/aboard/aboardwrite.do", method=RequestMethod.GET)
-	 * public String aboard2(Model model) { Authentication authentication =
-	 * SecurityContextHolder.getContext().getAuthentication(); String u_id =
-	 * authentication.getName(); UserDTO udto = udao.selectOne(u_id);
-	 * model.addAttribute("udto", udto);
-	 * 
-	 * return "/aboard/aboardwrite"; }
-	 * 
-	 * //post방식인 경우 입력한 FAQ 게시글을 DB처리
-	 * 
-	 * @RequestMapping(value="/aboard/aboardwrite.do", method=RequestMethod.POST)
-	 * public String aboard3(aboardDTO aboardDto) { int result =
-	 * asv.insertA(aboardDto); if(result==1) System.out.println("게시글이 등록되었습니다.");
-	 * 
-	 * return "redirect:/aboard/aboardlist.do"; }
-	 */
-	
+
 	@RequestMapping(value="/aboard/aboardview.do", method=RequestMethod.GET)
 	public String aboard4(HttpServletRequest req, Model model) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -178,18 +167,22 @@ public class AboardController {
 	    model.addAttribute("udto", udto);
 	    model.addAttribute("aboardDto", dto);
 	    
+	    AupDTO aupDto = asv.uploadview(Integer.parseInt(a_num));
+	    
+	    model.addAttribute("aupDto", aupDto);
+	    List<String> aup = new ArrayList<String>();
+	    
 	    try {
 			String path = ResourceUtils
 				.getFile("classpath:static/aUpload/").toPath().toString();
-			Map<String, Integer> fileMap = new HashMap<String, Integer>();
 
 			File file = new File(path);
 			File[] fileArray = file.listFiles();
 			for(File f : fileArray){
 				//저장된 파일명, 파일 용량을 Map에 저장한다. 
-				fileMap.put(f.getName(), (int)Math.ceil(f.length()/1024.0));
+				aup.add(f.getName());
 			}
-			model.addAttribute("fileMap", fileMap);		
+			model.addAttribute("file", aup);		
 		}
 		catch (Exception e) {}
 		

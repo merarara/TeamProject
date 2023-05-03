@@ -109,4 +109,5 @@ public class ACommentServiceImpl implements IACommentService {
 	public ACommentDTO getAComment(int ac_num) {
 		return acs.getAComment(ac_num);
 	}
+	
 }
