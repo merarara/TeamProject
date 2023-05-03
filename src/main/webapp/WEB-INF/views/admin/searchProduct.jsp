@@ -11,8 +11,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 <style>
-<style>
-<style>
 .list {
   list-style: none;
   margin: 0;
@@ -88,6 +86,51 @@ function doDeleteCnt(barcode, p_num) {
 		});	
 	}
 }
+
+function doAddCnt(p_num) {
+	var barcode = $('#barcode_' + p_num).val();
+	var barcodes = $('.barcodes_' + p_num);
+	var barChk = 'No'; 
+	
+	// 중복 체크
+	barcodes.each(function () {
+		if (barcode == $(this).text()) {
+			alert('이미 등록된 바코드번호입니다.');
+			barChk = 'Yes';
+		}
+	})
+	
+	if (barChk == 'No') {
+		if (confirm('(' + barcode + ') 해당 바코드번호를 ' + p_num + '번 상품에 추가하시겠습니까?')) {
+			$.ajax({
+				type: 'POST',
+				url: '/admin/addBarcode.do',
+				data: {
+					p_num: p_num,
+					barcode: barcode
+				},
+				success: function (data) {
+					if (data.status === "success") {
+						alert("추가되었습니다.");
+						var newTd = '<tr><td>' +
+				             '<span class="barcodes_' + p_num + '">' + barcode + '</span>' +
+				             '<span class="float-right">' +
+				             '<button class="btn btn-outline-danger" onclick="doDeleteCnt(\'' + barcode + '\', \'' + p_num + '\');">삭제</button>' +
+				             '</span>' +
+				             '</td></tr>';
+			    		$('table tbody').append(newTd);
+			    		
+			    		// 재고 수량 업데이트
+						var countElem = document.getElementById("count_" + p_num);
+						countElem.innerHTML = parseInt(countElem.innerHTML) + 1;
+					} else {
+						alert('추가에 실패하였습니다.');
+					}
+				}
+			});
+		}
+	}
+}
 </script>
 </head>
 <body>
@@ -95,7 +138,6 @@ function doDeleteCnt(barcode, p_num) {
 <div id="content">
 	<div class="col-md-4 offset-md-4" style="margin-top: 10px; margin-bottom: 10px;">
 		<form action="/admin/searchProduct.do" id="searchFrm" name="searchFrm">
-	    	<input type="hidden" name="type" value="search">
 	      	<div class="input-group">
 	      		<a href="/admin/productManagement.do">
 	      			<button class="btn btn-outline-primary float-left">돌아가기</button>
@@ -118,6 +160,10 @@ function doDeleteCnt(barcode, p_num) {
 	      		<h3 onclick="showBarcodes(this)" style="color: #0067A3;">상품명: ${i.p_name}</h3>
 	      		<div class="barcodes">
 	      			재고: <span id="count_${i.p_num}">${i.p_count}</span>
+	      			<br>
+					  <label for="barcode" style="font-size: 11px; color: #ccc">※ 등록하실 바코드 번호를 입력해주세요</label><br>
+					  <input type="text" class="form-control" id="barcode_${i.p_num }" placeholder="바코드 번호를 입력해주세요" style="width: 250px; display: inline-block;">
+					  <button type="button" class="btn btn-outline-primary" onclick="doAddCnt('${i.p_num}')">등록</button>
 			  		<table class="table" style="margin-top: 10px; margin-bottom: 10px;">
 			    		<thead>
 			      			<tr>
@@ -129,7 +175,7 @@ function doDeleteCnt(barcode, p_num) {
 			        		<c:if test="${i.p_num == j.p_num}">
 			          		<tr>
 			            		<td>
-			            			${j.p_barcode}
+			            			<span class="barcodes_${i.p_num }">${j.p_barcode}</span>
 			            			<span class="float-right">
 			            				<button class="btn btn-outline-danger" onclick="doDeleteCnt('${j.p_barcode }', '${i.p_num }');">삭제</button>
 			            			</span>

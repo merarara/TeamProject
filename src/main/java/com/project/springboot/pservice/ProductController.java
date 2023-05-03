@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.springboot.member.UserDTO;
 import com.project.springboot.member.UserService;
+import com.project.springboot.pbservice.IPBascketDaoService;
 import com.project.springboot.ppageinfo.PPageInfo;
-import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 import com.project.springboot.productdto.ReviewDTO;
@@ -38,6 +38,9 @@ public class ProductController {
 	
 	@Autowired
 	IPReviewDaoService prdao;
+	
+	@Autowired
+	IPBascketDaoService pbdao;
 	
 	@Autowired
 	UserService udao;
@@ -101,8 +104,7 @@ public class ProductController {
 	    String u_id = authentication.getName(); // 사용자 id
 	    
 	    UserDTO udto = udao.selectOne(u_id);
-	    String bchk1 = pldao.buyCheck1(p_num, u_id);
-	    String bchk2 = pldao.buyCheck2(p_num, u_id);
+	    String bchk = pldao.buyCheck(p_num, u_id);
 	    
 	    List<ReviewDTO> rdto = prdao.GetReview(p_num);
 	    List<ReviewImageDTO> ridto = prdao.getRevImgDao(p_num);
@@ -132,7 +134,7 @@ public class ProductController {
 	    	e.printStackTrace();
 	    }
 	    
-    	if (u_id.equals(bchk1) || u_id.equals(bchk2)) {
+    	if (u_id.equals(bchk)) {
     		model.addAttribute("bchk", "ok");
     	} else {
     		model.addAttribute("bchk", "no");
@@ -147,16 +149,6 @@ public class ProductController {
 	    // 상품 정보
 		model.addAttribute("pinfo", dto);
 		return "product/productinfo";
-	}
-	
-	// 단품 결제 DB처리
-	@RequestMapping(value = "/product/save_oinfo.do", method = RequestMethod.POST)
-	public String save_order_info(OrderinfoDTO orderinfoDTO) {
-		int result = pldao.insertOrder(orderinfoDTO);
-		
-		int result2 = pldao.update_SCount(orderinfoDTO.getP_num());
-		
-		return "redirect:product/productinfo.do";
 	}
 	
 	// 검색 자동완성 기능

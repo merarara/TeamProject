@@ -5,7 +5,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	
 <mapper namespace="com.project.springboot.pmservice.PManagerDao">
-	<!-- 페이지설정 -->
+	<!-- 상품 페이지설정 -->
 	<select id="articleMPageDao" resultType="_int">
 		select count(*) as total from product_list
 			<if test="searchWord != null and searchWord != ''">
@@ -69,5 +69,34 @@
 		  from p_count
 		 where p_sold = 'N'
 		   and p_num = #{param1}
+	</select>
+	
+	<!-- 바코드 번호 추가 -->
+	<insert id="addBarcodeDao">
+		insert into p_count (p_num, p_barcode)
+		values (#{param1}, #{param2})
+	</insert>
+	
+	<!-- 판매 목록 페이징 -->
+	<select id="articleSPageDao" resultType="_int">
+		select count(*) as total from order_info
+	</select>
+	
+	<!-- 판매 목록 -->
+	<select id="searchSlistDao" resultType="com.project.springboot.productdto.OrderinfoDTO">
+		select * 
+		  from (
+		  		select rownum num, A.*
+		  		  from (
+		  		  		select *
+		  		  		  from order_info
+		  		  		 order by m_num desc
+		  		  		) A
+		  		  where rownum <![CDATA[<=]]> #{nEnd} ) B
+		  where B.num <![CDATA[>=]]> #{nStart}
+	</select>
+	
+	<select id="getBOrderDao" resultType="com.project.springboot.productdto.BOrderinfoDTO">
+		select * from b_orderinfo
 	</select>
 </mapper>

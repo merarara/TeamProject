@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.springboot.member.UserDTO;
 import com.project.springboot.member.UserService;
-import com.project.springboot.productdto.BascketOrderDTO;
+import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.ProductBascketDTO;
 import com.project.springboot.pservice.IPListDaoService;
 
@@ -33,11 +33,29 @@ public class PBascketController {
 	@Autowired
 	UserService udao;
 	
+	// 단품 결제 DB처리
+	@RequestMapping(value = "/product/save_oinfo.do", method = RequestMethod.POST)
+	public String save_order_info(OrderinfoDTO dto, HttpServletRequest req) {
+		String p_num = req.getParameter("p_num");
+		String p_name = req.getParameter("p_name");
+		String p_price = req.getParameter("p_price");
+		String m_qty = req.getParameter("m_qty");
+		
+		int result = pbdao.insertOrder(dto);
+		
+		String m_num = pbdao.checkM_Num(dto.getU_id());
+		pbdao.insertBOinfo(m_num, dto.getU_id(), p_num, p_name, p_price, m_qty);
+		
+		int result2 = pldao.update_SCount(Integer.parseInt(p_num));
+		
+		return "redirect:product/productinfo.do";
+	}
+	
 	// 장바구니 결제 DB처리
 	@ResponseBody
 	@RequestMapping(value = "/product/save_bascket_order.do", method = RequestMethod.POST)
-	public Map<String, String> save_bascket_order(BascketOrderDTO bOrderDTO) {
-		int result = pbdao.insertBOrder(bOrderDTO);
+	public Map<String, String> save_bascket_order(OrderinfoDTO orderinfoDTO) {
+		int result = pbdao.insertOrder(orderinfoDTO);
 		
 		Map<String, String> response = new HashMap<String, String>();
 		if (result == 1) {
@@ -59,13 +77,13 @@ public class PBascketController {
 		String[] p_price = req.getParameterValues("p_price[]");
 		String[] bo_qty = req.getParameterValues("bo_qty[]");
 		
-		String o_num = pbdao.checkO_Num(u_id);
+		String m_num = pbdao.checkM_Num(u_id);
 		
 		int result = 0;
 		int result2;
 		
 		for (int i = 0; i < p_num.length; i++) {
-			result = result + pbdao.insertBOinfo(o_num, u_id, p_num[i], p_name[i], p_price[i], bo_qty[i]);
+			result = result + pbdao.insertBOinfo(m_num, u_id, p_num[i], p_name[i], p_price[i], bo_qty[i]);
 			result2 = pldao.update_SCount(Integer.parseInt(p_num[i]));
 		}
 		

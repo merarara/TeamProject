@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.project.springboot.productdto.BascketOrderDTO;
+import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.ProductBascketDTO;
 
 @Service
@@ -38,26 +38,26 @@ public class PBascketDaoService implements IPBascketDaoService {
 		return result;
 	}
 	
-	// 장바구니 결제
+	// O_Num 체크
 	@Override
-	public int insertBOrder(BascketOrderDTO bOrderDTO) {
-		int result = dao.insertBOrderDao(bOrderDTO);
+	public String checkM_Num(String u_id) {
+		String result = dao.checkM_NumDao(u_id);
 		
 		return result;
 	}
 	
-	// O_Num 체크
+	// 결제 DB처리
 	@Override
-	public String checkO_Num(String u_id) {
-		String result = dao.checkO_NumDao(u_id);
+	public int insertOrder(OrderinfoDTO orderinfoDTO) {
+		int result = dao.insertOrderDao(orderinfoDTO);
 		
 		return result;
 	}
 	
 	// 장바구니 결제 상세 DB처리
 	@Override
-	public int insertBOinfo(String o_num, String u_id, String p_num, String p_name, String p_price, String bo_qty) {
-		int result = dao.insertBOinfoDao(o_num, u_id, p_num, p_name, p_price, bo_qty);
+	public int insertBOinfo(String m_num, String u_id, String p_num, String p_name, String p_price, String bo_qty) {
+		int result = dao.insertBOinfoDao(m_num, u_id, p_num, p_name, p_price, bo_qty);
 		return result;
 	}
 	

@@ -148,7 +148,7 @@ function iamport(){
                 url: '/product/save_oinfo.do', // 저장하는 컨트롤러의 URL
                 data: {
                     u_id: '${uinfo.u_id}', // 구매한 사용자의 아이디
-                    m_addr: '${uinfo.u_addr1}' + '${uinfo.u_addr2}', // 사용자의 주소
+                    m_addr: '${uinfo.u_addr1}' + ' ${uinfo.u_addr2}', // 사용자의 주소
                     p_num: '${pinfo.p_num}', // 구매한 상품 번호
                     p_name: '${pinfo.p_name}',
                     m_price: $("#amount").val(), // 상품 가격

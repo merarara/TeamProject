@@ -19,6 +19,9 @@
 		  		  from (
 		  		        select *
 		  		          from f_board
+						  <if test="searchField != null and searchField != ''">
+							  where ${searchField} like '%${searchWord}%'
+						  </if>
 		  		         order by f_num desc
 		  		          ) A
 		  		  where rownum <![CDATA[<=]]> #{param1} ) B
@@ -28,6 +31,9 @@
 	<!-- 페이지설정 -->
 	<select id="articlePageDao" resultType="_int">
 		select count(*) as total from f_board
+		<if test="searchField != null and searchField != ''">
+			where ${searchField} like '%${searchWord}%'
+		</if>
 	</select>
 	
 
@@ -57,31 +63,4 @@
 		delete from f_board where f_num=#{f_num}
 	</delete> 
 	
-	<!-- 전체 게시글 수 조회 -->
-	<select id="selectCount" resultType="int">
-    	SELECT COUNT(*) FROM f_board
-		<if test="searchWord != null">
-			WHERE ${param1} LIKE '%' || #{param2} || '%'
-		</if>
-	</select>
-	
-	<select id="searchFboard" parameterType="hashmap" resultType="com.project.springboot.fboard.fboardDTO">
-	    SELECT *
-	    FROM f_board
-	    WHERE ${param1} like '%'|| #{param2} || '%'
-	    ORDER BY f_num DESC
-	    
-	        <!-- select *
-		  from (
-		  		select rownum num, A.*
-		  		  from (
-		  		          SELECT *
-	   					  FROM f_board
-	                      WHERE ${param1} like '%'|| #{param2} || '%'
-	                      ORDER BY f_num DESC
-		  		          ) A
-		  		  where rownum <![CDATA[<=]]> #{param1} ) B
-		  where B.num <![CDATA[>=]]> #{param2} -->
-	    
-	</select>
 </mapper>

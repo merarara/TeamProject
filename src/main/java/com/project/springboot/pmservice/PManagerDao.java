@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.project.springboot.productdto.BOrderinfoDTO;
+import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
@@ -27,4 +29,16 @@ public interface PManagerDao {
 	
 	// 바코드번호 가져오기
 	public List<String> getBarcodeListDao(int p_num);
+	
+	// 바코드번호 추가
+	public int addBarcodeDao(int p_num, String barcode);
+	
+	// 페이지 설정
+	public int articleSPageDao (@Param("searchWord") String searchWord, @Param("searchField") String searchField);
+	
+	// 결제 목록 가져오기
+	public List<OrderinfoDTO> searchSlistDao(@Param("nEnd") int nEnd, @Param("nStart") int nStart, @Param("searchWord") String searchword, @Param("searchField") String searchfield);
+	
+	// 주문 상세 내역 가져오기
+	public List<BOrderinfoDTO> getBOrderDao();
 }
