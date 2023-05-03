@@ -47,65 +47,66 @@ th {
 <body>
 <%@ include file="../header.jsp" %>	
 <div id="content">
-	<table>
-		<thead>
-            <tr>
-                <th>구매 번호</th>
-                <th>구매 아이디</th>
-                <th>주소</th>
-                <th>가격</th>
-                <th>수량</th>
-                <th>주문상태</th>
-                <th>주문일</th>
-            </tr>
-        </thead>
-		<tbody>
-		  <c:forEach items="${orderlist}" var="i">
-		    <tr>
-		      <td>${i.m_num}</td>
-		      <td>${i.u_id}</td>
-		      <td>${i.m_addr}</td>
-		      <td>${i.m_price}</td>
-		      <td>${i.m_qty}</td>
-		      <td>${i.m_payment}</td>
-		      <td>${i.m_bdate}</td>
-		    </tr>
-		    <tr>
-		      <td colspan="7">
-		        <button type="button" class="btn btn-link" data-toggle="collapse"
-		                data-target="#collapse${i.m_num}" aria-expanded="false"
-		                aria-controls="collapse${i.m_num}">
-		          주문 상세
-		        </button>
-		        <div class="collapse" id="collapse${i.m_num}">
-		          <table class="table">
-		            <thead>
-		              <tr>
-		                <th>상품번호</th>
-		                <th>상품명</th>
-		                <th>상품 가격</th>
-		                <th>구매 수량</th>
-		              </tr>
-		            </thead>
-		            <tbody>
-		              <c:forEach items="${blist}" var="j">
-		                <c:if test="${i.m_num == j.m_num}">
-		                  <tr>
-		                    <td>${j.p_num}</td>
-		                    <td>${j.p_name}</td>
-		                    <td>${j.p_price}</td>
-		                    <td>${j.bo_qty}</td>
-		                  </tr>
-		                </c:if>
-		              </c:forEach>
-		            </tbody>
-		          </table>
-		        </div>
-		      </td>
-		    </tr>
-		  </c:forEach>
-		</tbody>
-	</table>
+	<div class="container">
+		<table>
+			<thead>
+	            <tr>
+	                <th>구매 번호</th>
+	                <th>구매 아이디</th>
+	                <th>주소</th>
+	                <th>가격</th>
+	                <th>수량</th>
+	                <th>주문상태</th>
+	                <th>주문일</th>
+	            </tr>
+	        </thead>
+			<tbody>
+			  <c:forEach items="${orderlist}" var="i">
+			    <tr>
+			      <td><mark>${i.m_num}</mark></td>
+				  <td><mark>${i.u_id}</mark></td>
+				  <td><mark>${i.m_addr}</mark></td>
+				  <td><mark>${i.m_price}</mark></td>
+				  <td><mark>${i.m_qty}</mark></td>
+				  <td><mark>${i.m_payment}</mark></td>
+				  <td><mark>${i.m_bdate}</mark></td>
+			    </tr>
+			    <tr>
+			      <td colspan="7">
+			        <button type="button" class="btn btn-link" data-toggle="collapse"
+			                data-target="#collapse${i.m_num}" aria-expanded="false"
+			                aria-controls="collapse${i.m_num}">
+			          주문 상세
+			        </button>
+			        <div class="collapse" id="collapse${i.m_num}">
+			          <table class="table">
+			            <thead>
+			              <tr>
+			                <th>상품번호</th>
+			                <th>상품명</th>
+			                <th>상품 가격</th>
+			                <th>구매 수량</th>
+			              </tr>
+			            </thead>
+			            <tbody>
+			              <c:forEach items="${blist}" var="j">
+			                <c:if test="${i.m_num == j.m_num}">
+			                  <tr>
+			                    <td>${j.p_num}</td>
+			                    <td>${j.p_name}</td>
+			                    <td>${j.p_price}</td>
+			                    <td>${j.bo_qty}</td>
+			                  </tr>
+			                </c:if>
+			              </c:forEach>
+			            </tbody>
+			          </table>
+			        </div>
+			      </td>
+			    </tr>
+			  </c:forEach>
+			</tbody>
+		</table>
 	<table style="margin: 0 auto;">
 		<tr>
 			<td colspan="5" style="text-align: center;">
@@ -178,6 +179,7 @@ th {
 			</td>
 		</tr>
 	</table>
+	</div>
 </div>
 <%@ include file="../footer.jsp" %>
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
