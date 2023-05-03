@@ -33,6 +33,11 @@ public class UserService {
     public void insertUser(UserDTO userDTO) {
         userMapper.insertUser(userDTO);
     }
+    // sns 회원가입
+    @Transactional
+    public void insertSnsUser(UserDTO userDTO) {
+    	userMapper.insertSnsUser(userDTO);
+    }
 
     // 회원정보 수정
     @Transactional
@@ -59,11 +64,10 @@ public class UserService {
         return userList;
     }
 
-
     // 닉네임 조회
     @Transactional
-    public UserDTO selectUserByNickname(String u_nickname) {
-        UserDTO dto = userMapper.selectUserByNickname(u_nickname);
+    public UserDTO selectUserByNickname(String u_nick) {
+        UserDTO dto = userMapper.selectUserByNickname(u_nick);
         return dto;
     }
     
@@ -101,13 +105,4 @@ public class UserService {
     public void updateAuthority(String u_id, String u_authority) {
         userMapper.updateAuthority(u_id, u_authority);
     }
-    
-    // SNS 회원가입
-    @Transactional
-    public void insertSnsUser(SnsDTO snsDTO) {
-        userMapper.insertSnsUser(snsDTO);
-    }
-    
-
-    
 }

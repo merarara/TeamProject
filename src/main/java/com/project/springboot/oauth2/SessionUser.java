@@ -10,11 +10,9 @@ public class SessionUser implements Serializable {
 	
 	private String name;
 	private String email;
-	private String picture;
 
-	public SessionUser(String name, String email, String picture) {
+	public SessionUser(String name, String email) {
 		this.name = name;
 		this.email = email;
-		this.picture = picture;
 	}
 }

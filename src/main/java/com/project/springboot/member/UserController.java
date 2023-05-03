@@ -4,14 +4,11 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -25,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.project.springboot.oauth2.SessionUser;
+
 @Controller
 public class UserController {
 	
@@ -32,8 +31,6 @@ public class UserController {
 	UserService userService;
 	@Autowired
 	private UserMapper userMapper;
-	@Autowired
-	private JavaMailSender javaMailSender;
 	
 	// 로그인 및 회원가입 페이지로 이동하는 매핑
 	@RequestMapping("/user/main.do")
@@ -62,7 +59,9 @@ public class UserController {
 	
 	// 홈으로 이동하는 맵핑
 	@RequestMapping("/home.do")
-	public String home() {
+	public String home(Model model, HttpSession session) {
+		String u_nick = (String) session.getAttribute("u_nick");
+		model.addAttribute("u_nick", u_nick);
 		return "home";
 	}
 	
@@ -132,19 +131,19 @@ public class UserController {
 
     // 로그인
     @RequestMapping("/myLogin.do")
-    public String login1(Principal principal, Model model, HttpServletRequest request, 
+    public String login1(Principal principal, Model model, HttpServletRequest request,
                          @RequestParam(value = "error", required = false) String error) {
         try {
             if (error != null) { // 로그인 실패 시
                 model.addAttribute("error", "아이디 또는 비밀번호가 일치하지 않습니다."); // 실패 메시지를 모델에 추가
             }
-
             String user_id = principal.getName();
+
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String id = authentication.getName(); // 사용자 id
-
+            
             request.getSession().setAttribute("userId", id); // 세션에 사용자 id 저장
-            model.addAttribute("user_id", user_id);
+            
             return "home"; // 로그인 성공 시 home.jsp로 이동
         } catch (Exception e) {
             System.out.println("로그인 전입니다.");
@@ -156,10 +155,11 @@ public class UserController {
     @PostMapping("/user/checkUser.do")
     @ResponseBody
     public Map<String, String> checkUser(@RequestParam("u_id") String u_id,
-                            @RequestParam("u_pw") String u_pw) {
+                            			 @RequestParam("u_pw") String u_pw,
+                            			 HttpSession session) {
         UserDTO user = userService.selectOne(u_id);
         Map<String, String> response = new HashMap<>();
-        
+         
         if (user == null) { // 아이디가 없는 경우
             response.put("status", "fail");
         } else {
@@ -196,16 +196,23 @@ public class UserController {
  		
  		return "/user/edit";
  	}
-
+ 	
  	// 회원 정보 수정 처리
+    @ResponseBody
  	@PostMapping("/user/edit.do")
- 	public String edit(@ModelAttribute UserDTO userDTO) {
- 		// 수정된 회원 정보를 업데이트합니다.
+ 	public  Map<String, String> edit(@ModelAttribute UserDTO userDTO, HttpServletRequest req) {
+    	Map<String, String> response = new HashMap<>();
+ 		String email1 = req.getParameter("email1");
+        String email2 = req.getParameter("email2");
+        String u_email = email1 + "@" + email2;
+        userDTO.setU_email(u_email);
  		String passwd = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(userDTO.getU_pw());
     	userDTO.setU_pw(passwd);
  		userMapper.updateUser(userDTO);
-
- 		return "redirect:/home.do";
+ 		
+ 		response.put("status", "success");
+ 		
+ 		return response;
  	} 
     
  	// 회원탈퇴 페이지로 이동하는 매핑
@@ -344,39 +351,50 @@ public class UserController {
         return "redirect:/admin/userManagement.do";
     }
     
-//    @ResponseBody
-//	@RequestMapping(value = "/emailAuth", method = RequestMethod.POST)
-//	public String emailAuth(String email) {		
-//		Random random = new Random();
-//		int checkNum = random.nextInt(888888) + 111111;
-//
-//		/* 이메일 보내기 */
-//        String setFrom = "자신의 이메일을 입력해주세요";
-//        String toMail = email;
-//        String title = "회원가입 인증 이메일 입니다.";
-//        String content = 
-//                "홈페이지를 방문해주셔서 감사합니다." +
-//                "<br><br>" + 
-//                "인증 번호는 " + checkNum + "입니다." + 
-//                "<br>" + 
-//                "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
-//        
-//        try {
-//            
-//            MimeMessage message = mailSender.createMimeMessage();
-//            MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
-//            helper.setFrom(setFrom);
-//            helper.setTo(toMail);
-//            helper.setSubject(title);
-//            helper.setText(content,true);
-//            mailSender.send(message);
-//            
-//        }catch(Exception e) {
-//            e.printStackTrace();
-//        }
-//        
-//        return Integer.toString(checkNum);
-// 
-//	}
-
+    // sns 
+    @RequestMapping("/user/snsJoin.do")
+    public String snsJoin(HttpServletRequest request, Model model) {
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userId = auth.getName();
+        
+        UserDTO idchk = userService.selectOne(userId);
+        System.out.println(idchk);
+        
+        if (idchk != null) {
+            return "redirect:/home.do";
+        } else {
+            model.addAttribute("alertMsg", "추가정보를 입력해주세요!.");
+            return "/user/snsJoin";
+        }
+    }
+    // sns 추가정보
+    @RequestMapping("/user/snsnInsert.do")
+    public String snsInsert(@ModelAttribute UserDTO userDTO, HttpServletRequest request, Model model) {
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userId = auth.getName();
+        
+        HttpSession session = request.getSession();
+        
+        SessionUser obj = (SessionUser) session.getAttribute("user");
+        
+    	String sName = (String)obj.getName();
+    	String sEmail = (String)obj.getEmail();
+        
+    	UserDTO dto = new UserDTO();
+    	
+    	dto.setU_id(String.valueOf(userId));
+    	dto.setU_name(sName);
+    	dto.setU_nick(userDTO.getU_nick());
+    	dto.setU_phone(userDTO.getU_phone());
+    	dto.setU_email(sEmail);
+    	dto.setU_zip(userDTO.getU_zip());
+    	dto.setU_addr1(userDTO.getU_addr1());
+    	dto.setU_addr2(userDTO.getU_addr2());
+    	userService.insertSnsUser(dto);
+    	
+    	
+        System.out.println(sName);
+        System.out.println(sEmail);
+    	return  "redirect:/home.do";
+    }
 }

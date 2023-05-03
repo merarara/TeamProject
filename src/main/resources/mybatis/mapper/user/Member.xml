@@ -13,6 +13,16 @@
         VALUES(seq_user_num.nextval,#{u_id},#{u_pw},#{u_name},#{u_nick},#{u_phone},
         		#{u_email},#{u_zip},#{u_addr1},#{u_addr2},'일반')
     </insert>    
+    <!--  sns회원가입 일반 -->
+    <insert id="insertSnsUser" 
+    	parameterType="com.project.springboot.member.UserDTO">
+        INSERT INTO USER_INFO
+        (u_num, u_id, u_pw, u_name, u_nick, u_phone, u_email, u_zip, u_addr1, u_addr2, u_type)
+        VALUES(seq_user_num.nextval,#{u_id},'SNS',#{u_name},#{u_nick},#{u_phone},
+        		#{u_email},#{u_zip},#{u_addr1},#{u_addr2},'SNS')
+    </insert>   
+    
+        
     <!-- 회원정보 수정 -->
 	<update id="updateUser" parameterType="com.project.springboot.member.UserDTO">
 	   <choose>
@@ -29,6 +39,7 @@
 			</when>
 			<otherwise>
 				UPDATE USER_INFO SET
+				    u_pw = #{u_pw},
 				    u_nick = #{u_nick},
 				    u_phone = #{u_phone},
 				    u_email = #{u_email},
@@ -46,6 +57,10 @@
 	</delete>
 	<!-- 아이디로 회원 검색 -->
 	<select id="selectOne" resultType="com.project.springboot.member.UserDTO">
+		SELECT * FROM USER_INFO WHERE u_id = #{param1}
+	</select>
+	
+	<select id="selectUserByNickname" resultType="com.project.springboot.member.UserDTO">
 		SELECT * FROM USER_INFO WHERE u_id = #{param1}
 	</select>
 	

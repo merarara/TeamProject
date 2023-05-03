@@ -25,16 +25,6 @@
               <a class="nav-link" href="/user/main.do">로그인</a>
             </li>
           </s:authorize>
-			<s:authorize access="hasAnyRole('USER', 'BLACKLIST', 'ADMIN')">
-			    <li class="nav-item">
-			        <!-- 로그아웃 버튼 -->
-			        <form action="${pageContext.request.contextPath}/logout" method="post">
-			            <input type="submit" value="로그아웃">
-			        </form>
-			    </li>
-			</s:authorize>
-
-
 	        <li class="nav-item">
 	          <a class="nav-link" href="/product/productlist.do">판매제품</a>
 	        </li>
@@ -65,7 +55,7 @@
 			      프로필
 			    </a>
 			    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-			      <h6 class="dropdown-header">${sessionScope.userId}</h6>
+				  <h6 class="dropdown-header">${u_nick}</h6>
 			      <a class="dropdown-item" href="${pageContext.request.contextPath}/user/myinfo.do">내 정보</a>
 			      <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">로그아웃</a>
 			    </div>
@@ -78,7 +68,7 @@
 			      프로필
 			    </a>
 			    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-			      <h6 class="dropdown-header">${sessionScope.userId} <span class="badge badge-danger">B</span></h6>
+			      <h6 class="dropdown-header">${user_Nick} <span class="badge badge-danger">B</span></h6>
 			      <a class="dropdown-item" href="${pageContext.request.contextPath}/user/myinfo.do">내 정보</a>
 			      <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">로그아웃</a>
 			    </div>
@@ -92,7 +82,7 @@
 			      <i class="fas fa-crown"></i> 관리자
 			    </a>
 			    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-			      <h6 class="dropdown-header">${sessionScope.userId}</h6>
+			      <h6 class="dropdown-header">${user_Nick}</h6>
 			    </div>
 			  </li>
 			</s:authorize>

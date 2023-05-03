@@ -21,7 +21,6 @@ public class OAuthAttributes {
 		this.nameAttributeKey = nameAttributeKey;
 		this.name = name;
 		this.email = email;
-		this.picture = picture;
 	}
 
 	public static OAuthAttributes of(String registrationId, String userNameAttributeName,
@@ -46,7 +45,6 @@ public class OAuthAttributes {
 		return OAuthAttributes.builder()
 				.name((String) attributes.get("name"))
 				.email((String) attributes.get("email"))
-				.picture((String) attributes.get("picture"))
 				.attributes(attributes)
 				.nameAttributeKey(userNameAttributeName)
 				.build();
@@ -76,13 +74,11 @@ public class OAuthAttributes {
 		Map<String, Object> obj1 = (Map<String, Object>) attributes.get("kakao_account");
 		Map<String, Object> obj2 = (Map<String, Object>) obj1.get("profile");
 		String sName = (String) obj2.get("nickname");
-		String sPic = (String) obj2.get("thumbnail_image_url");
 		String sEmail = (String) obj1.get("email");
 		
 		return OAuthAttributes.builder()
 				.name(sName)
 				.email(sEmail)
-				.picture(sPic)
 				.attributes(attributes)
 				.nameAttributeKey(userNameAttributeName)
 				.build();
@@ -93,13 +89,11 @@ public class OAuthAttributes {
 //		System.out.println(attributes);
 		Map<String, Object> obj1 = (Map<String, Object>) attributes.get("response");
 		String sName = (String) obj1.get("name");
-		String sPic = (String) obj1.get("profile_image");
 		String sEmail = (String) obj1.get("email");
 
 		return OAuthAttributes.builder()
 				.name(sName)
 				.email(sEmail)
-				.picture(sPic)
 				.attributes(attributes)
 				.nameAttributeKey(userNameAttributeName)
 				.build();

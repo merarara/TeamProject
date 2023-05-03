@@ -57,15 +57,11 @@ public class SecurityConfig {
 		
 		httpSecurity.formLogin()
 	    .loginPage("/myLogin.do") // default: /login
-	    // .loginPage("/main.jsp")
 	    .loginProcessingUrl("/myLoginAction.do")
-//	    .defaultSuccessUrl("/myLogin.do")
-	    .failureUrl("/myError.do") // default: /login?error
 	    .successHandler(myAuthenticationSuccessHandler)
 	    .failureHandler(authenticationFailureHandler)
 	    .usernameParameter("my_id") // default: username
 	    .passwordParameter("my_pass") // default: password
-	    
 	    .permitAll();
 		
 		httpSecurity.logout()
@@ -86,7 +82,7 @@ public class SecurityConfig {
 	            .userInfoEndpoint()
 	            .userService(customOAuth2UserService)
 				.and()
-				.defaultSuccessUrl("/snsjoin", true);
+				.defaultSuccessUrl("/user/snsJoin.do", true);
 				
 
 		

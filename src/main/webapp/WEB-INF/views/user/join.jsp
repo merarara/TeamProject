@@ -24,32 +24,6 @@ grecaptcha.enterprise.ready(function() {
       
     });
 });
-/* 이메일 인증 */
-$(".email_auth_btn").click(function(){	     	 
-    	 var email = $('#email').val();
-    	 
-    	 if(email == ''){
-    	 	alert("이메일을 입력해주세요.");
-    	 	return false;
-    	 }
-    	 
-    	 $.ajax({
-			type : "POST",
-			url : "/emailAuth",
-			data : {email : email},
-			success: function(data){
-				alert("인증번호가 발송되었습니다.");
-				email_auth_cd = data;
-			},
-			error: function(data){
-				alert("메일 발송에 실패했습니다.");
-			}
-		}); 
-	});
-if($('#email_auth_key').val() != email_auth_cd){
-	alert("인증번호가 일치하지 않습니다.");
-	return false;
-}
 /* 주소 API를 통해 DB에 값 넣는 기능 */
 function execution_daum_address(e) {
 	 e.preventDefault(); // 기본 이벤트 발생 방지
@@ -161,27 +135,36 @@ function signUp() {
 			}
 	});
 }
+// 이메일
+/* function checkMail() {
+  var email1 = $("#email1").val();
+  var email2 = $("#email2").val();
+  var email_domain = $("select[name='email_domain']").val();
+  
+  // 이메일 주소 조합
+  var email = email1 + "@" + email2;
+  if(email_domain) {
+    email = email1 + "@" + email_domain;
+  }
+  $.ajax({
+	  type: "POST",
+	  url: "/emailConfirm",
+	  data: { email1: email1, email2: email2 },
+	  dataType: "json",
+	  success: function(data) {
+	    // ajax 요청이 성공적으로 수행된 경우 실행되는 코드
+	    alert(data); // 서버에서 전달된 결과 출력
+	  },
+	  error: function(request, status, error) {
+	    // ajax 요청이 실패한 경우 실행되는 코드
+	    alert("ajax에러 "+ status + " - " + error);
+	  }
+	});
+} */
 
-
-// 이메일인증
-function sendEmail() {
-    var email = document.getElementById('email').value;
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/emailConfirm', true);
-    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-    xhr.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            var response = JSON.parse(xhr.responseText);
-            alert(response.message);
-        } else if (this.readyState === XMLHttpRequest.DONE) {
-            alert('에러 발생!');
-        }
-    };
-    xhr.send(JSON.stringify(email));
-}
 
 // 빈 값이 있으면 알럿창 
-function validateForm(event) {
+function validateForm() {
     var inputId = document.getElementById("inputId").value;
     var inputPw = document.getElementById("inputPw").value;
     var inputName = document.getElementById("inputName").value;
@@ -268,11 +251,9 @@ function validateForm(event) {
                                    </select>
                                    <!-- 이메일 인증 버튼 -->
                                </div>
-                               <button type="button" id="email_auth_btn" class="btn-certi ">인증하기</button> 
-                               </div>
-								  <input type="text" placeholder="인증번호 입력" id="email_auth_key">
-							  </div>
+                               <button type="button" class="btn-certi" onclick="checkMail()">인증하기</button> 
                    </div>
+							<input type="text" placeholder="인증번호 입력" id="email_auth_key">
                    <div class="address_wrap form_group">
                        <div class="address_input_wrap ">
                            <label for="adress_num">우편번호</label>
@@ -281,7 +262,6 @@ function validateForm(event) {
                               <button class="address_button" onclick="execution_daum_address(event)">
                               		주소 찾기
                               </button>
-                              
                            </div>
                        </div>
                        <div class="clearfix"></div>
@@ -304,12 +284,12 @@ function validateForm(event) {
                    </div>
                </form>
 					<div id="google_recaptha">
-					<script src='https://www.google.com/recaptcha/api.js'></script>
-					<div class="g-recaptcha" data-sitekey="6LeDHNQlAAAAAFS1lpWcwEd4WMADWCVMEgOM7-Qx"></div>
+						<script src='https://www.google.com/recaptcha/api.js'></script>
+						<div class="g-recaptcha" data-sitekey="6LeDHNQlAAAAAFS1lpWcwEd4WMADWCVMEgOM7-Qx"></div>
 					</div>
-           </div>
        </div>
    </div>
+</div>
    <%@ include file="../footer.jsp" %>
    <!--  jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
