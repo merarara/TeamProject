@@ -75,16 +75,19 @@ function toggleLike() {
         <td>내용</td>
         <td colspan="3">
         	${ aboardDto.a_content }</br>
-	  			
-		<c:forEach items="${ file }" var="f">
-			<c:if test="${ aupDto.sfile == f }">
-      			<a href="../aUpload/${f}" data-lightbox="image">
-				<img src="../aUpload/${f}" width="100px" height="100px"></a>
-			</c:if>
+        	
+        <c:forEach items="${file}" var="f">
+	        <c:forEach items="${aupDto }" var="i">
+	  			<c:if test="${i.sfile == f}">
+	   				 <a href="../aUpload/${f}" data-lightbox="image">
+	     			 <img src="../aUpload/${f}" width="100px" height="100px">
+	    			 </a>
+	  			</c:if>
+			</c:forEach>	
 		</c:forEach>
-	  			
         </td>
     </tr>
+
     <!-- 하단 메뉴(버튼) -->
     <tr>
         <td colspan="4" align="center">

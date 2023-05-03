@@ -100,55 +100,56 @@ public class AboardController {
 			MultipartHttpServletRequest req) { 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String u_id = authentication.getName();
-		int a_num = asv.uploadnum(aboardDto);
 		
-		if (multipartResolver.isMultipart(req)) {
-	        MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
-	      //파일외 폼값을 받는다. MultipartHttpServletRequest객체를 사용.	
-			String title = req.getParameter("title");
-			System.out.println("제목:"+ title);
-			
-			//파일을 처리한다. 
-			String path = "";
-			for(MultipartFile f: user_file) {
-				//전송된 원본파일명을 얻어온다. 
-				String originalName = f.getOriginalFilename();
-				//파일명에서 확장자를 잘라낸다. 
-				String ext = originalName.substring(
-						originalName.lastIndexOf('.'));
-				//범용고유식별자를 통해 파일명으로 사용할 문자열 생성
-				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-				//문자열을 결합하여 새로운 파일명을 생성한다.
-				String savedName = uuid + ext;
-				
-				try {
-					//디렉토리의 물리적 경로
-					path = ResourceUtils.getFile("classpath:static/aUpload/")
-							.toPath().toString();
-					//경로와 파일명을 통해 File객체를 생성
-					File filePath = new File(path, savedName);
-					//해당 경로에 파일을 전송한다. 
-					f.transferTo(filePath);
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				AupDTO aupDto = new AupDTO();
-				aupDto.setA_num(a_num);
-				aupDto.setOfile(originalName);
-				aupDto.setSfile(savedName);
-				
-				asv.upload(aupDto);
-			}
-			System.out.println("aUpload폴더:"+ path);
-	    } else {
-	        // Multipart 요청이 아닌 경우 처리
-	    }
 		int result = asv.insertA(aboardDto); 
 		
-		
-		
+		if (!user_file[0].isEmpty()) {
+			if (multipartResolver.isMultipart(req)) {
+		        MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
+		      //파일외 폼값을 받는다. MultipartHttpServletRequest객체를 사용.	
+		        
+		        int a_num = asv.uploadnum(aboardDto);
+				String title = req.getParameter("title");
+				System.out.println("제목:"+ title);
+				
+				//파일을 처리한다. 
+				String path = "";
+				for(MultipartFile f: user_file) {
+					//전송된 원본파일명을 얻어온다. 
+					String originalName = f.getOriginalFilename();
+					//파일명에서 확장자를 잘라낸다. 
+					String ext = originalName.substring(
+							originalName.lastIndexOf('.'));
+					//범용고유식별자를 통해 파일명으로 사용할 문자열 생성
+					String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+					//문자열을 결합하여 새로운 파일명을 생성한다.
+					String savedName = uuid + ext;
+					
+					try {
+						//디렉토리의 물리적 경로
+						path = ResourceUtils.getFile("classpath:static/aUpload/")
+								.toPath().toString();
+						//경로와 파일명을 통해 File객체를 생성
+						File filePath = new File(path, savedName);
+						//해당 경로에 파일을 전송한다. 
+						f.transferTo(filePath);
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					AupDTO aupDto = new AupDTO();
+					aupDto.setA_num(a_num);
+					aupDto.setOfile(originalName);
+					aupDto.setSfile(savedName);
+					
+					asv.upload(aupDto);
+				}
+				System.out.println("aUpload폴더:"+ path);
+		    } else {
+		        // Multipart 요청이 아닌 경우 처리
+		    }
+		}
 		
 		if(result==1) System.out.println("게시글이 등록되었습니다.");
 		
@@ -167,7 +168,11 @@ public class AboardController {
 	    model.addAttribute("udto", udto);
 	    model.addAttribute("aboardDto", dto);
 	    
-	    AupDTO aupDto = asv.uploadview(Integer.parseInt(a_num));
+	    List<AupDTO> aupDto = asv.uploadview(Integer.parseInt(a_num));
+	    
+	    for (AupDTO e: aupDto) {
+	    	System.out.println(e.getSfile());
+	    }
 	    
 	    model.addAttribute("aupDto", aupDto);
 	    List<String> aup = new ArrayList<String>();
@@ -229,7 +234,7 @@ public class AboardController {
 	    return "redirect:/aboard/aboardlist.do";
 	}
 	
-	@RequestMapping("/download.do")
+	@RequestMapping("/aboard/download.do")
 	public void downloadFile(HttpServletRequest req, 
 			HttpServletResponse response) 
 		throws Exception {
@@ -261,42 +266,42 @@ public class AboardController {
 	    }
 	}
 	
-	 @PostMapping("/aboard/like.do")
-	 public String addLike(HttpServletRequest req, HttpSession session) {
-		 int a_num = Integer.parseInt(req.getParameter("a_num"));
-		  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-          String u_id = authentication.getName(); // 사용자 id
- 		 if (u_id == null) {
+	 // 좋아요 기능
+	@PostMapping("/aboard/like.do")
+	public String addLike(HttpServletRequest req, HttpSession session) {
+		int a_num = Integer.parseInt(req.getParameter("a_num"));
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String u_id = authentication.getName(); // 사용자 id
+ 		if (u_id == null) {
  			return "redirect:/auth/login.do";
-	     }
-	 	 int result = asv.addLike(a_num, u_id);
-         if (result == 1) {
-        	 int a_like = asv.getLikeCount(a_num);
-        	 return "redirect:/aboard/aboardview.do?a_num=" + a_num;
-         } else {
-        	 return "redirect:/aboard/aboardview.do?a_num=" + a_num;
-         }
-     }
+	    }
+	 	int result = asv.addLike(a_num, u_id);
+        if (result == 1) {
+        	int a_like = asv.getLikeCount(a_num);
+        	return "redirect:/aboard/aboardview.do?a_num=" + a_num;
+        } else {
+        	return "redirect:/aboard/aboardview.do?a_num=" + a_num;
+        }
+	}
 	 
-	 @PostMapping("/aboard/unlike.do")
-	 public String removeLike(HttpServletRequest req, HttpSession session) {
-	     // HttpSession에서 로그인 정보인 user_id를 가져온다.
-		 int a_num = Integer.parseInt(req.getParameter("a_num"));
-		 
-		  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-          String u_id = authentication.getName(); // 사용자 id
-	     if (u_id == null) {
-	         // 로그인하지 않은 경우 처리
-	    	 
+	// 싫어요 기능
+	@PostMapping("/aboard/unlike.do")
+	public String removeLike(HttpServletRequest req, HttpSession session) {
+	    // HttpSession에서 로그인 정보인 user_id를 가져온다.
+		int a_num = Integer.parseInt(req.getParameter("a_num"));
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String u_id = authentication.getName(); // 사용자 id
+	    if (u_id == null) {
+	    	// 로그인하지 않은 경우 처리
 	         return "redirect:/user/login.do";
-	     } else {
-	         // 좋아요 정보를 삭제한다.
-	         asv.removeLike(a_num, u_id);
-	         // 게시글의 좋아요 수를 갱신한다.
-	         int a_like = asv.getLikeCount(a_num);
-	         return "redirect:/aboard/aboardview.do?a_num=" + a_num;
-	     }
-	 }
+	    } else {
+	        // 좋아요 정보를 삭제한다.
+	        asv.removeLike(a_num, u_id);
+	        // 게시글의 좋아요 수를 갱신한다.
+	        int a_like = asv.getLikeCount(a_num);
+	        return "redirect:/aboard/aboardview.do?a_num=" + a_num;
+	    }
+	}
 
 }
 	

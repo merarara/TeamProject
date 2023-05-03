@@ -40,6 +40,6 @@ public interface aboardService {
 	
 	public int upload(AupDTO aupDto);
 	public int uploadnum(aboardDTO aboardDto);
-	public AupDTO uploadview(int a_num);
+	public List<AupDTO> uploadview(int a_num);
 
 }

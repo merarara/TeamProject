@@ -134,7 +134,7 @@ public class aboardServiceImpl implements IAboardService {
 	 }
 	 
 	@Override
-	public AupDTO uploadview(int a_num) {
+	public List<AupDTO> uploadview(int a_num) {
 		return abs.uploadview(a_num);
 	}
 }
