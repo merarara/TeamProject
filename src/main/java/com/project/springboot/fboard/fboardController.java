@@ -34,6 +34,14 @@ public class fboardController {
 		int curPage = 1;
 		int nPage = 1;
 		
+	    // 검색어와 검색 조건을 파라미터에서 가져옵니다.
+	    String searchField = request.getParameter("searchField");
+	    String searchWord = request.getParameter("searchWord");
+	    
+	    // 검색 폼을 유지하기 위해 검색어와 검색 조건도 모델에 담아서 전달합니다.
+	    model.addAttribute("searchField", searchField);
+	    model.addAttribute("searchWord", searchWord);
+		
 		try
 		{
 			String sPage = request.getParameter("page");
@@ -44,48 +52,14 @@ public class fboardController {
 			
 		}
 		
-		BpageInfo pinfo = fdao.articlePage(nPage);
+		BpageInfo pinfo = fdao.articlePage(nPage, searchField, searchWord);
 		model.addAttribute("page", pinfo);
 		
-		
 		//DAO(Mapper)의 select() 메서드를 호출해서 회원목록을 인출 
-		model.addAttribute("fboardLists", fdao.selectF(nPage));		
+		model.addAttribute("fboardLists", fdao.selectF(nPage, searchField, searchWord));		
 		return "/fboard/fboardlist";       
 	}
 	
-	@RequestMapping("/fboard/searchFboard.do")
-	public String searchFboard(HttpServletRequest request, Model model) {
-		/*
-		 * int curPage = 1; int nPage = 1;
-		 * 
-		 * try { String sPage = request.getParameter("page"); nPage =
-		 * Integer.parseInt(sPage); } catch (Exception e) {
-		 * 
-		 * }
-		 * 
-		 * BpageInfo pinfo = fdao.articlePage(nPage); model.addAttribute("page", pinfo);
-		 * 
-		 * 
-		 * //DAO(Mapper)의 select() 메서드를 호출해서 회원목록을 인출 model.addAttribute("fboardLists",
-		 * fdao.selectF(nPage));
-		 */
-	    // 검색어와 검색 조건을 파라미터에서 가져옵니다.
-	    String searchField = request.getParameter("searchField");
-	    String searchWord = request.getParameter("searchWord");
-	    
-	    // 검색어와 검색 조건을 기준으로 게시글 목록을 조회합니다.
-	    List<fboardDTO> fboardLists = fdao.searchFboard(searchField, searchWord);
-	    
-	    // 조회된 게시글 목록을 모델에 담아서 화면으로 전달합니다.
-	    model.addAttribute("fboardLists", fboardLists);
-	    
-	    // 검색 폼을 유지하기 위해 검색어와 검색 조건도 모델에 담아서 전달합니다.
-	    model.addAttribute("searchField", searchField);
-	    model.addAttribute("searchWord", searchWord);
-
-	    return "/fboard/fboardlist";
-	}
-
 	//FAQ 게시글 등록 - get방식인 경우 등록하기 페이지 진입	
 	@RequestMapping(value="/fboard/fboardwrite.do", method=RequestMethod.GET)
 	public String fboard2(Model model) {		

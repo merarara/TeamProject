@@ -2,9 +2,7 @@ package com.project.springboot.afbService;
 
 
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +20,15 @@ public class aboardServiceImpl implements IAboardService {
 	@Autowired
 	private aboardService abs;
 	
-	int listCount = 5;		// 한 페이지당 보여줄 게시물의 갯수
+	int listCount = 15;		// 한 페이지당 보여줄 게시물의 갯수
 	int pageCount = 5;		// 하단에 보여줄 페이지 리스트의 갯수
 	
     @Override
-    public List<aboardDTO> selectA(int curpage) {
+    public List<aboardDTO> selectA(int curpage, String searchField, String searchWord) {
     	int nStart = (curpage - 1) * listCount + 1;
 		int nEnd = (curpage - 1) * listCount + listCount;
     	
-        return abs.selectA(nEnd, nStart);
+        return abs.selectA(nEnd, nStart, searchField, searchWord);
     }
 
     @Override
@@ -49,19 +47,14 @@ public class aboardServiceImpl implements IAboardService {
     }
     
     @Override
-    public List<aboardDTO> searchAboard(String searchField, String searchWord) {
-        return abs.searchAboard(searchField, searchWord);
-    }
-    
-    @Override
     public int deleteA(String a_num) {
 	    return sqlSession.delete("deleteA", a_num);
     }
 
     @Override
-    public BpageInfo articlePage(int curPage) {
+    public BpageInfo articlePage(int curPage, String searchField, String searchWord) {
     	int totalCount = 0;
-		totalCount = abs.articlePageDao(curPage);
+		totalCount = abs.articlePageDao(curPage, searchField, searchWord);
 		
 		// 총 페이지 수
 		int totalPage = totalCount / listCount;
@@ -110,84 +103,22 @@ public class aboardServiceImpl implements IAboardService {
     }
     
     @Override
-    public Map<String, Object> toggleLike(int a_num, String u_id) {
-        Map<String, Object> result = new HashMap<String, Object>();
+	public int addLike(int a_num, String u_id) {
+		return abs.insertLike(a_num, u_id);
+	}
 
-        int likeCount = abs.selectLikeCount(a_num);
-
-        int updatedLikeCount = 0;
-
-        // 이미 좋아요를 누른 상태인 경우 -> 좋아요 삭제
-        if (abs.selectLike(a_num, u_id) != null) {
-            abs.deleteLike(a_num, u_id);
-            updatedLikeCount = likeCount - 1;
-            result.put("liked", false);
-        }
-        // 좋아요를 누르지 않은 상태인 경우 -> 좋아요 추가
-        else {
-            abs.insertLike(a_num, u_id);
-            updatedLikeCount = likeCount + 1;
-            result.put("liked", true);
-        }
-
-        abs.updateLikeCount(a_num, updatedLikeCount);
-
-        result.put("likeCount", updatedLikeCount);
-
-        return result;
-    }
-    
-    @Override
-    public int insertLike(int a_num, String u_id) {
-        int result = 0;
-        try {
-            result = abs.insertLike(a_num, u_id); // DAO 메서드 호출
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-    
-    @Override
-    public int deleteLike(int a_num, String u_id) {
-        int result = 0;
-        try {
-            result = abs.deleteLike(a_num, u_id); // DAO 메서드 호출
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-    
-    @Override
-    public int selectLikeCount(int a_num) {
-        int result = 0;
-        try {
-            result = abs.selectLikeCount(a_num); // DAO 메서드 호출
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-    
-    @Override
-    public Object selectLike(int a_num, String u_id) {
-        Object result = null;
-        try {
-            result = abs.selectLike(a_num, u_id); // DAO 메서드 호출
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-    
-    
-    
-    @Override
-    public void updateLikeCount(int a_num, int updatedLikeCount) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("a_num", a_num);
-        map.put("a_likecount", updatedLikeCount);
-        sqlSession.update("aboardMapper.updateLikeCount", map);
-    }
+	@Override
+	public int removeLike(int a_num, String u_id) {
+		return abs.deleteLike(a_num, u_id);
+	}
+	
+	@Override
+	public int getLikeCount(int a_num) {
+	    return abs.getLikeCount(a_num);
+	}
+	
+	 @Override
+	    public aboardDTO getAboard(int a_num) {
+	        return abs.getAboard(a_num);
+	   }
 }

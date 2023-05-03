@@ -121,7 +121,7 @@ details caption {
 				[ &lt;&lt; ]
 			</c:when>
 			<c:otherwise>
-				<a href="/fboard/fboardlist.do?page=1">[ &lt;&lt; ]</a>
+				<a href="/fboard/fboardlist.do?page=1&searchField=${searchField}&searchWord=${searchWord}">[ &lt;&lt; ]</a>
 			</c:otherwise>
 			</c:choose>
 			<!-- 이전 -->
@@ -130,7 +130,7 @@ details caption {
 				[ &lt; ]
 			</c:when>
 			<c:otherwise>
-				<a href="/fboard/fboardlist.do?page=${page.curPage - 1 }">[ &lt; ]</a>
+				<a href="/fboard/fboardlist.do?page=${page.curPage - 1 }&searchField=${searchField}&searchWord=${searchWord}">[ &lt; ]</a>
 			</c:otherwise>
 			</c:choose>
 			
@@ -141,7 +141,7 @@ details caption {
 					[ ${fEach} ] &nbsp;
 				</c:when>
 				<c:otherwise>
-					<a href="/fboard/fboardlist.do?page=${fEach }">[ ${fEach } ]</a> &nbsp;
+					<a href="/fboard/fboardlist.do?page=${fEach }&searchField=${searchField}&searchWord=${searchWord}">[ ${fEach } ]</a> &nbsp;
 				</c:otherwise>
 				</c:choose>
 			</c:forEach>
@@ -152,7 +152,7 @@ details caption {
 				[ &gt; ]
 			</c:when>
 			<c:otherwise>
-				<a href="/fboard/fboardlist.do?page=${page.curPage + 1 }">[ &gt; ]</a>
+				<a href="/fboard/fboardlist.do?page=${page.curPage + 1 }&searchField=${searchField}&searchWord=${searchWord}">[ &gt; ]</a>
 			</c:otherwise>
 			</c:choose>
 			<!-- 끝 -->
@@ -161,14 +161,14 @@ details caption {
 				[ &gt;&gt; ]
 			</c:when>
 			<c:otherwise>
-				<a href="/fboard/fboardlist.do?page=${page.totalPage }">[ &gt;&gt; ]</a>
+				<a href="/fboard/fboardlist.do?page=${page.totalPage }&searchField=${searchField}&searchWord=${searchWord}">[ &gt;&gt; ]</a>
 			</c:otherwise>
 			</c:choose>
 			</td>
 		</tr>	
 <!-- 검색폼 -->
 <div style="margin-bottom: 50px";>
- <form action="/fboard/searchFboard.do" method="post">  
+ <form action="/fboard/fboardlist.do" method="post">  
     <table align="center" border="1" width="30%">
         <tr>
             <td align="center">
