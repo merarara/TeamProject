@@ -106,9 +106,9 @@ function doPayment() {
                 url: '/product/save_bascket_order.do',
                 data: {
                     u_id: '${uinfo.u_id}',
-                    o_addr: '${uinfo.u_addr1}',
-                    o_price: total_price,
-                    o_qty: total_qty
+                    m_addr: '${uinfo.u_addr1}' + ' ${uinfo.u_addr2}',
+                    m_price: total_price,
+                    m_qty: total_qty
                 },
                 success: function(result) {
                 	if (result.status === "success") {

@@ -31,6 +31,8 @@
         background-color: #ddd;
     }
 </style>
+<script>
+</script>
 </head>
 <body>
 
@@ -39,9 +41,12 @@
   <form method="POST" id="" action="/admin/allUser.do">
     <button type="button" onclick="location.href='/admin/userManagement.do'">뒤로가기</button>
     <h1>전체 회원 조회</h1>
-    <label for="search-id">회원 아이디 검색</label>
-     <input type="text" id="searchId" name="searchId" placeholder="검색어를 입력하세요">
+    
+    <label for=searchId>회원 아이디 검색</label>
+     <input type="text"  id ="searchId" name="searchId" placeholder="검색어를 입력하세요">
     <button type="submit">검색</button>
+  </form>
+    
     <table>
       <thead>
         <tr>
@@ -88,7 +93,6 @@
         <a href="?page=${page+1}">다음</a>
       </c:if>
     </div>
-  </form>
 </div>
 
 <%@ include file="../footer.jsp" %>

@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.project.springboot.ppageinfo.MProductPageinfo;
+import com.project.springboot.productdto.BOrderinfoDTO;
+import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
@@ -25,4 +27,16 @@ public interface IPManagerDaoService {
 	
 	// 바코드번호 가져오기
 	public List<String> getBarcodeList(int p_num);
+	
+	// 바코드 번호 추가
+	public int addBarcode(int p_num, String barcode);
+	
+	// 재고 관리 페이지 설정
+	public MProductPageinfo articleSPage(int curPage, String searchword, String searchfield);
+		
+	// 상품 검색
+	public List<OrderinfoDTO> searchSList(int curPage, String searchword, String searchfield);
+	
+	// 주문 상세 내역 가져오기
+	public List<BOrderinfoDTO> getBOrder();
 }

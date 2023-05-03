@@ -7,7 +7,6 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.project.springboot.ppageinfo.PPageInfo;
-import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountVO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
@@ -27,16 +26,10 @@ public interface IPListDaoService {
 	public ProductinfoDTO viewpinfo(int p_num);
 	
 	// 상품 구매 체크
-	public String buyCheck1(int p_num, String u_id);
+	public String buyCheck(int p_num, String u_id);
 	
-	// 상품 구매 체크2
-	public String buyCheck2(int p_num, String u_id);
-		
 	// 상품 검색 자동완성
 	public List<String> wordSearchShow(Map<String, String> paraMap);
-	
-	// 상품 구매
-	public int insertOrder(OrderinfoDTO orderinfoDTO);
 	
 	// 결제 후 sCount 증가
 	public int update_SCount(int p_num);	

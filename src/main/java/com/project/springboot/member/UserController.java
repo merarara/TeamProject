@@ -4,10 +4,14 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -28,6 +32,8 @@ public class UserController {
 	UserService userService;
 	@Autowired
 	private UserMapper userMapper;
+	@Autowired
+	private JavaMailSender javaMailSender;
 	
 	// 로그인 및 회원가입 페이지로 이동하는 매핑
 	@RequestMapping("/user/main.do")
@@ -40,6 +46,13 @@ public class UserController {
 	public String login() {
 		return "/auth/login";
 	}
+	
+	// 결재내역 맵핑
+	@RequestMapping("/user/buyHistory.do")
+	public String buyHistory() {
+		return "/user/buyHistory";
+	}
+	
 	
 	// 내정보로 이동하는 맵핑
 	@RequestMapping("/user/myinfo.do")
@@ -238,42 +251,9 @@ public class UserController {
         return "/admin/userManagement";
     }
     
-    // 회원전체 조회 및 검색
-    @RequestMapping(value = "/admin/allUser.do", method = {RequestMethod.GET, RequestMethod.POST})
-    public String showAllUsers(Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String search_Id) {
-        int totalCount = userService.selectSearchIdCount(search_Id); // 전체 회원 수 조회
-        int limit = 10; // 페이지 당 보여줄 회원 수
-        int maxPage = (int) Math.ceil((double) totalCount / limit); // 전체 페이지 수 계산
-        int offset = (page - 1) * limit; // 조회 시작할 회원 번호
-
-        if (page > maxPage) { // 요청한 페이지 번호가 최대 페이지 수를 넘어갈 경우, 마지막 페이지로 이동
-            page = maxPage;
-            offset = (page - 1) * limit;
-        }
-
-        List<UserDTO> userList;
-        if (search_Id == null) { // 검색어가 없을 때 전체 회원 조회
-            userList = userService.selectAll(offset, limit);
-        } else { // 검색어가 있을 때 해당 검색어를 포함한 회원 조회
-        	search_Id = "%" + search_Id + "%"; // 검색어에 와일드카드 추가
-            userList = userService.searchById(search_Id, offset, limit);
-        }
-
-        model.addAttribute("userList", userList); // 조회 결과를 JSP 파일에 전달
-
-        model.addAttribute("totalCount", totalCount); // 전체 회원 수를 JSP 파일에 전달
-        model.addAttribute("currentPage", page); // 현재 페이지 번호를 JSP 파일에 전달
-        model.addAttribute("maxPage", maxPage); // 전체 페이지 수를 JSP 파일에 전달
-        model.addAttribute("searchId", search_Id); // 검색어를 JSP 파일에 전달
-
-        return "admin/allUser";
-    }
-
-
-    
-    // basic
-    @RequestMapping(value = "/admin/basicUser.do", method = RequestMethod.GET)
-    public String selectUserlist(Model model, @RequestParam(defaultValue = "1") int page) {
+    // 회원전체 조회
+    @RequestMapping(value = "/admin/allUser.do")
+    public String selectAll(Model model, @RequestParam(defaultValue = "1")  int page, @RequestParam(name = "searchId", required = false) String searchId) {
     	int totalCount = userService.selectUserCount(); // 전체 회원 수 조회
     	int limit = 10; // 페이지 당 보여줄 회원 수
     	int maxPage = (int) Math.ceil((double) totalCount / limit); // 전체 페이지 수 계산
@@ -284,20 +264,24 @@ public class UserController {
     		offset = (page - 1) * limit;
     	}
     	
-    	List<UserDTO> userList = userService.selectUserlist(offset, limit); // 특정 범위 내의 회원 조회
+    	
+    	
+    	List<UserDTO> userList = userService.selectAll(offset, limit, searchId); // 특정 범위 내의 회원 조회
     	model.addAttribute("userList", userList); // 조회 결과를 JSP 파일에 전달
     	
     	model.addAttribute("totalCount", totalCount); // 전체 회원 수를 JSP 파일에 전달
     	model.addAttribute("currentPage", page); // 현재 페이지 번호를 JSP 파일에 전달
     	model.addAttribute("maxPage", maxPage); // 전체 페이지 수를 JSP 파일에 전달
     	
-    	return "admin/basicUser";
+    	return "admin/allUser";
     }
+
+
     
-    // blacklist
-    @RequestMapping(value = "/admin/blackUser.do", method = RequestMethod.GET)
-    public String selectBlacklist(Model model, @RequestParam(defaultValue = "1") int page) {
-    	int totalCount = userService.selectBlackCount(); // 전체 회원 수 조회
+    // basic
+    @RequestMapping(value = "/admin/basicUser.do", method = RequestMethod.GET)
+    public String selectUserlist(Model model, @RequestParam(defaultValue = "1")  int page, @RequestParam(name = "searchId", required = false) String searchId) {
+    	int totalCount = userService.selectUserCount(); // 전체 회원 수 조회
     	int limit = 10; // 페이지 당 보여줄 회원 수
     	int maxPage = (int) Math.ceil((double) totalCount / limit); // 전체 페이지 수 계산
     	int offset = (page - 1) * limit; // 조회 시작할 회원 번호
@@ -307,14 +291,41 @@ public class UserController {
     		offset = (page - 1) * limit;
     	}
     	
-    	List<UserDTO> userList = userService.selectBlacklist(offset, limit); // 특정 범위 내의 회원 조회
+    	
+    	
+    	List<UserDTO> userList = userService.selectUserlist(offset, limit, searchId); // 특정 범위 내의 회원 조회
     	model.addAttribute("userList", userList); // 조회 결과를 JSP 파일에 전달
     	
     	model.addAttribute("totalCount", totalCount); // 전체 회원 수를 JSP 파일에 전달
     	model.addAttribute("currentPage", page); // 현재 페이지 번호를 JSP 파일에 전달
     	model.addAttribute("maxPage", maxPage); // 전체 페이지 수를 JSP 파일에 전달
     	
-    	return "admin/blackUser";
+    	return "admin/allUser";
+    }
+    
+    // blacklist
+    @RequestMapping(value = "/admin/blackUser.do", method = RequestMethod.GET)
+    public String selectBlacklist(Model model, @RequestParam(defaultValue = "1")  int page, @RequestParam(name = "searchId", required = false) String searchId) {
+    	int totalCount = userService.selectUserCount(); // 전체 회원 수 조회
+    	int limit = 10; // 페이지 당 보여줄 회원 수
+    	int maxPage = (int) Math.ceil((double) totalCount / limit); // 전체 페이지 수 계산
+    	int offset = (page - 1) * limit; // 조회 시작할 회원 번호
+    	
+    	if (page > maxPage) { // 요청한 페이지 번호가 최대 페이지 수를 넘어갈 경우, 마지막 페이지로 이동
+    		page = maxPage;
+    		offset = (page - 1) * limit;
+    	}
+    	
+    	
+    	
+    	List<UserDTO> userList = userService.selectBlacklist(offset, limit, searchId); // 특정 범위 내의 회원 조회
+    	model.addAttribute("userList", userList); // 조회 결과를 JSP 파일에 전달
+    	
+    	model.addAttribute("totalCount", totalCount); // 전체 회원 수를 JSP 파일에 전달
+    	model.addAttribute("currentPage", page); // 현재 페이지 번호를 JSP 파일에 전달
+    	model.addAttribute("maxPage", maxPage); // 전체 페이지 수를 JSP 파일에 전달
+    	
+    	return "admin/allUser";
     }
     
     // 전체권한관리 
@@ -333,4 +344,39 @@ public class UserController {
         return "redirect:/admin/userManagement.do";
     }
     
+//    @ResponseBody
+//	@RequestMapping(value = "/emailAuth", method = RequestMethod.POST)
+//	public String emailAuth(String email) {		
+//		Random random = new Random();
+//		int checkNum = random.nextInt(888888) + 111111;
+//
+//		/* 이메일 보내기 */
+//        String setFrom = "자신의 이메일을 입력해주세요";
+//        String toMail = email;
+//        String title = "회원가입 인증 이메일 입니다.";
+//        String content = 
+//                "홈페이지를 방문해주셔서 감사합니다." +
+//                "<br><br>" + 
+//                "인증 번호는 " + checkNum + "입니다." + 
+//                "<br>" + 
+//                "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
+//        
+//        try {
+//            
+//            MimeMessage message = mailSender.createMimeMessage();
+//            MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+//            helper.setFrom(setFrom);
+//            helper.setTo(toMail);
+//            helper.setSubject(title);
+//            helper.setText(content,true);
+//            mailSender.send(message);
+//            
+//        }catch(Exception e) {
+//            e.printStackTrace();
+//        }
+//        
+//        return Integer.toString(checkNum);
+// 
+//	}
+
 }

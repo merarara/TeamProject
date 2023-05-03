@@ -22,6 +22,14 @@
 	<Ul class="user-list">
 		<li>
 			<p>
+				결재내역<br>
+				내가 구매한 상품 보러 가기
+			</p>
+			<img src="/userimages/buyHistory.png">
+			<a href="/user/buyHistory.do" class="login-link">결재내역</a>
+		</li>
+		<li>
+			<p>
 				내 정보 수정하기!<br> 컴 온 컴 온 
 			</p>
 			<img src="/userimages/ico_update.png" >

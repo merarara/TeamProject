@@ -41,14 +41,14 @@
 				판매관리
 			</p>
 			<img src="/admin/salesMng.png">
-			<a href="" class="login-link">판매관리</a>
+			<a href="/admin/sellManage.do" class="login-link">판매관리</a>
 		</li>
 		<li>
 			<p>
 				재고관리
 			</p>
 			<img src="/admin/inventoryMng.png">
-			<a href="/admin/productManagement.do" class="login-link">재고관리</a>
+			<a href="/admin/searchProduct.do" class="login-link">재고관리</a>
 		</li>
 		<li>
 			<p>
@@ -58,6 +58,7 @@
 			<a href="" class="login-link">상품관리</a>
 		</li>
 	</Ul>
+</div>
 </div>
 </div>
 <%@ include file="../footer.jsp" %>

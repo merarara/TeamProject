@@ -16,7 +16,40 @@
 <!--  API기능  -->
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://www.google.com/recaptcha/enterprise.js?render=6Lfd49MlAAAAANS-AmiQi_nazkcpIKwod-M9Q4eB"></script>
 <script>
+// 리캡챠
+grecaptcha.enterprise.ready(function() {
+    grecaptcha.enterprise.execute('6Lfd49MlAAAAANS-AmiQi_nazkcpIKwod-M9Q4eB', {action: 'login'}).then(function(token) {
+      
+    });
+});
+/* 이메일 인증 */
+$(".email_auth_btn").click(function(){	     	 
+    	 var email = $('#email').val();
+    	 
+    	 if(email == ''){
+    	 	alert("이메일을 입력해주세요.");
+    	 	return false;
+    	 }
+    	 
+    	 $.ajax({
+			type : "POST",
+			url : "/emailAuth",
+			data : {email : email},
+			success: function(data){
+				alert("인증번호가 발송되었습니다.");
+				email_auth_cd = data;
+			},
+			error: function(data){
+				alert("메일 발송에 실패했습니다.");
+			}
+		}); 
+	});
+if($('#email_auth_key').val() != email_auth_cd){
+	alert("인증번호가 일치하지 않습니다.");
+	return false;
+}
 /* 주소 API를 통해 DB에 값 넣는 기능 */
 function execution_daum_address(e) {
 	 e.preventDefault(); // 기본 이벤트 발생 방지
@@ -92,7 +125,7 @@ function checkNick() {
 }
 //가입 버튼 클릭 시 실행되는 함수
 function signUp() {
-// 아이디 중복 체크 여부 확인
+	// 아이디 중복 체크 여부 확인
 	if (!idChecked) {
 		alert("아이디 중복 체크를 해주세요.");
 	return;
@@ -235,7 +268,10 @@ function validateForm(event) {
                                    </select>
                                    <!-- 이메일 인증 버튼 -->
                                </div>
-                               <button type="button" class="btn-certi " onclick="sendEmail()" >인증하기</button>
+                               <button type="button" id="email_auth_btn" class="btn-certi ">인증하기</button> 
+                               </div>
+								  <input type="text" placeholder="인증번호 입력" id="email_auth_key">
+							  </div>
                    </div>
                    <div class="address_wrap form_group">
                        <div class="address_input_wrap ">
@@ -267,6 +303,10 @@ function validateForm(event) {
                        <button type="button" id ="signupBtn" class="btn-submit " onclick="signUp()">가입 완료</button>
                    </div>
                </form>
+					<div id="google_recaptha">
+					<script src='https://www.google.com/recaptcha/api.js'></script>
+					<div class="g-recaptcha" data-sitekey="6LeDHNQlAAAAAFS1lpWcwEd4WMADWCVMEgOM7-Qx"></div>
+					</div>
            </div>
        </div>
    </div>
