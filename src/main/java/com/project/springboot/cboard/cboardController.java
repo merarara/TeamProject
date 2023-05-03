@@ -48,7 +48,7 @@ public class cboardController {
 	@Autowired 
 	UserService udao;
 	
-	//회원 목록
+	//게시글  목록
 	@RequestMapping("/cboard/cboardlist.do") 
 	public String cboard(HttpServletRequest req, Model model) {
 		
@@ -96,7 +96,7 @@ public class cboardController {
 	    return "/cboard/cboardlist";
 	}
 
-	//공지사항 게시글 등록 - get방식인 경우 등록하기 페이지 진입
+	//get방식인 경우 등록하기 페이지 진입
 	@RequestMapping(value="/cboard/cboardwrite.do", method=RequestMethod.GET)
 	public String write(Model model) { 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -107,7 +107,7 @@ public class cboardController {
 		return "/cboard/cboardwrite"; 
 	}
 
-	//post방식인 경우 입력한 FAQ 게시글을 DB처리
+	//post방식인 경우 입력한 게시글을 DB처리
 	@RequestMapping(value="/cboard/cboardwrite.do", method=RequestMethod.POST)
 	public String write(cboardDTO cboardDto, MultipartFile[] user_file, 
 			Model model, 
@@ -196,7 +196,7 @@ public class cboardController {
 	}
 	
 	
-	//get방식인 경우 FAQ게시판 수정 페이지
+	//get방식인 경우 게시판 수정 페이지
 	@RequestMapping(value="/cboard/cboardedit.do", method=RequestMethod.GET)
 	public String cboard6(HttpServletRequest req, Model model) { 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -205,7 +205,7 @@ public class cboardController {
 		String c_num = req.getParameter("c_num");
 	    cboardDTO dto = asv.selectOne(c_num);
 	    model.addAttribute("udto", udto);
-	    // 게시물 번호를 통해 게시물 정보를 조회하여 fboardDto에 담아줌
+	    // 게시물 번호를 통해 게시물 정보를 조회하여 boardDto에 담아줌
 	    model.addAttribute("cboardDto", dto);
 	    
 		return "cboard/cboardedit"; 

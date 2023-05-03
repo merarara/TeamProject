@@ -70,7 +70,6 @@
 	</c:forEach>
 </table>
 </div>
-</div>
 <%@ include file="../footer.jsp" %>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
