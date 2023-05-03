@@ -63,13 +63,13 @@ th {
 			<tbody>
 			  <c:forEach items="${orderlist}" var="i">
 			    <tr>
-			      <td><mark>${i.m_num}</mark></td>
-				  <td><mark>${i.u_id}</mark></td>
-				  <td><mark>${i.m_addr}</mark></td>
-				  <td><mark>${i.m_price}</mark></td>
-				  <td><mark>${i.m_qty}</mark></td>
-				  <td><mark>${i.m_payment}</mark></td>
-				  <td><mark>${i.m_bdate}</mark></td>
+			      <td>${i.m_num}</td>
+				  <td>${i.u_id}</td>
+				  <td>${i.m_addr}</td>
+				  <td>${i.m_price}</td>
+				  <td>${i.m_qty}</td>
+				  <td>${i.m_payment}</td>
+				  <td>${i.m_bdate}</td>
 			    </tr>
 			    <tr>
 			      <td colspan="7">
