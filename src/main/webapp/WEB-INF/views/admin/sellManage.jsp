@@ -62,6 +62,19 @@ footer {
    	    $(this).next().toggle();
    	  });
     });
+    
+    function checkLimit(checkbox, boQty, p_num) {
+    	  const checkedCount = $(".barcode" + p_num + ":checked").length;
+    	  
+    	  console.log(checkedCount);
+    	 /* 
+    	  console.log(checkedCount);
+    	  if (checkedCount > boQty) {
+    	    checkbox.checked = false;
+    	    alert("해당 상품의 수량은 " + boQty + "개 입니다.");
+    	  }
+    	  */
+    }
 </script>
 </head>
 <body>
@@ -103,7 +116,7 @@ footer {
 					                      		<td>${j.p_num}</td>
 					                      		<td>${j.p_name}</td>
 					                      		<td>${j.p_price}</td>
-					                      		<td>${j.bo_qty}</td>
+					                      		<td id="qty_${j.p_num }">${j.bo_qty}</td>
 					                    	</tr>
 					                    	<tr style="display: none;">
 									        	<td colspan="4">
@@ -122,7 +135,7 @@ footer {
 									                    					<ul>	
 									                    						<li>
 											                    					<label class="form-check-label" for="${ x.p_barcode }">${ x.p_barcode }</label>
-																			  		<input type="checkbox" class="form-check-input barcode${ j.p_num }" id="${ x.p_barcode }">
+																			  		<input type="checkbox" class="form-check-input barcode${ j.p_num }" id="${ x.p_barcode }" onclick="checkLimit(this, ${j.bo_qty}, ${j.p_num })">
 																	  			</li>
 																	  		</ul>
 																		</div>
