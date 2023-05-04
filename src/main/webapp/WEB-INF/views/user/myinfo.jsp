@@ -37,6 +37,13 @@
 		</li>
 		<li>
 			<p>
+				비밀번호 변경하기
+			</p>
+			<img src="/userimages/updatePw.png">
+			<a href="/user/updatePw.do" class="login-link">비밀번호 변경 하기</a>
+		</li>
+		<li>
+			<p>
 				회원탈퇴를 원하세요?<br>
 				한번 더 고민해 보시는건 어떠세요?
 			</p>

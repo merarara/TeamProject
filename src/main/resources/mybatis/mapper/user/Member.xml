@@ -28,7 +28,6 @@
 	   <choose>
 			<when test = "#{u_pw} != null">
 				UPDATE USER_INFO SET
-			    u_pw = #{u_pw},
 			    u_nick = #{u_nick},
 			    u_phone = #{u_phone},
 			    u_email = #{u_email},
@@ -39,7 +38,6 @@
 			</when>
 			<otherwise>
 				UPDATE USER_INFO SET
-				    u_pw = #{u_pw},
 				    u_nick = #{u_nick},
 				    u_phone = #{u_phone},
 				    u_email = #{u_email},
@@ -49,6 +47,11 @@
 				    WHERE u_id = #{u_id}
 			</otherwise>
 		</choose>
+	</update>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="updatePwd" parameterType="map">
+	    UPDATE user_info SET u_pw = #{newPwd} WHERE u_id = #{u_id}
 	</update>
 
     <!-- 회원탈퇴 -->

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +44,12 @@ public class UserService {
     @Transactional
     public void updateUser(UserDTO userDTO) {
         userMapper.updateUser(userDTO);
+    }
+    
+    // 비밀번호 수정
+    @Transactional
+    public boolean updatePwd(String u_id, String newPwd) {
+        return userMapper.updatePwd(u_id, newPwd) == 1;
     }
 
     // 회원 탈퇴
