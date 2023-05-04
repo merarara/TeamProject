@@ -137,4 +137,14 @@ public class aboardServiceImpl implements IAboardService {
 	public List<AupDTO> uploadview(int a_num) {
 		return abs.uploadview(a_num);
 	}
+	
+	@Override
+	public int deleteFile(int a_num, String sfile) {
+		return abs.deleteFile(a_num, sfile);
+	}
+	
+	@Override
+	public int deleteFileAll(String a_num) {
+		return abs.deleteFileAll(a_num);
+	}
 }

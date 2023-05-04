@@ -41,5 +41,7 @@ public interface aboardService {
 	public int upload(AupDTO aupDto);
 	public int uploadnum(aboardDTO aboardDto);
 	public List<AupDTO> uploadview(int a_num);
+	public int deleteFile(@Param("a_num") int a_num, @Param("sfile") String sfile);
+	public int deleteFileAll(String a_num);
 
 }

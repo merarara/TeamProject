@@ -17,7 +17,7 @@
 <%@ include file="../header.jsp" %>	
 <div id="content">
 
-<h2>FAQ게시판 - 글쓰기(write)</h2>
+<h2>공지사항 게시판 - 글쓰기(write)</h2>
 <!-- 글쓰기 페이지를 그대로 사용하되 action 부분만 수정한다. 수정시에도
 파일첨부가 있으므로 enctype속성은 추가되어야한다. -->
 <form action="/aboard/aboardwrite.do" method="post" modelAttribute="aboardDto" enctype="multipart/form-data">
@@ -40,7 +40,7 @@
     <tr>
         <td>내용</td>
         <td>
-            <textarea name="a_content" style="width:90%;height:100px;"></textarea>
+            <textarea name="a_content" style="width:90%;height:200px;"></textarea>
         </td>
     </tr>
     <tr>

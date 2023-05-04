@@ -18,58 +18,52 @@
 <h2>공지사항 게시판 - 수정하기(Edit)</h2>
 <!-- 글쓰기 페이지를 그대로 사용하되 action 부분만 수정한다. 수정시에도
 파일첨부가 있으므로 enctype속성은 추가되어야한다. -->
-<form method="post" action="/aboard/aboardedit.do" >
-<!-- 게시물 수정을 위한 일련번호 -->	
-	<input type="hidden" name="a_num" value="${ aboardDto.a_num }"/>
-	<input type="hidden" name="u_id" value="${udto.u_id}" />
+<form method="post" action="/aboard/aboardedit.do" enctype="multipart/form-data">
+    <!-- 게시물 수정을 위한 일련번호 -->    
+    <input type="hidden" name="a_num" value="${ aboardDto.a_num }"/>
+    <input type="hidden" name="u_id" value="${udto.u_id}" />
 
-	<table border="1" width="90%">
-	    <tr>
-	        <td>작성자</td>
-	        <td>
-	            <input type="text" name="u_nick" style="width:150px;" value="${aboardDto.u_nick }" readonly/>
-	        </td>
-	    </tr>
-	    <tr>
-	        <td>제목</td>
-	        <td>
-	            <input type="text" name="a_title" style="width:90%;" value="${ aboardDto.a_title }" />
-	        </td>
-	    </tr>
-	    <tr>
-	        <td>내용</td>
-	        <td>
-	            <textarea name="a_content" style="width:90%;height:100px;">${ aboardDto.a_content }
-		             <c:forEach items="${file}" var="f">
-		        		<c:forEach items="${aupDto }" var="i">
-		  					<c:if test="${i.sfile == f}">
-		   				 		<a href="../aUpload/${f}" data-lightbox="image">
-		     			 		<img src="../aUpload/${f}" width="100px" height="100px">
-		    			 		</a>
-		  					</c:if>
-						</c:forEach>	
-					</c:forEach>
-	            </textarea>
-	        </td>
-	    </tr>
-	    <tr>
-   <!--  	<td>첨부파일</td>
-    	<td><input type="file" name="user_file" multiple/></td> -->
-    	</tr>
-	    <tr>
-	        <td colspan="2" align="center">
-	            <button type="submit">수정 완료</button>
-	            <button type="button" onclick="location.href='../aboard/aboardlist.do';">
-	                목록 바로가기
-	            </button>
-	        </td>
-	    </tr>
-	</table>    
-</form>
-<table border="1">
+    <table border="1" width="90%">
+        <tr>
+            <td>작성자</td>
+            <td>
+                <input type="text" name="u_nick" style="width:150px;" value="${aboardDto.u_nick }" readonly/>
+            </td>
+        </tr>
+        <tr>
+            <td>제목</td>
+            <td>
+                <input type="text" name="a_title" style="width:90%;" value="${ aboardDto.a_title }" />
+            </td>
+        </tr>
+        <tr>
+            <td>내용</td>
+            <td>
+                <textarea name="a_content" style="width:90%;height:200px;">${ aboardDto.a_content }</textarea>
+            </td>
+        </tr>
+    <tr>
+    <td>첨부파일</td>
+    <td>
+        <input type="file" name="user_file" multiple/><br/>
+    </td>
+    <tr>
 
-</table>
-</div>
+		 <c:forEach items="${aupDto}" var="file">
+    <tr>
+        <td><input type="checkbox" name="file" value="${file.sfile}">${file.ofile}</td>
+    </tr>
+		 </c:forEach>
+     <tr>
+         <td colspan="2" align="center">
+         	<button type="submit">수정 완료</button>
+            <button type="button" onclick="location.href='../aboard/aboardlist.do';">
+                목록 바로가기
+            </button>
+            </td>
+        </tr>
+    </table>
+</form> 
 </div>
 <%@ include file="../footer.jsp" %>
 

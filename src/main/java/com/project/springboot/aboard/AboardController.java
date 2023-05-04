@@ -218,6 +218,29 @@ public class AboardController {
 	    // 게시물 번호를 통해 게시물 정보를 조회하여 fboardDto에 담아줌
 	    model.addAttribute("aboardDto", dto);
 	    
+	    List<AupDTO> aupDto = asv.uploadview(Integer.parseInt(a_num));
+	    
+	    for (AupDTO e: aupDto) {
+	    	System.out.println(e.getSfile());
+	    }
+	    
+	    model.addAttribute("aupDto", aupDto);
+	    List<String> aup = new ArrayList<String>();
+	    
+	    try {
+			String path = ResourceUtils
+				.getFile("classpath:static/aUpload/").toPath().toString();
+
+			File file = new File(path);
+			File[] fileArray = file.listFiles();
+			for(File f : fileArray){
+				//저장된 파일명, 파일 용량을 Map에 저장한다. 
+				aup.add(f.getName());
+			}
+			model.addAttribute("file", aup);		
+		}
+		catch (Exception e) {}
+	    
 		return "aboard/aboardedit"; 
 	} 
 	
@@ -225,54 +248,84 @@ public class AboardController {
 	@RequestMapping(value="/aboard/aboardedit.do", method=RequestMethod.POST)
 	public String aboard7(aboardDTO aboardDto, MultipartFile[] user_file, 
 			Model model, 
-			MultipartHttpServletRequest req) {
-		String a_num = req.getParameter("a_num");
+			MultipartHttpServletRequest req, HttpServletRequest request) {
+		int a_num = Integer.parseInt(req.getParameter("a_num"));
+		aboardDto = asv.selectOneA(String.valueOf(a_num));
 		int result = asv.updateA(aboardDto); 
 		
 		if (!user_file[0].isEmpty()) {
 			if (multipartResolver.isMultipart(req)) {
-		        MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
-		      //파일외 폼값을 받는다. MultipartHttpServletRequest객체를 사용.	
-//		        int a_num = asv.uploadnum(aboardDto);
-				String title = req.getParameter("title");
-				System.out.println("제목:"+ title);
-				
-				//파일을 처리한다. 
-				String path = "";
-				for(MultipartFile f: user_file) {
-					//전송된 원본파일명을 얻어온다. 
-					String originalName = f.getOriginalFilename();
-					//파일명에서 확장자를 잘라낸다. 
-					String ext = originalName.substring(
-							originalName.lastIndexOf('.'));
-					//범용고유식별자를 통해 파일명으로 사용할 문자열 생성
-					String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-					//문자열을 결합하여 새로운 파일명을 생성한다.
-					String savedName = uuid + ext;
-					
-					try {
-						//디렉토리의 물리적 경로
-						path = ResourceUtils.getFile("classpath:static/aUpload/")
-								.toPath().toString();
-						//경로와 파일명을 통해 File객체를 생성
-						File filePath = new File(path, savedName);
-						//해당 경로에 파일을 전송한다. 
-						f.transferTo(filePath);
-					}
-					catch (Exception e) {
-						e.printStackTrace();
-					}
-					
-					AupDTO aupDto = new AupDTO();
-//					aupDto.setA_num(a_num);
-					aupDto.setOfile(originalName);
-					aupDto.setSfile(savedName);
-					
-					asv.upload(aupDto);
-				}
-				System.out.println("aUpload폴더:"+ path);
-		    } else {
-		        // Multipart 요청이 아닌 경우 처리
+			    MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
+			    //파일외 폼값을 받는다. MultipartHttpServletRequest객체를 사용.	
+			    a_num = asv.uploadnum(aboardDto);
+			    String title = req.getParameter("title");
+			    System.out.println("제목:"+ title);
+			    //파일을 처리한다. 
+			    String path = "";
+			    for(MultipartFile f: user_file) {
+			        //전송된 원본파일명을 얻어온다. 
+			        String originalName = f.getOriginalFilename();
+			        //파일명에서 확장자를 잘라낸다. 
+			        String ext = originalName.substring(
+			            originalName.lastIndexOf('.'));
+			        //범용고유식별자를 통해 파일명으로 사용할 문자열 생성
+			        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			        //문자열을 결합하여 새로운 파일명을 생성한다.
+			        String savedName = uuid + ext;
+			        
+			        try {
+			            //디렉토리의 물리적 경로
+			            path = ResourceUtils.getFile("classpath:static/aUpload/")
+			                .toPath().toString();
+			            //경로와 파일명을 통해 File객체를 생성
+			            File filePath = new File(path, savedName);
+			            //해당 경로에 파일을 전송한다. 
+			            f.transferTo(filePath);
+			        }
+			        catch (Exception e) {
+			            e.printStackTrace();
+			        }
+			        
+			        AupDTO aupDto = new AupDTO();
+			        aupDto.setA_num(a_num);
+			        aupDto.setOfile(originalName);
+			        aupDto.setSfile(savedName);
+			        
+			        asv.upload(aupDto);
+			    }
+			    System.out.println("aUpload폴더:"+ path);
+			} else {
+			    // Multipart 요청이 아닌 경우 처리
+			}
+		}
+		
+		String[] files = request.getParameterValues("file");
+		if (files != null && files.length > 0) { // 체크된 첨부파일이 있을 경우
+		    for (String f : files) {
+		        String sfile = req.getParameter("sfile");
+		        List<AupDTO> fileList = asv.uploadview(a_num);
+		        AupDTO file = null;
+		        if (fileList != null && !fileList.isEmpty()) {
+		            file = fileList.get(0);
+		        }
+		        if (file != null) {
+		            // 파일 경로를 가져옵니다.
+		        	
+		        try {
+		        	for (AupDTO e: fileList) {
+			            String filePath = ResourceUtils.getFile("classpath:static/aUpload").toPath().toString();
+			            // 파일을 삭제합니다.
+			            File deleteFile = new File(filePath, e.getSfile());
+			            if (deleteFile.exists()) {
+			                deleteFile.delete();
+			            }
+			        }
+		        } catch (Exception e) {
+		        	
+		        }
+		        // 파일 정보를 DB에서 삭제합니다.
+		        asv.deleteFile(a_num, f);
+		        }
 		    }
 		}
 		
@@ -285,6 +338,7 @@ public class AboardController {
 	@RequestMapping(value="/aboard/aboarddelete.do", method=RequestMethod.GET)
 	public String deleteA(@RequestParam("a_num") String a_num) {
 	    int result = asv.deleteA(a_num);
+	    int result2 = asv.deleteFileAll(a_num);
 	    if (result == 1) {
 	      System.out.println("삭제되었습니다.");
 	    }

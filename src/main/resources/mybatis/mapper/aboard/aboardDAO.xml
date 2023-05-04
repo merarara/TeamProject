@@ -100,4 +100,13 @@
 	    select * from aup where a_num = #{a_num, jdbcType=INTEGER}
 	</select>
 	
+	<delete id="deleteFile">
+	  DELETE FROM aup WHERE sfile = #{sfile, jdbcType=VARCHAR} AND a_num = #{a_num}
+	</delete>
+	
+	<delete id="deleteFileAll">
+	  DELETE FROM aup WHERE a_num = #{a_num}
+	</delete>
+	
+	
 </mapper>

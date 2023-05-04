@@ -32,5 +32,7 @@ public interface IAboardService {
 	public int upload(AupDTO aupDto);
 	public int uploadnum(aboardDTO aboardDto);
 	public List<AupDTO> uploadview(int a_num);
+	public int deleteFile(int a_num, String sfile);
+	public int deleteFileAll(String a_num);
 	
 }

@@ -82,4 +82,5 @@ public class ACommentController {
 	        acs.deleteAC(ac_num);
 	        return "redirect:/aboard/aboardview.do?a_num=" + a_num;
 	    }
+	 
 }
