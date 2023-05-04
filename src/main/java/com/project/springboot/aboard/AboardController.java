@@ -233,7 +233,7 @@ public class AboardController {
 			if (multipartResolver.isMultipart(req)) {
 		        MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
 		      //파일외 폼값을 받는다. MultipartHttpServletRequest객체를 사용.	
-		        int a_num = asv.uploadnum(aboardDto);
+//		        int a_num = asv.uploadnum(aboardDto);
 				String title = req.getParameter("title");
 				System.out.println("제목:"+ title);
 				
@@ -264,7 +264,7 @@ public class AboardController {
 					}
 					
 					AupDTO aupDto = new AupDTO();
-					aupDto.setA_num(a_num);
+//					aupDto.setA_num(a_num);
 					aupDto.setOfile(originalName);
 					aupDto.setSfile(savedName);
 					
