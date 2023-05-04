@@ -10,24 +10,23 @@ import com.project.springboot.afbpageinfo.BpageInfo;
 
 @Service
 public interface IboardService {
-	public List<cboardDTO> select(int curPage); 
+	public List<cboardDTO> select(int curPage, String searchField, String searchWord); 
 	public int insert(cboardDTO cboardDto);
-	public cboardDTO selectOne(String a_num);
+	public cboardDTO selectOne(String c_num);
 	public int update(cboardDTO cboardDto);
-	public int delete(String a_num);
-	public List<cboardDTO> searchboard(String searchField, String searchWord);
+	public int delete(String c_num);
 	
 	// 페이지설정
-	public BpageInfo articlePage(int curPage);
-	void updateVisitCount(String a_num);
-	Map<String, Object> toggleLike(int a_num, String u_id);
+	public BpageInfo articlePage(int curPage, String searchField, String searchWord);
+	// 조회수 증가
+	void updateVisitCount(String c_num);
 	
-	public void updateLikeCount(int a_num, int updatedLikeCount); 
-	public int insertLike(int a_num, String u_id);
-    public int selectLikeCount(int a_num);
-    public Object selectLike(int a_num, String u_id);
-	public int deleteLike(int a_num, String u_id);
-    
+	public int addLike(int c_num, String u_id);
+	public int removeLike(int c_num, String u_id);
+	
+	// 좋아요 수 가져오기
+	public int getLikeCount(int c_num);
+	cboardDTO getCboard(int c_num);
     
 	
 }

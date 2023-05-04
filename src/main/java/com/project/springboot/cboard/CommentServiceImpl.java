@@ -1,7 +1,5 @@
 package com.project.springboot.cboard;
 
-
-
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -11,50 +9,44 @@ import org.springframework.stereotype.Service;
 import com.project.springboot.afbpageinfo.BpageInfo;
 
 @Service
-public class cboardServiceImpl implements IboardService {
+public class CommentServiceImpl implements ICommentService {
 	
 	@Autowired
     private SqlSession sqlSession;
 	
-	@Autowired
-	private cboardService abs;
-	
-	int listCount = 5;		// 한 페이지당 보여줄 게시물의 갯수
+    @Autowired
+    private CommentService Cs;
+    
+    int listCount = 15;		// 한 페이지당 보여줄 게시물의 갯수
 	int pageCount = 5;		// 하단에 보여줄 페이지 리스트의 갯수
-	
+
     @Override
-    public List<cboardDTO> select(int curpage, String searchField, String searchWord) {
+    public List<CommentDTO> selectC(int curpage) {
     	int nStart = (curpage - 1) * listCount + 1;
 		int nEnd = (curpage - 1) * listCount + listCount;
     	
-        return abs.select(nEnd, nStart, searchField, searchWord);
+        return Cs.selectC(nEnd, nStart);
     }
 
     @Override
-    public int insert(cboardDTO cboardDto) {
-        return abs.insert(cboardDto);
+    public int insertC(CommentDTO CDto) {
+        return Cs.insertC(CDto);
     }
 
     @Override
-    public cboardDTO selectOne(String c_num) {
-        return abs.selectOne(c_num);
+    public int updateC(CommentDTO CDto) {
+        return Cs.updateC(CDto);
     }
 
     @Override
-    public int update(cboardDTO cboardDto) {
-        return abs.update(cboardDto);
+    public int deleteC(String cc_num) {
+        return sqlSession.delete("deleteC", cc_num);
     }
     
-    
     @Override
-    public int delete(String c_num) {
-	    return sqlSession.delete("delete", c_num);
-    }
-
-    @Override
-    public BpageInfo articlePage(int curPage, String searchField, String searchWord) {
+    public BpageInfo articlePage(int curPage) {
     	int totalCount = 0;
-		totalCount = abs.articlePageDao(curPage, searchField, searchWord);
+		totalCount = Cs.articlePageDao(curPage);
 		
 		// 총 페이지 수
 		int totalPage = totalCount / listCount;
@@ -98,27 +90,22 @@ public class cboardServiceImpl implements IboardService {
     }
     
     @Override
-    public void updateVisitCount(String c_num) {
-        abs.updateVisitCount(c_num);
-    }
-    
-    @Override
-	public int addLike(int c_num, String u_id) {
-		return abs.insertLike(c_num, u_id);
+	public int addLike(int cc_num, String u_id) {
+		return Cs.insertLike(cc_num, u_id);
 	}
 
 	@Override
-	public int removeLike(int c_num, String u_id) {
-		return abs.deleteLike(c_num, u_id);
+	public int removeLike(int cc_num, String u_id) {
+		return Cs.deleteLike(cc_num, u_id);
 	}
 	
 	@Override
-	public int getLikeCount(int c_num) {
-	    return abs.getLikeCount(c_num);
+	public int getLikeCount(int cc_num) {
+	    return Cs.getLikeCount(cc_num);
 	}
 	
-	 @Override
-	    public cboardDTO getCboard(int c_num) {
-	        return abs.getCboard(c_num);
-	   }
+	@Override
+	public CommentDTO getComment(int cc_num) {
+		return Cs.getComment(cc_num);
+	}
 }
