@@ -98,6 +98,13 @@ public class PManagerDaoService implements IPManagerDaoService {
 		return blist;
 	}
 	
+	// 상품 결제 승인
+	@Override
+	public int confirmOrder(String barcode, String m_num) {
+		
+		return 0;
+	}
+	
 	// 재고 관리 페이지 설정
 	@Override
 	public MProductPageinfo articleMPage(int curpage, String searchword, String searchfield) {
@@ -144,6 +151,7 @@ public class PManagerDaoService implements IPManagerDaoService {
 		return pinfo;
 	}
 	
+	// 상품 승인 페이지 페이지 설정
 	@Override
 	public MProductPageinfo articleSPage(int curpage, String searchword, String searchfield) {
 		int totalCount = 0;

@@ -170,4 +170,18 @@ public class PManagerController {
     	
     	return "admin/sellManage";
     }
+    
+    // 상품 결제 승인
+    @RequestMapping("/admin/confirmOrder.do")
+    public String confirmOrder(HttpServletRequest req) {
+    	
+    	String[] barcodelist = req.getParameterValues("barcodelist[]");
+    	String m_num = req.getParameter("m_num");
+    	
+    	for(String e: barcodelist) {
+    		System.out.println(e);
+    	}
+    	
+    	return null;
+    }
 }

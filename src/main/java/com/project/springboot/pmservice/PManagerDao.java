@@ -12,7 +12,7 @@ import com.project.springboot.productdto.ProductlistDTO;
 
 @Mapper
 public interface PManagerDao {
-	//페이지 설정
+	// 페이지 설정
 	public int articleMPageDao (@Param("searchWord") String searchWord, @Param("searchField") String searchField);
 	
 	// 상품 검색
@@ -41,4 +41,10 @@ public interface PManagerDao {
 	
 	// 주문 상세 내역 가져오기
 	public List<BOrderinfoDTO> getBOrderDao();
+	
+	// 상품 결제 승인시 재고 상태 변경
+	public int updateBarcodeDao(@Param("barcode") String barcode, @Param("m_num") String m_num);
+	
+	// 주문 상태 변경
+	public int updateOrderDao(@Param("m_num") String m_num);
 }

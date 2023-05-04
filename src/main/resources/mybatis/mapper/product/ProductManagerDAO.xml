@@ -96,7 +96,22 @@
 		  where B.num <![CDATA[>=]]> #{nStart}
 	</select>
 	
+	<!-- 상품 상세 정보 가져오기 -->
 	<select id="getBOrderDao" resultType="com.project.springboot.productdto.BOrderinfoDTO">
 		select * from b_orderinfo
 	</select>
+	
+	<!-- 재고 상태 변경 -->
+	<update id="updateBarcodeDao">
+		update p_count
+		   set p_sold = 'Y'
+		 where p_barcode = #{barcode}
+		   and m_num = #{m_num}
+	</update>
+	
+	<update id="updateOrderDao">
+		update order_info
+		   set m_payment = '배송준비'
+		 where m_num = #{m_num}
+	</update>
 </mapper>

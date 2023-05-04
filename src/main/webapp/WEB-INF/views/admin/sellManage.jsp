@@ -74,11 +74,23 @@ function checkLimit(checkbox, boQty, p_num) {
 
 function doConfirm(totalQty, m_num) {
 	const checkedTotal = $(".totalQty_" + m_num + " .form-check-input:checked").length;
+	const barcodelist = [];
 	
-	console.log(checkedTotal);
+	$(".totalQty_" + m_num + " .form-check-input:checked").each(function () {
+		barcodelist.push($(this).val());
+	});
 	
 	if (totalQty == checkedTotal) {
-		confirm("이 정보로 주문을 승낙하시겠습니까?");
+		if(confirm("이 정보로 주문을 승낙하시겠습니까?")) {
+			$.ajax({
+				type: 'POST',
+				url: '/admin/confirmOrder.do',
+				data: {
+					barcodelist: barcodelist,
+					m_num: m_num
+				},
+			});
+		}
 	} else {
 		alert("주문한 총 갯수와 일치하지 않습니다.");
 	}
@@ -143,7 +155,7 @@ function doConfirm(totalQty, m_num) {
 									                    					<ul>	
 									                    						<li>
 											                    					<label class="form-check-label" for="${ x.p_barcode }">${ x.p_barcode }</label>
-																			  		<input type="checkbox" class="form-check-input barcode${ j.p_num }" id="${ x.p_barcode }" onclick="checkLimit(this, ${j.bo_qty}, ${j.p_num })">
+																			  		<input type="checkbox" value="${x.p_barcode }" class="form-check-input barcode${ j.p_num }" id="${ x.p_barcode }" onclick="checkLimit(this, ${j.bo_qty}, ${j.p_num })">
 																	  			</li>
 																	  		</ul>
 																		</div>

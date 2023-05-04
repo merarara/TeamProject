@@ -39,4 +39,7 @@ public interface IPManagerDaoService {
 	
 	// 주문 상세 내역 가져오기
 	public List<BOrderinfoDTO> getBOrder();
+	
+	// 상품 결제 승인
+	public int confirmOrder(String barcode, String m_num);
 }
