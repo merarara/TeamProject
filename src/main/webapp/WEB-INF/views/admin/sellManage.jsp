@@ -50,31 +50,39 @@ footer {
 
 </style>
 <script>
-    $(function() {
-        $('.toggle').click(function() {
-            $(this).next().toggle();
-        });
+$(function() {
+    $('.toggle').click(function() {
+        $(this).next().toggle();
     });
-    
-    $(document).ready(function() {
-   	  // toggle 클래스 클릭 시 다음 요소의 detail 클래스를 토글
-   	  $('.bartoggle').click(function() {
-   	    $(this).next().toggle();
-   	  });
-    });
-    
-    function checkLimit(checkbox, boQty, p_num) {
-    	  const checkedCount = $(".barcode" + p_num + ":checked").length;
-    	  
-    	  console.log(checkedCount);
-    	 /* 
-    	  console.log(checkedCount);
-    	  if (checkedCount > boQty) {
-    	    checkbox.checked = false;
-    	    alert("해당 상품의 수량은 " + boQty + "개 입니다.");
-    	  }
-    	  */
-    }
+});
+
+$(document).ready(function() {
+  	// toggle 클래스 클릭 시 다음 요소의 detail 클래스를 토글
+  	$('.bartoggle').click(function() {
+    	$(this).next().toggle();
+  	});
+});
+
+function checkLimit(checkbox, boQty, p_num) {
+	const checkedCount = $(".barcode" + p_num + ":checked").length;
+	  
+	if (checkedCount > boQty) {
+	    checkbox.checked = false;
+	    alert("해당 상품의 수량은 " + boQty + "개 입니다.");
+	}
+}
+
+function doConfirm(totalQty, m_num) {
+	const checkedTotal = $(".totalQty_" + m_num + " .form-check-input:checked").length;
+	
+	console.log(checkedTotal);
+	
+	if (totalQty == checkedTotal) {
+		confirm("이 정보로 주문을 승낙하시겠습니까?");
+	} else {
+		alert("주문한 총 갯수와 일치하지 않습니다.");
+	}
+}
 </script>
 </head>
 <body>
@@ -120,7 +128,7 @@ footer {
 					                    	</tr>
 					                    	<tr style="display: none;">
 									        	<td colspan="4">
-									          		<table style="width: 60%; margin: 0 auto;">
+									          		<table style="width: 60%; margin: 0 auto;" class="totalQty_${i.m_num }">
 									            		<thead>
 									              			<tr>
 									                			<th style="text-align: center;">${ j.p_num } 상품 코드 번호</th>
@@ -153,7 +161,7 @@ footer {
 							</table>
 						</div>
 						<div style="text-align:center;">
-						  <button type="button" class="btn btn-primary">승인</button>
+						  <button type="button" class="btn btn-primary" onclick="doConfirm(${i.m_qty}, ${i.m_num });">승인</button>
 						</div>
 					</div>
 				</div>
