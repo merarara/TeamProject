@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,10 +51,18 @@ public class cboardController {
 	
 	//게시글  목록
 	@RequestMapping("/cboard/cboardlist.do") 
-	public String cboard(HttpServletRequest req, Model model) {
+	public String write(HttpServletRequest req, Model model) {
 		
 		int curPage = 1;
 		int nPage = 1;
+		
+	    // 검색어와 검색 조건을 파라미터에서 가져옵니다.
+	    String searchField = req.getParameter("searchField");
+	    String searchWord = req.getParameter("searchWord");
+	    
+	    // 검색 폼을 유지하기 위해 검색어와 검색 조건도 모델에 담아서 전달합니다.
+	    model.addAttribute("searchField", searchField);
+	    model.addAttribute("searchWord", searchWord);
 		
 		try
 		{
@@ -65,35 +74,13 @@ public class cboardController {
 			
 		}
 		
-		BpageInfo pinfo = asv.articlePage(nPage);
+		BpageInfo pinfo = asv.articlePage(nPage, searchField, searchWord);
 		model.addAttribute("page", pinfo);
 		
-		
 		//DAO(Mapper)의 select() 메서드를 호출해서 회원목록을 인출 
-		model.addAttribute("cboardLists", asv.select(nPage));		
-		//DAO(Mapper)의 select() 메서드를 호출해서 회원목록을 인출
-//		model.addAttribute("cboardLists", asv.selectA()); 
+		model.addAttribute("cboardLists", asv.select(nPage, searchField, searchWord));	
+		
 		return "/cboard/cboardlist"; 
-	}
-	
-	@RequestMapping("/cboard/searchcboard.do")
-	public String searchcboard(HttpServletRequest request, Model model) {
-
-	    // 검색어와 검색 조건을 파라미터에서 가져옵니다.
-	    String searchField = request.getParameter("searchField");
-	    String searchWord = request.getParameter("searchWord");
-	    
-	    // 검색어와 검색 조건을 기준으로 게시글 목록을 조회합니다.
-	    List<cboardDTO> cboardLists = asv.searchboard(searchField, searchWord);
-	    
-	    // 조회된 게시글 목록을 모델에 담아서 화면으로 전달합니다.
-	    model.addAttribute("cboardLists", cboardLists);
-	    
-	    // 검색 폼을 유지하기 위해 검색어와 검색 조건도 모델에 담아서 전달합니다.
-	    model.addAttribute("searchField", searchField);
-	    model.addAttribute("searchWord", searchWord);
-
-	    return "/cboard/cboardlist";
 	}
 
 	//get방식인 경우 등록하기 페이지 진입
@@ -158,6 +145,7 @@ public class cboardController {
 		
 		return "redirect:/cboard/cboardlist.do"; 
 	}
+
 	
 	
 	@RequestMapping(value="/cboard/cboardview.do", method=RequestMethod.GET)
@@ -261,22 +249,42 @@ public class cboardController {
 	        e.printStackTrace();
 	    }
 	}
-	// 좋아요 기능
-	@RequestMapping(value = "/cboard/toggleLike.do", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> toggleLike(@RequestParam("c_num") int c_num, HttpSession session) {
-
-	    UserDTO user = (UserDTO)session.getAttribute("user");
-	    if(user == null) {
-	        Map<String, Object> result = new HashMap<String, Object>();
-	        result.put("loginRequired", true);
-	        return result;
-	    }
-
-	    Map<String, Object> result = asv.toggleLike(c_num, user.getU_id());
-
-	    return result;
-	}
+	@PostMapping("cboard/like.do")
+	 public String addLike(HttpServletRequest req, HttpSession session) {
+		 int c_num = Integer.parseInt(req.getParameter("c_num"));
+		  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         String u_id = authentication.getName(); // 사용자 id
+		 if (u_id == null) {
+			return "redirect:/auth/login.do";
+	     }
+	 	 int result = asv.addLike(c_num, u_id);
+        if (result == 1) {
+       	 int c_like = asv.getLikeCount(c_num);
+       	 return "redirect:/cboard/cboardview.do?c_num=" + c_num;
+        } else {
+       	 return "redirect:/cboard/cboardview.do?c_num=" + c_num;
+        }
+    }
+	 
+	 @PostMapping("/cboard/unlike.do")
+	 public String removeLike(HttpServletRequest req, HttpSession session) {
+	     // HttpSession에서 로그인 정보인 user_id를 가져온다.
+		 int c_num = Integer.parseInt(req.getParameter("c_num"));
+		 
+		  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         String u_id = authentication.getName(); // 사용자 id
+	     if (u_id == null) {
+	         // 로그인하지 않은 경우 처리
+	    	 
+	         return "redirect:/user/login.do";
+	     } else {
+	         // 좋아요 정보를 삭제한다.
+	         asv.removeLike(c_num, u_id);
+	         // 게시글의 좋아요 수를 갱신한다.
+	         int c_like = asv.getLikeCount(c_num);
+	         return "redirect:/cboard/cboardview.do?c_num=" + c_num;
+	     }
+	 }
 
 }
 	

@@ -3,30 +3,39 @@ package com.project.springboot.cboard;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper 
 public interface cboardService {
 
-	public List<cboardDTO> select(int nEnd, int nStart); 
+	public List<cboardDTO> select(
+			@Param("nEnd") int nEnd, 
+			@Param("nStart") int nStart, 
+			@Param("searchField") String searchField, 
+			@Param("searchWord") String searchWord); 
 	public int insert(cboardDTO cboardDto);
-	public cboardDTO selectOne(String a_num);
+	public cboardDTO selectOne(String c_num);
 	public int update(cboardDTO cboardDto);
-	public int delete(String a_num);
-	public List<cboardDTO> searchboard(String searchField, String searchWord);
+	public int delete(String c_num);
 	
 	// 페이지설정
-	public int articlePageDao(int curPage);
+	public int articlePageDao(
+			@Param("curPage") int curPage, 
+			@Param("searchField") String searchField, 
+			@Param("searchWord") String searchWord);
 	// 조회수 증가
-	public void updateVisitCount(String a_num);
+	public void updateVisitCount(String c_num);
 	// 좋아요 증가
-    public void updateLikeCount(String a_num);
+	public int insertLike(@Param("c_num") int c_num, @Param("u_id") String u_id);
+	public int deleteLike(@Param("c_num") int c_num, @Param("u_id") String u_id);
     
-    public int insertLike(int a_num, String u_id);
-    public int deleteLike(String a_num, String u_id);
-	public int selectLikeCount(int a_num);
-	public Object selectLike(int a_num, String u_id);
-	public int deleteLike(int a_num, String u_id);
-	public void updateLikeCount(int a_num, int updatedLikeCount);
+    public int addLike(int c_num, String u_id);
+	public int removeLike(int c_num, String u_id);
+	
+	// 좋아요 수 가져오기
+	public int getLikeCount(@Param("c_num") int c_num);
+	
+	cboardDTO getCboard(int c_num);
 	
 	
 

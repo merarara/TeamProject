@@ -2,6 +2,8 @@ package com.project.springboot.cboard;
  
 import java.sql.Timestamp;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 @Data 
@@ -14,5 +16,4 @@ public class cboardDTO {
 	private int c_visitcount; 
 	private Timestamp c_regdate; 
 	private int c_like; // 추가됨
-	
 }
