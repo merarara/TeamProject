@@ -14,100 +14,93 @@
 </head>
 <body>
 <%@ include file="../header.jsp" %>
-<div class="container text-center" id="content">
-    <h2>파일 첨부형 게시판 - 목록 보기(List)</h2>
-	
-    
-    <!-- 목록 테이블 -->
-<table class="table table-striped " align="center" border="1" width="90%">
-<thead class="table-primary">
+<!-- 게시판 영역 -->
+<div class="container py-5">
+  <h2 class="text-center mb-4">파일 첨부형 게시판 - 목록 보기(List)</h2>
+  <!-- 목록 테이블 -->
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead class="table-primary">
         <tr>
-            <th scope="col" width="10%">번호</th>
-            <th scope="col" width="*">제목</th>
-            <th scope="col" width="15%">작성자</th>
-            <th scope="col" width="15%">작성일</th>
-            <th scope="col" width="15%">좋아요</th>
-            <th scope="col" width="15%">조회수</th>
+          <th scope="col" style="width: 10%;">번호</th>
+          <th scope="col" style="width: 50%;">제목</th>
+          <th scope="col" style="width: 15%;">작성자</th>
+          <th scope="col" style="width: 15%;">작성일</th>
+          <th scope="col" style="width: 5%;">좋아요</th>
+          <th scope="col" style="width: 5%;">조회수</th>
         </tr>
-</thead>
-<tbody class="table-group-divider">
-<c:choose>
-    <c:when test="${ empty cboardLists }">  
-    	<!-- 게시물을 저장하고 있는 boardLists 컬렉션에 저장된 내용이 없다면
-    	아래와 같이 출력한다. -->
-        <tr>
-            <td colspan="6" align="center">
-                등록된 게시물이 없습니다^^*
-            </td>
-        </tr>
-    </c:when>
-    <c:otherwise>  
-    	<!-- 출력할 게시물이 있다면 저장된 갯수만큼 반복하여 출력한다. -->
-        <c:forEach items="${ cboardLists }" var="row" varStatus="loop">
-        <tr align="center">
-        	<td>${ row.c_num }</td>
-            <td align="center">
-<!-- 제목을 클릭할 경우 내용보기 페이지로 이동한다. -->            
-<a href="../cboard/cboardview.do?c_num=${ row.c_num }">${ row.c_title }</a>
-			</td>
-            <td>${ row.u_id }</td>
-            <td>${ row.c_regdate }</td>
-            <td>${ row.c_like }</td> 
-            <td>${ row.c_visitcount }</td>
-        </tr>
-        </c:forEach>        
-    </c:otherwise>    
-</c:choose>
+      </thead>
+      <tbody>
+        <c:choose>
+          <c:when test="${ empty cboardLists }">  
+            <tr>
+              <td colspan="6" class="text-center">등록된 게시물이 없습니다^^*</td>
+            </tr>
+          </c:when>
+          <c:otherwise>  
+            <c:forEach items="${ cboardLists }" var="row" varStatus="loop">
+              <tr>
+                <td class="align-middle">${ row.c_num }</td>
+                <td class="align-middle">
+                  <a href="../cboard/cboardview.do?c_num=${ row.c_num }">${ row.c_title }</a>
+                </td>
+                <td class="align-middle">${ row.u_id }</td>
+                <td class="align-middle">${ row.c_regdate }</td>
+                <td class="align-middle">${ row.c_like }</td> 
+                <td class="align-middle">${ row.c_visitcount }</td>
+              </tr>
+            </c:forEach>        
+          </c:otherwise>    
+        </c:choose>
+      </tbody>
     </table>
-    <table align="center" border="1" width="90%">
-            <td>
-                ${ map.pagingImg }
-            </td>
-            <td width="100"><button type="button" class="btn btn-primary" onclick="location.href='/cboard/cboardwrite.do';">글쓰기</button></td>
-	</tbody>
-    </table>
+  </div>
 </div>
-<div align="center" style="margin-bottom: 50px;">
-	<table>
-		<tr>
-			<td>
-			    <nav aria-label="...">
-			      <ul class="pagination">
-			        <li class="page-item ${page.curPage == 1 ? 'disabled' : ''}">
-			          <a class="page-link" href="/cboard/cboardlist.do?page=${page.curPage - 1}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${param.selected}" tabindex="-1" aria-disabled="${page.curPage == 1 ? 'true' : 'false'}">이전 </a>
-			        </li>
-			        <c:forEach var="fEach" begin="${page.startPage}" end="${page.endPage}" step="1">
-			          <li class="page-item ${page.curPage == fEach ? 'active' : ''}">
-			            <a class="page-link" href="/cboard/cboardlist.do?page=${fEach}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${param.selected}">${fEach}</a>
-			          </li>
-			        </c:forEach>
-			        <li class="page-item ${page.curPage == page.totalPage ? 'disabled' : ''}">
-			          <a class="page-link" href="/cboard/cboardlist.do?page=${page.curPage + 1}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${param.selected}" aria-disabled="${page.curPage == page.totalPage ? 'true' : 'false'}">다음 </a>
-			        </li>
-			      </ul>
-			    </nav>
-			</td>
-		</tr>
-	</table>
+  <!-- 페이징 및 글쓰기 버튼 -->
+<div class="d-flex justify-content-between align-items-center" style="width: 100%;">
+  <div>${ map.pagingImg }</div>
+  <div class="text-center">
+    <button type="button" class="btn btn-primary" onclick="location.href='/cboard/cboardwrite.do';">
+      글쓰기
+    </button>
+  </div>
 </div>
 
-
-<!-- 검색폼 -->
-<div style="margin-top: 50px; text-align: center;">
-  <form action="/cboard/cboardlist.do" method="post">  
-    <table align="center" border="1" width="30%">
-      <tr>
-        <td align="center">
-          <select name="searchField">
-            <option value="c_title">제목</option>
-            <option value="c_content">내용</option>
-          </select>
-          <input type="text" name="searchWord" />
-          <input class="btn btn-secondary" type="submit" value="검색하기" />&nbsp;&nbsp;
-        </td>
-      </tr>
-    </table>
+<!-- 검색 폼 -->
+<div class="container my-5">
+  <form action="/cboard/cboardlist.do" method="post" class="form-inline justify-content-center">
+    <div class="form-group mx-sm-3 mb-2">
+      <label for="searchField" class="sr-only">검색필드</label>
+      <select name="searchField" id="searchField" class="form-control">
+        <option value="c_title">제목</option>
+        <option value="c_content">내용</option>
+      </select>
+    </div>
+    <div class="form-group mx-sm-3 mb-2">
+      <label for="searchWord" class="sr-only">검색어</label>
+      <input type="text" name="searchWord" id="searchWord" class="form-control" placeholder="검색어를 입력하세요">
+    </div>
+    <button type="submit" class="btn btn-secondary mb-2">검색하기</button>
   </form>
+</div>
+
+<!-- 페이징 -->
+<div class="container my-5">
+  <nav aria-label="...">
+    <ul class="pagination justify-content-center">
+      <li class="page-item ${page.curPage == 1 ? 'disabled' : ''}">
+        <a class="page-link" href="/cboard/cboardlist.do?page=${page.curPage - 1}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${param.selected}" tabindex="-1" aria-disabled="${page.curPage == 1 ? 'true' : 'false'}">이전</a>
+      </li>
+      <c:forEach var="fEach" begin="${page.startPage}" end="${page.endPage}" step="1">
+        <li class="page-item ${page.curPage == fEach ? 'active' : ''}">
+          <a class="page-link" href="/cboard/cboardlist.do?page=${fEach}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${param.selected}">${fEach}</a>
+        </li>
+      </c:forEach>
+      <li class="page-item ${page.curPage == page.totalPage ? 'disabled' : ''}">
+        <a class="page-link" href="/cboard/cboardlist.do?page=${page.curPage + 1}&searchfield=${param.searchfield}&searchword=${param.searchword}&type=${param.type}&selected=${param.selected}" aria-disabled="${page.curPage == page.totalPage ? 'true' : 'false'}">다음</a>
+      </li>
+    </ul>
+  </nav>
 </div>
 
 
