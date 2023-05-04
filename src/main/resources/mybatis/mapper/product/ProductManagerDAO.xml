@@ -34,6 +34,7 @@
 	<select id="searchPcountDao"
 		resultType="com.project.springboot.productdto.PCountDTO">
 		select * from p_count
+			where p_sold = 'N'
 	</select> 
 	
 	<!-- 상품 재고 삭제 -->
@@ -80,6 +81,9 @@
 	<!-- 판매 목록 페이징 -->
 	<select id="articleSPageDao" resultType="_int">
 		select count(*) as total from order_info
+		 <if test="tab == 'tab2'">
+		 where m_payment = '상품준비중'
+		 </if>
 	</select>
 	
 	<!-- 판매 목록 -->
@@ -90,6 +94,9 @@
 		  		  from (
 		  		  		select *
 		  		  		  from order_info
+		  		  		 <if test="tab == 'tab2'">
+		  		  		 where m_payment = '상품준비중'
+		  		  		 </if>
 		  		  		 order by m_num desc
 		  		  		) A
 		  		  where rownum <![CDATA[<=]]> #{nEnd} ) B
@@ -106,12 +113,12 @@
 		update p_count
 		   set p_sold = 'Y'
 		 where p_barcode = #{barcode}
-		   and m_num = #{m_num}
 	</update>
 	
+	<!-- 주문 상태 변경 -->
 	<update id="updateOrderDao">
 		update order_info
-		   set m_payment = '배송준비'
+		   set m_payment = '배송준비중'
 		 where m_num = #{m_num}
 	</update>
 </mapper>

@@ -591,7 +591,9 @@ footer {
 	  								<br>
 	  								<br>
 	  								<br>
+	  								
 	  								<form method="post">
+	  									<c:if test="${ pinfo.p_count != 0 }">
 	  									<input type="hidden" name="p_num" value="${ pinfo.p_num }">
 	  									<label for="p_count">재고:</label>
 	  									<input type="text" name="p_count" id="p_count" value="${ pinfo.p_count }" size="2" readonly>
@@ -605,12 +607,18 @@ footer {
 									  	<label for="amount">결제 금액:</label>
 									  	<input type="text" name="amount" id="amount" value="100" readonly>
 									  	<br>
-									  	<button name="paymentButton" id="paymentButton" onclick="iamport(); return false;" class="w-100 btn btn-warning btn-lg" type="submit">
-									    	결제하기
-									  	</button>
-									  	<button name="addBascket" id="addBascket" onclick="doAddBascket();" class="w-100 btn btn-primary btn-lg" type="button">
-									    	장바구니 추가
-									  	</button>
+									  	</c:if>
+									  	<c:if test="${ pinfo.p_count != 0 }">
+										  	<button name="paymentButton" id="paymentButton" onclick="iamport(); return false;" class="w-100 btn btn-warning btn-lg" type="submit">
+										    	결제하기
+										  	</button>
+										  	<button name="addBascket" id="addBascket" onclick="doAddBascket();" class="w-100 btn btn-primary btn-lg" type="button">
+										    	장바구니 추가
+										  	</button>
+									  	</c:if>
+									  	<c:if test="${ pinfo.p_count == 0 }">
+										  	<h1 class="chkNo">매진된 상품입니다. <br>입고될때까지 기다려주세요.</h1>
+									  	</c:if>
 									</form>
 								</div>
 							</div>
@@ -739,6 +747,9 @@ footer {
 									    	<h1 class="chkNo">이미 리뷰를 작성하신 상품입니다.</h1>
 									    </c:if>
 								    	<hr>
+								    	<c:if test="${ reviewNo == 'Yes' }">
+								    		<h1 class="chkNo">작성된 리뷰가 아직 없는 상품입니다.</h1>
+								    	</c:if>
 								    	<!-- 리뷰를 보여주는 코드 -->
 							      		<c:forEach items="${ rdto }" var="i">
 							      			<div class="review-container">

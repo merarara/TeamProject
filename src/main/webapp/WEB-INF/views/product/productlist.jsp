@@ -670,7 +670,9 @@
 							</div>
 						</td>
 						<td style="text-align: center;"><fmt:formatNumber type="number" value="${i.p_price}" pattern="#,###" />원<br>
-						<c:if test="${ i.p_count < 3 }"><div style="color: red;">매진임박</div></c:if></td>
+						<c:if test="${ i.p_count < 3 && i.p_count > 1 }"><div style="color: red;">매진임박</div></c:if>
+						<c:if test="${ i.p_count == 0 }"><div style="color: red;">매진</div></c:if>
+						</td>
 						<td style="text-align: center;">${i.p_company}</td>
 					</tr>
 				</c:forEach>

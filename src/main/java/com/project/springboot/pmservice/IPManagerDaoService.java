@@ -31,15 +31,18 @@ public interface IPManagerDaoService {
 	// 바코드 번호 추가
 	public int addBarcode(int p_num, String barcode);
 	
-	// 재고 관리 페이지 설정
-	public MProductPageinfo articleSPage(int curPage, String searchword, String searchfield);
+	// 주문 관리 페이지 설정
+	public MProductPageinfo articleSPage(int curPage, String searchword, String searchfield, String tab);
 		
-	// 상품 검색
-	public List<OrderinfoDTO> searchSList(int curPage, String searchword, String searchfield);
+	// 주문 관리 페이지 검색
+	public List<OrderinfoDTO> searchSList(int curPage, String searchword, String searchfield, String tab);
 	
 	// 주문 상세 내역 가져오기
 	public List<BOrderinfoDTO> getBOrder();
 	
 	// 상품 결제 승인
 	public int confirmOrder(String barcode, String m_num);
+	
+	// 상품 재고 업데이트
+	public void updateCount(String p_num);
 }

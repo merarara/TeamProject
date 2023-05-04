@@ -81,11 +81,11 @@ public class PManagerDaoService implements IPManagerDaoService {
 	
 	// 주문 내역 가져오기
 	@Override
-	public List<OrderinfoDTO> searchSList(int curpage, String searchword, String searchfield) {
+	public List<OrderinfoDTO> searchSList(int curpage, String searchword, String searchfield, String tab) {
 		int nStart = (curpage - 1) * plistSPsize + 1;
 		int nEnd = (curpage - 1) * plistSPsize + plistSPsize;
 		
-		List<OrderinfoDTO> plist = dao.searchSlistDao(nEnd, nStart, searchword, searchfield); 
+		List<OrderinfoDTO> plist = dao.searchSlistDao(nEnd, nStart, searchword, searchfield, tab); 
 		
 		return plist;
 	}
@@ -101,8 +101,20 @@ public class PManagerDaoService implements IPManagerDaoService {
 	// 상품 결제 승인
 	@Override
 	public int confirmOrder(String barcode, String m_num) {
+		int result = dao.updateBarcodeDao(barcode);
+		int result2 = dao.updateOrderDao(m_num);
 		
-		return 0;
+		if (result + result2 <= 2) {
+			dao.updateCountDao(result2);
+		}
+		
+		return result + result2;
+	}
+	
+	// 상품 재고 업데이트
+	@Override
+	public void updateCount(String p_num) {
+		dao.updateCountDao(Integer.parseInt(p_num));
 	}
 	
 	// 재고 관리 페이지 설정
@@ -151,11 +163,11 @@ public class PManagerDaoService implements IPManagerDaoService {
 		return pinfo;
 	}
 	
-	// 상품 승인 페이지 페이지 설정
+	// 주문 내역 페이지 설정
 	@Override
-	public MProductPageinfo articleSPage(int curpage, String searchword, String searchfield) {
+	public MProductPageinfo articleSPage(int curpage, String searchword, String searchfield, String tab) {
 		int totalCount = 0;
-		totalCount = dao.articleSPageDao(searchword, searchfield);
+		totalCount = dao.articleSPageDao(searchword, searchfield, tab);
 		
 		// 총 페이지 수
 		int totalPage = totalCount / plistSPsize;

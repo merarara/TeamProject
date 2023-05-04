@@ -1,5 +1,6 @@
 package com.project.springboot.pmservice;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,6 @@ import com.project.springboot.productdto.BOrderinfoDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountDTO;
 import com.project.springboot.productdto.ProductlistDTO;
-import com.project.springboot.pservice.IPListDaoService;
 
 @Controller
 public class PManagerController {
@@ -144,13 +144,14 @@ public class PManagerController {
     	
     	String searchword = req.getParameter("searchword");
     	String searchfield = req.getParameter("searchfield");
+    	String tab = req.getParameter("tab");
     	
     	try {
     		String sPage = req.getParameter("page");
     		nPage = Integer.parseInt(sPage);
     	} catch (Exception e) {}
     	
-    	MProductPageinfo pinfo = pmdao.articleSPage(nPage, searchword, searchfield);
+    	MProductPageinfo pinfo = pmdao.articleSPage(nPage, searchword, searchfield, tab);
     	model.addAttribute("page", pinfo);
     	
     	nPage = pinfo.getCurPage();
@@ -160,10 +161,20 @@ public class PManagerController {
     		model.addAttribute("searchfield", searchfield);
     	}
     	
-    	List<OrderinfoDTO> list = pmdao.searchSList(nPage, searchword, searchfield);
-    	List<BOrderinfoDTO> blist = pmdao.getBOrder();
-    	List<PCountDTO> pclist =  pmdao.searchPcount();
+    	List<OrderinfoDTO> list = pmdao.searchSList(nPage, searchword, searchfield, tab);
     	
+    	List<BOrderinfoDTO> blist = new ArrayList<BOrderinfoDTO>();
+    	List<PCountDTO> pclist = new ArrayList<PCountDTO>();
+    	
+    	if(!list.isEmpty()) {
+    		blist = pmdao.getBOrder();
+    		pclist = pmdao.searchPcount();
+    		model.addAttribute("isOrder", "Yes");
+    	} else {
+    		model.addAttribute("isOrder","No");
+    	}
+    	
+    	model.addAttribute("tab", tab);
     	model.addAttribute("pclist", pclist);
     	model.addAttribute("orderlist", list);
     	model.addAttribute("blist", blist);
@@ -172,16 +183,31 @@ public class PManagerController {
     }
     
     // 상품 결제 승인
+    @ResponseBody
     @RequestMapping("/admin/confirmOrder.do")
-    public String confirmOrder(HttpServletRequest req) {
+    public Map<String, String> confirmOrder(HttpServletRequest req) {
     	
     	String[] barcodelist = req.getParameterValues("barcodelist[]");
+    	String[] p_num = req.getParameterValues("p_num[]");
     	String m_num = req.getParameter("m_num");
     	
+    	int result = 0;
+    	Map<String, String> response = new HashMap<String, String>();
+    	
     	for(String e: barcodelist) {
-    		System.out.println(e);
+    		result = result + pmdao.confirmOrder(e, m_num);
     	}
     	
-    	return null;
+    	for(String e: p_num) {
+    		pmdao.updateCount(e);
+    	}
+    	
+    	if (result >= 2) {
+    		response.put("status", "success");
+    	} else {
+    		response.put("status", "fail");
+    	}
+    	
+    	return response;
     }
 }

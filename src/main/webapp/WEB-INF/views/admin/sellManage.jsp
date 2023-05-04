@@ -50,6 +50,7 @@ footer {
 
 </style>
 <script>
+/* 결제 승인 */
 $(function() {
     $('.toggle').click(function() {
         $(this).next().toggle();
@@ -63,8 +64,9 @@ $(document).ready(function() {
   	});
 });
 
-function checkLimit(checkbox, boQty, p_num) {
-	const checkedCount = $(".barcode" + p_num + ":checked").length;
+// 체크박스 체크 갯수 체크
+function checkLimit(checkbox, boQty, p_num, m_num) {
+	const checkedCount = $(".barcode_" + m_num + "_" + p_num + ":checked").length;
 	  
 	if (checkedCount > boQty) {
 	    checkbox.checked = false;
@@ -72,13 +74,20 @@ function checkLimit(checkbox, boQty, p_num) {
 	}
 }
 
-function doConfirm(totalQty, m_num) {
+// 승인 보내기
+function doConfirm(totalQty, m_num, btn) {
 	const checkedTotal = $(".totalQty_" + m_num + " .form-check-input:checked").length;
 	const barcodelist = [];
+	const p_num = [];
 	
 	$(".totalQty_" + m_num + " .form-check-input:checked").each(function () {
 		barcodelist.push($(this).val());
 	});
+	
+	$(".toggle_" + m_num).children("td:first-child").each(function () {
+		p_num.push($(this).text());
+	});
+	
 	
 	if (totalQty == checkedTotal) {
 		if(confirm("이 정보로 주문을 승낙하시겠습니까?")) {
@@ -87,13 +96,29 @@ function doConfirm(totalQty, m_num) {
 				url: '/admin/confirmOrder.do',
 				data: {
 					barcodelist: barcodelist,
-					m_num: m_num
+					m_num: m_num,
+					p_num: p_num
 				},
+				success: function (data) {
+					if (data.status == "success") {
+						alert(m_num + "번 결제가 승인 되었습니다.");
+						$("#collapse" + m_num).remove();
+						
+						$(btn).remove();
+						
+						$("#toggle" + m_num).remove();
+						
+						$("#payment_" + m_num).text("주문상태: 배송준비중");
+					} else {
+						
+					}				
+				}
 			});
 		}
 	} else {
 		alert("주문한 총 갯수와 일치하지 않습니다.");
 	}
+	
 }
 </script>
 </head>
@@ -102,156 +127,204 @@ function doConfirm(totalQty, m_num) {
 <div id="content">
 	<div class="container">
 		<div class="row">
-		<c:forEach items="${orderlist}" var="i">
-		    	<div class="col-md-12">
-		      		<div class="card mb-3">
-		        		<div class="card-header">
-		          			<h5 class="card-title">주문번호: ${i.m_num}</h5>
-					        <h6 class="card-subtitle mb-2 text-muted">주문일: ${i.m_bdate}</h6>
-					        <h6 class="card-subtitle mb-2 text-muted">회원아이디: ${i.u_id}</h6>
-		        		</div>
-		        		<div class="card-body">
-					        <h6 class="card-subtitle mb-2 text-muted">주소: ${i.m_addr}</h6>
-					        <h6 class="card-subtitle mb-2 text-muted">가격: ${i.m_price}</h6>
-					        <h6 class="card-subtitle mb-2 text-muted">수량: ${i.m_qty}</h6>
-					        <h6 class="card-subtitle mb-2 text-muted">주문상태: ${i.m_payment}</h6>
-					        <button type="button" class="btn btn-link toggle" data-toggle="collapse"
-					            data-target="#collapse${i.m_num}" aria-expanded="false" aria-controls="collapse${i.m_num}">
-					            주문상세
-					        </button>
-					        <div class="details collapse" id="collapse${i.m_num}">
-					        	<table class="table mt-3">
-					              	<thead>
-						                <tr>
-						                  	<th>상품번호</th>
-						                  	<th>상품명</th>
-						                  	<th>상품 가격</th>
-						                  	<th>구매 수량</th>
-						                </tr>
-					              	</thead>
-					              	<tbody>
-				                	<c:forEach items="${blist}" var="j">
-				                  		<c:if test="${i.m_num == j.m_num}">
-				                    		<tr class="bartoggle">
-					                      		<td>${j.p_num}</td>
-					                      		<td>${j.p_name}</td>
-					                      		<td>${j.p_price}</td>
-					                      		<td id="qty_${j.p_num }">${j.bo_qty}</td>
-					                    	</tr>
-					                    	<tr style="display: none;">
-									        	<td colspan="4">
-									          		<table style="width: 60%; margin: 0 auto;" class="totalQty_${i.m_num }">
-									            		<thead>
-									              			<tr>
-									                			<th style="text-align: center;">${ j.p_num } 상품 코드 번호</th>
-									              			</tr>
-									            		</thead>
-									            		<tbody>
-									              		<c:forEach items="${pclist}" var="x">
-									                		<c:if test="${j.p_num == x.p_num && i.m_payment == '상품준비중'}">
-									                  			<tr>
-									                    			<td style="padding: 0; padding-top:5px;">
-									                    				<div class="form-check form-check-inline">
-									                    					<ul>	
-									                    						<li>
-											                    					<label class="form-check-label" for="${ x.p_barcode }">${ x.p_barcode }</label>
-																			  		<input type="checkbox" value="${x.p_barcode }" class="form-check-input barcode${ j.p_num }" id="${ x.p_barcode }" onclick="checkLimit(this, ${j.bo_qty}, ${j.p_num })">
-																	  			</li>
-																	  		</ul>
-																		</div>
-																	</td>
-									                  			</tr>
-									                		</c:if>
-									              		</c:forEach>
-									            		</tbody>
-									          		</table>
-									        	</td>
-									      	</tr>
-					                	</c:if>
-									</c:forEach>
-								</tbody>
-							</table>
-						</div>
-						<div style="text-align:center;">
-						  <button type="button" class="btn btn-primary" onclick="doConfirm(${i.m_qty}, ${i.m_num });">승인</button>
-						</div>
+			<div class="col-md-12">
+				<ul class="nav nav-tabs">
+				  	<li class="nav-item">
+					    <a class="nav-link ${tab == null || tab == 'tab1' ? 'active' : ''}" data-toggle="tab" href="#tab1">결제 승인</a>
+					</li>
+					<li class="nav-item">
+					    <a class="nav-link ${tab == 'tab2' ? 'active' : ''}" data-toggle="tab" href="#tab2">배송 준비</a>
+					</li>
+					<li class="nav-item">
+					    <a class="nav-link ${tab == 'tab3' ? 'active' : ''}" data-toggle="tab" href="#tab3">배송중</a>
+					</li>
+					<li class="nav-item">
+					    <a class="nav-link ${tab == 'tab4' ? 'active' : ''}" data-toggle="tab" href="#tab4">판매내역</a>
+					</li>
+					<li class="nav-item">
+					    <a class="nav-link ${tab == 'tab5' ? 'active' : ''}" data-toggle="tab" href="#tab5">전체보기</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="tab-content">
+					<!-- 결제 승인 탭 시작 -->
+	  				<div id="tab1" class="tab-pane fade ${tab == null || tab == 'tab1' ? 'show active' : '' }">
+					
 					</div>
+					<!-- 결제 승인 탭 끝 -->
+					<div id="tab2" class="tab-pane fade ${tab == 'tab2' ? 'show active' : '' }" >
+				    <c:if test="${ isOrder == 'No' }">
+						<div class="col-md-12 d-flex align-items-center justify-content-center" style="height: 80vh; margin-top: 20px;">
+							<h5 style="color: gray; font-size: 20px; font-weight: bold;">승인 대기중인 결제 정보가 없습니다.</h5>
+						</div>
+					</c:if>
+					<c:if test="${ isOrder == 'Yes' }">
+					<c:forEach items="${orderlist}" var="i">
+				    	<div class="col-md-12">
+				      		<div class="card mb-3">
+				        		<div class="card-header">
+				          			<h5 class="card-title">주문번호: ${i.m_num}</h5>
+							        <h6 class="card-subtitle mb-2 text-muted">주문일: ${i.m_bdate}</h6>
+							        <h6 class="card-subtitle mb-2 text-muted">회원아이디: ${i.u_id}</h6>
+				        		</div>
+				        		<div class="card-body">
+							        <h6 class="card-subtitle mb-2 text-muted">주소: ${i.m_addr}</h6>
+							        <h6 class="card-subtitle mb-2 text-muted">가격: ${i.m_price}</h6>
+							        <h6 class="card-subtitle mb-2 text-muted">수량: ${i.m_qty}</h6>
+							        <h6 class="card-subtitle mb-2 text-muted" id="payment_${i.m_num }">주문상태: ${i.m_payment}</h6>
+							        <button type="button" class="btn btn-link toggle" id="toggle${i.m_num }" data-toggle="collapse"
+							            data-target="#collapse${i.m_num}" aria-expanded="false" aria-controls="collapse${i.m_num}">
+							            주문상세
+							        </button>
+							        <div class="details collapse" id="collapse${i.m_num}">
+							        	<table class="table mt-3">
+							              	<thead>
+								                <tr>
+								                  	<th>상품번호</th>
+								                  	<th>상품명</th>
+								                  	<th>상품 가격</th>
+								                  	<th>구매 수량</th>
+								                </tr>
+							              	</thead>
+							              	<tbody>
+						                	<c:forEach items="${blist}" var="j">
+					                  		<c:if test="${i.m_num == j.m_num}">
+					                    		<tr class="bartoggle toggle_${i.m_num }">
+						                      		<td>${j.p_num}</td>
+						                      		<td>${j.p_name}</td>
+						                      		<td>${j.p_price}</td>
+						                      		<td id="qty_${j.p_num }">${j.bo_qty}</td>
+						                    	</tr>
+						                    	<tr style="display: none;">
+										        	<td colspan="4">
+										          		<table style="width: 60%; margin: 0 auto;" class="totalQty_${i.m_num }">
+										            		<thead>
+										              			<tr>
+										                			<th style="text-align: center;">${ j.p_num } 상품 코드 번호</th>
+										              			</tr>
+										            		</thead>
+										            		<tbody>
+										              		<c:forEach items="${pclist}" var="x">
+										                		<c:if test="${j.p_num == x.p_num && i.m_payment == '상품준비중'}">
+										                  			<tr>
+										                    			<td style="padding: 0; padding-top:5px;">
+										                    				<div class="form-check form-check-inline">
+										                    					<ul>	
+										                    						<li>
+												                    					<label class="form-check-label" for="${ x.p_barcode }">${ x.p_barcode }</label>
+																				  		<input type="checkbox" value="${x.p_barcode }" class="form-check-input barcode_${i.m_num }_${ j.p_num }" id="${ x.p_barcode }" onclick="checkLimit(this, ${j.bo_qty}, ${j.p_num }, ${i.m_num })">
+																		  			</li>
+																		  		</ul>
+																			</div>
+																		</td>
+										                  			</tr>
+										                		</c:if>
+										              		</c:forEach>
+										            		</tbody>
+										          		</table>
+										        	</td>
+										      	</tr>
+						                	</c:if>
+											</c:forEach>
+											</tbody>
+										</table>
+									</div>
+									<div style="text-align:center;">
+									  	<button type="button" class="btn btn-primary" onclick="doConfirm(${i.m_qty}, ${i.m_num }, this);">승인</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</c:forEach>
+					</c:if>
+						<table style="margin: 0 auto;">
+							<tr>
+								<td colspan="5" style="text-align: center;">
+								  	<!-- 처음 -->
+								  	<c:choose>
+								    	<c:when test="${(page.curPage - 1) < 1 }">
+								      		<button class="btn btn-link text-dark" disabled>&lt;&lt;</button>
+								    	</c:when>
+									    <c:otherwise>
+									      	<a href="/admin/sellManage.do?page=1&searchword=${ searchword }&searchfield=${ searchfield }&tab=tab2" 
+									      		class="btn btn-link text-dark">
+									      		&lt;&lt;
+									      	</a>
+									    </c:otherwise>
+									</c:choose>
+									  
+									<!-- 이전 -->
+									<c:choose>
+									    <c:when test="${(page.curPage - 1) < 1 }">
+									      	<button class="btn btn-link text-dark pagingbtn" disabled>&lt;</button>
+									    </c:when>
+									    <c:otherwise>
+									      	<a href="/admin/sellManage.do?page=${page.curPage - 1}&searchword=${ searchword }&searchfield=${ searchfield }&tab=tab2" 
+									      		class="btn btn-link text-dark pagingbtn">
+									      		&lt;
+									      	</a>
+									    </c:otherwise>
+									</c:choose>
+									  
+									<!-- 개별 페이지 -->
+									<c:forEach var="fEach" begin="${page.startPage}" end="${page.endPage}" step="1">
+									    <c:choose>
+									      	<c:when test="${page.curPage == fEach}">
+									        	<button class="btn btn-link text-dark pagingbtn" disabled>${fEach}</button>
+									      	</c:when>
+									      	<c:otherwise>
+									        	<a href="/admin/sellManage.do?page=${fEach}&searchword=${ searchword }&searchfield=${ searchfield }&tab=tab2" 
+									        		class="btn btn-link text-dark pagingbtn">
+									        		${fEach}
+									        	</a>
+									      	</c:otherwise>
+									    </c:choose>
+									</c:forEach>
+									  
+									<!-- 다음 -->
+									<c:choose>
+									    <c:when test="${(page.curPage + 1) > page.totalPage }">
+									      	<button class="btn btn-link text-dark pagingbtn" disabled>&gt;</button>
+									    </c:when>
+									    <c:otherwise>
+									      	<a href="/admin/sellManage.do?page=${page.curPage + 1}&searchword=${ searchword }&searchfield=${ searchfield }&tab=tab2" 
+										      	class="btn btn-link text-dark pagingbtn">
+										      	&gt;
+									      	</a>
+									    </c:otherwise>
+									</c:choose>
+									  
+									<!-- 끝 -->
+									<c:choose>
+									    <c:when test="${page.curPage == page.totalPage }">
+									      	<button class="btn btn-link text-dark pagingbtn" disabled>&gt;&gt;</button>
+									    </c:when>
+									    <c:otherwise>
+									      	<a href="/admin/sellManage.do?page=${page.totalPage}&searchword=${ searchword }&searchfield=${ searchfield }&tab=tab2" 
+									      		class="btn btn-link text-dark pagingbtn">
+									      		&gt;&gt;
+									      	</a>
+									    </c:otherwise>
+									</c:choose>
+								</td>
+							</tr>
+						</table>
+				  	</div>
+				  	<div id="tab3" class="tab-pane fade ${tab == 'tab3' ? 'show active' : '' }">
+				    	tab3
+				  	</div>
+				  	<div id="tab4" class="tab-pane fade ${tab == 'tab4' ? 'show active' : '' }">
+				    	tab4
+				  	</div>
+				  	<div id="tab5" class="tab-pane fade ${tab == 'tab5' ? 'show active' : '' }">
+				    	tab5
+				  	</div>
 				</div>
 			</div>
-		</c:forEach>
 		</div>
-		<table style="margin: 0 auto;">
-			<tr>
-				<td colspan="5" style="text-align: center;">
-				  	<!-- 처음 -->
-				  	<c:choose>
-				    	<c:when test="${(page.curPage - 1) < 1 }">
-				      		<button class="btn btn-link text-dark" disabled>&lt;&lt;</button>
-				    	</c:when>
-					    <c:otherwise>
-					      	<a href="/admin/sellManage.do?page=1&searchword=${ searchword }&searchfield=${ searchfield }" 
-					      		class="btn btn-link text-dark">
-					      		&lt;&lt;
-					      	</a>
-					    </c:otherwise>
-					</c:choose>
-					  
-					<!-- 이전 -->
-					<c:choose>
-					    <c:when test="${(page.curPage - 1) < 1 }">
-					      	<button class="btn btn-link text-dark pagingbtn" disabled>&lt;</button>
-					    </c:when>
-					    <c:otherwise>
-					      	<a href="/admin/sellManage.do?page=${page.curPage - 1}&searchword=${ searchword }&searchfield=${ searchfield }" 
-					      		class="btn btn-link text-dark pagingbtn">
-					      		&lt;
-					      	</a>
-					    </c:otherwise>
-					</c:choose>
-					  
-					<!-- 개별 페이지 -->
-					<c:forEach var="fEach" begin="${page.startPage}" end="${page.endPage}" step="1">
-					    <c:choose>
-					      	<c:when test="${page.curPage == fEach}">
-					        	<button class="btn btn-link text-dark pagingbtn" disabled>${fEach}</button>
-					      	</c:when>
-					      	<c:otherwise>
-					        	<a href="/admin/sellManage.do?page=${fEach}&searchword=${ searchword }&searchfield=${ searchfield }" 
-					        		class="btn btn-link text-dark pagingbtn">
-					        		${fEach}
-					        	</a>
-					      	</c:otherwise>
-					    </c:choose>
-					</c:forEach>
-					  
-					<!-- 다음 -->
-					<c:choose>
-					    <c:when test="${(page.curPage + 1) > page.totalPage }">
-					      	<button class="btn btn-link text-dark pagingbtn" disabled>&gt;</button>
-					    </c:when>
-					    <c:otherwise>
-					      	<a href="/admin/sellManage.do?page=${page.curPage + 1}&searchword=${ searchword }&searchfield=${ searchfield }" 
-						      	class="btn btn-link text-dark pagingbtn">
-						      	&gt;
-					      	</a>
-					    </c:otherwise>
-					</c:choose>
-					  
-					<!-- 끝 -->
-					<c:choose>
-					    <c:when test="${page.curPage == page.totalPage }">
-					      	<button class="btn btn-link text-dark pagingbtn" disabled>&gt;&gt;</button>
-					    </c:when>
-					    <c:otherwise>
-					      	<a href="/admin/sellManage.do?page=${page.totalPage}&searchword=${ searchword }&searchfield=${ searchfield }" 
-					      		class="btn btn-link text-dark pagingbtn">
-					      		&gt;&gt;
-					      	</a>
-					    </c:otherwise>
-					</c:choose>
-				</td>
-			</tr>
-		</table>
 	</div>
 </div>
 <%@ include file="../footer.jsp" %>
