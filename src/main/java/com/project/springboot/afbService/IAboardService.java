@@ -1,11 +1,10 @@
 package com.project.springboot.afbService;
 
 import java.util.List;
-import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
+import com.project.springboot.aboard.AupDTO;
 import com.project.springboot.aboard.aboardDTO;
 import com.project.springboot.afbpageinfo.BpageInfo;
 
@@ -29,4 +28,9 @@ public interface IAboardService {
 	// 좋아요 수 가져오기
 	public int getLikeCount(int a_num);
 	aboardDTO getAboard(int a_num);
+	
+	public int upload(AupDTO aupDto);
+	public int uploadnum(aboardDTO aboardDto);
+	public List<AupDTO> uploadview(int a_num);
+	
 }

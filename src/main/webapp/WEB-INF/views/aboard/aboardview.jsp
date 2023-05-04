@@ -73,14 +73,21 @@ function toggleLike() {
     </tr>
     <tr>
         <td>내용</td>
-        <td colspan="3" height="100">
+        <td colspan="3">
         	${ aboardDto.a_content }</br>
-	   		<c:forEach items="${fileMap }" var="file" varStatus="vs">
-				<img src="../aUpload/${file.key }" width="200" height="150" />
-				<tr><a href="/aboard/download.do?savedFile=${file.key }&oriFile=원본파일명${vs.count }.jpg">[다운로드]</a></tr>
-			</c:forEach>
+        	
+        <c:forEach items="${file}" var="f">
+	        <c:forEach items="${aupDto }" var="i">
+	  			<c:if test="${i.sfile == f}">
+	   				 <a href="../aUpload/${f}" data-lightbox="image">
+	     			 <img src="../aUpload/${f}" width="100px" height="100px">
+	    			 </a>
+	  			</c:if>
+			</c:forEach>	
+		</c:forEach>
         </td>
     </tr>
+
     <!-- 하단 메뉴(버튼) -->
     <tr>
         <td colspan="4" align="center">
@@ -107,13 +114,19 @@ function toggleLike() {
 <form action="/aboard/unlike.do?a_num=${aboardDto.a_num}" method="post">
     <input type="submit" value="싫어요">
 </form>
-</s:authorize>
 <h3>댓글</h3>
-    <form action="/aboard/acomment/insertac" method="post">
+<table>
+	<tr>
+	<td>${ acDto.u_nick }</td>
+	<td>${ acDto.ac_comment }</td>
+	</tr>
+</table>
+    <form action="/aboard/acomment/insertac.do" method="post">
         <input type="hidden" name="a_num" value="${aboardDto.a_num}">
         <textarea name="ac_comment" rows="1" cols="100"></textarea>
         <button type="submit">댓글 입력</button>
 </form>
+</s:authorize>
 </div>
 <%@ include file="../footer.jsp" %>
 

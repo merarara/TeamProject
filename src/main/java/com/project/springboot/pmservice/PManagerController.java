@@ -18,6 +18,7 @@ import com.project.springboot.productdto.BOrderinfoDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountDTO;
 import com.project.springboot.productdto.ProductlistDTO;
+import com.project.springboot.pservice.IPListDaoService;
 
 @Controller
 public class PManagerController {
@@ -161,7 +162,9 @@ public class PManagerController {
     	
     	List<OrderinfoDTO> list = pmdao.searchSList(nPage, searchword, searchfield);
     	List<BOrderinfoDTO> blist = pmdao.getBOrder();
+    	List<PCountDTO> pclist =  pmdao.searchPcount();
     	
+    	model.addAttribute("pclist", pclist);
     	model.addAttribute("orderlist", list);
     	model.addAttribute("blist", blist);
     	

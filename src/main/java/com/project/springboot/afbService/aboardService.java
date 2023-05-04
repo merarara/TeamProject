@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.project.springboot.aboard.AupDTO;
 import com.project.springboot.aboard.aboardDTO;
 
 @Mapper 
@@ -36,5 +37,9 @@ public interface aboardService {
 	public int getLikeCount(@Param("a_num") int a_num);
 	
 	aboardDTO getAboard(int a_num);
+	
+	public int upload(AupDTO aupDto);
+	public int uploadnum(aboardDTO aboardDto);
+	public List<AupDTO> uploadview(int a_num);
 
 }

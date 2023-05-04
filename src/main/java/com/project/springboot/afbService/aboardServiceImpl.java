@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.project.springboot.aboard.AupDTO;
 import com.project.springboot.aboard.aboardDTO;
 import com.project.springboot.afbpageinfo.BpageInfo;
 
@@ -121,4 +122,19 @@ public class aboardServiceImpl implements IAboardService {
 	    public aboardDTO getAboard(int a_num) {
 	        return abs.getAboard(a_num);
 	   }
+	 
+	 @Override
+	 public int upload(AupDTO aupDto) {
+		 return abs.upload(aupDto);
+	 }
+	 
+	 @Override
+	 public int uploadnum(aboardDTO aboardDto) {
+		 return abs.uploadnum(aboardDto);
+	 }
+	 
+	@Override
+	public List<AupDTO> uploadview(int a_num) {
+		return abs.uploadview(a_num);
+	}
 }

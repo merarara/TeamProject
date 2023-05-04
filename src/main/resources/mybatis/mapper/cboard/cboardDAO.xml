@@ -65,11 +65,11 @@
 	</select>
 	
 	<!-- insertA 쿼리문에서 UserDTO 클래스를 참조하여 u_id 값을 가져옴 -->
-	<insert id="insert" 
-	    parameterType="com.project.springboot.cboard.cboardDTO"> 
-	    INSERT INTO c_board (c_num, u_id, u_nick, c_title, c_content, c_visitcount) 
-	    VALUES (C_num_SEQ.NEXTVAL, #{u_id}, #{u_nick}, #{c_title}, #{c_content}, 0)
+	<insert id="insert" parameterType="com.project.springboot.cboard.cboardDTO"> 
+	INSERT INTO c_board (c_num, u_id, u_nick, c_title, c_content, c_regdate) 
+	VALUES (C_num_SEQ.NEXTVAL, #{u_id}, #{u_nick}, #{c_title}, #{c_content}, sysdate)
 	</insert>
+
 	
 	
 	<!-- 공지사항 게시글 인출 -->	 
