@@ -116,6 +116,22 @@ function validateForm() {
     
     return true;
   }
+  
+const changePwCheckbox = document.getElementById('changePw');
+const newPwGroup = document.getElementById('newPwGroup');
+
+changePwCheckbox.addEventListener('change', function() {
+    if (this.checked) {
+        const newPwInput = document.createElement('input');
+        newPwInput.type = 'password';
+        newPwInput.name = 'new_pw';
+        newPwInput.placeholder = '새 비밀번호 입력';
+        newPwGroup.appendChild(newPwInput);
+    } else {
+        newPwGroup.innerHTML = '';
+    }
+});
+
 </script>
 </head>
 <body>
@@ -133,12 +149,20 @@ function validateForm() {
 						      <input type="text" class="" id="inputId" name="u_id" value=${ uinfo.u_id } readonly>
 						    </div>
 					  </div>
-                        <div class="form_group">
-                                    <label for="inputPw">비밀번호</label>
-                                    <div class="input_group">
-                                        <input type="password" class="" id="inputPw" name="u_pw" placeholder="비밀번호를 입력해주세요.">
-                                    </div>
-                        </div>
+						<div class="form_group">
+						    <label for="inputPw">비밀번호</label>
+						    <div class="input_group">
+						        <input type="password" class="" id="inputPw" name="u_pw" value=${uinfo.u_pw}>
+						    </div>
+						</div>
+						<div class="form_group">
+						    <label for="changePw">비밀번호 변경하기</label>
+						    <div class="input_group">
+						        <input type="checkbox" class="" id="changePw" name="change_pw">
+						    </div>
+						</div>
+						<div id="newPwGroup"></div>
+
                         <div class="form_group">
                                     <label for="inputName">이름</label>
                                     <div class="input_group">
