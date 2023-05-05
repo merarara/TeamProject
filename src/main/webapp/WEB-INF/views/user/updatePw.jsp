@@ -6,6 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+ <link rel="stylesheet"  href="/css/reset.css">
+ <link rel="stylesheet"  href="/css/join.css">
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -61,8 +63,9 @@ function updatePassword() {
         },
         success: function(result) {
             if (result.status === "success") {
-                alert("비밀번호가 변경되었습니다.");
-                window.location.href = /user/login.do
+            	alert("비밀번호가 변경되었습니다.\n로그인 창으로 이동합니다.");
+                window.location.href = "/user/logout.do";
+                window.location.href = "/user/login.do";
             } else {
                 alert("비밀번호 변경에 실패하였습니다.");
             }
@@ -81,25 +84,40 @@ $(document).ready(function() {
 </head>
 <body>
 <%@ include file="../header.jsp" %>  
-
-<form>
-    <div class="login_pw">
-        <h4>비밀번호</h4>
-        <input type="password" name="user_pwd" id="user_pwd" placeholder="기존 비밀번호를 입력해주세요">
-        <button type="button" onclick="validateForm();">확인 </button>
-    </div>
-    <div> 
-        <h4>새 비밀번호</h4>
-        <input type="password" name="my_pass" id="new_pwd1" placeholder="비밀번호를 입력해주세요">
-    </div>
-    <div> 
-        <h4>새 비밀번호 확인</h4>
-        <input type="password" name="my_pass" id="new_pwd2" placeholder="비밀번호를 입력해주세요">
-    </div>
-    <div>
-        <input type="submit" id="change_pwd_btn" value="비밀번호 변경">
-    </div>
-</form>
+<div id="wrap">
+      <div class="inner">
+          <div class="form_wrap">
+			<form>
+			    <div class= "form_group">
+			    	<label for="user_pwd">현재 비밀번호</label>
+			    		<div class="input_group">
+					        <input type="password"  name="user_pwd" id="user_pwd" placeholder="현재 비밀번호를 입력해주세요">
+					        <button type="button" class="btn-certi" onclick="validateForm();">확인 </button>
+						</div>			    	
+			    </div>
+			    <div> 
+				    <div class= "form_group">
+				   		 <label for="user_pwd">새 비밀번호</label>
+				    		<div class="input_group">
+						        <input type="password" name="my_pass" id="new_pwd1" placeholder="비밀번호를 입력해주세요.">
+				    		</div>
+				    </div>
+			    </div>
+			    <div> 
+				    <div class= "form_group">
+				  		  <label for="user_pwd">새 비밀번호 확인</label>
+				    		<div class="input_group">
+						        <input type="password" name="my_pass" id="new_pwd2" placeholder="비밀번호를 입력해주세요.">
+						    </div>
+				    </div>
+			    </div>
+			    <div>
+			        <input type="submit" class="btn-submit" id="change_pwd_btn" value="비밀번호 변경">
+			    </div>
+			</form>
+		</div>
+	</div>
+</div>
 
             
 
