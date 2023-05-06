@@ -22,11 +22,8 @@ public class ACommentServiceImpl implements IACommentService {
 	int pageCount = 5;		// 하단에 보여줄 페이지 리스트의 갯수
 
     @Override
-    public List<ACommentDTO> selectAC(int curpage) {
-    	int nStart = (curpage - 1) * listCount + 1;
-		int nEnd = (curpage - 1) * listCount + listCount;
-    	
-        return acs.selectAC(nEnd, nStart);
+    public List<ACommentDTO> selectAC(int a_num, String ac_num) {
+        return acs.selectAC(a_num, ac_num);
     }
 
     @Override
@@ -110,4 +107,9 @@ public class ACommentServiceImpl implements IACommentService {
 		return acs.getAComment(ac_num);
 	}
 	
+	@Override
+	public List<ACommentDTO> selectAnum(String a_num) {
+		return acs.selectAnum(a_num);
+	}
+	 
 }

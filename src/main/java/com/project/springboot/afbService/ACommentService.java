@@ -10,8 +10,9 @@ import com.project.springboot.aboard.aboardDTO;
 
 @Mapper
 public interface ACommentService {
-	
-	public List<ACommentDTO> selectAC(int nEnd, int nStart);
+
+	public List<ACommentDTO> selectAnum(String a_num);
+	public List<ACommentDTO> selectAC(int a_num, String ac_num);
     public int insertAC(ACommentDTO acDto);
     public int updateAC(ACommentDTO acDto);
     public int deleteAC(int ac_num);

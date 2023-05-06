@@ -8,47 +8,52 @@
 <mapper namespace="com.project.springboot.afbService.ACommentService">
 	<select id="selectAC" 
 		resultType="com.project.springboot.aboard.ACommentDTO">
-		
+		SELECT * FROM acomment WHERE a_num=#{a_num} ORDER BY #{ac_num} DESC
 	</select>
 
 	<!-- 페이지설정 -->
 	<select id="articlePageDao" resultType="_int">
-		select count(*) as total from CComment
+		select count(*) as total from AComment
 	</select>
 	
 	<!-- insertA 쿼리문에서 UserDTO 클래스를 참조하여 u_id 값을 가져옴 -->
 	<insert id="insertAC" parameterType="com.project.springboot.aboard.ACommentDTO">
-	    INSERT INTO CComment (c_num, cc_num, u_id, u_nick, cc_comment) 
-	    VALUES (#{c_num}, seq_acomment_num.nextval, #{u_id, jdbcType=VARCHAR}, #{u_nick, jdbcType=VARCHAR}, #{cc_comment})
+	    INSERT INTO AComment (a_num, ac_num, u_id, u_nick, ac_comment) 
+	    VALUES (#{a_num}, seq_acomment_num.nextval, #{u_id, jdbcType=VARCHAR}, #{u_nick, jdbcType=VARCHAR}, #{ac_comment})
 	</insert>
 
-	<!-- 공지사항 게시글 수정. 파라미터는 DTO의 멤버변수를 사용한다. -->
+	<!-- 공지사항 게시글 댓글 수정. 파라미터는 DTO의 멤버변수를 사용한다. -->
 	<update id="updateAC" 
 		parameterType="com.project.springboot.aboard.ACommentDTO"> 
-		update CComment set cc_comment=#{cc_comment} 
-		where cc_num=#{cc_num}
+		update AComment set ac_comment=#{ac_comment} 
+		where ac_num=#{ac_num}
 	</update> 
 	
-	<!-- 공지사항 게시글 삭제 -->
+	<!-- 공지사항 게시글 댓글 삭제 -->
 	<delete id="deleteAC" parameterType="string">
-  		delete from CComment where cc_num=#{cc_num}
+  		delete from AComment where ac_num=#{ac_num}
 	</delete>
 
 	<!-- 좋아요 삽입 -->
 	<insert id="insertLike" parameterType="map">
-	  INSERT INTO c_comment_like (cc_num, u_id) VALUES (#{cc_num}, #{u_id})
+	  INSERT INTO ac_like (ac_num, u_id) VALUES (#{ac_num}, #{u_id})
 	</insert>
 	
 	<!-- 좋아요 삭제 -->
 	<delete id="deleteLike" parameterType="map">
-	  DELETE FROM c_comment_like WHERE cc_num = #{cc_num} AND u_id = #{u_id}
+	  DELETE FROM ac_like WHERE ac_num = #{ac_num} AND u_id = #{u_id}
 	</delete>
 	
 	<!-- 좋아요 등록 -->
 	<update id="getLikeCount"  parameterType="int">
-	  UPDATE c_board SET c_like = (
-      SELECT COUNT(*) FROM c_comment_like WHERE cc_num = #{cc_num}
-      ) WHERE c_num = #{c_num}
+	  UPDATE acomment SET ac_like = (
+      SELECT COUNT(*) FROM ac_like WHERE a_num = #{a_num}
+      ) WHERE ac_num = #{ac_num}
 	</update>
+	
+	<select id="selectAnum" 
+		resultType="com.project.springboot.aboard.ACommentDTO">
+		SELECT * FROM acomment WHERE a_num=#{a_num} order by ac_num desc
+	</select>
 
 </mapper>

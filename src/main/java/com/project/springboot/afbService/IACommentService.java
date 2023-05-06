@@ -10,7 +10,9 @@ import com.project.springboot.afbpageinfo.BpageInfo;
 
 @Service
 public interface IACommentService {
-	public List<ACommentDTO> selectAC(int curPage);
+	
+	public List<ACommentDTO> selectAnum(String a_num);
+	public List<ACommentDTO> selectAC(int a_num, String ac_num);
     public int insertAC(ACommentDTO acDto);
     public int updateAC(ACommentDTO acDto);
     public int deleteAC(String c_num);

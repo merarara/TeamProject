@@ -44,11 +44,11 @@ public class ACommentController {
 				
 			}
 			
-			BpageInfo pinfo = acs.articlePage(nPage);
-			model.addAttribute("page", pinfo);
-			
-	        List<ACommentDTO> acommentList = acs.selectAC(a_num);
-	        model.addAttribute("acommentList", acommentList);
+//			BpageInfo pinfo = acs.articlePage(nPage);
+//			model.addAttribute("page", pinfo);
+//			String ac_num = req.getParameter(ac_num);
+//	        List<ACommentDTO> acommentList = acs.selectAC(a_num, ac_num);
+//	        model.addAttribute("acommentList", acommentList);
 	        
 	        return "aboard/aboardview";
 	    }

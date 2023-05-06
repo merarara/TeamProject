@@ -173,11 +173,15 @@ public class AboardController {
 	    model.addAttribute("udto", udto);
 	    model.addAttribute("aboardDto", dto);
 	    
+	    List<ACommentDTO> acList = acs.selectAnum(a_num);
+	    model.addAttribute("acList", acList);
+	    
 	    List<AupDTO> aupDto = asv.uploadview(Integer.parseInt(a_num));
 	    
 	    for (AupDTO e: aupDto) {
 	    	System.out.println(e.getSfile());
 	    }
+	    
 	    
 	    model.addAttribute("aupDto", aupDto);
 	    List<String> aup = new ArrayList<String>();
@@ -195,7 +199,7 @@ public class AboardController {
 			model.addAttribute("file", aup);		
 		}
 		catch (Exception e) {}
-
+	    
 	    return "aboard/aboardview";
 	}
 	

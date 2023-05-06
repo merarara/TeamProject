@@ -108,5 +108,4 @@
 	  DELETE FROM aup WHERE a_num = #{a_num}
 	</delete>
 	
-	
 </mapper>

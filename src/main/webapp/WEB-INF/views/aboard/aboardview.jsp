@@ -87,7 +87,7 @@ function toggleLike() {
 		</c:forEach>
         </td>
     </tr>
-
+	<tr></tr>
     <!-- 하단 메뉴(버튼) -->
     <tr>
         <td colspan="4" align="center">
@@ -114,19 +114,35 @@ function toggleLike() {
 <form action="/aboard/unlike.do?a_num=${aboardDto.a_num}" method="post">
     <input type="submit" value="싫어요">
 </form>
-<h3>댓글</h3>
-<table>
-	<tr>
-	<td>${ acDto.u_nick }</td>
-	<td>${ acDto.ac_comment }</td>
-	</tr>
-</table>
+</s:authorize>
+<div id="comment-section">
+    <h3>댓글</h3>
+    <table>
+        <c:forEach var="acDto" items="${acList}">
+            <tr>
+                <td>${acDto.u_nick}</td>
+                <td>${acDto.ac_comment}</td>
+               		<td><form action="/aboard/like.do?ac_num=${acDto.a_num}" method="post">
+    					<input type="submit" value="좋아요">
+					</form>
+					<form action="/aboard/unlike.do?ac_num=${acDto.ac_num}" method="post">
+    					<input type="submit" value="싫어요">
+					</form></td>
+						<td><form action="/aboard/acomment/updateac.do?ac_num=${acDto.ac_num}" method="post">
+    					<input type="submit" value="댓글 수정">
+					</form>
+					<form action="/aboard/acomment/deleteac.do?ac_num=${acDto.ac_num}" method="post">
+    					<input type="submit" value="댓글 삭제">
+					</form></td>
+            </tr>
+        </c:forEach>
+    </table>
     <form action="/aboard/acomment/insertac.do" method="post">
         <input type="hidden" name="a_num" value="${aboardDto.a_num}">
         <textarea name="ac_comment" rows="1" cols="100"></textarea>
         <button type="submit">댓글 입력</button>
-</form>
-</s:authorize>
+    </form>
+</div>
 </div>
 <%@ include file="../footer.jsp" %>
 
