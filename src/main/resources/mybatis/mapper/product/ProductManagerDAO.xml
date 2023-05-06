@@ -81,9 +81,18 @@
 	<!-- 판매 목록 페이징 -->
 	<select id="articleSPageDao" resultType="_int">
 		select count(*) as total from order_info
-		 <if test="tab == 'tab2'">
+		 <if test="tab == 'tab1'">
 		 where m_payment = '상품준비중'
 		 </if>
+		 <if test="tab == 'tab2'">
+ 		 where m_payment = '배송준비중'
+ 		 </if>
+ 		 <if test="tab == 'tab3'">
+  		 where m_payment = '배송중'
+  		 </if>
+  		 <if test="tab == 'tab4'">
+  		 where m_payment = '판매완료'
+  		 </if>
 	</select>
 	
 	<!-- 판매 목록 -->
@@ -94,8 +103,17 @@
 		  		  from (
 		  		  		select *
 		  		  		  from order_info
-		  		  		 <if test="tab == 'tab2'">
+		  		  		 <if test="tab == 'tab1'">
 		  		  		 where m_payment = '상품준비중'
+		  		  		 </if>
+		  		  		 <if test="tab == 'tab2'">
+		  		  		 where m_payment = '배송준비중'
+		  		  		 </if>
+		  		  		 <if test="tab == 'tab3'">
+		  		  		 where m_payment = '배송중'
+		  		  		 </if>
+		  		  		 <if test="tab == 'tab4'">
+		  		  		 where m_payment = '판매완료'
 		  		  		 </if>
 		  		  		 order by m_num desc
 		  		  		) A
@@ -115,10 +133,37 @@
 		 where p_barcode = #{barcode}
 	</update>
 	
-	<!-- 주문 상태 변경 -->
+	<!-- 상품 판매 정보 입력 -->
+	<insert id="insertSoldInfoDao">
+		insert into p_soldinfo (m_num, p_num, p_barcode) 
+		values (#{m_num}, #{p_num}, #{barcode})
+	</insert>
+	
+	<!-- 주문 상태 배송준비중 변경 -->
 	<update id="updateOrderDao">
 		update order_info
 		   set m_payment = '배송준비중'
 		 where m_num = #{m_num}
 	</update>
+	
+	<!-- 주문 상태 배송중, 판매완료 변경 -->
+	<update id="updateOrderinfoDao">
+		update order_info
+		   <if test="status == '배송준비중'">
+		   set m_payment = '배송중'
+		   </if>
+		   <if test="status == '배송중'">
+		   set m_payment = '판매완료'
+		   </if>
+		 where m_num = #{m_num}
+	</update>
+	
+	<!-- 주문 상태 배송중 변경 -->
+	
+	<!-- 주문 상태 판매완료 변경 -->
+	
+	<!-- 상품 판매 정보 가져오기 -->
+	<select id="getSoldInfoDao" resultType="com.project.springboot.productdto.PSoldInfoDTO">
+		select * from p_soldinfo
+	</select>
 </mapper>

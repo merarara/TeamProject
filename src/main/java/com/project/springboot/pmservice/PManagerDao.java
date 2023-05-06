@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.project.springboot.productdto.BOrderinfoDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountDTO;
+import com.project.springboot.productdto.PSoldInfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
 @Mapper
@@ -47,6 +48,15 @@ public interface PManagerDao {
 	// 상품 결제 승인시 재고 상태 변경
 	public int updateBarcodeDao(@Param("barcode") String barcode);
 	
+	// 판매 재고 정보 입력
+	public int insertSoldInfoDao(@Param("barcode") String barcode, @Param("m_num") String m_num, @Param("p_num") String p_num);
+	
 	// 주문 상태 변경
 	public int updateOrderDao(@Param("m_num") String m_num);
+	
+	// 주문 상태 변경2
+	public int updateOrderinfoDao(@Param("m_num") String m_num, @Param("status") String status);
+		
+	// 상품 판매 내역 가져오기
+	public List<PSoldInfoDTO> getSoldInfoDao ();
 }

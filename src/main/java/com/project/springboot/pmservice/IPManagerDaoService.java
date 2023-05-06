@@ -8,6 +8,7 @@ import com.project.springboot.ppageinfo.MProductPageinfo;
 import com.project.springboot.productdto.BOrderinfoDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountDTO;
+import com.project.springboot.productdto.PSoldInfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
 @Service
@@ -41,8 +42,14 @@ public interface IPManagerDaoService {
 	public List<BOrderinfoDTO> getBOrder();
 	
 	// 상품 결제 승인
-	public int confirmOrder(String barcode, String m_num);
+	public int confirmOrder(String barcode, String m_num, String p_num);
 	
 	// 상품 재고 업데이트
 	public void updateCount(String p_num);
+	
+	// 상품 주문 상태 변경
+	public int updateOrder(String m_num, String status);
+	
+	// 상품 판매 내역 가져오기
+	public List<PSoldInfoDTO> getSoldInfo ();
 }

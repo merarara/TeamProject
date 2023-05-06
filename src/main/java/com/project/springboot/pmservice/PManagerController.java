@@ -18,6 +18,7 @@ import com.project.springboot.ppageinfo.MProductPageinfo;
 import com.project.springboot.productdto.BOrderinfoDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountDTO;
+import com.project.springboot.productdto.PSoldInfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
 @Controller
@@ -146,6 +147,10 @@ public class PManagerController {
     	String searchfield = req.getParameter("searchfield");
     	String tab = req.getParameter("tab");
     	
+    	if (tab == null) {
+    		tab = "tab1";
+    	}
+    	
     	try {
     		String sPage = req.getParameter("page");
     		nPage = Integer.parseInt(sPage);
@@ -166,6 +171,11 @@ public class PManagerController {
     	List<BOrderinfoDTO> blist = new ArrayList<BOrderinfoDTO>();
     	List<PCountDTO> pclist = new ArrayList<PCountDTO>();
     	
+    	List<PSoldInfoDTO> soldlist = new ArrayList<PSoldInfoDTO>();
+    	if (tab != "tab1") {
+    		soldlist = pmdao.getSoldInfo();
+    	}
+    	
     	if(!list.isEmpty()) {
     		blist = pmdao.getBOrder();
     		pclist = pmdao.searchPcount();
@@ -178,6 +188,7 @@ public class PManagerController {
     	model.addAttribute("pclist", pclist);
     	model.addAttribute("orderlist", list);
     	model.addAttribute("blist", blist);
+    	model.addAttribute("soldlist", soldlist);
     	
     	return "admin/sellManage";
     }
@@ -194,8 +205,8 @@ public class PManagerController {
     	int result = 0;
     	Map<String, String> response = new HashMap<String, String>();
     	
-    	for(String e: barcodelist) {
-    		result = result + pmdao.confirmOrder(e, m_num);
+    	for(int i = 0; i < barcodelist.length; i++) {
+    		result = result + pmdao.confirmOrder(barcodelist[i], m_num, p_num[i]);
     	}
     	
     	for(String e: p_num) {
@@ -203,6 +214,45 @@ public class PManagerController {
     	}
     	
     	if (result >= 2) {
+    		response.put("status", "success");
+    	} else {
+    		response.put("status", "fail");
+    	}
+    	
+    	return response;
+    }
+    
+    // 상품 주문상태 변경
+    @ResponseBody
+    @RequestMapping("/admin/doDelivery.do")
+    public Map<String, String> doDelivery(HttpServletRequest req) {
+    	String m_num = req.getParameter("m_num");
+    	String status = req.getParameter("status");
+    	
+    	int result = pmdao.updateOrder(m_num, status);
+    	
+    	Map<String, String> response = new HashMap<String, String>();
+    	
+    	if (result == 1) { 
+    		response.put("status", "success");
+    	} else {
+    		response.put("status", "fail");
+    	}
+    	
+    	return response;
+    }
+    
+    @ResponseBody
+    @RequestMapping("/admin/doConfirmSell.do")
+    public Map<String, String> doComfirmSell(HttpServletRequest req) {
+    	String m_num = req.getParameter("m_num");
+    	String status = req.getParameter("status");
+    	
+    	int result = pmdao.updateOrder(m_num, status);
+    	
+    	Map<String, String> response = new HashMap<String, String>();
+    	
+    	if (result == 1) { 
     		response.put("status", "success");
     	} else {
     		response.put("status", "fail");

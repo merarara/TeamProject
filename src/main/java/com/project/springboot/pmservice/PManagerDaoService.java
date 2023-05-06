@@ -9,6 +9,7 @@ import com.project.springboot.ppageinfo.MProductPageinfo;
 import com.project.springboot.productdto.BOrderinfoDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountDTO;
+import com.project.springboot.productdto.PSoldInfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
 @Service
@@ -100,11 +101,12 @@ public class PManagerDaoService implements IPManagerDaoService {
 	
 	// 상품 결제 승인
 	@Override
-	public int confirmOrder(String barcode, String m_num) {
+	public int confirmOrder(String barcode, String m_num, String p_num) {
 		int result = dao.updateBarcodeDao(barcode);
 		int result2 = dao.updateOrderDao(m_num);
+		int result3 = dao.insertSoldInfoDao(barcode, m_num, p_num);
 		
-		if (result + result2 <= 2) {
+		if (result + result2 >= 2) {
 			dao.updateCountDao(result2);
 		}
 		
@@ -115,6 +117,21 @@ public class PManagerDaoService implements IPManagerDaoService {
 	@Override
 	public void updateCount(String p_num) {
 		dao.updateCountDao(Integer.parseInt(p_num));
+	}
+	
+	// 상품 판매 내역 가져오기
+	@Override
+	public List<PSoldInfoDTO> getSoldInfo() {
+		List<PSoldInfoDTO> soldlist = dao.getSoldInfoDao();
+		return soldlist;
+	}
+	
+	// 상품 주문 상태 변경
+	@Override
+	public int updateOrder(String m_num, String status) {
+		int result = dao.updateOrderinfoDao(m_num, status);
+		
+		return result;
 	}
 	
 	// 재고 관리 페이지 설정
