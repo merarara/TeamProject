@@ -108,35 +108,53 @@ function toggleLike() {
     </tr>
 </table>
 <s:authorize access="hasRole('USER')">
+<tr>
+<td>
 <form action="/aboard/like.do?a_num=${aboardDto.a_num}" method="post">
     <input type="submit" value="좋아요">
 </form>
+</td>
+<td>
 <form action="/aboard/unlike.do?a_num=${aboardDto.a_num}" method="post">
     <input type="submit" value="싫어요">
 </form>
+</td>
+</tr>
 </s:authorize>
+
 <div id="comment-section">
     <h3>댓글</h3>
     <table>
-        <c:forEach var="acDto" items="${acList}">
+		<c:forEach var="acDto" items="${acList}">
             <tr>
                 <td>${acDto.u_nick}</td>
                 <td>${acDto.ac_comment}</td>
-               		<td><form action="/aboard/like.do?ac_num=${acDto.a_num}" method="post">
+          		<c:if test="${acDto.u_id != udto.u_id}">
+          		<td>
+          			<form action="/aboard/acomment/aclike.do?a_num=${acDto.a_num}" method="post">
+          				<input type="hidden" name="ac_num" value="${acDto.ac_num}">
     					<input type="submit" value="좋아요">
 					</form>
-					<form action="/aboard/unlike.do?ac_num=${acDto.ac_num}" method="post">
+				</td>
+				<td>
+					<form action="/aboard/acomment/acunlike.do?a_num=${acDto.a_num}" method="post">
+						<input type="hidden" name="ac_num" value="${acDto.ac_num}">
     					<input type="submit" value="싫어요">
-					</form></td>
-						<td><form action="/aboard/acomment/updateac.do?ac_num=${acDto.ac_num}" method="post">
-    					<input type="submit" value="댓글 수정">
 					</form>
-					<form action="/aboard/acomment/deleteac.do?ac_num=${acDto.ac_num}" method="post">
-    					<input type="submit" value="댓글 삭제">
-					</form></td>
+				</td>
+				</c:if>
+				<c:if test="${acDto.u_id == udto.u_id}">
+					<td>
+						<form action="/aboard/acomment/deleteac.do?a_num=${acDto.a_num}" method="post">
+	  							<input type="submit" value="댓글 삭제">
+	  							<input type="hidden" name="ac_num" value="${acDto.ac_num}">
+						</form>
+					</td>
+				</c:if>
+				<td>좋아요: ${ acDto.ac_like }</td>
             </tr>
         </c:forEach>
-    </table>
+	</table>
     <form action="/aboard/acomment/insertac.do" method="post">
         <input type="hidden" name="a_num" value="${aboardDto.a_num}">
         <textarea name="ac_comment" rows="1" cols="100"></textarea>

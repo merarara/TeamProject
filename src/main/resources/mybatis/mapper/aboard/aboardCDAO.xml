@@ -22,32 +22,24 @@
 	    VALUES (#{a_num}, seq_acomment_num.nextval, #{u_id, jdbcType=VARCHAR}, #{u_nick, jdbcType=VARCHAR}, #{ac_comment})
 	</insert>
 
-	<!-- 공지사항 게시글 댓글 수정. 파라미터는 DTO의 멤버변수를 사용한다. -->
-	<update id="updateAC" 
-		parameterType="com.project.springboot.aboard.ACommentDTO"> 
-		update AComment set ac_comment=#{ac_comment} 
-		where ac_num=#{ac_num}
-	</update> 
-	
-	<!-- 공지사항 게시글 댓글 삭제 -->
-	<delete id="deleteAC" parameterType="string">
-  		delete from AComment where ac_num=#{ac_num}
+	<delete id="deleteAC" parameterType="map">
+    	delete from AComment where ac_num=#{ac_num,jdbcType=INTEGER} and u_id=#{u_id,jdbcType=VARCHAR}
 	</delete>
 
 	<!-- 좋아요 삽입 -->
-	<insert id="insertLike" parameterType="map">
-	  INSERT INTO ac_like (ac_num, u_id) VALUES (#{ac_num}, #{u_id})
+	<insert id="insertAcLike" parameterType="map">
+	  INSERT INTO acomment_like (ac_num, u_id) VALUES (#{ac_num}, #{u_id})
 	</insert>
 	
 	<!-- 좋아요 삭제 -->
-	<delete id="deleteLike" parameterType="map">
-	  DELETE FROM ac_like WHERE ac_num = #{ac_num} AND u_id = #{u_id}
+	<delete id="deleteAcLike" parameterType="map">
+	  DELETE FROM acomment_like WHERE ac_num = #{ac_num} AND u_id = #{u_id}
 	</delete>
 	
 	<!-- 좋아요 등록 -->
-	<update id="getLikeCount"  parameterType="int">
+	<update id="getAcLikeCount"  parameterType="int">
 	  UPDATE acomment SET ac_like = (
-      SELECT COUNT(*) FROM ac_like WHERE a_num = #{a_num}
+      SELECT COUNT(*) FROM acomment_like WHERE ac_num = #{ac_num}
       ) WHERE ac_num = #{ac_num}
 	</update>
 	

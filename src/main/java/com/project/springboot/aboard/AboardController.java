@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -340,11 +342,22 @@ public class AboardController {
 	
 	// 공지사항 게시글 삭제 기능
 	@RequestMapping(value="/aboard/aboarddelete.do", method=RequestMethod.GET)
-	public String deleteA(@RequestParam("a_num") String a_num) {
-	    int result = asv.deleteA(a_num);
-	    int result2 = asv.deleteFileAll(a_num);
+	public String deleteA(@RequestParam("a_num") String a_num, Model model, aboardDTO aboardDto) {
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String u_id = authentication.getName();
+	    UserDTO udto = udao.selectOne(u_id);
+	    model.addAttribute("udto", udto);
+	    aboardDto.setU_id(u_id);
+	    System.out.println(u_id);
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("a_num", a_num);
+	    params.put("u_id", u_id);
+	    asv.deleteFileAll(a_num);
+	    asv.deleteAcAll(a_num);
+	    int result = asv.deleteA(params);
+
 	    if (result == 1) {
-	      System.out.println("삭제되었습니다.");
+	        System.out.println("삭제되었습니다.");
 	    }
 	    return "redirect:/aboard/aboardlist.do";
 	}
@@ -388,6 +401,7 @@ public class AboardController {
 		int a_num = Integer.parseInt(req.getParameter("a_num"));
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String u_id = authentication.getName(); // 사용자 id
+        
  		if (u_id == null) {
  			return "redirect:/auth/login.do";
 	    }
@@ -403,7 +417,6 @@ public class AboardController {
 	// 싫어요 기능
 	@PostMapping("/aboard/unlike.do")
 	public String removeLike(HttpServletRequest req, HttpSession session) {
-	    // HttpSession에서 로그인 정보인 user_id를 가져온다.
 		int a_num = Integer.parseInt(req.getParameter("a_num"));
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String u_id = authentication.getName(); // 사용자 id

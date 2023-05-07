@@ -1,6 +1,7 @@
 package com.project.springboot.afbService;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public interface IAboardService {
 	public int insertA(aboardDTO aboardDto);
 	public aboardDTO selectOneA(String a_num);
 	public int updateA(aboardDTO aboardDto);
-	public int deleteA(String a_num);
+	public int deleteA(Map<String, Object> params);
 	
 	// 페이지설정
 	public BpageInfo articlePage(int curPage, String searchField, String searchWord);
@@ -34,5 +35,6 @@ public interface IAboardService {
 	public List<AupDTO> uploadview(int a_num);
 	public int deleteFile(int a_num, String sfile);
 	public int deleteFileAll(String a_num);
+	public int deleteAcAll(String a_num);
 	
 }

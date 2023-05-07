@@ -3,6 +3,7 @@ package com.project.springboot.afbService;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +49,8 @@ public class aboardServiceImpl implements IAboardService {
     }
     
     @Override
-    public int deleteA(String a_num) {
-	    return sqlSession.delete("deleteA", a_num);
+    public int deleteA(Map<String, Object> params) {
+	    return abs.deleteA(params);
     }
 
     @Override
@@ -146,5 +147,10 @@ public class aboardServiceImpl implements IAboardService {
 	@Override
 	public int deleteFileAll(String a_num) {
 		return abs.deleteFileAll(a_num);
+	}
+	
+	@Override
+	public int deleteAcAll(String a_num) {
+		return abs.deleteAcAll(a_num);
 	}
 }
