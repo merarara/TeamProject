@@ -10,6 +10,7 @@ import com.project.springboot.productdto.BOrderinfoDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountDTO;
 import com.project.springboot.productdto.PSoldInfoDTO;
+import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
 @Service
@@ -132,6 +133,17 @@ public class PManagerDaoService implements IPManagerDaoService {
 		int result = dao.updateOrderinfoDao(m_num, status);
 		
 		return result;
+	}
+	
+	@Override
+	public int addProduct(ProductlistDTO pDTO, ProductinfoDTO pinfoDTO) {
+		int result = dao.addPListDao(pDTO);
+		int p_num = dao.searchPNum();
+		pinfoDTO.setP_num(p_num);
+		int result2 = dao.addPInfoDao(pinfoDTO);
+		
+		
+		return result + result2;
 	}
 	
 	// 재고 관리 페이지 설정

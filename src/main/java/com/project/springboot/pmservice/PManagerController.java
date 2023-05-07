@@ -1,5 +1,6 @@
 package com.project.springboot.pmservice;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +26,7 @@ import com.project.springboot.productdto.PCountDTO;
 import com.project.springboot.productdto.PSoldInfoDTO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
+import com.project.springboot.productdto.ReviewImageDTO;
 
 @Controller
 public class PManagerController {
@@ -260,34 +263,80 @@ public class PManagerController {
     	return response;
     }
     
-    // 상품관리 페이지 이동
-    @RequestMapping("/admin/productManage.do")
-    public String goProductManage() {
-    	
-    	return "admin/productManage";
-    }
-    
     // 상품 추가
     @RequestMapping("/admin/doAddProduct.do")
     public String addProduct(@RequestParam(name = "listimg", required = false) MultipartFile listimg, ProductlistDTO pDTO, 
-    		ProductinfoDTO pinfoDTO, MultipartFile[] p_imgsrcs) {
+    		ProductinfoDTO pinfoDTO, @RequestParam(name = "imgsrcs", required = false) MultipartFile[] imgsrcs,
+    		@RequestParam(name = "link_imgsrcs", required = false) String[] linkImgSrcs, HttpServletRequest req) {
     	
-    	System.out.println(pDTO.getP_company());
-    	System.out.println(pDTO.getP_name());
-    	System.out.println(pDTO.getP_price());
-    	System.out.println(pDTO.getP_listimg());
-    	System.out.println(pinfoDTO.getP_name());
-    	System.out.println(pinfoDTO.getOs());
+    	String p_imgsrcs = "";
+    	
+    	pinfoDTO.setP_name(pDTO.getP_name());
+    	
+    	// 상품 대표 이미지 파일업로드 추가
     	if (listimg != null) {
+    		String path = "";
 			String originalName = listimg.getOriginalFilename();
 			String ext = originalName.substring(originalName.lastIndexOf('.'));
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			String savedName = uuid + ext;
 			
 			pDTO.setP_listimg(savedName);
-			System.out.println(pDTO.getP_listimg());
+			
+			try {
+				path = ResourceUtils.getFile("classpath:static/productuploads/")
+						.toPath().toString();
+				File filePath = new File(path, savedName);
+				listimg.transferTo(filePath);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
     	}
     	
-    	return null;
+    	// 직접 입력한상품 상세 이미지 정제
+    	if (linkImgSrcs != null) {
+    		for (int i = 0; i < linkImgSrcs.length; i++) {
+        		if (i != (linkImgSrcs.length - 1)) {
+        			p_imgsrcs += linkImgSrcs[i] + ",";
+        		} else {
+        			p_imgsrcs += linkImgSrcs[i];
+        			pinfoDTO.setP_imgsrcs(p_imgsrcs);
+        		}
+        	}
+    	} else {
+    		// 파일 업로드 상세 이미지 정제 후 추가
+    		String path = "";
+    		for (int i = 0; i < imgsrcs.length; i++) {
+    			MultipartFile f = imgsrcs[i];
+    			String originalName = f.getOriginalFilename();
+				String ext = originalName.substring(originalName.lastIndexOf('.'));
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				String savedName = uuid + ext;
+				
+				if (i != imgsrcs.length - 1) {
+					p_imgsrcs += savedName + ",";
+				} else {
+					p_imgsrcs += savedName;
+					pinfoDTO.setP_imgsrcs(p_imgsrcs);
+				}
+				
+				try {
+					path = ResourceUtils.getFile("classpath:static/productuploads/")
+							.toPath().toString();
+					File filePath = new File(path, savedName);
+					f.transferTo(filePath);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+    		}
+    	}
+    	
+    	int result = pmdao.addProduct(pDTO, pinfoDTO);
+    	if (result == 2) {
+    		System.out.println("성공");
+    	} else {
+    		System.out.println("실패");
+    	}
+    	return "redirect:/admin/adminPage.do?check=yes";
     }
 }

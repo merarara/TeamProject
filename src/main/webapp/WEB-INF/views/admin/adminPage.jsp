@@ -44,6 +44,11 @@
 </style>
 <script>
 $(document).ready(function() {
+	var checkValue = "${param.check}";
+  	if (checkValue == 'yes') {
+    	alert("상품이 추가되었습니다.");
+  	}
+	
 	$('#productManageLink').on('click', function() {
 	    $('#myModal').modal('show');
 	});

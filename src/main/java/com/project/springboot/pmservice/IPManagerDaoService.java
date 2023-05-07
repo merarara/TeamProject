@@ -9,6 +9,7 @@ import com.project.springboot.productdto.BOrderinfoDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountDTO;
 import com.project.springboot.productdto.PSoldInfoDTO;
+import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
 @Service
@@ -52,4 +53,7 @@ public interface IPManagerDaoService {
 	
 	// 상품 판매 내역 가져오기
 	public List<PSoldInfoDTO> getSoldInfo ();
+	
+	// 상품 추가
+	public int addProduct(ProductlistDTO pDTO, ProductinfoDTO pinfoDTO);
 }

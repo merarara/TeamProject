@@ -31,8 +31,6 @@ public class PReviewController {
 			MultipartHttpServletRequest req) {
 		String path = "";
 		
-		System.out.println(review_file);
-		
 		int ireview = prdao.insertReview(rdto);
 		
 		int r_num = prdao.checkRnum(rdto.getP_num(), rdto.getU_id());

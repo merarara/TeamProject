@@ -9,6 +9,7 @@ import com.project.springboot.productdto.BOrderinfoDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountDTO;
 import com.project.springboot.productdto.PSoldInfoDTO;
+import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
 @Mapper
@@ -59,4 +60,13 @@ public interface PManagerDao {
 		
 	// 상품 판매 내역 가져오기
 	public List<PSoldInfoDTO> getSoldInfoDao ();
+	
+	// 상품 리스트 추가
+	public int addPListDao(ProductlistDTO pDTO);
+	
+	// p_num 추적
+	public int searchPNum();
+	
+	// 상품 상세 정보 추가
+	public int addPInfoDao(ProductinfoDTO pinfoDTO);
 }

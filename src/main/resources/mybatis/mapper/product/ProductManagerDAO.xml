@@ -170,12 +170,25 @@
 		 where m_num = #{m_num}
 	</update>
 	
-	<!-- 주문 상태 배송중 변경 -->
-	
-	<!-- 주문 상태 판매완료 변경 -->
-	
 	<!-- 상품 판매 정보 가져오기 -->
 	<select id="getSoldInfoDao" resultType="com.project.springboot.productdto.PSoldInfoDTO">
 		select * from p_soldinfo
 	</select>
+	
+	<!-- 상품리스트 추가 -->
+	<insert id="addPListDao" parameterType="com.project.springboot.productdto.ProductlistDTO">
+		insert into product_list (p_name, p_price, p_listimg, p_company, p_num)
+		values (#{p_name}, #{p_price}, #{p_listimg}, #{p_company}, p_num_seq.nextval)
+	</insert>
+	
+	<!-- p_num 추적 -->
+	<select id="searchPNum" resultType="int">
+		select p_num from product_list where rownum = 1 order by p_num desc
+	</select>
+		
+	<!-- 상품 상세 추가 -->
+	<insert id="addPInfoDao" parameterType="com.project.springboot.productdto.ProductinfoDTO">
+		insert into product_info
+		values (#{os}, #{monitor}, #{cpu}, #{ram}, #{graphic}, #{storage}, #{network}, #{video_io}, #{terminal}, #{add_ons}, #{io}, #{power}, #{p_name}, #{p_imgsrcs}, #{hz}, #{etc}, #{p_num}, #{r_storage})
+	</insert>
 </mapper>

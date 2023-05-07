@@ -578,7 +578,12 @@ footer {
 									<div class="img-list">
 										<c:forEach items="${ pinfo.p_imgsrcs }" var="imgsrc">
 											<div class="img-item">
-												<img class="img" src="${ imgsrc }" width="50" height="50">
+												<c:if test="${fn:contains(imgsrc, '/') }">
+													<img class="img" src="${ imgsrc }" width="50" height="50">
+												</c:if>
+												<c:if test="${not fn:contains(imgsrc, '/') }">
+													<img class="img" src="../productuploads/${ imgsrc }" width="50" height="50">
+												</c:if>
 											</div>
 										</c:forEach>
 									</div>
@@ -639,66 +644,66 @@ footer {
 								  		<table>
 								  			<caption>제품 정보</caption>
 										  <tr>
-										    <th>운영체제</th>
+										    <th width="250">운영체제</th>
 										    <td>${ pinfo.os }</td>
 										  </tr>
 										  <tr>
-										    <th>화면정보</th>
+										    <th width="250">화면정보</th>
 										    <td>${ pinfo.monitor }</td>
 										  </tr>
 										  <tr>
-										    <th>CPU</th>
+										    <th width="250">CPU</th>
 										    <td>${ pinfo.cpu }</td>
 										  </tr>
 										  <tr>
-										    <th>램</th>
+										    <th width="250">램</th>
 										    <td>${ pinfo.r_storage }</td>
 										  </tr>
 										  <tr>
-										    <th>램 교체</th>
+										    <th width="250">램 교체</th>
 										    <td>${ pinfo.ram }</td>
 										  </tr>
 										  <tr>
-										    <th>그래픽</th>
+										    <th width="250">그래픽</th>
 										    <td>${ pinfo.graphic }</td>
 										  </tr>
 										  <tr>
-										    <th>저장장치</th>
+										    <th width="250">저장장치</th>
 										    <td>${ pinfo.storage }</td>
 										  </tr>
 										  <tr>
-										    <th>네트워크</th>
+										    <th width="250">네트워크</th>
 										    <td>${ pinfo.network }</td>
 										  </tr>
 										  <tr>
-										    <th>영상입출력</th>
+										    <th width="250">영상입출력</th>
 										    <td>${ pinfo.video_io }</td>
 										  </tr>
 										  <tr>
-										    <th>단자</th>
+										    <th width="250">단자</th>
 										    <td>${ pinfo.terminal }</td>
 										  </tr>
 										  <tr>
-										    <th>부가기능</th>
+										    <th width="250">부가기능</th>
 										    <td>${ pinfo.add_ons }</td>
 										  </tr>
 										  <tr>
-										    <th>입력장치</th>
+										    <th width="250">입력장치</th>
 										    <td>${ pinfo.io }</td>
 										  </tr>
 										  <tr>
-										    <th>파워</th>
+										    <th width="250">파워</th>
 										    <td>${ pinfo.power }</td>
 										  </tr>
 										  <c:if test="${ not empty pinfo.hz }" >
 										    <tr>
-										      <th>주사율</th>
+										      <th width="250">주사율</th>
 										      <td>${ pinfo.hz }</td>
 										    </tr>
 										  </c:if>
 										  <c:if test="${ not empty pinfo.etc }" >
 										    <tr>
-										      <th>주요제원</th>
+										      <th width="250">주요제원</th>
 										      <td>${ pinfo.etc }</td>
 										    </tr>
 										  </c:if>

@@ -622,7 +622,14 @@
 				<tbody>
 				<c:forEach items="${plist}" var="i">
 					<tr>
-						<td style="text-align: center;" width="130" height="130"><img src="${i.p_listimg}"  width="130" height="130" style="object-fit: cover;"></td>
+						<td style="text-align: center;" width="130" height="130">
+							<c:if test="${fn:contains(i.p_listimg, '/') }">
+								<img src="${i.p_listimg}"  width="130" height="130" style="object-fit: cover;">
+							</c:if>
+							<c:if test="${not fn:contains(i.p_listimg, '/') }">
+								<img src="../productuploads/${i.p_listimg}"  width="130" height="130" style="object-fit: cover;">
+							</c:if>
+						</td>
 						<td><h4><a href="/product/productinfo.do?p_num=${i.p_num}" class="text-dark">${i.p_name}</a></h4><br>
 							<c:set var="ratingImgPath" value="" />
 							<c:choose>
@@ -670,7 +677,7 @@
 							</div>
 						</td>
 						<td style="text-align: center;"><fmt:formatNumber type="number" value="${i.p_price}" pattern="#,###" />원<br>
-						<c:if test="${ i.p_count < 3 && i.p_count > 1 }"><div style="color: red;">매진임박</div></c:if>
+						<c:if test="${ i.p_count < 3 && i.p_count > 0 }"><div style="color: red;">매진임박</div></c:if>
 						<c:if test="${ i.p_count == 0 }"><div style="color: red;">매진</div></c:if>
 						</td>
 						<td style="text-align: center;">${i.p_company}</td>
