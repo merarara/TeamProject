@@ -15,55 +15,59 @@
 <body>
 <%@ include file="../header.jsp" %>	
 <div id="content">
-<h2>공지사항 게시판 - 수정하기(Edit)</h2>
-<!-- 글쓰기 페이지를 그대로 사용하되 action 부분만 수정한다. 수정시에도
-파일첨부가 있으므로 enctype속성은 추가되어야한다. -->
+<h2 class="text-center">공지사항 게시판 - 수정하기</h2>
+
 <form method="post" action="/aboard/aboardedit.do" enctype="multipart/form-data">
     <!-- 게시물 수정을 위한 일련번호 -->    
-    <input type="hidden" name="a_num" value="${ aboardDto.a_num }"/>
+    <input type="hidden" name="a_num" value="${aboardDto.a_num}"/>
     <input type="hidden" name="u_id" value="${udto.u_id}" />
 
-    <table border="1" width="90%">
-        <tr>
-            <td>작성자</td>
-            <td>
-                <input type="text" name="u_nick" style="width:150px;" value="${aboardDto.u_nick }" readonly/>
-            </td>
-        </tr>
-        <tr>
-            <td>제목</td>
-            <td>
-                <input type="text" name="a_title" style="width:90%;" value="${ aboardDto.a_title }" />
-            </td>
-        </tr>
-        <tr>
-            <td>내용</td>
-            <td>
-                <textarea name="a_content" style="width:90%;height:200px;">${ aboardDto.a_content }</textarea>
-            </td>
-        </tr>
-    <tr>
-    <td>첨부파일</td>
-    <td>
-        <input type="file" name="user_file" multiple/><br/>
-    </td>
-    <tr>
-
-		 <c:forEach items="${aupDto}" var="file">
-    <tr>
-        <td><input type="checkbox" name="file" value="${file.sfile}">${file.ofile}</td>
-    </tr>
-		 </c:forEach>
-     <tr>
-         <td colspan="2" align="center">
-         	<button type="submit">수정 완료</button>
-            <button type="button" onclick="location.href='../aboard/aboardlist.do';">
-                목록 바로가기
-            </button>
-            </td>
-        </tr>
-    </table>
-</form> 
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="form-group">
+                    <label for="u_nick">작성자</label>
+                    <input type="text" class="form-control" id="u_nick" name="u_nick" value="${aboardDto.u_nick}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="a_title">제목</label>
+                    <input type="text" class="form-control" id="a_title" name="a_title" value="${aboardDto.a_title}">
+                </div>
+                <div class="form-group">
+                    <label for="a_content">내용</label>
+                    <textarea class="form-control" id="a_content" name="a_content" rows="10">${aboardDto.a_content}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="user_file">첨부파일</label>
+                    <input type="file" class="form-control-file" id="user_file" name="user_file" multiple>
+                </div>
+                <div class="form-group">
+                    <label for="file_list">첨부파일 목록</label>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">파일명</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach items="${aupDto}" var="file">
+                                <tr>
+                                    <td><input type="checkbox" name="file" value="${file.sfile}"></td>
+                                    <td>${file.ofile}</td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary mr-2">수정 완료</button>
+                    <button type="button" class="btn btn-secondary" onclick="location.href='../aboard/aboardlist.do';">목록 바로가기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 </div>
 <%@ include file="../footer.jsp" %>
 

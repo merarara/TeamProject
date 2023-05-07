@@ -46,120 +46,101 @@ function toggleLike() {
 <%@ include file="../header.jsp" %>	
 <div id="content">
 <h2>공지사항 게시판 - 상세 보기(View)</h2>
-<table border="1" width="90%">
-    <colgroup>
-        <col width="15%"/> <col width="35%"/>
-        <col width="15%"/> <col width="*"/>
-    </colgroup>
-
- <!-- 게시글 정보 -->
-    <tr>
-        <td>번호</td> 
-        <td>${ aboardDto.a_num }</td>
-        <td>작성자</td> 
-        <td>${ aboardDto.u_nick }</td>
-    </tr>
-    <tr>
-        <td>작성일</td> 
-        <td>${ aboardDto.a_regdate }</td>
-        <td>좋아요</td>
-        <td>${ aboardDto.a_like }</td>
-        <td>조회수</td> 
-        <td>${ aboardDto.a_visitcount }</td>
-    </tr>
-    <tr>
-        <td>제목</td>
-        <td colspan="3">${ aboardDto.a_title }</td>
-    </tr>
-    <tr>
-        <td>내용</td>
-        <td colspan="3">
-        	${ aboardDto.a_content }</br>
-        	
-        <c:forEach items="${file}" var="f">
-	        <c:forEach items="${aupDto }" var="i">
-	  			<c:if test="${i.sfile == f}">
-	   				 <a href="../aUpload/${f}" data-lightbox="image">
-	     			 <img src="../aUpload/${f}" width="100px" height="100px">
-	    			 </a>
-	  			</c:if>
-			</c:forEach>	
-		</c:forEach>
-        </td>
-    </tr>
-	<tr></tr>
-    <!-- 하단 메뉴(버튼) -->
-    <tr>
-        <td colspan="4" align="center">
-        	<s:authorize access="hasRole('ADMIN')">
-            <button type="button" 
-            	onclick="location.href='../aboard/aboardedit.do?a_num=${ aboardDto.a_num }';">
-                수정하기
-            </button>&nbsp;&nbsp;
-            <button type="button" 
-            	onclick="location.href='../aboard/aboarddelete.do?a_num=${ aboardDto.a_num }';">
-                삭제하기
-            </button>&nbsp;&nbsp;
-          	</s:authorize>
-            <button type="button" onclick="location.href='../aboard/aboardlist.do';">
-                목록 바로가기
-            </button>
-        </td>
-    </tr>
-</table>
-<s:authorize access="hasRole('USER')">
-<tr>
-<td>
-<form action="/aboard/like.do?a_num=${aboardDto.a_num}" method="post">
-    <input type="submit" value="좋아요">
-</form>
-</td>
-<td>
-<form action="/aboard/unlike.do?a_num=${aboardDto.a_num}" method="post">
-    <input type="submit" value="싫어요">
-</form>
-</td>
-</tr>
-</s:authorize>
-
-<div id="comment-section">
-    <h3>댓글</h3>
-    <table>
-		<c:forEach var="acDto" items="${acList}">
-            <tr>
-                <td>${acDto.u_nick}</td>
-                <td>${acDto.ac_comment}</td>
-          		<c:if test="${acDto.u_id != udto.u_id}">
-          		<td>
-          			<form action="/aboard/acomment/aclike.do?a_num=${acDto.a_num}" method="post">
-          				<input type="hidden" name="ac_num" value="${acDto.ac_num}">
-    					<input type="submit" value="좋아요">
-					</form>
-				</td>
-				<td>
-					<form action="/aboard/acomment/acunlike.do?a_num=${acDto.a_num}" method="post">
-						<input type="hidden" name="ac_num" value="${acDto.ac_num}">
-    					<input type="submit" value="싫어요">
-					</form>
-				</td>
-				</c:if>
-				<c:if test="${acDto.u_id == udto.u_id}">
-					<td>
-						<form action="/aboard/acomment/deleteac.do?a_num=${acDto.a_num}" method="post">
-	  							<input type="submit" value="댓글 삭제">
-	  							<input type="hidden" name="ac_num" value="${acDto.ac_num}">
-						</form>
-					</td>
-				</c:if>
-				<td>좋아요: ${ acDto.ac_like }</td>
-            </tr>
-        </c:forEach>
-	</table>
-    <form action="/aboard/acomment/insertac.do" method="post">
-        <input type="hidden" name="a_num" value="${aboardDto.a_num}">
-        <textarea name="ac_comment" rows="1" cols="100"></textarea>
-        <button type="submit">댓글 입력</button>
-    </form>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <strong>게시글 정보</strong>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>번호:</strong>
+                        </div>
+                        <div class="col-md-3">
+                            ${ aboardDto.a_num }
+                        </div>
+                        <div class="col-md-3">
+                            <strong>작성자:</strong>
+                        </div>
+                        <div class="col-md-3">
+                            ${ aboardDto.u_nick }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>작성일:</strong>
+                        </div>
+                        <div class="col-md-3">
+                            ${ aboardDto.a_regdate }
+                        </div>
+                        <div class="col-md-3">
+                            <strong>좋아요:</strong>
+                        </div>
+                        <div class="col-md-3">
+                            ${ aboardDto.a_like }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>조회수:</strong>
+                        </div>
+                        <div class="col-md-3">
+                            ${ aboardDto.a_visitcount }
+                        </div>
+                        <div class="col-md-3">
+                            <strong>제목:</strong>
+                        </div>
+                        <div class="col-md-3">
+                            ${ aboardDto.a_title }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>내용:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            ${ aboardDto.a_content }<br>
+                            <c:forEach items="${file}" var="f">
+                                <c:forEach items="${aupDto }" var="i">
+                                    <c:if test="${i.sfile == f}">
+                                        <a href="../aUpload/${f}" data-lightbox="image">
+                                            <img src="../aUpload/${f}" width="100px" height="100px">
+                                        </a>
+                                    </c:if>
+                                </c:forEach> 
+                            </c:forEach>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-body">
+                    <s:authorize access="hasRole('ADMIN')">
+                        <button type="button" class="btn btn-primary mr-2" 
+                            onclick="location.href='../aboard/aboardedit.do?a_num=${ aboardDto.a_num }';">
+                            수정하기
+                        </button>
+                        <button type="button" class="btn btn-danger mr-2" 
+                            onclick="location.href='../aboard/aboarddelete.do?a_num=${ aboardDto.a_num }';">
+                            삭제하기
+                        </button>
+                    </s:authorize>
+                    <button type="button" class="btn btn-secondary" onclick="location.href='../aboard/aboardlist.do';">
+                        목록 바로가기
+                    </button>
+                    <s:authorize access="hasRole('USER')">
+                        <div class="d-inline-block ml-2">
+                            <button type="button" class="btn btn-outline-primary" onclick="like('${ aboardDto.a_num }')">
+                                <i class="far fa-thumbs-up"></i> 좋아요
+                            </button>
+                        </div>
+                    </s:authorize>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 <%@ include file="../footer.jsp" %>
