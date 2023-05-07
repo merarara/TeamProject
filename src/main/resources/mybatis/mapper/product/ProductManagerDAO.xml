@@ -93,6 +93,12 @@
   		 <if test="tab == 'tab4'">
   		 where m_payment = '판매완료'
   		 </if>
+  		 <if test="searchField != null and searchField != '' and tab != 'tab5'">
+		 	and upper(${searchField}) like '%${searchWord.toUpperCase()}%'
+		 </if>
+		 <if test="tab == 'tab5' and searchField != '' and searchField != null">
+			where upper(${searchField}) like '%${searchWord.toUpperCase()}%'
+		 </if>
 	</select>
 	
 	<!-- 판매 목록 -->
@@ -115,6 +121,12 @@
 		  		  		 <if test="tab == 'tab4'">
 		  		  		 where m_payment = '판매완료'
 		  		  		 </if>
+		  		  		 <if test="searchField != null and searchField != '' and tab != 'tab5'">
+						 	and upper(${searchField}) like '%${searchWord.toUpperCase()}%'
+						 </if>
+						 <if test="tab == 'tab5' and searchField != '' and searchField != null">
+							where upper(${searchField}) like '%${searchWord.toUpperCase()}%'
+						 </if>
 		  		  		 order by m_num desc
 		  		  		) A
 		  		  where rownum <![CDATA[<=]]> #{nEnd} ) B

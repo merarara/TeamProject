@@ -157,7 +157,7 @@ function iamport(){
                 },
                 success: function(result) {
                     console.log(result); // 저장 결과 출력
-                    location.href = "/product/productinfo.do?p_num=${pinfo.p_num}"
+                    location.reload();
                 }
             });
             

@@ -165,7 +165,10 @@ function SellComplete(m_num, btn) {
 			}
 		});
 	}
-	
+}
+
+function goToAdminPage() {
+    window.location.href = '/admin/adminPage.do';
 }
 </script>
 </head>
@@ -194,8 +197,32 @@ function SellComplete(m_num, btn) {
 				</ul>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-md-12">
+		<div class="row d-flex justify-content-center">
+			<div class="col-md-12 d-flex justify-content-center" style="margin-top: 10px; margin-bottom: 10px;">
+				<form action="/admin/sellManage.do" id="searchFrm" name="searchFrm">
+			      	<div class="input-group">
+			      		<a href="#" onclick="goToAdminPage();" class="btn btn-outline-primary float-left">돌아가기</a>
+			      		&nbsp;&nbsp;
+			      		<select class="form-select" name="tab" id="tab">
+			          		<option value="tab1">결제승인</option>
+			          		<option value="tab2">배송준비</option>
+			          		<option value="tab3">배송중</option>
+			          		<option value="tab4">판매내역</option>
+			          		<option value="tab5">전체</option>
+			        	</select>
+			      		&nbsp;&nbsp;
+			        	<select class="form-select" name="searchfield" id="searchfield">
+			          		<option value="m_num">주문번호</option>
+			          		<option value="u_id">회원아이디</option>
+			        	</select>
+			        	&nbsp;&nbsp;
+			        	<input type="search" class="form-control" name="searchword" id="searchword" placeholder="검색어를 입력하세요">
+			        	&nbsp;&nbsp;
+			        	<button class="btn btn-secondary" type="submit">검색</button>
+			      	</div>
+			    </form>
+			</div>
+			<div class="col-md-12" style="margin-top: 20px;">
 				<div class="tab-content">
 					<!-- 결제 승인 탭 시작 -->
 	  				<div id="tab1" class="tab-pane fade ${tab == null || tab == 'tab1' ? 'show active' : '' }">

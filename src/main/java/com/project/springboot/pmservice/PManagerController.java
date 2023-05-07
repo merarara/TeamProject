@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,13 +13,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.project.springboot.ppageinfo.MProductPageinfo;
 import com.project.springboot.productdto.BOrderinfoDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountDTO;
 import com.project.springboot.productdto.PSoldInfoDTO;
+import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
 @Controller
@@ -95,12 +99,6 @@ public class PManagerController {
     	}
     	
     	return response;
-    }
-    
-    // 재고관리 페이지 이동
-    @RequestMapping("/admin/productManage.do")
-    public String addPcountForm() {
-        return "admin/productManage";
     }
     
     // 바코드번호 가져오기
@@ -242,6 +240,7 @@ public class PManagerController {
     	return response;
     }
     
+    // 상품 주문상태 변경
     @ResponseBody
     @RequestMapping("/admin/doConfirmSell.do")
     public Map<String, String> doComfirmSell(HttpServletRequest req) {
@@ -259,5 +258,36 @@ public class PManagerController {
     	}
     	
     	return response;
+    }
+    
+    // 상품관리 페이지 이동
+    @RequestMapping("/admin/productManage.do")
+    public String goProductManage() {
+    	
+    	return "admin/productManage";
+    }
+    
+    // 상품 추가
+    @RequestMapping("/admin/doAddProduct.do")
+    public String addProduct(@RequestParam(name = "listimg", required = false) MultipartFile listimg, ProductlistDTO pDTO, 
+    		ProductinfoDTO pinfoDTO, MultipartFile[] p_imgsrcs) {
+    	
+    	System.out.println(pDTO.getP_company());
+    	System.out.println(pDTO.getP_name());
+    	System.out.println(pDTO.getP_price());
+    	System.out.println(pDTO.getP_listimg());
+    	System.out.println(pinfoDTO.getP_name());
+    	System.out.println(pinfoDTO.getOs());
+    	if (listimg != null) {
+			String originalName = listimg.getOriginalFilename();
+			String ext = originalName.substring(originalName.lastIndexOf('.'));
+			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			String savedName = uuid + ext;
+			
+			pDTO.setP_listimg(savedName);
+			System.out.println(pDTO.getP_listimg());
+    	}
+    	
+    	return null;
     }
 }
