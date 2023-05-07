@@ -23,21 +23,22 @@
 		<li>
 			<p>
 				결재내역<br>
-				내가 구매한 상품 보러 가기
+				내가 구매한 상품 보러 가기!
 			</p>
 			<img src="/userimages/buyHistory.png">
 			<a href="/user/buyHistory.do" class="login-link">결재내역</a>
 		</li>
 		<li>
 			<p>
-				내 정보 수정하기!<br> 컴 온 컴 온 
+				내 정보 <br> 수정하러 가기!
 			</p>
 			<img src="/userimages/ico_update.png" >
     		<a href="/user/edit.do" class="login-link">회원수정 하기</a>
 		</li>
 		<li>
 			<p>
-				비밀번호 변경하기
+				비밀번호 변경하기 <br>
+				비밀번호를 최신화 해주세요!
 			</p>
 			<img src="/userimages/updatePw.png">
 			<a href="/user/updatePw.do" class="login-link">비밀번호 변경 하기</a>

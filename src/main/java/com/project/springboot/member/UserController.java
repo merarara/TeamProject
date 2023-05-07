@@ -60,8 +60,6 @@ public class UserController {
 	// 홈으로 이동하는 맵핑
 	@RequestMapping("/home.do")
 	public String home(Model model, HttpSession session) {
-		String u_nick = (String) session.getAttribute("u_nick");
-		model.addAttribute("u_nick", u_nick);
 		return "home";
 	}
 	
@@ -422,7 +420,7 @@ public class UserController {
     	System.out.println(u_authority);
         userService.updateAuthority(u_id, u_authority);
         // 권한 수정하고 관리 페이지로 넘어가서 확인하기.
-        return "redirect:/admin/userManagement.do";
+        return "redirect:/admin/allUser.do";
     }
     
     // sns 

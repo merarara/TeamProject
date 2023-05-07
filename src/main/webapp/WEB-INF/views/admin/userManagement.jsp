@@ -39,7 +39,13 @@
 			<img src="/userimages/blackUser.png" >
     		<a href="/admin/blackUser.do" class="login-link">조회</a>
 		</li>
-		
+		<li>
+			<p>
+				회원 권환 관리
+			</p>
+			<img src="/userimages/Authority2.png" >
+    		<a href="/admin/totalAuthority.do" class="login-link">관리</a>
+		</li>
 	</Ul>
 </div>
 
