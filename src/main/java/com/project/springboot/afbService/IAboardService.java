@@ -3,6 +3,7 @@ package com.project.springboot.afbService;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import com.project.springboot.aboard.AupDTO;
@@ -36,5 +37,8 @@ public interface IAboardService {
 	public int deleteFile(int a_num, String sfile);
 	public int deleteFileAll(String a_num);
 	public int deleteAcAll(String a_num);
+	
+	public boolean checkLike(int a_num, String u_id);
+	int selectLikeCount(@Param("a_num") int a_num, @Param("u_id") String u_id);
 	
 }

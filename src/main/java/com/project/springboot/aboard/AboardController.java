@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
@@ -435,6 +436,17 @@ public class AboardController {
 	        int a_like = asv.getLikeCount(a_num);
 	        return "redirect:/aboard/aboardview.do?a_num=" + a_num;
 	    }
+	}
+	
+	@PostMapping("/aboard/checkLike.do")
+	@ResponseBody
+	public boolean checkLike(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    int a_num = Integer.parseInt(request.getParameter("a_num"));
+	    String u_id = (String) request.getSession().getAttribute("userId");
+
+	    boolean result = asv.checkLike(a_num, u_id);
+
+	    return result;
 	}
 	
 }
