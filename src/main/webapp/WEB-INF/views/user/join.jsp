@@ -258,9 +258,9 @@ function validateForm() {
                                    </select>
                                    <!-- 이메일 인증 버튼 -->
                                </div>
-                               <button type="button" class="btn-certi" onclick="checkMail()">인증하기</button> 
+                              <!--  <button type="button" class="btn-certi" onclick="checkMail()">인증하기</button>  -->
                    </div>
-							<input type="text" placeholder="인증번호 입력" id="email_auth_key">
+							<!-- <input type="text" placeholder="인증번호 입력" id="email_auth_key"> -->
                    <div class="address_wrap form_group">
                        <div class="address_input_wrap ">
                            <label for="adress_num">우편번호</label>

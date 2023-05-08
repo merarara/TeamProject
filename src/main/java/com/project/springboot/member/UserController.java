@@ -127,27 +127,11 @@ public class UserController {
     }
 
     // 로그인
-    @RequestMapping("/myLogin.do")
-    public String login1(Principal principal, Model model, HttpServletRequest request,
-                         @RequestParam(value = "error", required = false) String error) {
-        try {
-            if (error != null) { // 로그인 실패 시
-                model.addAttribute("error", "아이디 또는 비밀번호가 일치하지 않습니다."); // 실패 메시지를 모델에 추가
-            }
-            String user_id = principal.getName();
-
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String id = authentication.getName(); // 사용자 id
-            
-            request.getSession().setAttribute("userId", id); // 세션에 사용자 id 저장
-            
-            return "home"; // 로그인 성공 시 home.jsp로 이동
-        } catch (Exception e) {
-            System.out.println("로그인 전입니다.");
-        }
-        return "auth/login";
-    }
-    
+	  @RequestMapping("/myLogin.do")
+	  public String login1() {
+	
+	  	return "auth/login";
+	  }   
     // 로그인 ajax 맵핑
     @PostMapping("/user/checkUser.do")
     @ResponseBody
@@ -163,6 +147,7 @@ public class UserController {
             boolean encodedPw = PasswordEncoderFactories.createDelegatingPasswordEncoder().matches(u_pw, user.getU_pw());
             if (encodedPw) { // 비밀번호가 일치하는 경우
                 response.put("status", "success");
+                session.setAttribute("userType", user.getU_type());
             } else { // 비밀번호가 일치하지 않는 경우
                 response.put("status", "fail");
             }
