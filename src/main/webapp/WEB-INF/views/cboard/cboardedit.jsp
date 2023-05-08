@@ -2,6 +2,7 @@
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,62 +15,91 @@
 </head>
 <body>
 <%@ include file="../header.jsp" %>	
-<div id="content">
-<h2>공지사항 게시판 - 수정하기(Edit)</h2>
-<!-- 글쓰기 페이지를 그대로 사용하되 action 부분만 수정한다. 수정시에도
-파일첨부가 있으므로 enctype속성은 추가되어야한다. -->
-<form method="post" action="/cboard/cboardedit.do" >
-<!-- 게시물 수정을 위한 일련번호 -->	
-	<input type="hidden" name="c_num" value="${ cboardDto.c_num }"/>
-	<input type="hidden" name="u_nick" value="${ udto.u_nick}" />
+<div align="center">
+    <h1>게시물 수정하기</h1>
+<div>
+    <h3>게시물 수정</h3>
+    <form action="/cboard/cboardedit.do" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="c_num" value="${cboardDto.c_num}">
 
-	<table border="1" width="90%">
-	    <tr>
-	        <td>작성자</td>
-	        <td>
-	            <input type="text" name="u_nick" style="width:150px;" value="${cboardDto.u_nick }" readonly/>
-	        </td>
-	    </tr>
-	    <tr>
-	        <td>제목</td>
-	        <td>
-	            <input type="text" name="c_title" style="width:90%;" value="${ cboardDto.c_title }" />
-	        </td>
-	    </tr>
-	    <tr>
-	        <td>내용</td>
-	        <td>
-	            <textarea name="c_content" style="width:90%;height:100px;">${ cboardDto.c_content }</textarea>
-	        </td>
-	    </tr>
-	    <tr>
-	        <td colspan="2" align="center">
-	            <button type="submit">수정 완료</button>
-	            <button type="button" onclick="location.href='../cboard/cboardlist.do';">
-	                목록 바로가기
-	            </button>
-	        </td>
-	    </tr>
-	</table>    
-</form>
-<table border="1">
-		<tr>
-			<th>이미지</th>
-			<th>파일명</th>
-			<th>파일크기</th>
-			<th></th>
+        <table border="1" width="90%">
+            <colgroup>
+                <col width="15%"/> <col width="35%"/>
+                <col width="15%"/> <col width="*"/>
+            </colgroup> 
+            <tr>
+                <td>번호</td> <td>${ cboardDto.c_num }</td>
+                <td>작성자</td> <td>${ cboardDto.u_nick }</td>
+            </tr>
+            <tr>
+                <td>작성일</td> <td>${ cboardDto.c_regdate }</td>
+                <td>조회수</td> <td>${ cboardDto.c_visitcount }</td>
+            </tr>
+            <tr>
+                <td>제목</td>
+                <td colspan="3"><input type="text" name="c_title" value="${ cboardDto.c_title }"></td>
+            </tr>
+            <tr>
+               <td>내용</td>
+			<td colspan="3">
+			    <textarea name="c_content" rows="10">${cboardDto.c_content}</textarea>
+			    <br>
+			<div class="box-footer" id="fileDiv">
+            <a href="#this" class="btn btn-default file_add" onclick="addFile()">파일추가</a><br/><br/>
+            <c:forEach items="${upDto }" var="i">
+            	<p>
+            	<span class="cboard-file" aria-hidden="true"></span>
+            	${i.sfile }
+            	<input type="hidden" name="FILE_${i.c_num }" value="true">
+            	<a href="#this" class="btn" name="delete">삭제</a>
+            	</p>
+           </c:forEach>
+        </div>
+		</td>
 		</tr>
-	<c:forEach items="${fileMap }" var="file" varStatus="vs">
 		<tr>
-			<td><img src="aUpload/${file.key }" width="200" 
-					height="150" /></td>
-			<td>${file.key }</td>
-			<td>${file.value }Kb</td>
-			<td><a href="download.do?savedFile=${file.key }&oriFile=원본파일명${vs.count }.jpg">[다운로드]</a></td>
+		<td>첨부파일</td>
+		<td>
+		    <c:forEach items="${upDto}" var="i">
+		        <c:if test="${i.sfile == cboardDto.c_num}">
+		            <a href="download.do?savedFile=${i.sfile}&oriFile=${i.ofile}">${i.ofile}</a>
+		            <br>
+		        </c:if>
+		    </c:forEach>
+		</td>
 		</tr>
-	</c:forEach>
-</table>
-</div>
+		<tr>
+		<td colspan="4" align="center">
+		    <button type="submit">수정완료</button>
+		    <button type="button" onclick="location.href='/cboard/cboardlist.do';">목록 바로가기</button>
+		</td>
+		</tr>
+		</table>
+		</form>
+		<script type="text/javascript">
+		var gfv_count = 1;
+		$(document).ready(function(){
+            $("a[name='delete']").on("click", function(e){
+                e.preventDefault();
+                deleteFile($(this));
+            });
+		})
+		function addFile() {
+			var str = "<p><input type='file' name='file' class='file_input'><a href='#this' class='btn' name='delete'>삭제</a></p>";
+			$("#fileDiv").append(str);
+			 $("a[name='delete']").on("click", function(e){
+	                e.preventDefault();
+	                deleteFile($(this));
+	            });
+		}
+		function deleteFile(obj) {
+			obj.parent().remove();
+		}
+</script>
+
+
+
+
 <%@ include file="../footer.jsp" %>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

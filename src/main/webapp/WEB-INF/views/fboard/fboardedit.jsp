@@ -15,40 +15,26 @@
 <body>
 <%@ include file="../header.jsp" %>	
 <div id="content">
-<center>
-<h2>FAQ게시판 - 수정하기(Edit)</h2>
-</center>
-<!-- 글쓰기 페이지를 그대로 사용하되 action 부분만 수정한다. 수정시에도
-파일첨부가 있으므로 enctype속성은 추가되어야한다. -->
-<form action="/fboard/fboardedit.do" method="post">
-	<input type="hidden" name="f_num" value="${fboardDto.f_num}" /> <!-- f_num 값을 hidden 타입으로 추가 -->
-	<input type="hidden" name="u_id" value="${udto.u_id}" />
-	<!-- 게시물 수정을 위한 일련번호 -->	
-	<input type="hid den" name="u_id" value="${ udto.u_id }"/>
-	<table align="center" border="1" width="60%">
-		<tr>
-		  <td>제목</td>
-		  <td>
-		    <input type="text" name="f_title" style="width:60%;" value="${fboardDto.f_title}" />
-		  </td>
-		</tr>
-	    <tr>
-	        <td>내용</td>
-	        <td>
-	            <textarea name="f_content" style="width:90%;height:100px;">${ fboardDto.f_content }</textarea>
-	        </td>
-	    </tr>
-	    <tr>
-	        <td colspan="2" align="center">
-	            <button type="submit">수정 완료</button>
-	            <button type="reset">RESET</button>
-	            <button type="button" onclick="location.href='/fboard/fboardlist.do';">
-	                목록 바로가기
-	            </button>
-	        </td>
-	    </tr>
-</table>    
-</form>
+<div class="container">
+  <h2 class="text-center">FAQ게시판 - 수정하기(Edit)</h2>
+  <form action="/fboard/fboardedit.do" method="post">
+    <input type="hidden" name="f_num" value="${fboardDto.f_num}" />
+    <input type="hidden" name="u_id" value="${udto.u_id}" />
+    <div class="form-group">
+      <label for="title">제목</label>
+      <input type="text" class="form-control" id="title" name="f_title" value="${fboardDto.f_title}">
+    </div>
+    <div class="form-group">
+      <label for="content">내용</label>
+      <textarea class="form-control" id="content" name="f_content" rows="10">${fboardDto.f_content}</textarea>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary mr-2">수정 완료</button>
+      <button type="button" class="btn btn-secondary" onclick="location.href='/fboard/fboardlist.do';">목록 바로가기</button>
+    </div>
+  </form>
+</div> 
+
 </div>
 <%@ include file="../footer.jsp" %>
 

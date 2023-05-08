@@ -19,95 +19,112 @@
 		  		  from (
 		  		        select *
 		  		          from c_board
+		  		          <if test="searchField != null and searchField != ''">
+							  where ${searchField} like '%${searchWord}%'
+						  </if>
 		  		         order by c_num desc
 		  		          ) A
 		  		  where rownum <![CDATA[<=]]> #{param1} ) B
 		  where B.num <![CDATA[>=]]> #{param2}
 	</select>
-	
-<!-- <select id="selectA" parameterType="HashMap" resultType="String">
-  검색어(searchField)가 없는 경우
-  <choose>
-	  <when test="searchField eq null">
-	    SELECT *
-	    FROM (
-	      SELECT ROWNUM AS num, A.*
-	      FROM (
-	        SELECT *
-	        FROM c_board
-	        ORDER BY c_num DESC
-	      ) A
-	      WHERE ROWNUM <![CDATA[<=]]> #{endRow}
-	    ) B
-	    WHERE B.rnum <![CDATA[>=]]> #{startRow}
-		</when>
-		<otherwise>	  
-	  검색어(searchField)가 있는 경우
-	    SELECT *
-	    FROM (
-	      SELECT ROWNUM AS rnum, A.*
-	      FROM (
-	        SELECT *
-	        FROM c_board
-	        WHERE ${searchField} LIKE '%' || #{searchWord} || '%'
-	        ORDER BY c_num DESC
-	      ) A
-	      WHERE ROWNUM <![CDATA[<=]]> #{endRow}
-	    ) B
-	    WHERE B.rnum <![CDATA[>=]]> #{startRow}
-	    </otherwise>
- </choose>
-</select> -->
+
 	 
 	<!-- 페이지설정 -->
 	<select id="articlePageDao" resultType="_int">
 		select count(*) as total from c_board
+		<if test="searchField != null and searchField != ''">
+			where ${searchField} like '%${searchWord}%'
+		</if>
 	</select>
 	
-	<!-- insertA 쿼리문에서 UserDTO 클래스를 참조하여 u_id 값을 가져옴 -->
+	<!-- insert -->
 	<insert id="insert" parameterType="com.project.springboot.cboard.cboardDTO"> 
-	INSERT INTO c_board (c_num, u_id, u_nick, c_title, c_content, c_regdate) 
-	VALUES (C_num_SEQ.NEXTVAL, #{u_id}, #{u_nick}, #{c_title}, #{c_content}, sysdate)
+	
+	insert into
+			c_board(u_id, u_nick, c_title, c_content)
+				values(#{u_id}, #{u_nick}, #{c_title}, #{c_content})
 	</insert>
 
 	
 	
-	<!-- 공지사항 게시글 인출 -->	 
+	<!--   게시글 인출 -->	 
 	<select id="selectOne" 
 		parameterType="com.project.springboot.cboard.cboardDTO"
 		resultType="com.project.springboot.cboard.cboardDTO"> 
 		select * from c_board where c_num=#{param1}
 	</select>	 
 	
-	<!-- 공지사항 게시글 수정. 파라미터는 DTO의 멤버변수를 사용한다. -->
+	<!--   게시글 수정. 파라미터는 DTO의 멤버변수를 사용한다. -->
 	<update id="update" 
 		parameterType="com.project.springboot.cboard.cboardDTO"> 
 		update c_board set c_title=#{c_title}, c_content=#{c_content} 
 		where c_num=#{c_num}
 	</update> 
 	
-	<!-- 공지사항 게시글 삭제 -->
+	<!--   게시글 삭제 -->
 	<delete id="delete" parameterType="string">
   		delete from c_board where c_num=#{c_num}
-	</delete>
-	
-	<!-- 검색 기능 -->
-	<select id="searchboard" parameterType="hashmap" resultType="com.project.springboot.cboard.cboardDTO">
-	    SELECT *
-	    FROM c_board
-	    WHERE ${param1} like '%'|| #{param2} || '%'
-	    ORDER BY c_num DESC
-	</select>	
+	</delete>	
 	
 	<!-- 조회수 증가 -->
 	<update id="updateVisitCount" parameterType="java.lang.String">
     UPDATE c_board SET c_visitcount=c_visitcount+1 WHERE c_num=#{c_num}
 	</update>
 	
-	<!-- 좋아요 증가 -->
-	<update id="updateLikeCount" parameterType="string">
-	    UPDATE c_board SET c_likecount=c_likecount+1 WHERE c_num=#{c_num}
-	</update>
+	<!-- 좋아요 추가 -->
+<insert id="addLike" parameterType="map">
+  INSERT INTO c_board_like (c_num, u_id) VALUES (#{c_num}, #{u_id})
+</insert>
+
+<!-- 좋아요 삭제 -->
+<delete id="removeLike" parameterType="map">
+  DELETE FROM c_board_like WHERE c_num = #{c_num} AND u_id = #{u_id}
+</delete>
+
+<!-- 좋아요 수 조회 -->
+<select id="getLikeCount" resultType="int" parameterType="int">
+  SELECT COUNT(*) FROM c_board_like WHERE c_num = #{c_num}
+</select>
+
+<!-- 사용자가 좋아요를 눌렀는지 여부 조회 -->
+<select id="checkLiked" resultType="boolean" parameterType="map">
+  SELECT EXISTS (
+    SELECT 1 FROM c_board_like
+    WHERE c_num = #{c_num} AND u_id = #{u_id}
+  )
+</select>
+
+
+	<insert id="upload" parameterType="com.project.springboot.cboard.upDTO">
+		insert into up (c_num, ofile, sfile)
+			values (#{c_num}, #{ofile}, #{sfile})
+	</insert> 
 	
+	<select id="uploadnum" parameterType="com.project.springboot.cboard.cboardDTO" resultType="int">
+		select c_num from c_board
+ 			where u_id = #{u_id}
+   			and rownum = 1
+		order by c_num desc
+	</select>
+	
+	<select id="uploadview" parameterType="int" resultType="com.project.springboot.cboard.upDTO">
+	    select * from up where c_num = #{c_num, jdbcType=INTEGER}
+	</select>
+	
+	<!-- getUploadList -->
+	<select id="getUploadList" resultType="com.project.springboot.cboard.upDTO">
+	    SELECT * FROM up WHERE c_num = #{c_num}
+	</select>
+	<!-- deleteUploadBySfile -->
+	<delete id="deleteUploadBySfile" parameterType="map">
+	  DELETE FROM up
+	  WHERE c_num = #{c_num}
+	  AND sfile NOT IN
+	  <foreach collection="sfiles" item="sfile" separator="," open="(" close=")">
+	    #{sfile}
+	  </foreach>
+	</delete>
+
+
 	
 </mapper>

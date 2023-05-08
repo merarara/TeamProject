@@ -1,6 +1,7 @@
 package com.project.springboot.afbService;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -19,7 +20,7 @@ public interface aboardService {
 	public int insertA(aboardDTO aboardDto);
 	public aboardDTO selectOneA(String a_num);
 	public int updateA(aboardDTO aboardDto);
-	public int deleteA(String a_num);
+	public int deleteA(Map<String, Object> params);
 	
 	// 페이지설정
 	public int articlePageDao(
@@ -41,5 +42,8 @@ public interface aboardService {
 	public int upload(AupDTO aupDto);
 	public int uploadnum(aboardDTO aboardDto);
 	public List<AupDTO> uploadview(int a_num);
+	public int deleteFile(@Param("a_num") int a_num, @Param("sfile") String sfile);
+	public int deleteFileAll(String a_num);
+	public int deleteAcAll(String a_num);
 
 }
