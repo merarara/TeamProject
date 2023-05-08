@@ -77,7 +77,7 @@
         </c:otherwise>
     </c:choose>
     <span id="likecnt" style="margin-left:5px;">${likecnt}</span>
-	</div>
+</div>
       <div class="card mt-4">
         <div class="card-body">
           <h5 class="card-title">댓글 작성</h5>
