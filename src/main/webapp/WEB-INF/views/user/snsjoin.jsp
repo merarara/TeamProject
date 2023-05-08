@@ -42,6 +42,7 @@ function checkNick() {
     	});
     }
 }
+
 /* 주소 API를 통해 DB에 값 넣는 기능 */
 function execution_daum_address(e) {
 	 e.preventDefault(); // 기본 이벤트 발생 방지
@@ -55,6 +56,26 @@ function execution_daum_address(e) {
         }
     }).open();
 }
+
+function validateForm() {
+    var inputNick = document.getElementById("inputNick").value;
+    var inputPhone1 = document.getElementById("inputPhone1").value;
+    var inputPhone2 = document.getElementById("inputPhone2").value;
+    var inputPhone3 = document.getElementById("inputPhone3").value;
+    var u_zip = document.getElementById("adress_num").value;
+    var u_addr1 = document.getElementById("adress01").value;
+
+    if (!inputNick || !inputPhone1 || !inputPhone2 || !inputPhone3|| !u_zip || !u_addr1) {
+      alert("모든 항목은 필수 입력사항입니다.");
+      return false;
+    }
+    if (nickChecked === false) {
+    	alert("닉네임 중복체크를 해주세요.")
+        return false;
+      }
+    return true;
+  }
+ 
 </script>
 </head>
 <body>
@@ -64,7 +85,7 @@ function execution_daum_address(e) {
            <div class="form_wrap">
                <!-- 회원가입 폼 시작 -->
                <h2>추가정보</h2>
-               <form method="post" id="sns" action="/user/snsnInsert.do">
+               <form method="post" id="sns" action="/user/snsnInsert.do" onsubmit="return validateForm()">
                    <div class="form_group">
                                <label for="inputNick">닉네임</label>
                                <div class="input_group">

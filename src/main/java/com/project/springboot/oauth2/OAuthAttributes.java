@@ -55,14 +55,10 @@ public class OAuthAttributes {
 //		System.out.println(attributes);
 		String sName = (String) attributes.get("name");
 		String sEmail = (String) attributes.get("email");
-		Map<String, Object> pic1 = (Map<String, Object>) attributes.get("picture");
-		Map<String, Object> pic2 = (Map<String, Object>) pic1.get("data");
-		String pic3 = (String) pic2.get("url");
 		
 		return OAuthAttributes.builder()
 				.name(sName)
 				.email(sEmail)
-				.picture(pic3)
 				.attributes(attributes)
 				.nameAttributeKey(userNameAttributeName)
 				.build();
