@@ -2,11 +2,15 @@ package com.project.springboot.cboard;
 
 
 
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.project.springboot.afbpageinfo.BpageInfo;
 
@@ -117,8 +121,84 @@ public class cboardServiceImpl implements IboardService {
 	    return abs.getLikeCount(c_num);
 	}
 	
+	@Override
+	public cboardDTO getCboard(int c_num) {
+	    return abs.getCboard(c_num);
+	}
+	
 	 @Override
-	    public cboardDTO getCboard(int c_num) {
-	        return abs.getCboard(c_num);
-	   }
+	 public int upload(upDTO upDto) {
+		 return abs.upload(upDto);
+	 }
+	 
+	 @Override
+	 public int uploadnum(cboardDTO cboardDto) {
+		 return abs.uploadnum(cboardDto);
+	 }
+	 
+	@Override
+	public List<upDTO> uploadview(int c_num) {
+		return abs.uploadview(c_num);
+	}
+
+	@Override
+	public List<upDTO> getUploadList(int c_num) {
+	    return abs.getUploadList(c_num);
+	}
+	@Override
+	public void deleteUploadBySfile(int c_num, List<String> sfiles) {
+	  Map<String, Object> paramMap = new HashMap<>();
+	  paramMap.put("c_num", c_num);
+	  paramMap.put("sfiles", sfiles);
+	  abs.deleteUploadBySfile(paramMap);
+	}
+
+	public void deleteUploadBySfile(cboardDTO cboardDto, List<String> sfiles) {
+		
+	}
+
+	public void deleteUploadBySfile(String sfile) {
+		
+	}
+
+
+	@Override
+	public void updateCBoard(cboardDTO cboardDto) {
+		cboardService mapper = sqlSession.getMapper(cboardService.class);
+	    mapper.update(cboardDto);
+	}
+
+	@Override
+	public void deleteUploadBySfile(Enumeration<String> enumeration, MultipartFile[] file) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteUploadBySfile(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<upDTO> getFile(int parseInt) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int update(cboardDTO cboardDto, MultipartFile[] file) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean checkLiked(int c_num, String u_id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
+
+
 }
