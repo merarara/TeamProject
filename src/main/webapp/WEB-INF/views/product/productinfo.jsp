@@ -157,11 +157,10 @@ function iamport(){
                     p_price: $("#price").val()	 // 상품 원래 가격
                 },
                 success: function(result) {
-                    console.log(result); // 저장 결과 출력
-                    location.reload();
+               		alert("결제에 성공하였습니다!");
+               		location.href = "/product/productinfo.do?p_num=${pinfo.p_num}";
                 }
             });
-            
         } else {
              var msg = '결제에 실패하였습니다.';
              msg += '에러내용 : ' + rsp.error_msg;
