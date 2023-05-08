@@ -1,6 +1,7 @@
 package com.project.springboot.afbService;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,8 @@ public class ACommentServiceImpl implements IACommentService {
 	int pageCount = 5;		// 하단에 보여줄 페이지 리스트의 갯수
 
     @Override
-    public List<ACommentDTO> selectAC(int curpage) {
-    	int nStart = (curpage - 1) * listCount + 1;
-		int nEnd = (curpage - 1) * listCount + listCount;
-    	
-        return acs.selectAC(nEnd, nStart);
+    public List<ACommentDTO> selectAC(int a_num, String ac_num) {
+        return acs.selectAC(a_num, ac_num);
     }
 
     @Override
@@ -40,8 +38,8 @@ public class ACommentServiceImpl implements IACommentService {
     }
 
     @Override
-    public int deleteAC(String ac_num) {
-        return sqlSession.delete("deleteAC", ac_num);
+    public int deleteAC(Map<String, Object> params) {
+        return acs.deleteAC(params);
     }
     
     @Override
@@ -91,18 +89,18 @@ public class ACommentServiceImpl implements IACommentService {
     }
     
     @Override
-	public int addLike(int ac_num, String u_id) {
-		return acs.insertLike(ac_num, u_id);
+	public int addAcLike(int ac_num, String u_id) {
+		return acs.insertAcLike(ac_num, u_id);
 	}
 
 	@Override
-	public int removeLike(int ac_num, String u_id) {
-		return acs.deleteLike(ac_num, u_id);
+	public int removeAcLike(int ac_num, String u_id) {
+		return acs.deleteAcLike(ac_num, u_id);
 	}
 	
 	@Override
-	public int getLikeCount(int ac_num) {
-	    return acs.getLikeCount(ac_num);
+	public int getAcLikeCount(int ac_num) {
+	    return acs.getAcLikeCount(ac_num);
 	}
 	
 	@Override
@@ -110,4 +108,15 @@ public class ACommentServiceImpl implements IACommentService {
 		return acs.getAComment(ac_num);
 	}
 	
+	@Override
+	public List<ACommentDTO> selectAnum(String a_num) {
+		return acs.selectAnum(a_num);
+	}
+	
+	@Override
+	public ACommentDTO getAC(String u_id, int ac_num) {
+	    ACommentDTO acDto = acs.getAC(u_id, ac_num);
+	    return acDto;
+	}
+	 
 }

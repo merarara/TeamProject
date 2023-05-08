@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -167,10 +170,61 @@ public class AboardController {
 	    String u_id = authentication.getName();
 	    UserDTO udto = udao.selectOne(u_id);
 		String a_num = req.getParameter("a_num");
+		
 		// 조회수 증가 처리
-	    asv.updateVisitCount(a_num);
+		 asv.updateVisitCount(a_num);
+	    
 	    aboardDTO dto = asv.selectOneA(a_num);
 	    model.addAttribute("udto", udto);
+	    model.addAttribute("aboardDto", dto);
+	    
+	    List<ACommentDTO> acList = acs.selectAnum(a_num);
+	    model.addAttribute("acList", acList);
+	    
+	    List<AupDTO> aupDto = asv.uploadview(Integer.parseInt(a_num));
+	    
+	    for (AupDTO e: aupDto) {
+	    	System.out.println(e.getSfile());
+	    }
+	    
+	    
+	    model.addAttribute("aupDto", aupDto);
+	    List<String> aup = new ArrayList<String>();
+	    
+	    try {
+			String path = ResourceUtils
+				.getFile("classpath:static/aUpload/").toPath().toString();
+
+			File file = new File(path);
+			File[] fileArray = file.listFiles();
+			for(File f : fileArray){
+				//저장된 파일명, 파일 용량을 Map에 저장한다. 
+				aup.add(f.getName());
+			}
+			model.addAttribute("file", aup);		
+		}
+		catch (Exception e) {}
+	    
+	    return "aboard/aboardview";
+	}
+	
+	// 공지사항 상세보기 - post
+	@RequestMapping(value="/aboard/aboardview.do", method=RequestMethod.POST)
+	public String aboard5(aboardDTO aboardDto) {
+		return "aboard/aboardview";
+	}
+	
+	
+	// 공지사항 게시글 수정 페이지 - get방식
+	@RequestMapping(value="/aboard/aboardedit.do", method=RequestMethod.GET)
+	public String aboard6(HttpServletRequest req, Model model) { 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String u_id = authentication.getName();
+	    UserDTO udto = udao.selectOne(u_id);
+		String a_num = req.getParameter("a_num");
+	    aboardDTO dto = asv.selectOneA(a_num);
+	    model.addAttribute("udto", udto);
+	    // 게시물 번호를 통해 게시물 정보를 조회하여 fboardDto에 담아줌
 	    model.addAttribute("aboardDto", dto);
 	    
 	    List<AupDTO> aupDto = asv.uploadview(Integer.parseInt(a_num));
@@ -195,28 +249,6 @@ public class AboardController {
 			model.addAttribute("file", aup);		
 		}
 		catch (Exception e) {}
-
-	    return "aboard/aboardview";
-	}
-	
-	// 공지사항 상세보기 - post
-	@RequestMapping(value="/aboard/aboardview.do", method=RequestMethod.POST)
-	public String aboard5(aboardDTO aboardDto) {
-		return "aboard/aboardview";
-	}
-	
-	
-	// 공지사항 게시글 수정 페이지 - get방식
-	@RequestMapping(value="/aboard/aboardedit.do", method=RequestMethod.GET)
-	public String aboard6(HttpServletRequest req, Model model) { 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String u_id = authentication.getName();
-	    UserDTO udto = udao.selectOne(u_id);
-		String a_num = req.getParameter("a_num");
-	    aboardDTO dto = asv.selectOneA(a_num);
-	    model.addAttribute("udto", udto);
-	    // 게시물 번호를 통해 게시물 정보를 조회하여 fboardDto에 담아줌
-	    model.addAttribute("aboardDto", dto);
 	    
 		return "aboard/aboardedit"; 
 	} 
@@ -225,54 +257,84 @@ public class AboardController {
 	@RequestMapping(value="/aboard/aboardedit.do", method=RequestMethod.POST)
 	public String aboard7(aboardDTO aboardDto, MultipartFile[] user_file, 
 			Model model, 
-			MultipartHttpServletRequest req) {
-		String a_num = req.getParameter("a_num");
+			MultipartHttpServletRequest req, HttpServletRequest request) {
+		int a_num = Integer.parseInt(req.getParameter("a_num"));
+		aboardDto = asv.selectOneA(String.valueOf(a_num));
 		int result = asv.updateA(aboardDto); 
 		
 		if (!user_file[0].isEmpty()) {
 			if (multipartResolver.isMultipart(req)) {
-		        MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
-		      //파일외 폼값을 받는다. MultipartHttpServletRequest객체를 사용.	
-//		        int a_num = asv.uploadnum(aboardDto);
-				String title = req.getParameter("title");
-				System.out.println("제목:"+ title);
-				
-				//파일을 처리한다. 
-				String path = "";
-				for(MultipartFile f: user_file) {
-					//전송된 원본파일명을 얻어온다. 
-					String originalName = f.getOriginalFilename();
-					//파일명에서 확장자를 잘라낸다. 
-					String ext = originalName.substring(
-							originalName.lastIndexOf('.'));
-					//범용고유식별자를 통해 파일명으로 사용할 문자열 생성
-					String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-					//문자열을 결합하여 새로운 파일명을 생성한다.
-					String savedName = uuid + ext;
-					
-					try {
-						//디렉토리의 물리적 경로
-						path = ResourceUtils.getFile("classpath:static/aUpload/")
-								.toPath().toString();
-						//경로와 파일명을 통해 File객체를 생성
-						File filePath = new File(path, savedName);
-						//해당 경로에 파일을 전송한다. 
-						f.transferTo(filePath);
-					}
-					catch (Exception e) {
-						e.printStackTrace();
-					}
-					
-					AupDTO aupDto = new AupDTO();
-//					aupDto.setA_num(a_num);
-					aupDto.setOfile(originalName);
-					aupDto.setSfile(savedName);
-					
-					asv.upload(aupDto);
-				}
-				System.out.println("aUpload폴더:"+ path);
-		    } else {
-		        // Multipart 요청이 아닌 경우 처리
+			    MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
+			    //파일외 폼값을 받는다. MultipartHttpServletRequest객체를 사용.	
+			    a_num = asv.uploadnum(aboardDto);
+			    String title = req.getParameter("title");
+			    System.out.println("제목:"+ title);
+			    //파일을 처리한다. 
+			    String path = "";
+			    for(MultipartFile f: user_file) {
+			        //전송된 원본파일명을 얻어온다. 
+			        String originalName = f.getOriginalFilename();
+			        //파일명에서 확장자를 잘라낸다. 
+			        String ext = originalName.substring(
+			            originalName.lastIndexOf('.'));
+			        //범용고유식별자를 통해 파일명으로 사용할 문자열 생성
+			        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			        //문자열을 결합하여 새로운 파일명을 생성한다.
+			        String savedName = uuid + ext;
+			        
+			        try {
+			            //디렉토리의 물리적 경로
+			            path = ResourceUtils.getFile("classpath:static/aUpload/")
+			                .toPath().toString();
+			            //경로와 파일명을 통해 File객체를 생성
+			            File filePath = new File(path, savedName);
+			            //해당 경로에 파일을 전송한다. 
+			            f.transferTo(filePath);
+			        }
+			        catch (Exception e) {
+			            e.printStackTrace();
+			        }
+			        
+			        AupDTO aupDto = new AupDTO();
+			        aupDto.setA_num(a_num);
+			        aupDto.setOfile(originalName);
+			        aupDto.setSfile(savedName);
+			        
+			        asv.upload(aupDto);
+			    }
+			    System.out.println("aUpload폴더:"+ path);
+			} else {
+			    // Multipart 요청이 아닌 경우 처리
+			}
+		}
+		
+		String[] files = request.getParameterValues("file");
+		if (files != null && files.length > 0) { // 체크된 첨부파일이 있을 경우
+		    for (String f : files) {
+		        String sfile = req.getParameter("sfile");
+		        List<AupDTO> fileList = asv.uploadview(a_num);
+		        AupDTO file = null;
+		        if (fileList != null && !fileList.isEmpty()) {
+		            file = fileList.get(0);
+		        }
+		        if (file != null) {
+		            // 파일 경로를 가져옵니다.
+		        	
+		        try {
+		        	for (AupDTO e: fileList) {
+			            String filePath = ResourceUtils.getFile("classpath:static/aUpload").toPath().toString();
+			            // 파일을 삭제합니다.
+			            File deleteFile = new File(filePath, e.getSfile());
+			            if (deleteFile.exists()) {
+			                deleteFile.delete();
+			            }
+			        }
+		        } catch (Exception e) {
+		        	
+		        }
+		        // 파일 정보를 DB에서 삭제합니다.
+		        asv.deleteFile(a_num, f);
+		        }
 		    }
 		}
 		
@@ -283,10 +345,22 @@ public class AboardController {
 	
 	// 공지사항 게시글 삭제 기능
 	@RequestMapping(value="/aboard/aboarddelete.do", method=RequestMethod.GET)
-	public String deleteA(@RequestParam("a_num") String a_num) {
-	    int result = asv.deleteA(a_num);
+	public String deleteA(@RequestParam("a_num") String a_num, Model model, aboardDTO aboardDto) {
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String u_id = authentication.getName();
+	    UserDTO udto = udao.selectOne(u_id);
+	    model.addAttribute("udto", udto);
+	    aboardDto.setU_id(u_id);
+	    System.out.println(u_id);
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("a_num", a_num);
+	    params.put("u_id", u_id);
+	    asv.deleteFileAll(a_num);
+	    asv.deleteAcAll(a_num);
+	    int result = asv.deleteA(params);
+
 	    if (result == 1) {
-	      System.out.println("삭제되었습니다.");
+	        System.out.println("삭제되었습니다.");
 	    }
 	    return "redirect:/aboard/aboardlist.do";
 	}
@@ -324,28 +398,30 @@ public class AboardController {
 	    }
 	}
 	
-	 // 좋아요 기능
+	// 좋아요 기능
 	@PostMapping("/aboard/like.do")
 	public String addLike(HttpServletRequest req, HttpSession session) {
-		int a_num = Integer.parseInt(req.getParameter("a_num"));
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String u_id = authentication.getName(); // 사용자 id
- 		if (u_id == null) {
- 			return "redirect:/auth/login.do";
+	    int a_num = Integer.parseInt(req.getParameter("a_num"));
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String u_id = authentication.getName();
+
+	    if (u_id == null) {
+	        return "redirect:/auth/login.do";
 	    }
-	 	int result = asv.addLike(a_num, u_id);
-        if (result == 1) {
-        	int a_like = asv.getLikeCount(a_num);
-        	return "redirect:/aboard/aboardview.do?a_num=" + a_num;
-        } else {
-        	return "redirect:/aboard/aboardview.do?a_num=" + a_num;
-        }
+
+	    try {
+	        asv.addLike(a_num, u_id);
+	    } catch (DuplicateKeyException e) {
+	        // 이미 좋아요가 추가된 경우, 무시하고 계속 진행합니다.
+	    }
+	    
+	    int a_like = asv.getLikeCount(a_num);
+	    return "redirect:/aboard/aboardview.do?a_num=" + a_num;
 	}
 	 
 	// 싫어요 기능
 	@PostMapping("/aboard/unlike.do")
 	public String removeLike(HttpServletRequest req, HttpSession session) {
-	    // HttpSession에서 로그인 정보인 user_id를 가져온다.
 		int a_num = Integer.parseInt(req.getParameter("a_num"));
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String u_id = authentication.getName(); // 사용자 id
@@ -360,6 +436,6 @@ public class AboardController {
 	        return "redirect:/aboard/aboardview.do?a_num=" + a_num;
 	    }
 	}
-
+	
 }
 	

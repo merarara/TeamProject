@@ -11,125 +11,124 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
-
 </head>
 <body>
 
 <%@ include file="../header.jsp" %>	
-<div id="content">
-    <h2>공지사항 게시판 </h2>
-<table align="center" border="1" width="90%">
-        <tr>
-            <th width="10%">번호</th>
-            <th width="*">제목</th>
-            <th width="15%">작성자</th>
-            <th width="15%">작성일</th>
-            <th width="15%">좋아요</th>
-            <th width="15%">조회수</th>
-        </tr>
-<c:choose>
-    <c:when test="${ empty aboardLists }">  
-    	<!-- 게시물을 저장하고 있는 boardLists 컬렉션에 저장된 내용이 없다면
-    	아래와 같이 출력한다. -->
-        <tr>
-            <td colspan="6" align="center">
-                등록된 게시물이 없습니다^^*
-            </td>
-        </tr>
-    </c:when>
-    <c:otherwise>  
-    	<!-- 출력할 게시물이 있다면 저장된 갯수만큼 반복하여 출력한다. -->
-        <c:forEach items="${ aboardLists }" var="row" varStatus="loop">
-        <tr align="center">
-        	<td>${ row.a_num }</td>
-            <td align="center">
-<!-- 제목을 클릭할 경우 내용보기 페이지로 이동한다. -->            
-<a href="../aboard/aboardview.do?a_num=${ row.a_num }">${ row.a_title }</a>
-			</td>
-            <td>${ row.u_id }</td>
-            <td>${ row.a_regdate }</td>
-            <td>${ row.a_like }</td> 
-            <td>${ row.a_visitcount }</td>
-        </tr>
-        </c:forEach>        
-    </c:otherwise>    
-</c:choose>
-    </table>
-
+<div class="container">
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header bg-dark text-white">
+          <h3 class="text-center font-weight-light my-4">공지사항 게시판</h3>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col" width="10%">번호</th>
+                  <th scope="col" width="*">제목</th>
+                  <th scope="col" width="15%">작성자</th>
+                  <th scope="col" width="15%">작성일</th>
+                  <th scope="col" width="15%">좋아요</th>
+                  <th scope="col" width="15%">조회수</th>
+                </tr>
+              </thead>
+              <tbody>
+                <c:choose>
+                  <c:when test="${ empty aboardLists }">
+                    <tr>
+                      <td colspan="6" align="center">
+                        등록된 게시물이 없습니다^^*
+                      </td>
+                    </tr>
+                  </c:when>
+                  <c:otherwise>
+                    <c:forEach items="${ aboardLists }" var="row" varStatus="loop">
+                      <tr align="center">
+                        <td>${ row.a_num }</td>
+                        <td align="left">
+                          <a href="../aboard/aboardview.do?a_num=${ row.a_num }">${ row.a_title }</a>
+                        </td>
+                        <td>${ row.u_id }</td>
+                        <td>${ row.a_regdate }</td>
+                        <td>${ row.a_like }</td>
+                        <td>${ row.a_visitcount }</td>
+                      </tr>
+                    </c:forEach>
+                  </c:otherwise>
+                </c:choose>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div align="center" style="margin-bottom: 50px";>
-	<tr>
-		<td colspan="5">
-		<!-- 처음 -->
-		<c:choose>
-		<c:when test="${(page.curPage - 1) < 1 }">
-			[ &lt;&lt; ]
-		</c:when>
-		<c:otherwise>
-			<a href="/aboard/aboardlist.do??page=1&searchField=${searchField}&searchWord=${searchWord}">[ &lt;&lt; ]</a>
-		</c:otherwise>
-		</c:choose>
-		<!-- 이전 -->
-		<c:choose>
-		<c:when test="${(page.curPage - 1) < 1 }">
-			[ &lt; ]
-		</c:when>
-		<c:otherwise>
-			<a href="/aboard/aboardlist.do?page=${page.curPage - 1 }&searchField=${searchField}&searchWord=${searchWord}">[ &lt; ]</a>
-		</c:otherwise>
-		</c:choose>
-		
-		<!-- 개별 페이지 -->
-		<c:forEach var="fEach" begin="${page.startPage }" end="${page.endPage }" step="1">
-			<c:choose>
-			<c:when test="${page.curPage == fEach }">
-				[ ${fEach} ] &nbsp;
-			</c:when>
-			<c:otherwise>
-				<a href="/aboard/aboardlist.do?page=${fEach }&searchField=${searchField}&searchWord=${searchWord}">[ ${fEach } ]</a> &nbsp;
-			</c:otherwise>
-			</c:choose>
-		</c:forEach>
-		
-		<!-- 다움 -->
-		<c:choose>
-		<c:when test="${(page.curPage + 1) > page.totalPage }">
-			[ &gt; ]
-		</c:when>
-		<c:otherwise>
-			<a href="/aboard/aboardlist.do?page=${page.curPage + 1 }&searchField=${searchField}&searchWord=${searchWord}">[ &gt; ]</a>
-		</c:otherwise>
-		</c:choose>
-		<!-- 끝 -->
-		<c:choose>
-		<c:when test="${page.curPage == page.totalPage }">
-			[ &gt;&gt; ]
-		</c:when>
-		<c:otherwise>
-			<a href="/aboard/aboardlist.do?page=${page.totalPage }&searchField=${searchField}&searchWord=${searchWord}">[ &gt;&gt; ]</a>
-		</c:otherwise>
-		</c:choose>
-		</td>
-	</tr>	
+<div class="row justify-content-center" style="margin-bottom: 50px;">
+    <div class="col-lg-5">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <c:choose>
+                        <c:when test="${(page.curPage - 1) < 1 }">
+                            <a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                        </c:when>
+                        <c:otherwise>
+                            <a class="page-link" href="/aboard/aboardlist.do?page=1&searchField=${searchField}&searchWord=${searchWord}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                        </c:otherwise>
+                    </c:choose>
+                </li>
+                <c:forEach var="fEach" begin="${page.startPage }" end="${page.endPage }" step="1">
+                    <li class="page-item">
+                        <c:choose>
+                            <c:when test="${page.curPage == fEach }">
+                                <a class="page-link" href="#" aria-label="Current page"><strong>${fEach}</strong></a>
+                            </c:when>
+                            <c:otherwise>
+                                <a class="page-link" href="/aboard/aboardlist.do?page=${fEach }&searchField=${searchField}&searchWord=${searchWord}" aria-label="Page ${fEach}">${fEach}</a>
+                            </c:otherwise>
+                        </c:choose>
+                    </li>
+                </c:forEach>
+                <li class="page-item">
+                    <c:choose>
+                        <c:when test="${(page.curPage + 1) > page.totalPage }">
+                            <a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                        </c:when>
+                        <c:otherwise>
+                            <a class="page-link" href="/aboard/aboardlist.do?page=${page.curPage + 1 }&searchField=${searchField}&searchWord=${searchWord}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                        </c:otherwise>
+                    </c:choose>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
 	<!-- 검색폼 -->
-<div style="margin-top: 50px;">
-    <form action="/aboard/aboardlist.do" method="post">  
-    <table align="center" border="1" width="30%">
-    <tr>
-        <td align="center">
-            <select name="searchField">
-                <option value="a_title">제목</option>
-                <option value="a_content">내용</option>
-            </select>
-            <input type="text" name="searchWord" />
-            <input type="submit" value="검색하기" />&nbsp;&nbsp;
-            <s:authorize access="hasRole('ADMIN')">
-                    <a href="/aboard/aboardwrite.do">글쓰기</a>
-            </s:authorize>
-        </td>
-    </tr>
-    </table>
-    </form>
+<div class="container my-5">
+  <form action="/aboard/aboardlist.do" method="post">  
+    <div class="row justify-content-center">
+      <div class="col-8">
+        <div class="input-group">
+          <select class="form-select" name="searchField">
+            <option value="a_title">제목</option>
+            <option value="a_content">내용</option>
+          </select>
+          <input class="form-control" type="text" name="searchWord" placeholder="검색어를 입력해주세요." />
+          <button class="btn btn-primary" type="submit">검색하기</button>
+          <s:authorize access="hasRole('ADMIN')">
+            <a class="btn btn-outline-primary" href="/aboard/aboardwrite.do">글쓰기</a>
+          </s:authorize>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
 	
 </div>
 

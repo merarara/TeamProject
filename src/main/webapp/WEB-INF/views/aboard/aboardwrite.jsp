@@ -17,47 +17,44 @@
 <%@ include file="../header.jsp" %>	
 <div id="content">
 
-<h2>FAQ게시판 - 글쓰기(write)</h2>
-<!-- 글쓰기 페이지를 그대로 사용하되 action 부분만 수정한다. 수정시에도
-파일첨부가 있으므로 enctype속성은 추가되어야한다. -->
-<form action="/aboard/aboardwrite.do" method="post" modelAttribute="aboardDto" enctype="multipart/form-data">
-<!-- 게시물 수정을 위한 일련번호 -->	
-<input type="hid_den" name="u_id" value="${ udto.u_id }"/>
+<h2>공지사항 게시판 - 글쓰기(write)</h2>
+<form action="/aboard/aboardwrite.do" method="post" modelAttribute="aboardDto" enctype="multipart/form-data" class="p-4">
+  <!-- 게시물 수정을 위한 일련번호 -->	
+  <input type="hid_den" name="u_id" value="${ udto.u_id }"/>
 
-<table border="1" width="90%">
-    <tr>
-        <td>작성자</td>
-        <td>
-            <input type="text" name="u_nick" style="width:150px;" value="${udto.u_nick }" readonly/>
-        </td>
-    </tr>
-    <tr>
-        <td>제목</td>
-        <td>
-            <input type="text" name="a_title" style="width:90%;" value="" />
-        </td>
-    </tr>
-    <tr>
-        <td>내용</td>
-        <td>
-            <textarea name="a_content" style="width:90%;height:100px;"></textarea>
-        </td>
-    </tr>
-    <tr>
-    	<td>첨부파일</td>
-    	<td><input type="file" name="user_file" multiple/></td>
-    </tr>
-    <tr>
-        <td colspan="2" align="center">
-            <button type="submit">작성 완료</button>
-            <button type="reset">RESET</button>
-            
-            <button type="button" onclick="location.href='../aboard/aboardlist.do';">
-                목록 바로가기
-            </button>
-        </td>
-    </tr>
-</table>    
+  <div class="form-group row">
+    <label for="u_nick" class="col-sm-2 col-form-label">작성자</label>
+    <div class="col-sm-10">
+      <input type="text" name="u_nick" id="u_nick" class="form-control" value="${udto.u_nick }" readonly>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="a_title" class="col-sm-2 col-form-label">제목</label>
+    <div class="col-sm-10">
+      <input type="text" name="a_title" id="a_title" class="form-control" value="">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="a_content" class="col-sm-2 col-form-label">내용</label>
+    <div class="col-sm-10">
+      <textarea name="a_content" id="a_content" class="form-control" rows="10"></textarea>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="user_file" class="col-sm-2 col-form-label">첨부파일</label>
+    <div class="col-sm-10">
+      <input type="file" name="user_file" id="user_file" multiple>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-sm-12 text-center">
+      <button type="submit" class="btn btn-primary mr-2">작성 완료</button>
+      <button type="reset" class="btn btn-secondary mr-2">RESET</button>
+      <button type="button" class="btn btn-info" onclick="location.href='../aboard/aboardlist.do';">
+        목록 바로가기
+      </button>
+    </div>
+  </div>
 </form>
 </div>
 <%@ include file="../footer.jsp" %>

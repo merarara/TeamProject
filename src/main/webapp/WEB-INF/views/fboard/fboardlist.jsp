@@ -70,7 +70,6 @@ details caption {
       frm.submit();
     }
   }
-  
 
 </script>
 </head>
@@ -112,80 +111,83 @@ details caption {
 </div>
 </div>
 
-<div align="center" style="margin-bottom: 50px";>
-<tr>
-			<td colspan="5">
-			<!-- 처음 -->
-			<c:choose>
-			<c:when test="${(page.curPage - 1) < 1 }">
-				[ &lt;&lt; ]
-			</c:when>
-			<c:otherwise>
-				<a href="/fboard/fboardlist.do?page=1&searchField=${searchField}&searchWord=${searchWord}">[ &lt;&lt; ]</a>
-			</c:otherwise>
-			</c:choose>
-			<!-- 이전 -->
-			<c:choose>
-			<c:when test="${(page.curPage - 1) < 1 }">
-				[ &lt; ]
-			</c:when>
-			<c:otherwise>
-				<a href="/fboard/fboardlist.do?page=${page.curPage - 1 }&searchField=${searchField}&searchWord=${searchWord}">[ &lt; ]</a>
-			</c:otherwise>
-			</c:choose>
-			
-			<!-- 개별 페이지 -->
-			<c:forEach var="fEach" begin="${page.startPage }" end="${page.endPage }" step="1">
-				<c:choose>
-				<c:when test="${page.curPage == fEach }">
-					[ ${fEach} ] &nbsp;
-				</c:when>
-				<c:otherwise>
-					<a href="/fboard/fboardlist.do?page=${fEach }&searchField=${searchField}&searchWord=${searchWord}">[ ${fEach } ]</a> &nbsp;
-				</c:otherwise>
-				</c:choose>
-			</c:forEach>
-			
-			<!-- 다움 -->
-			<c:choose>
-			<c:when test="${(page.curPage + 1) > page.totalPage }">
-				[ &gt; ]
-			</c:when>
-			<c:otherwise>
-				<a href="/fboard/fboardlist.do?page=${page.curPage + 1 }&searchField=${searchField}&searchWord=${searchWord}">[ &gt; ]</a>
-			</c:otherwise>
-			</c:choose>
-			<!-- 끝 -->
-			<c:choose>
-			<c:when test="${page.curPage == page.totalPage }">
-				[ &gt;&gt; ]
-			</c:when>
-			<c:otherwise>
-				<a href="/fboard/fboardlist.do?page=${page.totalPage }&searchField=${searchField}&searchWord=${searchWord}">[ &gt;&gt; ]</a>
-			</c:otherwise>
-			</c:choose>
-			</td>
-		</tr>	
-<!-- 검색폼 -->
-<div style="margin-bottom: 50px";>
- <form action="/fboard/fboardlist.do" method="post">  
-    <table align="center" border="1" width="30%">
-        <tr>
-            <td align="center">
-                <select name="searchField">
-                    <option value="f_title">제목</option>
-                    <option value="f_content">내용</option>
-                </select>
-                <input type="text" name="searchWord" />
-                <input type="submit" value="검색하기" />&nbsp;&nbsp;
-                <s:authorize access="hasRole('ADMIN')">
-                    <a href="/fboard/fboardwrite.do">글쓰기</a>
-                </s:authorize>
-            </td>
-        </tr>
-    </table>
-</form>
+<div class="row justify-content-center" style="margin-bottom: 50px">
+    <ul class="pagination">
+        <li class="page-item">
+            <c:choose>
+                <c:when test="${(page.curPage - 1) < 1}">
+                    <span class="page-link"> &lt;&lt; </span>
+                </c:when>
+                <c:otherwise>
+                    <a class="page-link" href="/fboard/fboardlist.do?page=1&searchField=${searchField}&searchWord=${searchWord}"> &lt;&lt; </a>
+                </c:otherwise>
+            </c:choose>
+        </li>
+        <li class="page-item">
+            <c:choose>
+                <c:when test="${(page.curPage - 1) < 1}">
+                    <span class="page-link"> &lt; </span>
+                </c:when>
+                <c:otherwise>
+                    <a class="page-link" href="/fboard/fboardlist.do?page=${page.curPage - 1 }&searchField=${searchField}&searchWord=${searchWord}"> &lt; </a>
+                </c:otherwise>
+            </c:choose>
+        </li>
+
+        <c:forEach var="fEach" begin="${page.startPage }" end="${page.endPage }" step="1">
+            <li class="page-item">
+                <c:choose>
+                    <c:when test="${page.curPage == fEach}">
+                        <span class="page-link"> ${fEach} </span>
+                    </c:when>
+                    <c:otherwise>
+                        <a class="page-link" href="/fboard/fboardlist.do?page=${fEach }&searchField=${searchField}&searchWord=${searchWord}"> ${fEach } </a>
+                    </c:otherwise>
+                </c:choose>
+            </li>
+        </c:forEach>
+
+        <li class="page-item">
+            <c:choose>
+                <c:when test="${(page.curPage + 1) > page.totalPage}">
+                    <span class="page-link"> &gt; </span>
+                </c:when>
+                <c:otherwise>
+                    <a class="page-link" href="/fboard/fboardlist.do?page=${page.curPage + 1 }&searchField=${searchField}&searchWord=${searchWord}"> &gt; </a>
+                </c:otherwise>
+            </c:choose>
+        </li>
+        <li class="page-item">
+            <c:choose>
+                <c:when test="${page.curPage == page.totalPage}">
+                    <span class="page-link"> &gt;&gt; </span>
+                </c:when>
+                <c:otherwise>
+                    <a class="page-link" href="/fboard/fboardlist.do?page=${page.totalPage }&searchField=${searchField}&searchWord=${searchWord}"> &gt;&gt; </a>
+                </c:otherwise>
+            </c:choose>
+        </li>
+    </ul>
 </div>
+<!-- 검색폼 -->
+<div class="container my-5">
+  <form action="/fboard/fboardlist.do" method="post">  
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="input-group">
+          <select class="form-select" name="searchField">
+            <option value="f_title">제목</option>
+            <option value="f_content">내용</option>
+          </select>
+          <input class="form-control" type="text" name="searchWord" placeholder="검색어를 입력해주세요." />
+          <button class="btn btn-primary" type="submit">검색하기</button>
+          <s:authorize access="hasRole('ADMIN')">
+            <a class="btn btn-outline-primary" href="/fboard/fboardwrite.do">글쓰기</a>
+          </s:authorize>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
 <%@ include file="../footer.jsp" %>
 
