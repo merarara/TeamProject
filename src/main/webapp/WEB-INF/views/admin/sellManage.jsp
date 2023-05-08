@@ -167,6 +167,10 @@ function SellComplete(m_num, btn) {
 	}
 }
 
+function doCancel(i_num, btn) {
+	
+}
+
 function goToAdminPage() {
     window.location.href = '/admin/adminPage.do';
 }
@@ -306,6 +310,9 @@ function goToAdminPage() {
 									</div>
 									<div style="text-align:center;">
 									  	<button type="button" class="btn btn-primary" onclick="doConfirm(${i.m_qty}, ${i.m_num }, this);">승인</button>
+									</div>
+									<div style="text-align:center;">
+									  	<button type="button" class="btn btn-danger" onclick="doCancel(${i.m_num }, this);">주문취소</button>
 									</div>
 								</div>
 							</div>
