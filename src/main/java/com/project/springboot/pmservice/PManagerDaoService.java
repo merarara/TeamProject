@@ -9,6 +9,8 @@ import com.project.springboot.ppageinfo.MProductPageinfo;
 import com.project.springboot.productdto.BOrderinfoDTO;
 import com.project.springboot.productdto.OrderinfoDTO;
 import com.project.springboot.productdto.PCountDTO;
+import com.project.springboot.productdto.PSoldInfoDTO;
+import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 
 @Service
@@ -81,11 +83,11 @@ public class PManagerDaoService implements IPManagerDaoService {
 	
 	// 주문 내역 가져오기
 	@Override
-	public List<OrderinfoDTO> searchSList(int curpage, String searchword, String searchfield) {
+	public List<OrderinfoDTO> searchSList(int curpage, String searchword, String searchfield, String tab) {
 		int nStart = (curpage - 1) * plistSPsize + 1;
 		int nEnd = (curpage - 1) * plistSPsize + plistSPsize;
 		
-		List<OrderinfoDTO> plist = dao.searchSlistDao(nEnd, nStart, searchword, searchfield); 
+		List<OrderinfoDTO> plist = dao.searchSlistDao(nEnd, nStart, searchword, searchfield, tab); 
 		
 		return plist;
 	}
@@ -96,6 +98,52 @@ public class PManagerDaoService implements IPManagerDaoService {
 		List<BOrderinfoDTO> blist = dao.getBOrderDao();
 		
 		return blist;
+	}
+	
+	// 상품 결제 승인
+	@Override
+	public int confirmOrder(String barcode, String m_num, String p_num) {
+		int result = dao.updateBarcodeDao(barcode);
+		int result2 = dao.updateOrderDao(m_num);
+		int result3 = dao.insertSoldInfoDao(barcode, m_num, p_num);
+		
+		if (result + result2 >= 2) {
+			dao.updateCountDao(result2);
+		}
+		
+		return result + result2;
+	}
+	
+	// 상품 재고 업데이트
+	@Override
+	public void updateCount(String p_num) {
+		dao.updateCountDao(Integer.parseInt(p_num));
+	}
+	
+	// 상품 판매 내역 가져오기
+	@Override
+	public List<PSoldInfoDTO> getSoldInfo() {
+		List<PSoldInfoDTO> soldlist = dao.getSoldInfoDao();
+		return soldlist;
+	}
+	
+	// 상품 주문 상태 변경
+	@Override
+	public int updateOrder(String m_num, String status) {
+		int result = dao.updateOrderinfoDao(m_num, status);
+		
+		return result;
+	}
+	
+	@Override
+	public int addProduct(ProductlistDTO pDTO, ProductinfoDTO pinfoDTO) {
+		int result = dao.addPListDao(pDTO);
+		int p_num = dao.searchPNum();
+		pinfoDTO.setP_num(p_num);
+		int result2 = dao.addPInfoDao(pinfoDTO);
+		
+		
+		return result + result2;
 	}
 	
 	// 재고 관리 페이지 설정
@@ -144,10 +192,11 @@ public class PManagerDaoService implements IPManagerDaoService {
 		return pinfo;
 	}
 	
+	// 주문 내역 페이지 설정
 	@Override
-	public MProductPageinfo articleSPage(int curpage, String searchword, String searchfield) {
+	public MProductPageinfo articleSPage(int curpage, String searchword, String searchfield, String tab) {
 		int totalCount = 0;
-		totalCount = dao.articleSPageDao(searchword, searchfield);
+		totalCount = dao.articleSPageDao(searchword, searchfield, tab);
 		
 		// 총 페이지 수
 		int totalPage = totalCount / plistSPsize;

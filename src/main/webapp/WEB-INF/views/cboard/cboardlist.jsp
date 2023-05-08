@@ -15,15 +15,15 @@
 <body>
 <%@ include file="../header.jsp" %>
 <!-- 게시판 영역 -->
-<div class="container py-5">
-  <h2 class="text-center mb-4">파일 첨부형 게시판 - 목록 보기(List)</h2>
+<div class="container py-5 text-center">
+  <h2>파일 첨부형 게시판 - 목록 보기(List)</h2>
   <!-- 목록 테이블 -->
-  <div class="table-responsive">
-    <table class="table table-striped table-bordered">
-      <thead class="table-primary">
+  <div class="table-responsive overflow-x-auto">
+    <table class="table table-striped table-bordered" style="width: 1110px; border-left: transparent; border-right: transparent;">
+      <thead class="table-dark">
         <tr>
           <th scope="col" style="width: 10%;">번호</th>
-          <th scope="col" style="width: 50%;">제목</th>
+          <th scope="col" style="width: 20%;">제목</th>
           <th scope="col" style="width: 15%;">작성자</th>
           <th scope="col" style="width: 15%;">작성일</th>
           <th scope="col" style="width: 5%;">좋아요</th>
@@ -32,22 +32,22 @@
       </thead>
       <tbody>
         <c:choose>
-          <c:when test="${ empty cboardLists }">  
+          <c:when test="${empty cboardLists}">  
             <tr>
               <td colspan="6" class="text-center">등록된 게시물이 없습니다^^*</td>
             </tr>
           </c:when>
           <c:otherwise>  
-            <c:forEach items="${ cboardLists }" var="row" varStatus="loop">
+            <c:forEach items="${cboardLists}" var="row" varStatus="loop">
               <tr>
-                <td class="align-middle">${ row.c_num }</td>
+                <td class="align-middle">${row.c_num}</td>
                 <td class="align-middle">
-                  <a href="../cboard/cboardview.do?c_num=${ row.c_num }">${ row.c_title }</a>
+                  <a href="../cboard/cboardview.do?c_num=${row.c_num}">${row.c_title}</a>
                 </td>
-                <td class="align-middle">${ row.u_id }</td>
-                <td class="align-middle">${ row.c_regdate }</td>
-                <td class="align-middle">${ row.c_like }</td> 
-                <td class="align-middle">${ row.c_visitcount }</td>
+                <td class="align-middle">${row.u_id}</td>
+                <td class="align-middle">${row.c_regdate}</td>
+                <td class="align-middle">${row.c_like}</td> 
+                <td class="align-middle">${row.c_visitcount}</td>
               </tr>
             </c:forEach>        
           </c:otherwise>    
@@ -55,17 +55,15 @@
       </tbody>
     </table>
   </div>
-</div>
-  <!-- 페이징 및 글쓰기 버튼 -->
-<div class="d-flex justify-content-between align-items-center" style="width: 100%;">
-  <div>${ map.pagingImg }</div>
-  <div class="text-center">
-    <button type="button" class="btn btn-primary" onclick="location.href='/cboard/cboardwrite.do';">
-      글쓰기
-    </button>
+  <div class="d-flex justify-content-between align-items-center" style="max-width: 1400px; margin: 0 auto; border-left: transparent; border-right: transparent;">
+    <div>${map.pagingImg}</div>
+    <div class="text-right">
+      <button type="button" class="btn btn-primary" onclick="location.href='/cboard/cboardwrite.do';">
+        글쓰기
+      </button>
+    </div>
   </div>
 </div>
-
 <!-- 검색 폼 -->
 <div class="container my-5">
   <form action="/cboard/cboardlist.do" method="post" class="form-inline justify-content-center">

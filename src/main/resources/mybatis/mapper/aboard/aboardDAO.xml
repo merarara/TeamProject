@@ -59,7 +59,7 @@
 	
 	<!-- 공지사항 게시글 삭제 -->
 	<delete id="deleteA" parameterType="string">
-  		delete from a_board where a_num=#{a_num}
+  		delete from a_board where a_num=#{a_num} and u_id=#{u_id}
 	</delete>
 	
 	<!-- 조회수 증가 -->
@@ -99,5 +99,17 @@
 	<select id="uploadview" parameterType="int" resultType="com.project.springboot.aboard.AupDTO">
 	    select * from aup where a_num = #{a_num, jdbcType=INTEGER}
 	</select>
+	
+	<delete id="deleteFile">
+	    DELETE FROM aup WHERE sfile = #{sfile, jdbcType=VARCHAR} AND a_num = #{a_num}
+	</delete>
+	
+	<delete id="deleteFileAll">
+	    DELETE FROM aup WHERE a_num = #{a_num}
+	</delete>
+		
+	<delete id="deleteAcAll">
+		Delete from acomment where a_num=#{a_num}
+	</delete>
 	
 </mapper>

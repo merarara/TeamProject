@@ -148,6 +148,7 @@ function iamport(){
                 url: '/product/save_oinfo.do', // 저장하는 컨트롤러의 URL
                 data: {
                     u_id: '${uinfo.u_id}', // 구매한 사용자의 아이디
+                    u_nick: '${uinfo.u_nick}',
                     m_addr: '${uinfo.u_addr1}' + ' ${uinfo.u_addr2}', // 사용자의 주소
                     p_num: '${pinfo.p_num}', // 구매한 상품 번호
                     p_name: '${pinfo.p_name}',
@@ -156,11 +157,10 @@ function iamport(){
                     p_price: $("#price").val()	 // 상품 원래 가격
                 },
                 success: function(result) {
-                    console.log(result); // 저장 결과 출력
-                    location.href = "/product/productinfo.do?p_num=${pinfo.p_num}"
+               		alert("결제에 성공하였습니다!");
+               		location.href = "/product/productinfo.do?p_num=${pinfo.p_num}";
                 }
             });
-            
         } else {
              var msg = '결제에 실패하였습니다.';
              msg += '에러내용 : ' + rsp.error_msg;
@@ -191,6 +191,7 @@ function doAddBascket() {
 			data: {
 				u_id: '${uinfo.u_id}',
 				p_num: '${pinfo.p_num}',
+				u_nick: '${uinfo.u_nick}',
 				m_qty: $("#quantity").val(),
 				p_name: '${pinfo.p_name}',
 				p_listimg: '${pinfo.p_listimg}',
@@ -515,11 +516,16 @@ footer {
 
 <%@ include file="../header.jsp" %>	
 <div class="container-fluid" id="content" style="min-width: 1600px;">
-	<div class="row" style="padding-top: 30px; padding-bottom: 30px;">
-		<div class="col-md-4 offset-md-4">
+	<div class="row justify-content-center" style="padding-top: 30px; padding-bottom: 30px;">
+		<!-- 검색창 -->
+		<div class="col-md-5">
 		    <form action="/product/productlist.do" id="searchFrm" name="searchFrm">
 		    	<input type="hidden" name="type" value="search">
 		      	<div class="input-group">
+		      		<a href="/product/productlist.do">
+		      			<button type="button" class="btn btn-outline-primary">돌아가기</button>
+		      		</a>
+		      		&nbsp;&nbsp;
 		        	<select class="form-select" name="searchfield" id="searchfield">
 		          		<option value="p_name">상품명</option>
 		          		<option value="p_company">제조사</option>
@@ -552,6 +558,7 @@ footer {
 		        </div>  
 		    </div>
 		</div>
+		<!-- 상품 내용 -->
 		<div class="col-md-8">
 			<div class="row">
 				<div class="d-flex align-items-center justify-content-center">
@@ -578,7 +585,12 @@ footer {
 									<div class="img-list">
 										<c:forEach items="${ pinfo.p_imgsrcs }" var="imgsrc">
 											<div class="img-item">
-												<img class="img" src="${ imgsrc }" width="50" height="50">
+												<c:if test="${fn:contains(imgsrc, '/') }">
+													<img class="img" src="${ imgsrc }" width="50" height="50">
+												</c:if>
+												<c:if test="${not fn:contains(imgsrc, '/') }">
+													<img class="img" src="../productuploads/${ imgsrc }" width="50" height="50">
+												</c:if>
 											</div>
 										</c:forEach>
 									</div>
@@ -591,26 +603,32 @@ footer {
 	  								<br>
 	  								<br>
 	  								<br>
+	  								
 	  								<form method="post">
-	  									<input type="hidden" name="p_num" value="${ pinfo.p_num }">
-	  									<label for="p_count">재고:</label>
-	  									<input type="text" name="p_count" id="p_count" value="${ pinfo.p_count }" size="2" readonly>
-	  									<br>
-										<label for="quantity">주문 수량:</label>
-									  	<input type="number" name="quantity" id="quantity" min="1" max="${ pinfo.p_count }" value="1" required onchange="calculateAmount()">
-									  	<br>
-									  	<label for="price">상품 가격:</label>
-									  	<input type="text" name="price" id="price" value="100" readonly>
-									  	<br>
-									  	<label for="amount">결제 금액:</label>
-									  	<input type="text" name="amount" id="amount" value="100" readonly>
-									  	<br>
-									  	<button name="paymentButton" id="paymentButton" onclick="iamport(); return false;" class="w-100 btn btn-warning btn-lg" type="submit">
-									    	결제하기
-									  	</button>
-									  	<button name="addBascket" id="addBascket" onclick="doAddBascket();" class="w-100 btn btn-primary btn-lg" type="button">
-									    	장바구니 추가
-									  	</button>
+	  									
+									  	<div class="form-group mb-3">
+									    	<label for="p_count">재고</label>
+									    	<input type="text" class="form-control" name="p_count" id="p_count" value="${pinfo.p_count}" readonly>
+									  	</div>
+									  	<div class="form-group mb-3">
+									    	<label for="quantity">주문 수량</label>
+									    	<input type="number" class="form-control" name="quantity" id="quantity" min="1" max="${pinfo.p_count}" value="1" required onchange="calculateAmount()">
+									  	</div>
+									  	<div class="form-group mb-3">
+									    	<label for="price">상품 가격</label>
+									    	<input type="text" class="form-control" name="price" id="price" value="100" readonly>
+									  	</div>
+									  	<div class="form-group mb-3">
+									    	<label for="amount">결제 금액</label>
+									    	<input type="text" class="form-control" name="amount" id="amount" value="100" readonly>
+									  	</div>
+									  	<div class="d-grid gap-2 mb-3">
+									    	<button name="paymentButton" id="paymentButton" onclick="iamport(); return false;" class="btn btn-warning btn-lg" type="submit">바로 결제하기</button>
+									    	<button name="addBascket" id="addBascket" onclick="doAddBascket();" class="btn btn-primary btn-lg" type="button">장바구니 추가</button>
+									  	</div>
+									  	<c:if test="${pinfo.p_count == 0}">
+								    	<h1 class="chkNo">매진된 상품입니다. <br>입고될때까지 기다려주세요.</h1>
+									  	</c:if>
 									</form>
 								</div>
 							</div>
@@ -631,66 +649,66 @@ footer {
 								  		<table>
 								  			<caption>제품 정보</caption>
 										  <tr>
-										    <th>운영체제</th>
+										    <th width="250">운영체제</th>
 										    <td>${ pinfo.os }</td>
 										  </tr>
 										  <tr>
-										    <th>화면정보</th>
+										    <th width="250">화면정보</th>
 										    <td>${ pinfo.monitor }</td>
 										  </tr>
 										  <tr>
-										    <th>CPU</th>
+										    <th width="250">CPU</th>
 										    <td>${ pinfo.cpu }</td>
 										  </tr>
 										  <tr>
-										    <th>램</th>
+										    <th width="250">램</th>
 										    <td>${ pinfo.r_storage }</td>
 										  </tr>
 										  <tr>
-										    <th>램 교체</th>
+										    <th width="250">램 교체</th>
 										    <td>${ pinfo.ram }</td>
 										  </tr>
 										  <tr>
-										    <th>그래픽</th>
+										    <th width="250">그래픽</th>
 										    <td>${ pinfo.graphic }</td>
 										  </tr>
 										  <tr>
-										    <th>저장장치</th>
+										    <th width="250">저장장치</th>
 										    <td>${ pinfo.storage }</td>
 										  </tr>
 										  <tr>
-										    <th>네트워크</th>
+										    <th width="250">네트워크</th>
 										    <td>${ pinfo.network }</td>
 										  </tr>
 										  <tr>
-										    <th>영상입출력</th>
+										    <th width="250">영상입출력</th>
 										    <td>${ pinfo.video_io }</td>
 										  </tr>
 										  <tr>
-										    <th>단자</th>
+										    <th width="250">단자</th>
 										    <td>${ pinfo.terminal }</td>
 										  </tr>
 										  <tr>
-										    <th>부가기능</th>
+										    <th width="250">부가기능</th>
 										    <td>${ pinfo.add_ons }</td>
 										  </tr>
 										  <tr>
-										    <th>입력장치</th>
+										    <th width="250">입력장치</th>
 										    <td>${ pinfo.io }</td>
 										  </tr>
 										  <tr>
-										    <th>파워</th>
+										    <th width="250">파워</th>
 										    <td>${ pinfo.power }</td>
 										  </tr>
 										  <c:if test="${ not empty pinfo.hz }" >
 										    <tr>
-										      <th>주사율</th>
+										      <th width="250">주사율</th>
 										      <td>${ pinfo.hz }</td>
 										    </tr>
 										  </c:if>
 										  <c:if test="${ not empty pinfo.etc }" >
 										    <tr>
-										      <th>주요제원</th>
+										      <th width="250">주요제원</th>
 										      <td>${ pinfo.etc }</td>
 										    </tr>
 										  </c:if>
@@ -708,6 +726,7 @@ footer {
 										    			<form action="/product/reviewUpload.do" method="post" enctype="multipart/form-data">
 										    				<input type="hidden" name="u_id" value="${uinfo.u_id }">
 										    				<input type="hidden" name="p_num" value="${pinfo.p_num }">
+										    				<input type="hidden" name="u_nick" value="${uinfo.u_nick }">
 										        			<div class="form-group">
 										            			<label for="FormControlTextarea1">리뷰를 작성해주세요.</label>
 										            			<textarea name="p_content" class="form-control" id="formControlTextarea1" rows="3"></textarea>
@@ -739,6 +758,9 @@ footer {
 									    	<h1 class="chkNo">이미 리뷰를 작성하신 상품입니다.</h1>
 									    </c:if>
 								    	<hr>
+								    	<c:if test="${ reviewNo == 'Yes' }">
+								    		<h1 class="chkNo">작성된 리뷰가 아직 없는 상품입니다.</h1>
+								    	</c:if>
 								    	<!-- 리뷰를 보여주는 코드 -->
 							      		<c:forEach items="${ rdto }" var="i">
 							      			<div class="review-container">
@@ -783,7 +805,7 @@ footer {
 														<img src="${ratingImgPath}" alt="별점" style="width: 80px; height: 18px;"/>
 													</div>
 									    			<div class="review-info">
-									      				<div class="review-writer">${i.u_id}</div>
+									      				<div class="review-writer">${i.u_nick}</div>
 									      				<div class="review-date">${i.r_date}</div>
 									    			</div>
 										  		</div>

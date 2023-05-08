@@ -11,7 +11,7 @@
 </head>
 <body>
 <div>
-<form method="post" action="/reply/delete">
+<form method="post" action="/cboard/delete">
 
 	<p>정말 삭제하시겠습니까?</p>
 	
