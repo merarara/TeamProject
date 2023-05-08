@@ -46,6 +46,9 @@ public interface PManagerDao {
 	// 주문 상세 내역 가져오기
 	public List<BOrderinfoDTO> getBOrderDao();
 	
+	// 상품 주문 취소
+	public int doCancelDao (int m_num);
+	
 	// 상품 결제 승인시 재고 상태 변경
 	public int updateBarcodeDao(@Param("barcode") String barcode);
 	

@@ -46,14 +46,22 @@ $(document).ready(function() {
 	$('#searchword').on('keyup', function() {
 		checkLength();
 	});
+	
+	 // 파일 확장자 체크
+    const filechk1 = document.getElementById('formControlFile1');
+    filechk1.addEventListener('change', function(event) {
+      	const file = event.target.files[0];
+      	const extension = file.name.split('.').pop().toLowerCase();
+      	if (!['jpg', 'png', 'gif'].includes(extension)) {
+        	alert('JPG, PNG, GIF 파일만 업로드 가능합니다.');
+        	filechk1.value = '';
+      	}
+    });
 });
 
 // 상품 검색 자동완성
 function checkLength() {
 	var wordLength = $('#searchword').val().trim().length;
-	console.log(wordLength);
-	console.log($("#searchfield").val());
-	console.log($("#searchword").val());
 	if(wordLength == 0){
 		$("#displayList").hide();
 	} else {
@@ -71,7 +79,6 @@ function checkLength() {
 						var word = item.word;
 	                    // 검색목록들과 검색단어를 모두 소문자로 바꾼 후 검색단어가 나타난 곳의 index를 표시.
 						var index = word.toLowerCase().indexOf( $("#searchword").val().toLowerCase() );
-						// jaVa -> java
 						var len = $("#searchword").val().length;
 						// 검색한 단어를 파랑색으로 표현
 						var result = word.substr(0, index) + "<span style='color:blue;'>"+word.substr(index, len)+"</span>" + word.substr(index+len);
@@ -155,17 +162,15 @@ function iamport(){
                     m_price: $("#amount").val(), // 상품 가격
                     m_qty: $("#quantity").val(), // 상품 수량
                     p_price: $("#price").val()	 // 상품 원래 가격
-                },
-                success: function(result) {
-               		alert("결제에 성공하였습니다!");
-               		location.href = "/product/productinfo.do?p_num=${pinfo.p_num}";
                 }
             });
+            alert("결제에 성공하였습니다.");
+       		location.reload();
         } else {
              var msg = '결제에 실패하였습니다.';
              msg += '에러내용 : ' + rsp.error_msg;
+             alert(msg);
         }
-        alert(msg);
     });
 }
 
@@ -510,6 +515,50 @@ footer {
 .side-menu2 a:hover {
     background-color: #e9ecef;
 }
+
+/* */
+
+#collapseReview {
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  padding: 10px;
+}
+
+label {
+  font-weight: bold;
+}
+
+.rev-group {
+  margin-bottom: 20px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.form-control-file {
+  overflow: hidden;
+}
+
+.btn-primary:focus {
+  box-shadow: none;
+}
+
+#formControlSelect1 {
+  appearance: none;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><path d="M0 10h30L15 27z"/></svg>') no-repeat right center/10px 10px, transparent;
+  font-size: 16px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 300px;
+  background-color: #fff;
+}
+
+#formControlSelect1::-ms-expand {
+  display: none;
+}
 </style>
 </head>
 <body>
@@ -603,9 +652,7 @@ footer {
 	  								<br>
 	  								<br>
 	  								<br>
-	  								
 	  								<form method="post">
-	  									
 									  	<div class="form-group mb-3">
 									    	<label for="p_count">재고</label>
 									    	<input type="text" class="form-control" name="p_count" id="p_count" value="${pinfo.p_count}" readonly>
@@ -727,15 +774,15 @@ footer {
 										    				<input type="hidden" name="u_id" value="${uinfo.u_id }">
 										    				<input type="hidden" name="p_num" value="${pinfo.p_num }">
 										    				<input type="hidden" name="u_nick" value="${uinfo.u_nick }">
-										        			<div class="form-group">
+										        			<div class="form-group rev-group">
 										            			<label for="FormControlTextarea1">리뷰를 작성해주세요.</label>
-										            			<textarea name="p_content" class="form-control" id="formControlTextarea1" rows="3"></textarea>
+										            			<textarea name="p_content" class="form-control" id="formControlTextarea1" rows="3" placeholder="리뷰 내용을 작성해주세요"></textarea>
 										        			</div>
-										        			<div class="form-group">
+										        			<div class="form-group rev-group">
 										            			<label for="formControlFile1">사진을 업로드해주세요.</label>
-										            			<input type="file" name="review_file" class="form-control-file" id="formControlFile1" multiple>
+										            			<input type="file" name="review_file" class="form-control-file" id="formControlFile1" accept=".jpg,.png,.gif" multiple>
 										        			</div>
-										        			<div class="form-group">
+										        			<div class="form-group rev-group">
 													            <label for="formControlSelect1">별점을 매겨주세요.</label>
 													            <select name="r_rating" class="form-control" id="formControlSelect1">
 													                <option>1</option>

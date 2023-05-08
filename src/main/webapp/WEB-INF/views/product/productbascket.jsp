@@ -132,7 +132,7 @@ function doPayment() {
                 	} else {
                 		alert("결제중 에러가 발생했습니다.");
                 	}
-                }, 
+                }
             });
         } else {
             var msg = '결제에 실패하였습니다.';
