@@ -214,6 +214,7 @@ function goToAdminPage() {
 			        	<select class="form-select" name="searchfield" id="searchfield">
 			          		<option value="m_num">주문번호</option>
 			          		<option value="u_id">회원아이디</option>
+			          		<option value="u_nick">회원닉네임</option>
 			        	</select>
 			        	&nbsp;&nbsp;
 			        	<input type="search" class="form-control" name="searchword" id="searchword" placeholder="검색어를 입력하세요">
@@ -226,7 +227,7 @@ function goToAdminPage() {
 				<div class="tab-content">
 					<!-- 결제 승인 탭 시작 -->
 	  				<div id="tab1" class="tab-pane fade ${tab == null || tab == 'tab1' ? 'show active' : '' }">
-						<c:if test="${ isOrder == 'No' }">
+					<c:if test="${ isOrder == 'No' }">
 						<div class="col-md-12 d-flex align-items-center justify-content-center" style="height: 80vh; margin-top: 20px;">
 							<h5 style="color: gray; font-size: 20px; font-weight: bold;">승인 대기중인 결제 정보가 없습니다.</h5>
 						</div>
@@ -239,6 +240,7 @@ function goToAdminPage() {
 				          			<h5 class="card-title">주문번호: ${i.m_num}</h5>
 							        <h6 class="card-subtitle mb-2 text-muted">주문일: ${i.m_bdate}</h6>
 							        <h6 class="card-subtitle mb-2 text-muted">회원아이디: ${i.u_id}</h6>
+							        <h6 class="card-subtitle mb-2 text-muted">회원닉네임: ${i.u_nick}</h6>
 				        		</div>
 				        		<div class="card-body">
 							        <h6 class="card-subtitle mb-2 text-muted">주소: ${i.m_addr}</h6>
@@ -327,6 +329,7 @@ function goToAdminPage() {
 				          			<h5 class="card-title">주문번호: ${i.m_num}</h5>
 							        <h6 class="card-subtitle mb-2 text-muted">주문일: ${i.m_bdate}</h6>
 							        <h6 class="card-subtitle mb-2 text-muted">회원아이디: ${i.u_id}</h6>
+							        <h6 class="card-subtitle mb-2 text-muted">회원닉네임: ${i.u_nick}</h6>
 				        		</div>
 				        		<div class="card-body">
 							        <h6 class="card-subtitle mb-2 text-muted">주소: ${i.m_addr}</h6>
@@ -414,6 +417,7 @@ function goToAdminPage() {
 				          			<h5 class="card-title">주문번호: ${i.m_num}</h5>
 							        <h6 class="card-subtitle mb-2 text-muted">주문일: ${i.m_bdate}</h6>
 							        <h6 class="card-subtitle mb-2 text-muted">회원아이디: ${i.u_id}</h6>
+							        <h6 class="card-subtitle mb-2 text-muted">회원닉네임: ${i.u_nick}</h6>
 				        		</div>
 				        		<div class="card-body">
 							        <h6 class="card-subtitle mb-2 text-muted">주소: ${i.m_addr}</h6>
@@ -500,6 +504,7 @@ function goToAdminPage() {
 				          			<h5 class="card-title">주문번호: ${i.m_num}</h5>
 							        <h6 class="card-subtitle mb-2 text-muted">주문일: ${i.m_bdate}</h6>
 							        <h6 class="card-subtitle mb-2 text-muted">회원아이디: ${i.u_id}</h6>
+							        <h6 class="card-subtitle mb-2 text-muted">회원닉네임: ${i.u_nick}</h6>
 				        		</div>
 				        		<div class="card-body">
 							        <h6 class="card-subtitle mb-2 text-muted">주소: ${i.m_addr}</h6>
@@ -582,6 +587,7 @@ function goToAdminPage() {
 				          			<h5 class="card-title">주문번호: ${i.m_num}</h5>
 							        <h6 class="card-subtitle mb-2 text-muted">주문일: ${i.m_bdate}</h6>
 							        <h6 class="card-subtitle mb-2 text-muted">회원아이디: ${i.u_id}</h6>
+							        <h6 class="card-subtitle mb-2 text-muted">회원닉네임: ${i.u_nick}</h6>
 				        		</div>
 				        		<div class="card-body">
 							        <h6 class="card-subtitle mb-2 text-muted">주소: ${i.m_addr}</h6>

@@ -148,6 +148,7 @@ function iamport(){
                 url: '/product/save_oinfo.do', // 저장하는 컨트롤러의 URL
                 data: {
                     u_id: '${uinfo.u_id}', // 구매한 사용자의 아이디
+                    u_nick: '${uinfo.u_nick}',
                     m_addr: '${uinfo.u_addr1}' + ' ${uinfo.u_addr2}', // 사용자의 주소
                     p_num: '${pinfo.p_num}', // 구매한 상품 번호
                     p_name: '${pinfo.p_name}',
@@ -191,6 +192,7 @@ function doAddBascket() {
 			data: {
 				u_id: '${uinfo.u_id}',
 				p_num: '${pinfo.p_num}',
+				u_nick: '${uinfo.u_nick}',
 				m_qty: $("#quantity").val(),
 				p_name: '${pinfo.p_name}',
 				p_listimg: '${pinfo.p_listimg}',
@@ -515,11 +517,16 @@ footer {
 
 <%@ include file="../header.jsp" %>	
 <div class="container-fluid" id="content" style="min-width: 1600px;">
-	<div class="row" style="padding-top: 30px; padding-bottom: 30px;">
-		<div class="col-md-4 offset-md-4">
+	<div class="row justify-content-center" style="padding-top: 30px; padding-bottom: 30px;">
+		<!-- 검색창 -->
+		<div class="col-md-5">
 		    <form action="/product/productlist.do" id="searchFrm" name="searchFrm">
 		    	<input type="hidden" name="type" value="search">
 		      	<div class="input-group">
+		      		<a href="/product/productlist.do">
+		      			<button type="button" class="btn btn-outline-primary">돌아가기</button>
+		      		</a>
+		      		&nbsp;&nbsp;
 		        	<select class="form-select" name="searchfield" id="searchfield">
 		          		<option value="p_name">상품명</option>
 		          		<option value="p_company">제조사</option>
@@ -552,6 +559,7 @@ footer {
 		        </div>  
 		    </div>
 		</div>
+		<!-- 상품 내용 -->
 		<div class="col-md-8">
 			<div class="row">
 				<div class="d-flex align-items-center justify-content-center">
@@ -598,31 +606,29 @@ footer {
 	  								<br>
 	  								
 	  								<form method="post">
-	  									<c:if test="${ pinfo.p_count != 0 }">
-	  									<input type="hidden" name="p_num" value="${ pinfo.p_num }">
-	  									<label for="p_count">재고:</label>
-	  									<input type="text" name="p_count" id="p_count" value="${ pinfo.p_count }" size="2" readonly>
-	  									<br>
-										<label for="quantity">주문 수량:</label>
-									  	<input type="number" name="quantity" id="quantity" min="1" max="${ pinfo.p_count }" value="1" required onchange="calculateAmount()">
-									  	<br>
-									  	<label for="price">상품 가격:</label>
-									  	<input type="text" name="price" id="price" value="100" readonly>
-									  	<br>
-									  	<label for="amount">결제 금액:</label>
-									  	<input type="text" name="amount" id="amount" value="100" readonly>
-									  	<br>
-									  	</c:if>
-									  	<c:if test="${ pinfo.p_count != 0 }">
-										  	<button name="paymentButton" id="paymentButton" onclick="iamport(); return false;" class="w-100 btn btn-warning btn-lg" type="submit">
-										    	결제하기
-										  	</button>
-										  	<button name="addBascket" id="addBascket" onclick="doAddBascket();" class="w-100 btn btn-primary btn-lg" type="button">
-										    	장바구니 추가
-										  	</button>
-									  	</c:if>
-									  	<c:if test="${ pinfo.p_count == 0 }">
-										  	<h1 class="chkNo">매진된 상품입니다. <br>입고될때까지 기다려주세요.</h1>
+	  									
+									  	<div class="form-group mb-3">
+									    	<label for="p_count">재고</label>
+									    	<input type="text" class="form-control" name="p_count" id="p_count" value="${pinfo.p_count}" readonly>
+									  	</div>
+									  	<div class="form-group mb-3">
+									    	<label for="quantity">주문 수량</label>
+									    	<input type="number" class="form-control" name="quantity" id="quantity" min="1" max="${pinfo.p_count}" value="1" required onchange="calculateAmount()">
+									  	</div>
+									  	<div class="form-group mb-3">
+									    	<label for="price">상품 가격</label>
+									    	<input type="text" class="form-control" name="price" id="price" value="100" readonly>
+									  	</div>
+									  	<div class="form-group mb-3">
+									    	<label for="amount">결제 금액</label>
+									    	<input type="text" class="form-control" name="amount" id="amount" value="100" readonly>
+									  	</div>
+									  	<div class="d-grid gap-2 mb-3">
+									    	<button name="paymentButton" id="paymentButton" onclick="iamport(); return false;" class="btn btn-warning btn-lg" type="submit">바로 결제하기</button>
+									    	<button name="addBascket" id="addBascket" onclick="doAddBascket();" class="btn btn-primary btn-lg" type="button">장바구니 추가</button>
+									  	</div>
+									  	<c:if test="${pinfo.p_count == 0}">
+								    	<h1 class="chkNo">매진된 상품입니다. <br>입고될때까지 기다려주세요.</h1>
 									  	</c:if>
 									</form>
 								</div>
@@ -721,6 +727,7 @@ footer {
 										    			<form action="/product/reviewUpload.do" method="post" enctype="multipart/form-data">
 										    				<input type="hidden" name="u_id" value="${uinfo.u_id }">
 										    				<input type="hidden" name="p_num" value="${pinfo.p_num }">
+										    				<input type="hidden" name="u_nick" value="${uinfo.u_nick }">
 										        			<div class="form-group">
 										            			<label for="FormControlTextarea1">리뷰를 작성해주세요.</label>
 										            			<textarea name="p_content" class="form-control" id="formControlTextarea1" rows="3"></textarea>
@@ -799,7 +806,7 @@ footer {
 														<img src="${ratingImgPath}" alt="별점" style="width: 80px; height: 18px;"/>
 													</div>
 									    			<div class="review-info">
-									      				<div class="review-writer">${i.u_id}</div>
+									      				<div class="review-writer">${i.u_nick}</div>
 									      				<div class="review-date">${i.r_date}</div>
 									    			</div>
 										  		</div>

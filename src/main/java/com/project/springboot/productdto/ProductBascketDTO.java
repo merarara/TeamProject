@@ -6,6 +6,7 @@ import lombok.Data;
 public class ProductBascketDTO {
 	private int b_num;
 	private String u_id;
+	private String u_nick;
 	private int p_num;
 	private int m_qty;
 	private String p_name;

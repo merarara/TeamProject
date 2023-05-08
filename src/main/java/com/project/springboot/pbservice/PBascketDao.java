@@ -26,7 +26,7 @@ public interface PBascketDao {
 	public String checkM_NumDao(String u_id);
 	
 	// 장바구니 결제 상세
-	public int insertBOinfoDao(@Param("m_num") String m_num, @Param("u_id") String u_id, @Param("p_num") String p_num, 
+	public int insertBOinfoDao(@Param("m_num") String m_num, @Param("u_id") String u_id, @Param("u_nick") String u_nick, @Param("p_num") String p_num, 
 			@Param("p_name") String p_name, @Param("p_price") String p_price, @Param("bo_qty") String bo_qty);
 	
 	// 장바구니 결제 후 삭제

@@ -8,8 +8,8 @@
 	<!-- 리뷰 글 쓰기 -->
 	<insert id="insertReviewDao"
 		parameterType="com.project.springboot.productdto.ReviewDTO">
-		insert into p_review (r_num, p_num, u_id, p_content, r_rating)
-		values (r_num_seq.nextval, #{p_num}, #{u_id}, #{p_content}, #{r_rating})
+		insert into p_review (r_num, p_num, u_id, u_nick, p_content, r_rating)
+		values (r_num_seq.nextval, #{p_num}, #{u_id}, #{u_nick}, #{p_content}, #{r_rating})
 	</insert>
 	
 	<!-- 리뷰 이미지 등록 -->
