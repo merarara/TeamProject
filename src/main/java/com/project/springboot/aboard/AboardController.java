@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -169,8 +170,10 @@ public class AboardController {
 	    String u_id = authentication.getName();
 	    UserDTO udto = udao.selectOne(u_id);
 		String a_num = req.getParameter("a_num");
+		
 		// 조회수 증가 처리
-	    asv.updateVisitCount(a_num);
+		 asv.updateVisitCount(a_num);
+	    
 	    aboardDTO dto = asv.selectOneA(a_num);
 	    model.addAttribute("udto", udto);
 	    model.addAttribute("aboardDto", dto);
@@ -395,23 +398,25 @@ public class AboardController {
 	    }
 	}
 	
-	 // 좋아요 기능
+	// 좋아요 기능
 	@PostMapping("/aboard/like.do")
 	public String addLike(HttpServletRequest req, HttpSession session) {
-		int a_num = Integer.parseInt(req.getParameter("a_num"));
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String u_id = authentication.getName(); // 사용자 id
-        
- 		if (u_id == null) {
- 			return "redirect:/auth/login.do";
+	    int a_num = Integer.parseInt(req.getParameter("a_num"));
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String u_id = authentication.getName();
+
+	    if (u_id == null) {
+	        return "redirect:/auth/login.do";
 	    }
-	 	int result = asv.addLike(a_num, u_id);
-        if (result == 1) {
-        	int a_like = asv.getLikeCount(a_num);
-        	return "redirect:/aboard/aboardview.do?a_num=" + a_num;
-        } else {
-        	return "redirect:/aboard/aboardview.do?a_num=" + a_num;
-        }
+
+	    try {
+	        asv.addLike(a_num, u_id);
+	    } catch (DuplicateKeyException e) {
+	        // 이미 좋아요가 추가된 경우, 무시하고 계속 진행합니다.
+	    }
+	    
+	    int a_like = asv.getLikeCount(a_num);
+	    return "redirect:/aboard/aboardview.do?a_num=" + a_num;
 	}
 	 
 	// 싫어요 기능
@@ -431,6 +436,6 @@ public class AboardController {
 	        return "redirect:/aboard/aboardview.do?a_num=" + a_num;
 	    }
 	}
-
+	
 }
 	
