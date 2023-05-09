@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.project.springboot.aboard.aboardDTO;
 import com.project.springboot.ppageinfo.PPageInfo;
 import com.project.springboot.productdto.PCountVO;
 import com.project.springboot.productdto.ProductinfoDTO;
@@ -77,6 +78,20 @@ public class PListDaoService implements IPListDaoService {
 		int result = dao.update_SCountDao(p_num);
 		
 		return result;
+	}
+	
+	@Override
+	public List<ProductlistDTO> homeProduct() {
+		List<ProductlistDTO> plist = dao.homeProductDao();
+		
+		return plist;
+	}
+	
+	@Override
+	public List<aboardDTO> getNotice() {
+		List<aboardDTO> nlist = dao.getNoticeDao();
+		
+		return nlist;
 	}
 	
 	// 페이지 설정 service & dao

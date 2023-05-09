@@ -37,7 +37,7 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity)
 			throws Exception {
 		httpSecurity.authorizeRequests()
-			.antMatchers("/").permitAll()
+			.antMatchers("/", "/home.do").permitAll()
 			.antMatchers("/css/**","/js/**","/productimgs/**","/userimages/**","/revuploads/**","/favicon.ico",
 							"/uploads/**", "/aUpload/**", "/productuploads/**").permitAll()
 

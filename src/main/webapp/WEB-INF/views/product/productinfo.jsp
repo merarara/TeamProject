@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>상품 상세 정보</title>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -40,7 +40,7 @@ $(document).ready(function() {
      	// 해당 요소의 위치로 스크롤 이동
         var offset = $(target).offset().top;
         $('html, body').animate({scrollTop: offset}, 500);
-   });
+   	});
     
    	$("#displayList").hide();
 	$('#searchword').on('keyup', function() {
