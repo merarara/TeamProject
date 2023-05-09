@@ -35,29 +35,30 @@
                     <label for="c_content">내용</label>
                     <textarea class="form-control" id="c_content" name="c_content" rows="10">${cboardDto.c_content}</textarea>
                 </div>
-                <div class="form-group">
+                   <div class="form-group">
                     <label for="user_file">첨부파일</label>
                     <input type="file" class="form-control-file" id="user_file" name="user_file" multiple>
                 </div>
-                <div class="form-group">
-                    <label for="file_list">첨부파일 목록</label>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col">파일명</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach items="${upDto}" var="file">
-                                <tr>
-                                    <td><input type="checkbox" name="file" value="${file.sfile}"></td>
-                                    <td>${file.ofile}</td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
+                <tbody>
+				  <c:forEach items="${upDto}" var="file">
+				    <tr>
+				      <td><input type="checkbox" name="file" value="${file.sfile}"></td>
+				      <td>${file.ofile}</td>
+				      <td>
+				        <div class="row">
+				          <c:forEach items="${fn:split(file.sfile, ',')}" var="f">
+				            <div class="col-md-2">
+				              <a href="../uploads/${f}" class="image-link">
+				                <img src="../uploads/${f}" width="100px" height="100px" class="img-thumbnail">
+				              </a>
+				            </div>
+				          </c:forEach>
+				        </div>
+				      </td>
+				    </tr>
+				  </c:forEach>
+				</tbody>
+				</table>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary mr-2">수정 완료</button>
                     <button type="button" class="btn btn-secondary" onclick="location.href='../cboard/cboardlist.do';">목록 바로가기</button>

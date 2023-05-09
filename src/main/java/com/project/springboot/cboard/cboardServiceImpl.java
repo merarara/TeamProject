@@ -2,9 +2,7 @@ package com.project.springboot.cboard;
 
 
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,10 +108,15 @@ public class cboardServiceImpl implements IboardService {
 		return abs.insertLike(c_num, u_id);
 	}
 
-	@Override
-	public int removeLike(int c_num, String u_id) {
-		return abs.deleteLike(c_num, u_id);
-	}
+    @Override
+    public void addlike(int c_like) {
+        abs.addlike(c_like);
+    }
+    
+    @Override
+    public void minlike(int c_like) {
+        abs.minlike(c_like);
+    }
 	
 	@Override
 	public int getLikeCount(int c_num) {
@@ -166,11 +169,6 @@ public class cboardServiceImpl implements IboardService {
 		return false;
 	}
 
-	@Override
-	public int addLike(int c_num, String u_id) {
-		return 0;
-	}
-
 
 	@Override
 	public int deleteFile(int c_num, String sfile) {
@@ -186,4 +184,20 @@ public class cboardServiceImpl implements IboardService {
 	public int deleteAll(String c_num) {
 		return abs.deleteAll(c_num);
 	}
+	@Override
+	public boolean checkLike(int c_num, String u_id) {
+	    int likeCount = abs.selectLikeCount(c_num, u_id); // c_num, u_id로 likeCount 조회
+	    return likeCount > 0; // likeCount가 0보다 크면 좋아요를 누른 기록이 있는 것이므로 true 반환
+	}
+	
+	@Override
+	public int selectLikeCount(int c_num, String u_id) {
+	    return abs.selectLikeCount(c_num, u_id);
+	}
+
+	@Override
+    public cboardDTO selectOne(int c_num) {
+        return abs.selectOne(c_num);
+    }
+
 }

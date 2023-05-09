@@ -1,5 +1,7 @@
 package com.project.springboot.cboard;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +26,9 @@ public class ReplyController {
 	@Autowired
 	private ReplyService replyService;
 	
+	@Autowired 
+	IboardService asv;
+	
 	@Autowired
 	private cboardDTO cdto;
 	
@@ -37,11 +42,13 @@ public class ReplyController {
 		}
 	//댓글작성 
 	@RequestMapping(value = "/cboard/write.do", method = RequestMethod.POST)
-	public String postWrite(ReplyVO vo, Model model) throws Exception {
-	    
+	public String postWrite(HttpServletRequest req, ReplyVO vo, Model model) throws Exception {
+		int c_num = Integer.parseInt(req.getParameter("c_num"));
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String u_id = authentication.getName();
 	    UserDTO udto = udao.selectOne(u_id);
+	    cboardDTO dto = asv.selectOne(c_num);
+	    model.addAttribute("cboardDto", dto);
 	    model.addAttribute("u_nick", udto.getU_nick());
 	    vo.setU_id(udto.getU_nick());
 	    

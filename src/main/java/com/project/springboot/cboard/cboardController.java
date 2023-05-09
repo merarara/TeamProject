@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -220,31 +221,56 @@ public class cboardController {
 
 	//수정 페이지 
 	@RequestMapping(value="/cboard/cboardedit.do", method=RequestMethod.GET)
-	public String update(HttpServletRequest req, Model model) { 
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	public String update(HttpServletRequest req, Model model, cboardDTO cboardDto) { 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String u_id = authentication.getName();
 	    UserDTO udto = udao.selectOne(u_id);
-	    String c_num = req.getParameter("c_num");
+		String c_num = req.getParameter("c_num");
 	    cboardDTO dto = asv.selectOne(c_num);
 	    model.addAttribute("udto", udto);
+	    // 게시물 번호를 통해 게시물 정보를 조회하여 fboardDto에 담아줌
 	    model.addAttribute("cboardDto", dto);
 	    
-	    return "cboard/cboardedit"; 
+	    List<upDTO> upDto = asv.uploadview(Integer.parseInt(c_num));
+	    
+	    for (upDTO e: upDto) {
+	    	System.out.println(e.getSfile());
+	    }
+	    
+	    model.addAttribute("upDto", upDto);
+	    List<String> up = new ArrayList<String>();
+	    
+	    try {
+			String path = ResourceUtils
+				.getFile("classpath:static/uploads/").toPath().toString();
+
+			File file = new File(path);
+			File[] fileArray = file.listFiles();
+			for(File f : fileArray){
+				//저장된 파일명, 파일 용량을 Map에 저장한다. 
+				up.add(f.getName());
+			}
+			model.addAttribute("file", up);		
+		}
+		catch (Exception e) {}
+	    
+		return "cboard/cboardedit"; 
 	} 
+		
+		
 	
 	// 게시글 수정 메서드
 	@RequestMapping(value="/cboard/cboardedit.do", method=RequestMethod.POST)
-	public String update(@RequestParam("c_num") int c_num,cboardDTO cboardDto, MultipartFile[] user_file, 
+	public String update(@RequestParam("c_num") int c_num,cboardDTO cDto, MultipartFile[] user_file, 
 	        Model model, 
 	        MultipartHttpServletRequest req, HttpServletRequest request) {
 	    
-	    int result = asv.update(cboardDto); 
+	    int result = asv.update(cDto); 
 		
 		if (user_file != null && !user_file[0].isEmpty()) {
 			if (multipartResolver.isMultipart(req)) {
 			    MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
 			    //파일외 폼값을 받는다. MultipartHttpServletRequest객체를 사용.	
-			    c_num = asv.uploadnum(cboardDto);
 			    String title = req.getParameter("title");
 			    System.out.println("제목:"+ title);
 			    //파일을 처리한다. 
@@ -274,13 +300,13 @@ public class cboardController {
 			        }
 			        
 			        upDTO upDto = new upDTO();
-			        upDto.setC_num(c_num);
+			        upDto.setC_num(cDto.getC_num());
 			        upDto.setOfile(originalName);
 			        upDto.setSfile(savedName);
 			        
 			        asv.upload(upDto);
 			    }
-			    System.out.println("upload폴더:"+ path);
+			    System.out.println("uploads폴더:"+ path);
 			} else {
 			    // Multipart 요청이 아닌 경우 처리
 			}
@@ -311,14 +337,14 @@ public class cboardController {
 		        	
 		        }
 		        // 파일 정보를 DB에서 삭제합니다.
-		        asv.deleteFile(c_num, f);
+		        asv.deleteFile(cDto.getC_num(), f);
 		        }
 		    }
 		}
 		
 		if(result==1) System.out.println("수정되었습니다."); 
 		
-		return "redirect:/cboard/cboardview.do?c_num=" + c_num;
+		return "redirect:/cboard/cboardview.do?c_num=" + cDto.getC_num();
 	} 
 	
 
@@ -394,16 +420,15 @@ public class cboardController {
 
 
 	
-	//   게시글 삭제 기능
+	// 게시글 삭제 기능
 	@RequestMapping(value="/cboard/cboarddelete.do", method=RequestMethod.GET)
 	public String delete(@RequestParam("c_num") String c_num) {
 	    int result = asv.delete(c_num);
 	    if (result == 1) {
-	      System.out.println("삭제되었습니다.");
+	        System.out.println("삭제되었습니다.");
 	    }
 	    return "redirect:/cboard/cboardlist.do";
 	}
-
 	
 	
 	// 첨부파일 다운로드
@@ -463,64 +488,71 @@ public class cboardController {
 //	    return "redirect:/cboard/cboardview.do?c_num=" + c_num;
 //	}
 	 
-	// 싫어요 기능
-	@PostMapping("/cboard/unlike.do")
-	public String removeLike(HttpServletRequest req, HttpSession session) {
+	// 좋아요 기능
+	@PostMapping("/cboard/like.do")
+	public String addLike(HttpServletRequest req, HttpSession session, Model model) {
 	    int c_num = Integer.parseInt(req.getParameter("c_num"));
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String u_id = authentication.getName(); // 사용자 id
+	    String u_id = authentication.getName();
 
 	    if (u_id == null) {
 	        return "redirect:/auth/login.do";
 	    }
 
-	    boolean isLiked = asv.checkLiked(c_num, u_id);
-
-	    if (isLiked) { // 좋아요를 누른 경우에만 삭제
-	        asv.removeLike(c_num, u_id);
+	    try {
+	        asv.insertLike(c_num, u_id);
+	    } catch (DuplicateKeyException e) {
+	        // 이미 좋아요가 추가된 경우, 무시하고 계속 진행합니다.
 	    }
 
+	    // 좋아요 개수 추가
+	    asv.addlike(c_num);
+
+	    // 수정된 좋아요 개수를 가져와서 모델에 추가합니다.
 	    int c_like = asv.getLikeCount(c_num);
+	    cboardDTO dto = asv.selectOne(c_num);
+	    dto.setC_like(c_like);
+	    model.addAttribute("cboardDto", dto);
+
 	    return "redirect:/cboard/cboardview.do?c_num=" + c_num;
 	}
-	    
-	// 좋아요 기능
-	@PostMapping("/cboard/like.do")
-	@ResponseBody
-	public String like(HttpServletRequest req) {
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String u_id = authentication.getName(); // 사용자 id
 
-	    String c_numParam = req.getParameter("c_num");
-	    int c_num = 0;
-	    if (c_numParam != null && !c_numParam.isEmpty()) {
-	        c_num = Integer.parseInt(c_numParam);
-	    }
+		 
+		// 싫어요 기능
+		@PostMapping("/cboard/unlike.do")
+		public String removeLike(HttpServletRequest req, HttpSession session, Model model) {
+			int c_num = Integer.parseInt(req.getParameter("c_num"));
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String u_id = authentication.getName(); // 사용자 id
+		    if (u_id == null) {
+		    	// 로그인하지 않은 경우 처리
+		         return "redirect:/user/login.do";
+		    } else {
+		        // 좋아요 정보를 삭제한다.
+		    	asv.minlike(c_num);
+		        // 게시글의 좋아요 수를 갱신한다.
+		        int c_like = asv.getLikeCount(c_num);
+			    cboardDTO dto = asv.selectOne(c_num);
+			    dto.setC_like(c_like);
+			    model.addAttribute("cboardDto", dto);
+			    
+		        return "redirect:/cboard/cboardview.do?c_num=" + c_num;
+		    }
+		}
+		
+		@PostMapping("/cboard/checkLike.do")
+		@ResponseBody
+		public boolean checkLike(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		    int c_num = Integer.parseInt(request.getParameter("c_num"));
+		    String u_id = (String) request.getSession().getAttribute("userId");
 
-	    if (u_id == null) {
-	        return "login";
-	    }
+		    boolean result = asv.checkLike(c_num, u_id);
 
-	    boolean isLiked = cboardService.checkLiked(c_num, u_id);
-
-	    if (!isLiked) { // 좋아요를 누르지 않은 경우에만 등록
-	        int result = cboardService.insertLike(c_num, u_id);
-	        if (result == 1) {
-	            return "liked";
-	        } else {
-	            return "error";
-	        }
-	    } else { // 좋아요를 이미 누른 경우에는 좋아요 취소
-	        int result = cboardService.removeLike(c_num, u_id);
-	        if (result == 1) {
-	            return "unliked";
-	        } else {
-	            return "error";
-	        }
-	    }
-	}
+		    return result;
+		}
 
 
+		
 
 }
 	
