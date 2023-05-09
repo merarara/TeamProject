@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -98,17 +99,18 @@ public class ACommentController {
 		if (u_id == null) { 
 			return "redirect:/auth/login.do"; 
 		}
-		  
-		int result = acs.addAcLike(ac_num, u_id); 
-		if (result == 1) { 
-			int ac_like = acs.getAcLikeCount(ac_num); 
-			return "redirect:/aboard/aboardview.do?a_num=" + a_num; 
-		} else { 
-			return "redirect:/aboard/aboardview.do?a_num=" + a_num; 
-		} 
+		
+	    try {
+	        acs.addAcLike(ac_num, u_id);
+	    } catch (DuplicateKeyException e) {
+	        // 이미 좋아요가 추가된 경우, 무시하고 계속 진행합니다.
+	    }
+		int ac_like = acs.getAcLikeCount(ac_num);
+		return "redirect:/aboard/aboardview.do?a_num=" + a_num;
+
 	}
     
-	// 싫어요 기능
+	// 좋아요 취소 기능
 	@PostMapping("/aboard/acomment/acunlike.do")
 	public String removeAcLike(HttpServletRequest req, HttpSession session, 
 			  @RequestParam("ac_num") int ac_num, @RequestParam("a_num") int a_num) { 

@@ -30,4 +30,14 @@ public class aboardDTO {
     public void setA_like(int a_num, aboardService asv) {
         this.a_like = asv.getLikeCount(a_num);
     }
+    
+    private boolean isLiked;
+
+    public boolean getIsLiked() {
+        return isLiked;
+    }
+
+    public void setIsLiked(boolean isLiked) {
+        this.isLiked = isLiked;
+    }
 }
