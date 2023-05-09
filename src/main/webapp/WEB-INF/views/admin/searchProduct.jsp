@@ -131,6 +131,10 @@ function doAddCnt(p_num) {
 		}
 	}
 }
+
+function goToAdminPage() {
+    window.location.href = '/admin/adminPage.do';
+}
 </script>
 </head>
 <body>
@@ -139,9 +143,7 @@ function doAddCnt(p_num) {
 	<div class="col-md-4 offset-md-4" style="margin-top: 10px; margin-bottom: 10px;">
 		<form action="/admin/searchProduct.do" id="searchFrm" name="searchFrm">
 	      	<div class="input-group">
-	      		<a href="/admin/productManagement.do">
-	      			<button class="btn btn-outline-primary float-left">돌아가기</button>
-	      		</a>
+	      		<a href="#" onclick="goToAdminPage();" class="btn btn-outline-primary float-left">돌아가기</a>
 	      		&nbsp;&nbsp;
 	        	<select class="form-select" name="searchfield" id="searchfield">
 	          		<option value="p_name">상품명</option>

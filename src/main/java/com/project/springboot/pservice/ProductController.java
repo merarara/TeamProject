@@ -103,11 +103,20 @@ public class ProductController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String u_id = authentication.getName(); // 사용자 id
 	    
+	    // 로그인한 사용자 구매 체크
 	    UserDTO udto = udao.selectOne(u_id);
 	    String bchk = pldao.buyCheck(p_num, u_id);
 	    
+	    // 리뷰 글
 	    List<ReviewDTO> rdto = prdao.GetReview(p_num);
-	    List<ReviewImageDTO> ridto = prdao.getRevImgDao(p_num);
+	    
+	    List<ReviewImageDTO> ridto = new ArrayList<ReviewImageDTO>();
+	    
+	    if (rdto.size() != 0) {
+	    	// 리뷰 이미지
+		    ridto = prdao.getRevImgDao(p_num);
+	    }
+	   
 	    
 	    String rchk = "no";
 	    
@@ -117,6 +126,7 @@ public class ProductController {
 	    	}
 	    }
 	    
+	    // 리뷰 작성자 체크 정보
 	    model.addAttribute("rchk", rchk);
 	    
 	    List<String> filepath = new ArrayList<String>();
@@ -142,8 +152,13 @@ public class ProductController {
     	
     	// 리뷰 이미지
     	model.addAttribute("ridto", ridto);
+    	
     	// 리뷰 내용
-    	model.addAttribute("rdto", rdto);
+    	if (rdto.size() != 0) {
+        	model.addAttribute("rdto", rdto);
+    	} else {
+    		model.addAttribute("reviewNo", "Yes");
+    	}
     	// 유저 정보
 	    model.addAttribute("uinfo", udto);
 	    // 상품 정보

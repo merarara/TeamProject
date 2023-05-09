@@ -56,8 +56,8 @@ public class PBascketDaoService implements IPBascketDaoService {
 	
 	// 장바구니 결제 상세 DB처리
 	@Override
-	public int insertBOinfo(String m_num, String u_id, String p_num, String p_name, String p_price, String bo_qty) {
-		int result = dao.insertBOinfoDao(m_num, u_id, p_num, p_name, p_price, bo_qty);
+	public int insertBOinfo(String m_num, String u_id, String u_nick, String p_num, String p_name, String p_price, String bo_qty) {
+		int result = dao.insertBOinfoDao(m_num, u_id, u_nick, p_num, p_name, p_price, bo_qty);
 		return result;
 	}
 	

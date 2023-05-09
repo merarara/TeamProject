@@ -107,6 +107,7 @@ function doPayment() {
                 data: {
                     u_id: '${uinfo.u_id}',
                     m_addr: '${uinfo.u_addr1}' + ' ${uinfo.u_addr2}',
+                    u_nick: '${uinfo.u_nick}',
                     m_price: total_price,
                     m_qty: total_qty
                 },
@@ -117,6 +118,7 @@ function doPayment() {
                         	url: '/product/save_bascket_oinfo.do',
                         	data: {
                         		u_id: '${uinfo.u_id}',
+                        		u_nick: '${uinfo.u_nick}',
                         		p_num: p_num,
                         		p_name: p_name,
                         		p_price: p_price,
@@ -130,7 +132,7 @@ function doPayment() {
                 	} else {
                 		alert("결제중 에러가 발생했습니다.");
                 	}
-                }, 
+                }
             });
         } else {
             var msg = '결제에 실패하였습니다.';
@@ -161,6 +163,13 @@ function doPayment() {
   	<h1>장바구니</h1>
   	<hr style="border:1px solid #000">
   	<div class="list-group">
+  		<c:if test="${empty blist}">
+  		<div class="col-md-12 d-flex align-items-center justify-content-center" style="height: 80vh; margin-top: 20px;">
+			<h5 style="color: gray; font-size: 20px; font-weight: bold;">장바구니에 담긴 상품이 없습니다.</h5><br>
+			<h5 style="color: gray; font-size: 20px; font-weight: bold;"><a href="/product/productlist.do">상품목록 이동</a></h5>
+		</div>
+  		</c:if>
+  		<c:if test="${not empty blist }">
     	<c:forEach items="${blist}" var="i">
       		<div class="list-group-item list-group-item-action flex-column align-items-start">
         		<div class="d-flex w-100 justify-content-between">
@@ -179,9 +188,10 @@ function doPayment() {
         		</form>
       		</div>
     	</c:forEach>
+    	<div class="mt-3">총 결제 금액: <span id="total_price"></span>원</div>
+  		<div><button type="button" class="btn btn-primary" onclick="doPayment();">구매</button></div>
+    	</c:if>
   	</div>
-  	<div class="mt-3">총 결제 금액: <span id="total_price"></span>원</div>
-  	<div><button type="button" onclick="doPayment();">구매</button></div>
 </div>
 
 

@@ -39,7 +39,7 @@ public class SecurityConfig {
 		httpSecurity.authorizeRequests()
 			.antMatchers("/").permitAll()
 			.antMatchers("/css/**","/js/**","/productimgs/**","/userimages/**","/revuploads/**","/favicon.ico",
-							"/uploads/**", "/aUpload/**").permitAll()
+							"/uploads/**", "/aUpload/**", "/productuploads/**").permitAll()
 
 			.antMatchers("/guest/**").permitAll()
 			.antMatchers("/user/**").permitAll()

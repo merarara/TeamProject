@@ -55,8 +55,15 @@
 			      프로필
 			    </a>
 			    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-				  <h6 class="dropdown-header">${u_nick}</h6>
-			      <a class="dropdown-item" href="${pageContext.request.contextPath}/user/myinfo.do">내 정보</a>
+				<c:choose>
+				    <c:when test="${sessionScope.userType == '일반'}">
+				        <h6 class="dropdown-header">${sessionScope.u_nick}님</h6>
+				    </c:when>
+				    <c:otherwise>
+				        <h6 class="dropdown-header">${sessionScope.user.name}님</h6>
+				    </c:otherwise>
+				</c:choose>
+				  <a class="dropdown-item" href="${pageContext.request.contextPath}/user/myinfo.do">내 정보</a>
 			      <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">로그아웃</a>
 			    </div>
 			  </li>
@@ -68,7 +75,14 @@
 			      프로필
 			    </a>
 			    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-			      <h6 class="dropdown-header">${user_Nick} <span class="badge badge-danger">B</span></h6>
+				<c:choose>
+				    <c:when test="${sessionScope.userType == '일반'}">
+				        <h6 class="dropdown-header">${sessionScope.u_nick}님</h6>
+				    </c:when>
+				    <c:otherwise>
+				        <h6 class="dropdown-header">${sessionScope.user.name}님</h6>
+				    </c:otherwise>
+				</c:choose>
 			      <a class="dropdown-item" href="${pageContext.request.contextPath}/user/myinfo.do">내 정보</a>
 			      <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">로그아웃</a>
 			    </div>
@@ -82,7 +96,8 @@
 			      <i class="fas fa-crown"></i> 관리자
 			    </a>
 			    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-			      <h6 class="dropdown-header">${user_Nick}</h6>
+			      <h6 class="dropdown-header">${sessionScope.u_nick}</h6>
+			      <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">로그아웃</a>
 			    </div>
 			  </li>
 			</s:authorize>

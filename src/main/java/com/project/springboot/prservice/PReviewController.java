@@ -25,13 +25,11 @@ public class PReviewController {
 	@Autowired
 	IPReviewDaoService prdao;
 	
-	// 상품 리뷰 글
+	// 상품 리뷰 글 업로드
 	@RequestMapping(value="/product/reviewUpload.do", method=RequestMethod.POST)
 	public String reviewUpload(MultipartFile[] review_file, ReviewDTO rdto,
 			MultipartHttpServletRequest req) {
 		String path = "";
-		
-		System.out.println(review_file);
 		
 		int ireview = prdao.insertReview(rdto);
 		

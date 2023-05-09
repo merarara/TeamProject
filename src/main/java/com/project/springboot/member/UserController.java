@@ -60,15 +60,12 @@ public class UserController {
 	// 홈으로 이동하는 맵핑
 	@RequestMapping("/home.do")
 	public String home(Model model, HttpSession session) {
-		String u_nick = (String) session.getAttribute("u_nick");
-		model.addAttribute("u_nick", u_nick);
 		return "home";
 	}
 	
 	// 회원가입 맵핑
 	@RequestMapping("/user/join.do")
 	public String join() {
-		System.out.println(5);
 		return "/user/join";
 	}
 	
@@ -130,27 +127,11 @@ public class UserController {
     }
 
     // 로그인
-    @RequestMapping("/myLogin.do")
-    public String login1(Principal principal, Model model, HttpServletRequest request,
-                         @RequestParam(value = "error", required = false) String error) {
-        try {
-            if (error != null) { // 로그인 실패 시
-                model.addAttribute("error", "아이디 또는 비밀번호가 일치하지 않습니다."); // 실패 메시지를 모델에 추가
-            }
-            String user_id = principal.getName();
-
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String id = authentication.getName(); // 사용자 id
-            
-            request.getSession().setAttribute("userId", id); // 세션에 사용자 id 저장
-            
-            return "home"; // 로그인 성공 시 home.jsp로 이동
-        } catch (Exception e) {
-            System.out.println("로그인 전입니다.");
-        }
-        return "auth/login";
-    }
-    
+	  @RequestMapping("/myLogin.do")
+	  public String login1() {
+	
+	  	return "auth/login";
+	  }   
     // 로그인 ajax 맵핑
     @PostMapping("/user/checkUser.do")
     @ResponseBody
@@ -166,6 +147,7 @@ public class UserController {
             boolean encodedPw = PasswordEncoderFactories.createDelegatingPasswordEncoder().matches(u_pw, user.getU_pw());
             if (encodedPw) { // 비밀번호가 일치하는 경우
                 response.put("status", "success");
+                session.setAttribute("userType", user.getU_type());
             } else { // 비밀번호가 일치하지 않는 경우
                 response.put("status", "fail");
             }
@@ -183,6 +165,73 @@ public class UserController {
         return "redirect:/user/login.do?logout=true"; // 로그인 페이지로 이동하며 로그아웃 메시지 전달
     }
     
+ 	
+    // 비밀번호 변경 폼
+    @GetMapping("/user/updatePw.do")
+    public String updatePw(Model model) {
+    	// 로그인된 사용자의 인증 정보를 가져옵니다.
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	String userId = auth.getName();
+    	System.out.println(userId);
+    	// 회원 정보를 조회합니다.
+    	UserDTO dto = userService.selectOne(userId);
+    	model.addAttribute("uinfo", dto);
+    	
+    	return "/user/updatePw";
+    }
+    
+ 	// 기존 비밀번호 확인
+ 	@ResponseBody
+ 	@PostMapping("/user/updatePw.do")
+ 	public Map<String, String> updatePw(@RequestParam("u_pw") String u_pw,HttpSession session) {
+
+ 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	String userId = auth.getName();
+ 	   UserDTO user = userService.selectOne(userId);
+       Map<String, String> response = new HashMap<>();
+
+           boolean encodedPw = PasswordEncoderFactories.createDelegatingPasswordEncoder().matches(u_pw, user.getU_pw());
+           if (encodedPw) { // 비밀번호가 일치하는 경우
+               response.put("status", "success");
+           } else { // 비밀번호가 일치하지 않는 경우
+               response.put("status", "fail");
+           }
+       
+       return response;
+ 	}
+ 	// 새 비밀번호 등록
+ 	@ResponseBody
+ 	@PostMapping("/user/saveNewPw.do")
+ 	public Map<String, String> saveNewPw(@RequestParam("u_pw") String u_pw) {
+ 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	String userId = auth.getName();
+    	
+ 		if (userId == null) {
+ 			// 로그인하지 않은 사용자이므로 실패 응답을 반환합니다.
+ 			Map<String, String> response = new HashMap<>();
+ 			response.put("status", "fail");
+ 			return response;
+ 		}
+ 		
+ 		// 새 비밀번호를 암호화합니다.
+ 		String encodedNewPwd = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(u_pw);
+ 		
+ 		// 새 비밀번호를 db에 저장합니다.
+ 		boolean isUpdated = userService.updatePwd(userId, encodedNewPwd);
+ 		Map<String, String> response = new HashMap<>();
+ 		
+ 		System.out.println(isUpdated);
+ 		
+ 		if (isUpdated) { // 비밀번호 변경에 성공한 경우
+ 			response.put("status", "success");
+ 		} else { // 비밀번호 변경에 실패한 경우
+ 			response.put("status", "fail");
+ 		}
+ 		
+ 		return response;
+ 	}
+
+    
     // 회원 정보 수정 폼
  	@GetMapping("/user/edit.do")
  	public String editForm(Model model) {
@@ -196,24 +245,32 @@ public class UserController {
  		
  		return "/user/edit";
  	}
+
+
  	
  	// 회원 정보 수정 처리
-    @ResponseBody
+ 	@ResponseBody
  	@PostMapping("/user/edit.do")
- 	public  Map<String, String> edit(@ModelAttribute UserDTO userDTO, HttpServletRequest req) {
-    	Map<String, String> response = new HashMap<>();
- 		String email1 = req.getParameter("email1");
-        String email2 = req.getParameter("email2");
-        String u_email = email1 + "@" + email2;
-        userDTO.setU_email(u_email);
- 		String passwd = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(userDTO.getU_pw());
-    	userDTO.setU_pw(passwd);
- 		userMapper.updateUser(userDTO);
- 		
- 		response.put("status", "success");
- 		
- 		return response;
- 	} 
+ 	public Map<String, String> edit(@ModelAttribute UserDTO userDTO, HttpServletRequest req) {
+ 	    Map<String, String> response = new HashMap<>();
+ 	    String email1 = req.getParameter("email1");
+ 	    String email2 = req.getParameter("email2");
+ 	    String u_email = null;
+
+ 	    if (email1 != null && !email1.trim().isEmpty() && email2 != null && !email2.trim().isEmpty()) {
+ 	        u_email = email1 + "@" + email2;
+ 	    } else {
+ 	        u_email = userDTO.getU_email();
+ 	    }
+ 	    
+ 	    userDTO.setU_email(u_email);
+ 	    userMapper.updateUser(userDTO);
+
+ 	    response.put("status", "success");
+
+ 	    return response;
+ 	}
+
     
  	// 회원탈퇴 페이지로 이동하는 매핑
     @RequestMapping("/user/delete.do")
@@ -348,7 +405,7 @@ public class UserController {
     	System.out.println(u_authority);
         userService.updateAuthority(u_id, u_authority);
         // 권한 수정하고 관리 페이지로 넘어가서 확인하기.
-        return "redirect:/admin/userManagement.do";
+        return "redirect:/admin/allUser.do";
     }
     
     // sns 

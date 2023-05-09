@@ -20,4 +20,6 @@ public interface UserMapper {
     List<UserDTO> selectBlacklist(@Param("offset") int offset, @Param("limit") int limit, @Param("searchId") String searchId);
     List<UserDTO> selectUserlist(@Param("offset") int offset, @Param("limit") int limit, @Param("searchId") String searchId);
     void updateAuthority(String u_id, String u_authority);
+    int updatePwd(@Param("u_id") String u_id, @Param("newPwd") String newPwd);
+
 }

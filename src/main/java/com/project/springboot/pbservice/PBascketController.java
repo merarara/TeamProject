@@ -35,7 +35,7 @@ public class PBascketController {
 	
 	// 단품 결제 DB처리
 	@RequestMapping(value = "/product/save_oinfo.do", method = RequestMethod.POST)
-	public String save_order_info(OrderinfoDTO dto, HttpServletRequest req) {
+	public Map<String, String> save_order_info(OrderinfoDTO dto, HttpServletRequest req) {
 		String p_num = req.getParameter("p_num");
 		String p_name = req.getParameter("p_name");
 		String p_price = req.getParameter("p_price");
@@ -43,12 +43,20 @@ public class PBascketController {
 		
 		int result = pbdao.insertOrder(dto);
 		
+		Map<String, String> response = new HashMap<String, String>();
+		
 		String m_num = pbdao.checkM_Num(dto.getU_id());
-		pbdao.insertBOinfo(m_num, dto.getU_id(), p_num, p_name, p_price, m_qty);
+		pbdao.insertBOinfo(m_num, dto.getU_id(), dto.getU_nick(), p_num, p_name, p_price, m_qty);
 		
 		int result2 = pldao.update_SCount(Integer.parseInt(p_num));
 		
-		return "redirect:product/productinfo.do";
+		if (result + result2 > 1) {
+			response.put("status", "success");
+		} else {
+			response.put("status", "fail");
+		}
+		
+		return response;
 	}
 	
 	// 장바구니 결제 DB처리
@@ -76,6 +84,7 @@ public class PBascketController {
 		String[] p_name = req.getParameterValues("p_name[]");
 		String[] p_price = req.getParameterValues("p_price[]");
 		String[] bo_qty = req.getParameterValues("bo_qty[]");
+		String u_nick = req.getParameter("u_nick");
 		
 		String m_num = pbdao.checkM_Num(u_id);
 		
@@ -83,7 +92,7 @@ public class PBascketController {
 		int result2;
 		
 		for (int i = 0; i < p_num.length; i++) {
-			result = result + pbdao.insertBOinfo(m_num, u_id, p_num[i], p_name[i], p_price[i], bo_qty[i]);
+			result = result + pbdao.insertBOinfo(m_num, u_id, u_nick, p_num[i], p_name[i], p_price[i], bo_qty[i]);
 			result2 = pldao.update_SCount(Integer.parseInt(p_num[i]));
 		}
 		

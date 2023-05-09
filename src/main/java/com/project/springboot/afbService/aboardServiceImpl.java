@@ -5,6 +5,7 @@ package com.project.springboot.afbService;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -152,5 +153,17 @@ public class aboardServiceImpl implements IAboardService {
 	@Override
 	public int deleteAcAll(String a_num) {
 		return abs.deleteAcAll(a_num);
+	}
+	
+	
+	@Override
+	public boolean checkLike(int a_num, String u_id) {
+	    int likeCount = abs.selectLikeCount(a_num, u_id); // a_num, u_id로 likeCount 조회
+	    return likeCount > 0; // likeCount가 0보다 크면 좋아요를 누른 기록이 있는 것이므로 true 반환
+	}
+	
+	@Override
+	public int selectLikeCount(int a_num, String u_id) {
+	    return abs.selectLikeCount(a_num, u_id);
 	}
 }

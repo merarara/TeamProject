@@ -38,5 +38,9 @@ public class UserDTO {
 	
 	}
 	
+	public String getU_nick() {
+		return u_nick;
+	}
+	
 	
 }

@@ -177,13 +177,20 @@ function validateForm() {
     var u_zip = document.getElementById("adress_num").value;
     var u_addr1 = document.getElementById("adress01").value;
 
-    if (!inputId || !inputPw || !inputName || !inputNick || !inputPhone1 || !inputPhone2 || !inputPhone3 || !email1 || !email2 || !u_zip || !u_addr1) {
-      alert("모든 항목을 입력해주세요.");
+    if (!inputId || inputId.length < 4 || !inputPw || inputPw.length < 12 || !inputName || !inputNick || !inputPhone1 || !inputPhone2 || !inputPhone3 || !email1 || !email2 || !u_zip || !u_addr1) {
+      alert("아이디는 4글자 이상, 비밀번호는 12자 이상으로 입력해주세요. 모든 항목은 필수 입력사항입니다.");
+      return false;
+    }
+    
+    var response = grecaptcha.getResponse();
+    if (response.length === 0) {
+      alert("리캡차를 확인해주세요.");
       return false;
     }
     
     return true;
-  } 
+  }
+ 
   
 </script>
 </head>
@@ -198,7 +205,7 @@ function validateForm() {
 				  <div class="form_group">
 				    <label for="inputId">아이디</label>
 					    <div class="input_group">
-					      <input type="text" class="" id="inputId" name="u_id" placeholder="아이디를 입력해주세요.">
+					      <input type="text" class="" id="inputId" name="u_id" placeholder="아이디를 입력해주세요." pattern="[A-Za-z0-9]{4,}">
 					      <button type="button" id="checkIdBtn" onclick="checkId()">중복확인</button>
 					    </div>
 				    <div id="idCheckMsg"></div>
@@ -206,7 +213,7 @@ function validateForm() {
                    <div class="form_group">
                                <label for="inputPw">비밀번호</label>
                                <div class="input_group">
-                                   <input type="password" class="" id="inputPw" name="u_pw" placeholder="비밀번호를 입력해주세요.">
+                                   <input type="password" class="" id="inputPw" name="u_pw" placeholder="비밀번호를 입력해주세요." pattern=".{12,}">
                                </div>
                    </div>
                    <div class="form_group">
@@ -251,9 +258,9 @@ function validateForm() {
                                    </select>
                                    <!-- 이메일 인증 버튼 -->
                                </div>
-                               <button type="button" class="btn-certi" onclick="checkMail()">인증하기</button> 
+                              <!--  <button type="button" class="btn-certi" onclick="checkMail()">인증하기</button>  -->
                    </div>
-							<input type="text" placeholder="인증번호 입력" id="email_auth_key">
+							<!-- <input type="text" placeholder="인증번호 입력" id="email_auth_key"> -->
                    <div class="address_wrap form_group">
                        <div class="address_input_wrap ">
                            <label for="adress_num">우편번호</label>
@@ -280,7 +287,7 @@ function validateForm() {
                        </div>
                    </div>
                    <div class="btn_wrap">
-                       <button type="button" id ="signupBtn" class="btn-submit " onclick="signUp()">가입 완료</button>
+                       <button type="button" id ="signupBtn" class="btn-submit" onclick="signUp()">가입 완료</button>
                    </div>
                </form>
 					<div id="google_recaptha">

@@ -16,7 +16,17 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- 주소 검색 API -->
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<style>
+#mail {
+  display: none;
+  /* 다른 스타일 속성들 */
+}
+</style>
+
 <script>
+function showForm() {
+	  document.querySelector('#mail').style.display = 'block';
+	}
 //닉네임 중복확인
 var nickChecked = false;
 function checkNick() {
@@ -98,40 +108,23 @@ function updateUp() {
 function validateForm() {
 	console.log("validateForm 동작")
     var inputId = document.getElementById("inputId").value;
-    var inputPw = document.getElementById("inputPw").value;
     var inputName = document.getElementById("inputName").value;
     var inputNick = document.getElementById("inputNick").value;
     var inputPhone1 = document.getElementById("inputPhone1").value;
     var inputPhone2 = document.getElementById("inputPhone2").value;
     var inputPhone3 = document.getElementById("inputPhone3").value;
-    var email1 = document.getElementById("email1").value;
-    var email2 = document.getElementById("email2").value;
+/*     var email1 = document.getElementById("email1").value;
+    var email2 = document.getElementById("email2").value; */
     var u_zip = document.getElementById("adress_num").value;
     var u_addr1 = document.getElementById("adress01").value;
 
-    if (!inputId || !inputPw || !inputName || !inputNick || !inputPhone1 || !inputPhone2 || !inputPhone3 || !email1 || !email2 || !u_zip || !u_addr1) {
+    if (!inputId || !inputName || !inputNick || !inputPhone1 || !inputPhone2 || !inputPhone3 || !email1 || !email2 || !u_zip || !u_addr1) {
       alert("모든 항목을 입력해주세요.");
       return false;
     }
     
     return true;
   }
-  
-const changePwCheckbox = document.getElementById('changePw');
-const newPwGroup = document.getElementById('newPwGroup');
-
-changePwCheckbox.addEventListener('change', function() {
-    if (this.checked) {
-        const newPwInput = document.createElement('input');
-        newPwInput.type = 'password';
-        newPwInput.name = 'new_pw';
-        newPwInput.placeholder = '새 비밀번호 입력';
-        newPwGroup.appendChild(newPwInput);
-    } else {
-        newPwGroup.innerHTML = '';
-    }
-});
-
 </script>
 </head>
 <body>
@@ -149,20 +142,6 @@ changePwCheckbox.addEventListener('change', function() {
 						      <input type="text" class="" id="inputId" name="u_id" value=${ uinfo.u_id } readonly>
 						    </div>
 					  </div>
-						<div class="form_group">
-						    <label for="inputPw">비밀번호</label>
-						    <div class="input_group">
-						        <input type="password" class="" id="inputPw" name="u_pw" value=${uinfo.u_pw}>
-						    </div>
-						</div>
-						<div class="form_group">
-						    <label for="changePw">비밀번호 변경하기</label>
-						    <div class="input_group">
-						        <input type="checkbox" class="" id="changePw" name="change_pw">
-						    </div>
-						</div>
-						<div id="newPwGroup"></div>
-
                         <div class="form_group">
                                     <label for="inputName">이름</label>
                                     <div class="input_group">
@@ -192,6 +171,13 @@ changePwCheckbox.addEventListener('change', function() {
                                     </div>
                         </div>
                         <div class="form_group">
+                                    <label for="email1">이메일</label>
+                                    <div class="input_group">
+                                        <input type="text" class="" id="email" name="u_email" value=${ uinfo.u_email }>
+                        <button type="button" class="btn-certi" onclick="showForm()">이메일 변경</button>
+                                    </div>
+                        </div>
+                        <div class="form_group" id="mail">
                                     <label for="email1">이메일</label>
                                     <div class="input_group">
                                         <input type="text" class="w05" id="email1" name="email1"/>

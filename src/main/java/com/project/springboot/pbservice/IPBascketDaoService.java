@@ -25,7 +25,7 @@ public interface IPBascketDaoService {
 	public String checkM_Num(String u_id);
 	
 	// 장바구니 결제 상세
-	public int insertBOinfo(String m_num, String u_id, String p_num, String p_name, String p_price, String bo_qty);
+	public int insertBOinfo(String m_num, String u_id, String u_nick, String p_num, String p_name, String p_price, String bo_qty);
 	
 	// 장바구니 결제 후 삭제
 	public int deleteABascket(String u_id);
