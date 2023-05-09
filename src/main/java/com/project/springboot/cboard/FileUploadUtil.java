@@ -53,25 +53,4 @@ public class FileUploadUtil {
         }
     }
     
-    public void deleteUploadAndFile(String sfile) {
-	    // 업로드 테이블에서 파일 정보 삭제
-	    asv.deleteUploadBySfile(sfile);
-
-	    // 파일 삭제
-	    String path = "";
-	    try {
-	        // 디렉토리의 물리적 경로
-	        path = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-
-	        // 경로와 파일명을 통해 File 객체를 생성
-	        File file = new File(path, sfile);
-
-	        // 해당 파일이 존재하는 경우 삭제
-	        if (file.exists()) {
-	            file.delete();
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	}
 }

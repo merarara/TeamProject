@@ -2,7 +2,6 @@ package com.project.springboot.cboard;
 
 
 
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,7 +106,7 @@ public class cboardServiceImpl implements IboardService {
     }
     
     @Override
-	public int addLike(int c_num, String u_id) {
+	public int insertLike(int c_num, String u_id) {
 		return abs.insertLike(c_num, u_id);
 	}
 
@@ -145,23 +144,7 @@ public class cboardServiceImpl implements IboardService {
 	public List<upDTO> getUploadList(int c_num) {
 	    return abs.getUploadList(c_num);
 	}
-	@Override
-	public void deleteUploadBySfile(int c_num, List<String> sfiles) {
-	  Map<String, Object> paramMap = new HashMap<>();
-	  paramMap.put("c_num", c_num);
-	  paramMap.put("sfiles", sfiles);
-	  abs.deleteUploadBySfile(paramMap);
-	}
-
-	public void deleteUploadBySfile(cboardDTO cboardDto, List<String> sfiles) {
-		
-	}
-
-	public void deleteUploadBySfile(String sfile) {
-		
-	}
-
-
+	
 	@Override
 	public void updateCBoard(cboardDTO cboardDto) {
 		cboardService mapper = sqlSession.getMapper(cboardService.class);
@@ -169,36 +152,38 @@ public class cboardServiceImpl implements IboardService {
 	}
 
 	@Override
-	public void deleteUploadBySfile(Enumeration<String> enumeration, MultipartFile[] file) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteUploadBySfile(int i) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public List<upDTO> getFile(int parseInt) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int update(cboardDTO cboardDto, MultipartFile[] file) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public boolean checkLiked(int c_num, String u_id) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
+	@Override
+	public int addLike(int c_num, String u_id) {
+		return 0;
+	}
+
+
+	@Override
+	public int deleteFile(int c_num, String sfile) {
+		return abs.deleteFile(c_num, sfile);
+	}
 	
-
-
+	@Override
+	public int deleteFileAll(String c_num) {
+		return abs.deleteFileAll(c_num);
+	}
+	
+	@Override
+	public int deleteAll(String c_num) {
+		return abs.deleteAll(c_num);
+	}
 }

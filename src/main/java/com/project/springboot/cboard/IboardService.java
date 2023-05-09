@@ -1,6 +1,5 @@
 package com.project.springboot.cboard;
 
-import java.util.Enumeration;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -33,13 +32,12 @@ public interface IboardService {
 	public int uploadnum(cboardDTO cboardDto);
 	public List<upDTO> uploadview(int c_num);
 	List<upDTO> getUploadList(int c_num);
-	void deleteUploadBySfile(Enumeration<String> enumeration, MultipartFile[] file);
-	public void deleteUploadBySfile(int i);
 	void updateCBoard(cboardDTO cboardDto);
-	void deleteUploadBySfile(int c_num, List<String> sfiles);
 	public List<upDTO> getFile(int parseInt);
-	public void deleteUploadBySfile(String sfile);
 	int update(cboardDTO cboardDto);
 	public boolean checkLiked(int c_num, String u_id);
-
+	int insertLike(int c_num, String u_id);
+	public int deleteFile(int c_num, String sfile);
+	public int deleteFileAll(String c_num);
+	public int deleteAll(String c_num);
 }

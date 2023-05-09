@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
@@ -217,7 +218,7 @@ public class cboardController {
 		return "cboard/cboardview";
 	}
 
-	//수정 페이지 - post방식인 경우 레코드를 update
+	//수정 페이지 
 	@RequestMapping(value="/cboard/cboardedit.do", method=RequestMethod.GET)
 	public String update(HttpServletRequest req, Model model) { 
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -230,73 +231,166 @@ public class cboardController {
 	    
 	    return "cboard/cboardedit"; 
 	} 
-
-	@RequestMapping(value = "/cboard/cboardedit.do", method = RequestMethod.POST)
-	public String update(cboardDTO cboardDto, MultipartFile[] user_file, 
-	    @RequestParam(value = "delete_files", required = false) String[] filesToDelete, 
-	    Model model, HttpServletRequest req) {
-	    int c_num = cboardDto.getC_num();
-	    int result = asv.update(cboardDto, user_file);
+	
+	// 게시글 수정 메서드
+	@RequestMapping(value="/cboard/cboardedit.do", method=RequestMethod.POST)
+	public String update(@RequestParam("c_num") int c_num,cboardDTO cboardDto, MultipartFile[] user_file, 
+	        Model model, 
+	        MultipartHttpServletRequest req, HttpServletRequest request) {
 	    
-	    // 기존 첨부파일 정보 가져오기
-	    List<upDTO> existingFiles =asv.getFile(c_num);
+	    int result = asv.update(cboardDto); 
+		
+		if (user_file != null && !user_file[0].isEmpty()) {
+			if (multipartResolver.isMultipart(req)) {
+			    MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
+			    //파일외 폼값을 받는다. MultipartHttpServletRequest객체를 사용.	
+			    c_num = asv.uploadnum(cboardDto);
+			    String title = req.getParameter("title");
+			    System.out.println("제목:"+ title);
+			    //파일을 처리한다. 
+			    String path = "";
+			    for(MultipartFile f: user_file) {
+			        //전송된 원본파일명을 얻어온다. 
+			        String originalName = f.getOriginalFilename();
+			        //파일명에서 확장자를 잘라낸다. 
+			        String ext = originalName.substring(
+			            originalName.lastIndexOf('.'));
+			        //범용고유식별자를 통해 파일명으로 사용할 문자열 생성
+			        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			        //문자열을 결합하여 새로운 파일명을 생성한다.
+			        String savedName = uuid + ext;
+			        
+			        try {
+			            //디렉토리의 물리적 경로
+			            path = ResourceUtils.getFile("classpath:static/uploads/")
+			                .toPath().toString();
+			            //경로와 파일명을 통해 File객체를 생성
+			            File filePath = new File(path, savedName);
+			            //해당 경로에 파일을 전송한다. 
+			            f.transferTo(filePath);
+			        }
+			        catch (Exception e) {
+			            e.printStackTrace();
+			        }
+			        
+			        upDTO upDto = new upDTO();
+			        upDto.setC_num(c_num);
+			        upDto.setOfile(originalName);
+			        upDto.setSfile(savedName);
+			        
+			        asv.upload(upDto);
+			    }
+			    System.out.println("upload폴더:"+ path);
+			} else {
+			    // Multipart 요청이 아닌 경우 처리
+			}
+		}
+		
+		String[] files = request.getParameterValues("file");
+		if (files != null && files.length > 0) { // 체크된 첨부파일이 있을 경우
+		    for (String f : files) {
+		        String sfile = req.getParameter("sfile");
+		        List<upDTO> fileList = asv.uploadview(c_num);
+		        upDTO file = null;
+		        if (fileList != null && !fileList.isEmpty()) {
+		            file = fileList.get(0);
+		        }
+		        if (file != null) {
+		            // 파일 경로를 가져옵니다.
+		        	
+		        try {
+		        	for (upDTO e: fileList) {
+			            String filePath = ResourceUtils.getFile("classpath:static/uploads").toPath().toString();
+			            // 파일을 삭제합니다.
+			            File deleteFile = new File(filePath, e.getSfile());
+			            if (deleteFile.exists()) {
+			                deleteFile.delete();
+			            }
+			        }
+		        } catch (Exception e) {
+		        	
+		        }
+		        // 파일 정보를 DB에서 삭제합니다.
+		        asv.deleteFile(c_num, f);
+		        }
+		    }
+		}
+		
+		if(result==1) System.out.println("수정되었습니다."); 
+		
+		return "redirect:/cboard/cboardview.do?c_num=" + c_num;
+	} 
+	
 
-	    // 새로운 첨부 파일 추가
-	    if (user_file != null && user_file.length > 0) {
-	        String path = "";
-	        try {
-	            path = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-	        for (MultipartFile f : user_file) {
-	            String originalName = f.getOriginalFilename();
-	            String ext = originalName.substring(originalName.lastIndexOf('.'));
-	            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-	            String savedName = uuid + ext;
-	            try {
-	                File filePath = new File(path, savedName);
-	                f.transferTo(filePath);
-	            } catch (Exception e) {
-	                e.printStackTrace();
-	            }
-	            upDTO upDto = new upDTO();
-	            upDto.setC_num(c_num);
-	            upDto.setOfile(originalName);
-	            upDto.setSfile(savedName);
-	            asv.upload(upDto); // DB에 추가
-
-	            // 파일 목록에 추가
-	            cboardDto.getFiles().add(upDto);
-	        }
-	    }
-	    
-	 // 첨부 파일 삭제
-	    if (existingFiles != null && existingFiles.size() > 0) {
-	        String path = "";
-	        try {
-	            path = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-	        for (upDTO fileToDelete : existingFiles) {
-	            if (cboardDto.getFiles().stream().noneMatch(file -> file.getSfile().equals(fileToDelete.getSfile()))) {
-	                String filePath = path + "/" + fileToDelete.getSfile();
-	                File deleteFile = new File(filePath);
-	                if (deleteFile.delete()) {
-	                    System.out.println(filePath + " 파일이 삭제되었습니다.");
-	                } else {
-	                    System.out.println(filePath + " 파일 삭제에 실패하였습니다.");
-	                }
-	                cboardDto.getFiles().removeIf(file -> file.getC_num() == fileToDelete.getC_num()); // 파일 목록에서 삭제
-	                asv.deleteUploadBySfile(fileToDelete.getC_num());
-	                
-	                
-	            }
-	        }
-	    }
-	    return "redirect:/cboard/cboardview.do?c_num=" + c_num;
-	}
+	
+	
+//	//게시판 수정 
+//	@RequestMapping(value = "/cboard/cboardedit.do", method = RequestMethod.POST)
+//	public String update(cboardDTO cboardDto, MultipartFile[] user_file, 
+//	    @RequestParam(value = "delete_files", required = false) String[] filesToDelete, 
+//	    Model model, HttpServletRequest req) {
+//	    int c_num = cboardDto.getC_num();
+//	    int result = asv.update(cboardDto, user_file);
+//	    
+//	    // 기존 첨부파일 정보 가져오기
+//	    List<upDTO> existingFiles =asv.getFile(c_num);
+//
+//	    // 새로운 첨부 파일 추가
+//	    if (user_file != null && user_file.length > 0) {
+//	        String path = "";
+//	        try {
+//	            path = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
+//	        } catch (Exception e) {
+//	            e.printStackTrace();
+//	        }
+//	        for (MultipartFile f : user_file) {
+//	            String originalName = f.getOriginalFilename();
+//	            String ext = originalName.substring(originalName.lastIndexOf('.'));
+//	            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+//	            String savedName = uuid + ext;
+//	            try {
+//	                File filePath = new File(path, savedName);
+//	                f.transferTo(filePath);
+//	            } catch (Exception e) {
+//	                e.printStackTrace();
+//	            }
+//	            upDTO upDto = new upDTO();
+//	            upDto.setC_num(c_num);
+//	            upDto.setOfile(originalName);
+//	            upDto.setSfile(savedName);
+//	            asv.deleteUploadBySfile(upDto); // DB에 추가
+//
+//	            // 파일 목록에 추가
+//	            cboardDto.getFiles().add(upDto);
+//	        }
+//	    }
+//	    
+//	 // 첨부 파일 삭제
+//	    if (existingFiles != null && existingFiles.size() > 0) {
+//	        String path = "";
+//	        try {
+//	            path = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
+//	        } catch (IOException e) {
+//	            e.printStackTrace();
+//	        }
+//	        for (upDTO fileToDelete : existingFiles) {
+//	            if (cboardDto.getFiles().stream().noneMatch(file -> file.getSfile().equals(fileToDelete.getSfile()))) {
+//	                String filePath = path + "/" + fileToDelete.getSfile();
+//	                File deleteFile = new File(filePath);
+//	                if (deleteFile.delete()) {
+//	                    System.out.println(filePath + " 파일이 삭제되었습니다.");
+//	                } else {
+//	                    System.out.println(filePath + " 파일 삭제에 실패하였습니다.");
+//	                }
+//	                cboardDto.getFiles().removeIf(file -> file.getC_num() == fileToDelete.getC_num()); // 파일 목록에서 삭제
+//	                asv.deleteUploadBySfile(fileToDelete.getC_num());
+//	                
+//	                
+//	            }
+//	        }
+//	    }
+//	    return "redirect:/cboard/cboardview.do?c_num=" + c_num;
+//	}
 
 
 	
@@ -344,30 +438,30 @@ public class cboardController {
 	        e.printStackTrace();
 	    }
 	}
-	
-	// 좋아요 기능
-	@PostMapping("/cboard/like.do")
-	public String addLike(HttpServletRequest req, HttpSession session) {
-	    int c_num = Integer.parseInt(req.getParameter("c_num"));
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String u_id = authentication.getName(); // 사용자 id
-
-	    if (u_id == null) {
-	        return "redirect:/auth/login.do";
-	    }
-
-	    boolean isLiked = asv.checkLiked(c_num, u_id);
-
-	    if (!isLiked) { // 좋아요를 누르지 않은 경우에만 등록
-	        int result = asv.addLike(c_num, u_id);
-	        if (result == 1) {
-	            int c_like = asv.getLikeCount(c_num);
-	            return "redirect:/cboard/cboardview.do?c_num=" + c_num;
-	        }
-	    }
-
-	    return "redirect:/cboard/cboardview.do?c_num=" + c_num;
-	}
+//	
+//	// 좋아요 기능
+//	@PostMapping("/cboard/like.do")
+//	public String addLike(HttpServletRequest req, HttpSession session) {
+//	    int c_num = Integer.parseInt(req.getParameter("c_num"));
+//	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//	    String u_id = authentication.getName(); // 사용자 id
+//
+//	    if (u_id == null) {
+//	        return "redirect:/auth/login.do";
+//	    }
+//
+//	    boolean isLiked = asv.checkLiked(c_num, u_id);
+//
+//	    if (!isLiked) { // 좋아요를 누르지 않은 경우에만 등록
+//	        int result = asv.addLike(c_num, u_id);
+//	        if (result == 1) {
+//	            int c_like = asv.getLikeCount(c_num);
+//	            return "redirect:/cboard/cboardview.do?c_num=" + c_num;
+//	        }
+//	    }
+//
+//	    return "redirect:/cboard/cboardview.do?c_num=" + c_num;
+//	}
 	 
 	// 싫어요 기능
 	@PostMapping("/cboard/unlike.do")
@@ -389,6 +483,43 @@ public class cboardController {
 	    int c_like = asv.getLikeCount(c_num);
 	    return "redirect:/cboard/cboardview.do?c_num=" + c_num;
 	}
+	    
+	// 좋아요 기능
+	@PostMapping("/cboard/like.do")
+	@ResponseBody
+	public String like(HttpServletRequest req) {
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String u_id = authentication.getName(); // 사용자 id
+
+	    String c_numParam = req.getParameter("c_num");
+	    int c_num = 0;
+	    if (c_numParam != null && !c_numParam.isEmpty()) {
+	        c_num = Integer.parseInt(c_numParam);
+	    }
+
+	    if (u_id == null) {
+	        return "login";
+	    }
+
+	    boolean isLiked = cboardService.checkLiked(c_num, u_id);
+
+	    if (!isLiked) { // 좋아요를 누르지 않은 경우에만 등록
+	        int result = cboardService.insertLike(c_num, u_id);
+	        if (result == 1) {
+	            return "liked";
+	        } else {
+	            return "error";
+	        }
+	    } else { // 좋아요를 이미 누른 경우에는 좋아요 취소
+	        int result = cboardService.removeLike(c_num, u_id);
+	        if (result == 1) {
+	            return "unliked";
+	        } else {
+	            return "error";
+	        }
+	    }
+	}
+
 
 
 }

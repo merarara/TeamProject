@@ -44,5 +44,9 @@ public interface cboardService {
 	public List<upDTO> getUploadList(int c_num);
 	public void updateCBoard(cboardDTO cboardDto);
 	public cboardDTO selectOne(int getc_num);
+	
+	public int deleteFile(@Param("c_num") int c_num, @Param("sfile") String sfile);
+	public int deleteFileAll(String c_num);
+	public int deleteAll(String c_num);
 
 }
