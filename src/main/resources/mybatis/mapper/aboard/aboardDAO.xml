@@ -112,4 +112,7 @@
 		Delete from acomment where a_num=#{a_num}
 	</delete>
 	
+	<select id="selectLikeCount" resultType="int">
+    	SELECT COUNT(*) FROM aboard_like WHERE a_num = #{a_num} AND u_id = #{u_id}
+	</select>
 </mapper>

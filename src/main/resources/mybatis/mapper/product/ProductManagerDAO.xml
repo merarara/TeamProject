@@ -151,6 +151,11 @@
 		values (#{m_num}, #{p_num}, #{barcode})
 	</insert>
 	
+	<!-- 상품 주문 취소 -->
+	<update id="doCancelDao">
+		update order_info set m_payment = '주문취소' where m_num = ${m_num}
+	</update>	
+		
 	<!-- 주문 상태 배송준비중 변경 -->
 	<update id="updateOrderDao">
 		update order_info

@@ -114,6 +114,14 @@ public class PManagerDaoService implements IPManagerDaoService {
 		return result + result2;
 	}
 	
+	// 상품 결제 취소
+	@Override
+	public int doCancel(int m_num) {
+		int result = dao.doCancelDao(m_num);
+		
+		return result;
+	}
+	
 	// 상품 재고 업데이트
 	@Override
 	public void updateCount(String p_num) {

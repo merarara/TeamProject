@@ -37,7 +37,7 @@ public class ReplyController {
 		}
 	//댓글작성 
 	@RequestMapping(value = "/cboard/write.do", method = RequestMethod.POST)
-	public String postWrite(ReplyVO vo, Model model, @RequestParam("c_num") int c_num) throws Exception {
+	public String postWrite(ReplyVO vo, Model model) throws Exception {
 	    
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String u_id = authentication.getName();
@@ -47,8 +47,9 @@ public class ReplyController {
 	    
 	    replyService.write(vo);
 	    
-	    return "redirect:/cboard/cboardview.do?c_num=" + c_num;
+	    return "redirect:/cboard/cboardview.do?c_num=" + vo.getC_num();
 	}
+
 
 
 

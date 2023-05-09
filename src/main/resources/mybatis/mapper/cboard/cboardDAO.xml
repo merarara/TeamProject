@@ -57,8 +57,8 @@
 	<!--   게시글 수정. 파라미터는 DTO의 멤버변수를 사용한다. -->
 	<update id="update" 
 		parameterType="com.project.springboot.cboard.cboardDTO"> 
-		update c_board set c_title=#{c_title}, c_content=#{c_content} 
-		where c_num=#{c_num}
+		update c_board set c_title=#{c_title, jdbcType=VARCHAR}, c_content=#{c_content, jdbcType=VARCHAR} 
+		where c_num=#{c_num, jdbcType=INTEGER}
 	</update> 
 	
 	<!--   게시글 삭제 -->
@@ -72,7 +72,7 @@
 	</update>
 	
 	<!-- 좋아요 추가 -->
-<insert id="addLike" parameterType="map">
+<insert id="insertLike" parameterType="map">
   INSERT INTO c_board_like (c_num, u_id) VALUES (#{c_num}, #{u_id})
 </insert>
 
@@ -110,20 +110,24 @@
 	<select id="uploadview" parameterType="int" resultType="com.project.springboot.cboard.upDTO">
 	    select * from up where c_num = #{c_num, jdbcType=INTEGER}
 	</select>
+		
+	<delete id="deleteFile">
+	    DELETE FROM up WHERE sfile = #{sfile, jdbcType=VARCHAR} AND c_num = #{c_num}
+	</delete>
 	
+	<delete id="deleteFileAll">
+	    DELETE FROM up WHERE c_num = #{c_num}
+	</delete>
+		
+	<delete id="deleteAll">
+		Delete from comment where c_num=#{c_num}
+	</delete>
 	<!-- getUploadList -->
 	<select id="getUploadList" resultType="com.project.springboot.cboard.upDTO">
 	    SELECT * FROM up WHERE c_num = #{c_num}
 	</select>
-	<!-- deleteUploadBySfile -->
-	<delete id="deleteUploadBySfile" parameterType="map">
-	  DELETE FROM up
-	  WHERE c_num = #{c_num}
-	  AND sfile NOT IN
-	  <foreach collection="sfiles" item="sfile" separator="," open="(" close=")">
-	    #{sfile}
-	  </foreach>
-	</delete>
+
+	
 
 
 	

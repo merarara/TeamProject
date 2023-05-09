@@ -2,7 +2,6 @@
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,88 +16,56 @@
 <%@ include file="../header.jsp" %>	
 <div align="center">
     <h1>게시물 수정하기</h1>
-<div>
-    <h3>게시물 수정</h3>
-    <form action="/cboard/cboardedit.do" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="c_num" value="${cboardDto.c_num}">
-
-        <table border="1" width="90%">
-            <colgroup>
-                <col width="15%"/> <col width="35%"/>
-                <col width="15%"/> <col width="*"/>
-            </colgroup> 
-            <tr>
-                <td>번호</td> <td>${ cboardDto.c_num }</td>
-                <td>작성자</td> <td>${ cboardDto.u_nick }</td>
-            </tr>
-            <tr>
-                <td>작성일</td> <td>${ cboardDto.c_regdate }</td>
-                <td>조회수</td> <td>${ cboardDto.c_visitcount }</td>
-            </tr>
-            <tr>
-                <td>제목</td>
-                <td colspan="3"><input type="text" name="c_title" value="${ cboardDto.c_title }"></td>
-            </tr>
-            <tr>
-               <td>내용</td>
-			<td colspan="3">
-			    <textarea name="c_content" rows="10">${cboardDto.c_content}</textarea>
-			    <br>
-			<div class="box-footer" id="fileDiv">
-            <a href="#this" class="btn btn-default file_add" onclick="addFile()">파일추가</a><br/><br/>
-            <c:forEach items="${upDto }" var="i">
-            	<p>
-            	<span class="cboard-file" aria-hidden="true"></span>
-            	${i.sfile }
-            	<input type="hidden" name="FILE_${i.c_num }" value="true">
-            	<a href="#this" class="btn" name="delete">삭제</a>
-            	</p>
-           </c:forEach>
+<form action="/cboard/cboardedit.do" method="post" enctype="multipart/form-data">
+<input type="hidden" name="c_num" value="${cboardDto.c_num}"/>
+<input type="hidden" name="u_id" value="${udto.u_id}" />
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            
+                <div class="form-group">
+                    <label for="u_nick">작성자</label>
+                    <input type="text" class="form-control" id="u_nick" name="u_nick" value="${cboardDto.u_nick}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="c_title">제목</label>
+                    <input type="text" class="form-control" id="c_title" name="c_title" value="${cboardDto.c_title}">
+                </div>
+                <div class="form-group">
+                    <label for="c_content">내용</label>
+                    <textarea class="form-control" id="c_content" name="c_content" rows="10">${cboardDto.c_content}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="user_file">첨부파일</label>
+                    <input type="file" class="form-control-file" id="user_file" name="user_file" multiple>
+                </div>
+                <div class="form-group">
+                    <label for="file_list">첨부파일 목록</label>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">파일명</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach items="${upDto}" var="file">
+                                <tr>
+                                    <td><input type="checkbox" name="file" value="${file.sfile}"></td>
+                                    <td>${file.ofile}</td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary mr-2">수정 완료</button>
+                    <button type="button" class="btn btn-secondary" onclick="location.href='../cboard/cboardlist.do';">목록 바로가기</button>
+                </div>
+            </form>
         </div>
-		</td>
-		</tr>
-		<tr>
-		<td>첨부파일</td>
-		<td>
-		    <c:forEach items="${upDto}" var="i">
-		        <c:if test="${i.sfile == cboardDto.c_num}">
-		            <a href="download.do?savedFile=${i.sfile}&oriFile=${i.ofile}">${i.ofile}</a>
-		            <br>
-		        </c:if>
-		    </c:forEach>
-		</td>
-		</tr>
-		<tr>
-		<td colspan="4" align="center">
-		    <button type="submit">수정완료</button>
-		    <button type="button" onclick="location.href='/cboard/cboardlist.do';">목록 바로가기</button>
-		</td>
-		</tr>
-		</table>
-		</form>
-		<script type="text/javascript">
-		var gfv_count = 1;
-		$(document).ready(function(){
-            $("a[name='delete']").on("click", function(e){
-                e.preventDefault();
-                deleteFile($(this));
-            });
-		})
-		function addFile() {
-			var str = "<p><input type='file' name='file' class='file_input'><a href='#this' class='btn' name='delete'>삭제</a></p>";
-			$("#fileDiv").append(str);
-			 $("a[name='delete']").on("click", function(e){
-	                e.preventDefault();
-	                deleteFile($(this));
-	            });
-		}
-		function deleteFile(obj) {
-			obj.parent().remove();
-		}
-</script>
-
-
-
+    </div>
+</div>
 
 <%@ include file="../footer.jsp" %>
 

@@ -36,21 +36,6 @@ public class PManagerController {
 	
 	int product_curPage = 1;
 	
-	// ADMIN 재고관리
-    @GetMapping("/admin/productManagement.do")
-    public String productManagement(Model model) {
-    	
-    	return "/admin/productManagement";
-    }
-    
-    // 전체제고관리 맵핑 
-  	@RequestMapping("/admin/totalProduct.do")
-  	public String totalProduct() {
-  		System.out.println(5);
-  		return "/admin/totalProduct";
-  	}
-    
-    
     // 재고 검색
     @RequestMapping("/admin/searchProduct.do")
     public String searchProduct (HttpServletRequest req, Model model) {
@@ -215,6 +200,25 @@ public class PManagerController {
     	}
     	
     	if (result >= 2) {
+    		response.put("status", "success");
+    	} else {
+    		response.put("status", "fail");
+    	}
+    	
+    	return response;
+    }
+    
+    // 상품 결제 취소
+    @ResponseBody
+    @RequestMapping("/admin/doCancel.do")
+    public Map<String, String> doCancel(HttpServletRequest req) {
+    	int m_num = Integer.parseInt(req.getParameter("m_num"));
+    	
+    	Map<String, String> response = new HashMap<String, String>();
+    	
+    	int result = pmdao.doCancel(m_num);
+    	
+    	if (result == 1) {
     		response.put("status", "success");
     	} else {
     		response.put("status", "fail");

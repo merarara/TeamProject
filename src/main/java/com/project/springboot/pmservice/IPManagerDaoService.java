@@ -45,6 +45,9 @@ public interface IPManagerDaoService {
 	// 상품 결제 승인
 	public int confirmOrder(String barcode, String m_num, String p_num);
 	
+	// 상품 주문 취소
+	public int doCancel(int m_num);
+	
 	// 상품 재고 업데이트
 	public void updateCount(String p_num);
 	

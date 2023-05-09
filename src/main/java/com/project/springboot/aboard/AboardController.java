@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,9 +27,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.project.springboot.afbService.IACommentService;
 import com.project.springboot.afbService.IAboardService;
@@ -109,13 +112,13 @@ public class AboardController {
 		String u_id = authentication.getName();
 		
 		int result = asv.insertA(aboardDto); 
-		
+		int a_num = asv.uploadnum(aboardDto);
 		if (!user_file[0].isEmpty()) {
 			if (multipartResolver.isMultipart(req)) {
 		        MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
 		      //파일외 폼값을 받는다. MultipartHttpServletRequest객체를 사용.	
 		        
-		        int a_num = asv.uploadnum(aboardDto);
+		        
 				String title = req.getParameter("title");
 				System.out.println("제목:"+ title);
 				
@@ -207,6 +210,7 @@ public class AboardController {
 	    
 	    return "aboard/aboardview";
 	}
+
 	
 	// 공지사항 상세보기 - post
 	@RequestMapping(value="/aboard/aboardview.do", method=RequestMethod.POST)
@@ -217,7 +221,7 @@ public class AboardController {
 	
 	// 공지사항 게시글 수정 페이지 - get방식
 	@RequestMapping(value="/aboard/aboardedit.do", method=RequestMethod.GET)
-	public String aboard6(HttpServletRequest req, Model model) { 
+	public String aboard6(HttpServletRequest req, Model model, aboardDTO aboardDto) { 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String u_id = authentication.getName();
 	    UserDTO udto = udao.selectOne(u_id);
@@ -260,7 +264,7 @@ public class AboardController {
 			MultipartHttpServletRequest req, HttpServletRequest request) {
 		int a_num = Integer.parseInt(req.getParameter("a_num"));
 		aboardDto = asv.selectOneA(String.valueOf(a_num));
-		int result = asv.updateA(aboardDto); 
+		
 		
 		if (!user_file[0].isEmpty()) {
 			if (multipartResolver.isMultipart(req)) {
@@ -337,8 +341,11 @@ public class AboardController {
 		        }
 		    }
 		}
-		
-		if(result==1) System.out.println("수정되었습니다."); 
+		int result = asv.updateA(aboardDto); 
+		if(result==1) {
+			
+			System.out.println("수정되었습니다."); 
+		}
 		
 		return "redirect:/aboard/aboardedit.do?a_num=" + aboardDto.getA_num(); 
 	} 
@@ -435,6 +442,17 @@ public class AboardController {
 	        int a_like = asv.getLikeCount(a_num);
 	        return "redirect:/aboard/aboardview.do?a_num=" + a_num;
 	    }
+	}
+	
+	@PostMapping("/aboard/checkLike.do")
+	@ResponseBody
+	public boolean checkLike(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    int a_num = Integer.parseInt(request.getParameter("a_num"));
+	    String u_id = (String) request.getSession().getAttribute("userId");
+
+	    boolean result = asv.checkLike(a_num, u_id);
+
+	    return result;
 	}
 	
 }

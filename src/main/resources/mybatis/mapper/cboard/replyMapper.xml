@@ -12,9 +12,9 @@
 			where c_num = #{c_num}		
 	</select>
 	<!-- 댓글작성 -->
-	<insert id="replyWrite" parameterType="com.project.springboot.cboard.ReplyVO">
-    INSERT INTO c_reply(c_num, u_id, c_content, c_regDate) 
-	VALUES(#{c_num}, #{u_id, jdbcType=VARCHAR}, #{c_content}, SYSDATE)
+	<insert id="replyWrite" parameterType="com.project.springboot.aboard.ACommentDTO">
+	    INSERT INTO c_reply (c_rno, c_num, u_id, c_content, c_regDate) 
+	    VALUES (c_rno_seq.NEXTVAL, #{c_num}, #{u_id, jdbcType=VARCHAR}, #{c_content}, SYSDATE)
 	</insert>
 
 		

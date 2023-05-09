@@ -38,6 +38,7 @@
   background: #febf00;
 }
 /* ------ */
+/*
 * {
   font-family: Pretendard;
   user-select: none;
@@ -48,6 +49,7 @@
   margin-left: .4rem;
   font-size: 1.4rem;
 }
+*/
 /* 로딩 */
 #waiting {
     width: 100%;
@@ -96,57 +98,28 @@ $(window).on('load', function() {
 <body>
 <%@ include file="./header.jsp" %>	
 <div id="content">
-<div id="waiting">
-	<img src="/userimages/welcome.jpeg">
-</div>
-<div class="list">
-  <div>페이지 상단</div>
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>
-  <div>7</div>
-  <div>8</div>
-  <div>9</div>
-  <div>10</div>
-  <div>11</div>
-  <div>12</div>
-  <div>13</div>
-  <div>14</div>
-  <div>15</div>
-  <div>16</div>
-  <div>17</div>
-  <div>18</div>
-  <div>19</div>
-  <div>20</div>
-  <div>21</div>
-  <div>22</div>
-  <div>23</div>
-  <div>24</div>
-  <div>25</div>
-  <div>26</div>
-  <div>27</div>
-  <div>28</div>
-  <div>29</div>
-  <div>30</div>
-  <div>31</div>
-  <div>32</div>
-  <div>33</div>
-  <div>34</div>
-  <div>35</div>
-  <div>36</div>
-  <div>37</div>
-  <div>38</div>
-  <div>39</div>
-  <div>40</div>
-  <div>페이지 하단</div>
-</div>
-<div class="btns">
-  <div class="moveTopBtn">위로가기</div>
-  <div class="moveBottomBtn">아래로가기</div>
-</div>
+	<div id="waiting">
+		<img src="/userimages/welcome.jpeg">
+	</div>
+	
+	<div class="container">
+	  	<div class="row">
+	    	<div class="col-md-4">
+	      	d
+	    	</div>
+	    	<div class="col-md-4">
+	      	d
+	    	</div>
+	    	<div class="col-md-4">
+	      	d
+	    	</div>
+	  	</div>
+	</div>
+	
+	<div class="btns">
+	  	<div class="moveTopBtn">위로가기</div>
+	  	<div class="moveBottomBtn">아래로가기</div>
+	</div>
 </div>
 <%@ include file="./footer.jsp" %>
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

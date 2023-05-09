@@ -75,7 +75,7 @@ function checkLimit(checkbox, boQty, p_num, m_num) {
 }
 
 // 승인 보내기
-function doConfirm(totalQty, m_num, btn) {
+function doConfirm(totalQty, m_num) {
 	const checkedTotal = $(".totalQty_" + m_num + " .form-check-input:checked").length;
 	const barcodelist = [];
 	const p_num = [];
@@ -104,7 +104,7 @@ function doConfirm(totalQty, m_num, btn) {
 						alert(m_num + "번 결제가 승인 되었습니다.");
 						$("#collapse" + m_num).remove();
 						
-						$(btn).remove();
+						$("#buttons" + m_num).remove();
 						
 						$("#toggle" + m_num).remove();
 						
@@ -164,6 +164,33 @@ function SellComplete(m_num, btn) {
 				}
 			}
 		});
+	}
+}
+
+function doCancel(m_num) {
+	if (confirm(m_num + "번 주문을 취소/환불 시키시겠습니까?")) {
+		$.ajax({
+			type: 'POST',
+			url: '/admin/doCancel.do',
+			data: {
+				m_num: m_num
+			},
+			success: function (data) {
+				if (data.status == 'success') {
+					alert(m_num + "번 주문이 취소 되었습니다.");
+					
+					$("#collapse" + m_num).remove();
+					
+					$("#buttons" + m_num).remove();
+					
+					$("#toggle" + m_num).remove();
+					
+					$("#payment_" + m_num).text("주문상태: 주문취소");
+				} else {
+					
+				}
+			}
+		})		
 	}
 }
 
@@ -303,9 +330,14 @@ function goToAdminPage() {
 											</c:forEach>
 											</tbody>
 										</table>
-									</div>
-									<div style="text-align:center;">
-									  	<button type="button" class="btn btn-primary" onclick="doConfirm(${i.m_qty}, ${i.m_num }, this);">승인</button>
+										<div id="buttons${i_num }" style="text-align:center;">
+											<div style="text-align:center; display: inline-block;">
+											  	<button type="button" class="btn btn-primary" onclick="doConfirm(${i.m_qty}, ${i.m_num });">승인</button>
+											</div>
+											<div style="text-align:center; display: inline-block;">
+											  	<button type="button" class="btn btn-danger" onclick="doCancel(${i.m_num });">주문취소</button>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
