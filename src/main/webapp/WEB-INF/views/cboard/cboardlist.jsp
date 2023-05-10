@@ -55,6 +55,7 @@
       </tbody>
     </table>
   </div>
+  <s:authorize access="hasRole('USER')">
   <div class="d-flex justify-content-between align-items-center" style="max-width: 1400px; margin: 0 auto; border-left: transparent; border-right: transparent;">
     <div>${map.pagingImg}</div>
     <div class="text-right">
@@ -64,6 +65,7 @@
     </div>
   </div>
 </div>
+</s:authorize>
 <!-- 검색 폼 -->
 <div class="container my-5">
   <form action="/cboard/cboardlist.do" method="post" class="form-inline justify-content-center">
