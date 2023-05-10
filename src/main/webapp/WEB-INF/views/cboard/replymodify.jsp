@@ -22,12 +22,14 @@
 			<textarea rows="5" cols="50" name="c_content">${reply.c_content}</textarea>
 		</p>
 		<p>
-			<input type="hidden" name="c_num" value="${reply.c_num}">			
+			<input type="hidden" name="c_num" value="${reply.c_num}">
+			<input type="hidden" name="c_rno" value="${reply.c_rno}">
 			<button type="submit">댓글 수정</button>
 		</p>
 	</form>
 	
 </div>
+
 
 
 </body>

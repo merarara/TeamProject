@@ -48,4 +48,11 @@ public class ReplyServiceImpl implements ReplyService {
 		return null;
 	}
 
+
+	@Override
+	public int delete(int c_num, int c_rno) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

@@ -55,7 +55,7 @@
       </tbody>
     </table>
   </div>
-  <s:authorize access="hasRole('USER')">
+  <s:authorize access="hasAnyRole('USER'),('BLACKLIST')">
   <div class="d-flex justify-content-between align-items-center" style="max-width: 1400px; margin: 0 auto; border-left: transparent; border-right: transparent;">
     <div>${map.pagingImg}</div>
     <div class="text-right">

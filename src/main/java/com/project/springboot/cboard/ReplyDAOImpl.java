@@ -46,4 +46,10 @@ public class ReplyDAOImpl implements ReplyDAO {
 		return sql.selectOne(namespace + ".replySelect", vo);
 	}
 
+	@Override
+	public void delete(int c_num) {
+		sql.delete(namespace + ".replyDelete", c_num);
+		
+	}
+
 }
