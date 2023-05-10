@@ -189,6 +189,16 @@ function doAddBascket() {
 		return false;
 	}
 	
+	if('${bascketCheck}' != null && '${bascketCheck}' != '') {
+		alert('이미 장바구니에 추가된 상품입니다.');
+		if (confirm('장바구니를 확인하러 가시겠습니까?')) {
+			location.href = '/product/productbascket.do';
+		} else {
+			return false;			
+		}
+		return false;
+	}
+	
 	if(confirm('장바구니에 담으시겠습니까?')) {
 		$.ajax({
 			type: 'POST',
@@ -207,6 +217,8 @@ function doAddBascket() {
 				if (data.status === 'success') {
 					if (confirm('장바구니에 성공적으로 추가되었습니다. 장바구니 페이지로 이동하시겠습니까?')) {
 						location.href = "/product/productbascket.do";
+					} else {
+						location.reload();
 					}
 				} else {
 					alert('장바구니 추가에 실패하였습니다.');

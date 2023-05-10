@@ -141,12 +141,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	  });
 	});
 
-$(window).on('load', function() {
-    setTimeout(function(){
-        $("#waiting").fadeOut();
-    }, 500);
-});
-
 //상품 검색 자동완성
 function checkLength() {
 	var wordLength = $('#searchword').val().trim().length;
@@ -211,9 +205,6 @@ $(document).click(function(event) {
 <body>
 <%@ include file="./header.jsp" %>	
 <div class="container-fluid" id="content" style="min-width: 1600px;">
-	<div id="waiting">
-		<img src="/userimages/welcome.jpeg">
-	</div>
 	<div class="container d-flex align-items-center justify-content-center" style=" border-bottom: 2px solid #ddd;">
 		<div class="row">
 			<div class="col-md-12">

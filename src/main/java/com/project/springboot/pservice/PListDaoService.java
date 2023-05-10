@@ -80,6 +80,7 @@ public class PListDaoService implements IPListDaoService {
 		return result;
 	}
 	
+	// 홈 상품 가져오기
 	@Override
 	public List<ProductlistDTO> homeProduct() {
 		List<ProductlistDTO> plist = dao.homeProductDao();
@@ -87,11 +88,19 @@ public class PListDaoService implements IPListDaoService {
 		return plist;
 	}
 	
+	// 홈 공지사항 가져오기
 	@Override
 	public List<aboardDTO> getNotice() {
 		List<aboardDTO> nlist = dao.getNoticeDao();
 		
 		return nlist;
+	}
+	
+	// 상품 상세 장바구니 체크
+	@Override
+	public String bascketCheck(String u_id) {
+		String bascketChk = dao.bascketCheckDao(u_id);
+		return bascketChk;
 	}
 	
 	// 페이지 설정 service & dao

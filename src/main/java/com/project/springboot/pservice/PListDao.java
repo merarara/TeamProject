@@ -43,4 +43,7 @@ public interface PListDao {
 	
 	// 홈화면 공지
 	public List<aboardDTO> getNoticeDao();
+	
+	// 상품 상세 장바구니 체크
+	public String bascketCheckDao(String u_id);
 }

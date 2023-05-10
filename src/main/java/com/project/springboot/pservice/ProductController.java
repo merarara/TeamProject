@@ -107,6 +107,11 @@ public class ProductController {
 	    UserDTO udto = udao.selectOne(u_id);
 	    String bchk = pldao.buyCheck(p_num, u_id);
 	    
+	    String bascketCheck = pldao.bascketCheck(u_id);
+	    
+	    System.out.println(bascketCheck);
+	    
+	    model.addAttribute("bascketCheck", bascketCheck);
 	    // 리뷰 글
 	    List<ReviewDTO> rdto = prdao.GetReview(p_num);
 	    

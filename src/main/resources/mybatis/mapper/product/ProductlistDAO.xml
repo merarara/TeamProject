@@ -166,4 +166,10 @@
 		 WHERE rownum <![CDATA[<=]]> 3
 		 ORDER BY a_like
 	</select>
+	
+	<!-- 장바구니 체크 -->
+	<select id="bascketCheckDao" resultType="String">
+		SELECT DISTINCT u_id FROM p_bascket
+		 WHERE u_id = #{param1}
+	</select>
 </mapper>
