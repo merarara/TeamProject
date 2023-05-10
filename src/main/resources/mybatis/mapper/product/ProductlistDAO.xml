@@ -184,5 +184,6 @@
 	<select id="bascketCheckDao" resultType="String">
 		SELECT DISTINCT u_id FROM p_bascket
 		 WHERE u_id = #{param1}
+		   AND p_num = #{param2}
 	</select>
 </mapper>

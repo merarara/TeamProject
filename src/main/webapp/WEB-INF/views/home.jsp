@@ -350,7 +350,7 @@ $(document).click(function(event) {
 	          			<ul class="list-group list-group-flush">
 	            		<c:forEach items="${clist}" var="c">
 	              			<li class="list-group-item py-2">
-	                			<a href="/aboard/aboardview.do?a_num=${c.c_num}">${c.c_title}</a>
+	                			<a href="/cboard/cboardview.do?c_num=${c.c_num}">${c.c_title}</a>
 	                			<small class="text-muted float-right">${c.c_regdate}</small>
 	              			</li>
 	            		</c:forEach>

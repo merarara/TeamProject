@@ -9,12 +9,16 @@ import org.springframework.util.ResourceUtils;
 
 import com.project.springboot.productdto.ReviewDTO;
 import com.project.springboot.productdto.ReviewImageDTO;
+import com.project.springboot.pservice.PListDao;
 
 @Service
 public class PReviewDaoService implements IPReviewDaoService {
 	
 	@Autowired
 	PReviewDao dao;
+	
+	@Autowired
+	PListDao pldao;
 	
 	// 리뷰 글쓰기
 	@Override
@@ -101,7 +105,12 @@ public class PReviewDaoService implements IPReviewDaoService {
 		}
 		
 		int result1 = dao.deleteRevImgDao(r_num, p_num);
+		
+		int result4 = dao.deleteRevLikeDao(r_num);
+		
 		int result2 = dao.deleteReviewDao(r_num, p_num);
+		
+		int result3 = dao.revGoodUpdateDao(p_num);
 		
 		return result2;
 	}

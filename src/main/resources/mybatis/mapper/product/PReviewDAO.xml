@@ -90,6 +90,12 @@
 		   and p_num = #{param2}
 	</delete>
 	
+	<!-- 리뷰 좋아요 삭제 -->
+	<delete id="deleteRevLikeDao">
+		delete from p_revlike
+		 where r_num = #{param1}
+	</delete>
+	
 	<!-- 실제 파일 삭제를 위한 이미지 찾기 -->
 	<select id="getImageNameDao"
 		resultType="String">

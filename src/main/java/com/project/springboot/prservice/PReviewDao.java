@@ -44,4 +44,7 @@ public interface PReviewDao {
 	
 	// 리뷰 이미지 삭제
 	public int deleteRevImgDao (int r_num, int p_num);
+	
+	// 리뷰 좋아요 삭제
+	public int deleteRevLikeDao (int r_num);
 }

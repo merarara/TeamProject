@@ -207,19 +207,19 @@ function goToAdminPage() {
 			<div class="col-md-12">
 				<ul class="nav nav-tabs">
 				  	<li class="nav-item">
-					    <a class="nav-link ${tab == null || tab == 'tab1' ? 'active' : ''}" href="/admin/sellManage.do?searchword=${searchword }&searchfield=${searchfield}&tab=tab1">결제 승인</a>
+					    <a class="nav-link ${tab == null || tab == 'tab1' ? 'active' : ''}" href="/admin/sellManage.do?searchword=&searchfield=&tab=tab1">결제 승인</a>
 					</li>
 					<li class="nav-item">
-					    <a class="nav-link ${tab == 'tab2' ? 'active' : ''}"  href="/admin/sellManage.do?searchword=${searchword }&searchfield=${searchfield}&tab=tab2">배송 준비</a>
+					    <a class="nav-link ${tab == 'tab2' ? 'active' : ''}"  href="/admin/sellManage.do?searchword=&searchfield=&tab=tab2">배송 준비</a>
 					</li>
 					<li class="nav-item">
-					    <a class="nav-link ${tab == 'tab3' ? 'active' : ''}"  href="/admin/sellManage.do?searchword=${searchword }&searchfield=${searchfield}&tab=tab3">배송중</a>
+					    <a class="nav-link ${tab == 'tab3' ? 'active' : ''}"  href="/admin/sellManage.do?searchword=&searchfield=&tab=tab3">배송중</a>
 					</li>
 					<li class="nav-item">
-					    <a class="nav-link ${tab == 'tab4' ? 'active' : ''}"  href="/admin/sellManage.do?searchword=${searchword }&searchfield=${searchfield}&tab=tab4">판매내역</a>
+					    <a class="nav-link ${tab == 'tab4' ? 'active' : ''}"  href="/admin/sellManage.do?searchword=&searchfield=&tab=tab4">판매내역</a>
 					</li>
 					<li class="nav-item">
-					    <a class="nav-link ${tab == 'tab5' ? 'active' : ''}"  href="/admin/sellManage.do?searchword=${searchword }&searchfield=${searchfield}&tab=tab5">전체보기</a>
+					    <a class="nav-link ${tab == 'tab5' ? 'active' : ''}"  href="/admin/sellManage.do?searchword=&searchfield=&tab=tab5">전체보기</a>
 					</li>
 				</ul>
 			</div>

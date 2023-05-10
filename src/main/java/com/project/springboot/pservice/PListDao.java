@@ -46,7 +46,7 @@ public interface PListDao {
 	public List<aboardDTO> getNoticeDao();
 	
 	// 상품 상세 장바구니 체크
-	public String bascketCheckDao(String u_id);
+	public String bascketCheckDao(String u_id, int p_num);
 	
 	public List<cboardDTO> getBoardDao();
 }

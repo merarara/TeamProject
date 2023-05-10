@@ -107,7 +107,7 @@ public class ProductController {
 	    UserDTO udto = udao.selectOne(u_id);
 	    String bchk = pldao.buyCheck(p_num, u_id);
 	    
-	    String bascketCheck = pldao.bascketCheck(u_id);
+	    String bascketCheck = pldao.bascketCheck(u_id, p_num);
 	    
 	    System.out.println(bascketCheck);
 	    

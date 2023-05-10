@@ -43,7 +43,7 @@ public interface IPListDaoService {
 	public List<aboardDTO> getNotice();
 	
 	// 상품상세 장바구니 체크
-	public String bascketCheck(String u_id);
+	public String bascketCheck(String u_id, int p_num);
 	
 	// 홈화면 커뮤니티
 	public List<cboardDTO> getBoard();

@@ -99,11 +99,12 @@ public class PListDaoService implements IPListDaoService {
 	
 	// 상품 상세 장바구니 체크
 	@Override
-	public String bascketCheck(String u_id) {
-		String bascketChk = dao.bascketCheckDao(u_id);
+	public String bascketCheck(String u_id, int p_num) {
+		String bascketChk = dao.bascketCheckDao(u_id, p_num);
 		return bascketChk;
 	}
 	
+	// 홈 커뮤니티 가져오기
 	@Override
 	public List<cboardDTO> getBoard() {
 		List<cboardDTO> clist = dao.getBoardDao();
