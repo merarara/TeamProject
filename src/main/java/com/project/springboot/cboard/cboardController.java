@@ -115,14 +115,13 @@ public class cboardController {
 		String u_id = authentication.getName();
 		
 		int result = asv.insert(cboardDto); 
-		
+		int c_num = asv.uploadnum(cboardDto);
 		if (!user_file[0].isEmpty()) {
 			if (multipartResolver.isMultipart(req)) {
 		        MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
 		      //파일외 폼값을 받는다. MultipartHttpServletRequest객체를 사용.	
 		        
-		        int c_num = asv.uploadnum(cboardDto);
-		        System.out.println(c_num);
+		        
 				String title = req.getParameter("title");
 				System.out.println("제목:"+ title);
 				

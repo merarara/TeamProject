@@ -122,14 +122,31 @@ public class ReplyController {
 	
 	// 댓글 수정
 	@RequestMapping(value = "/cboard/replymodify", method = RequestMethod.POST)
-	public String postModify(ReplyVO vo, @RequestParam("c_num") int c_num) throws Exception {
-
-		replyService.modify(vo);
-		 
-		return "redirect:/cboard/cboardview.do?c_num=" + c_num;
+	public String postModify(@RequestParam("c_num") int c_num, @RequestParam("c_rno") int c_rno, ReplyVO vo) throws Exception {
+	    vo.setC_Num(c_num);
+	    vo.setC_Rno(c_rno);// 댓글이 속한 게시글 번호를 설정
+	    replyService.modify(vo);
+	    return "redirect:/cboard/cboardview.do?c_num=" + c_num;
 	}
+
+
+
 	
 	
 	// 댓글 삭제
+	@RequestMapping(value = "/cboard/replydelete", method = RequestMethod.GET)
+	public String postDelete(ReplyVO vo, @RequestParam("c_num") int c_num, @RequestParam("c_rno") int c_rno) throws Exception {
+		vo.setC_Num(c_num);
+		vo.setC_Rno(c_rno);
+		int result = replyService.delete(c_num, c_rno);
+	    if (result == 1) {
+	        System.out.println("삭제되었습니다.");
+	    }
+		replyService.delete(vo);
+	    return "redirect:/cboard/cboardview.do?c_num=" + c_num;
+	}
 	
+	
+
+
 }

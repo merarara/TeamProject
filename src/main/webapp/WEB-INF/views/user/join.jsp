@@ -178,7 +178,7 @@ function validateForm() {
     var u_addr1 = document.getElementById("adress01").value;
 
     if (!inputId || inputId.length < 4 || !inputPw || inputPw.length < 12 || !inputName || !inputNick || !inputPhone1 || !inputPhone2 || !inputPhone3 || !email1 || !email2 || !u_zip || !u_addr1) {
-      alert("아이디는 4글자 이상, 비밀번호는 12자 이상으로 입력해주세요. 모든 항목은 필수 입력사항입니다.");
+      alert("아이디는 4글자 이상, 비밀번호는 12자 이상으로 입력해주세요.\n 모든 항목은 필수 입력사항입니다.");
       return false;
     }
     

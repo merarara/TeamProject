@@ -104,7 +104,7 @@ $(document).ready(function() {
     </div>
   </div>
 </div>
-<s:authorize access="hasRole('USER')">
+<s:authorize access="hasAnyRole('USER'),('BLACKLIST')">
   <div class="btn-group d-flex justify-content-center">
     <form id="like-form" action="/cboard/like.do?c_num=${cboardDto.c_num}" method="post">
       <button id="like-button" type="submit" class="btn btn-primary mx-auto"><i class="far fa-heart"></i> 좋아요</button>
@@ -116,8 +116,10 @@ $(document).ready(function() {
 </s:authorize>
 	<div class="btn-group d-flex justify-content-center">
 	  <div class="col-sm-3">
+	  <s:authorize access="hasAnyRole('USER'),('BLACKLIST')">
 	    <button class="btn btn-primary mx-auto" type="button" onclick="location.href='/cboard/cboardedit.do?c_num=${cboardDto.c_num}';">수정하기</button>
 	    <button class="btn btn-danger mx-auto" type="button" onclick="location.href='/cboard/cboarddelete.do?c_num=${cboardDto.c_num}';">삭제하기</button>
+	    </s:authorize>
 	    <button class="btn btn-secondary mx-auto" type="button" onclick="location.href='/cboard/cboardlist.do';">목록 바로가기</button>
 	  </div>
 	</div>
@@ -132,7 +134,9 @@ $(document).ready(function() {
               <textarea class="form-control" rows="5" cols="50" name="c_content"></textarea>
             </div>
             <input type="hidden" name="c_num" value="${cboardDto.c_num}" /> <!-- 게시물 번호 -->
+            <s:authorize access="hasAnyRole('USER'),('BLACKLIST')">
             <button type="submit" class="btn btn-primary">댓글 작성</button>
+            </s:authorize>
           </form>
         </div>
       </div>
@@ -148,8 +152,10 @@ $(document).ready(function() {
 		            </div>
 		            <p class="mb-1">${reply.c_content }</p>
 		            <div class="d-flex justify-content-end">
+		            <s:authorize access="hasAnyRole('USER'),('BLACKLIST')">
 		              <a class="btn btn-sm btn-outline-secondary" href="/cboard/replymodify?c_num=${cboardDto.c_num}&c_rno=${reply.c_rno}">수정</a>
 		              <a class="btn btn-sm btn-outline-danger" href="/cboard/replydelete?c_num=${cboardDto.c_num}&c_rno=${reply.c_rno}">삭제</a>
+		               </s:authorize>
 		            </div>
 		          </li>
 		        </c:forEach>

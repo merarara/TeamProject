@@ -72,14 +72,14 @@
 			      프로필
 			    </a>
 			    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-				<c:choose>
-				    <c:when test="${sessionScope.userType == '일반'}">
-				        <h6 class="dropdown-header">${sessionScope.u_nick}님</h6>
-				    </c:when>
-				    <c:otherwise>
-				        <h6 class="dropdown-header">${sessionScope.user.name}님</h6>
-				    </c:otherwise>
-				</c:choose>
+			      <c:choose>
+			        <c:when test="${sessionScope.userType == '일반'}">
+			          <h6 class="dropdown-header"><span class="badge badge-danger">B</span>${sessionScope.u_nick}님</h6>
+			        </c:when>
+			        <c:otherwise>
+			          <h6 class="dropdown-header"><span class="badge badge-danger">B</span>${sessionScope.user.name}님</h6>
+			        </c:otherwise>
+			      </c:choose>
 			      <a class="dropdown-item" href="${pageContext.request.contextPath}/user/myinfo.do">내 정보</a>
 			      <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">로그아웃</a>
 			    </div>
