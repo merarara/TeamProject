@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.project.springboot.afbService.IACommentService;
 import com.project.springboot.afbService.IAboardService;
@@ -181,15 +180,14 @@ public class AboardController {
 	    model.addAttribute("udto", udto);
 	    model.addAttribute("aboardDto", dto);
 	    
+	    List<AupDTO> aupDto = asv.uploadview(Integer.parseInt(a_num));
+	    
 	    List<ACommentDTO> acList = acs.selectAnum(a_num);
 	    model.addAttribute("acList", acList);
-	    
-	    List<AupDTO> aupDto = asv.uploadview(Integer.parseInt(a_num));
 	    
 	    for (AupDTO e: aupDto) {
 	    	System.out.println(e.getSfile());
 	    }
-	    
 	    
 	    model.addAttribute("aupDto", aupDto);
 	    List<String> aup = new ArrayList<String>();
@@ -228,7 +226,7 @@ public class AboardController {
 		String a_num = req.getParameter("a_num");
 	    aboardDTO dto = asv.selectOneA(a_num);
 	    model.addAttribute("udto", udto);
-	    // 게시물 번호를 통해 게시물 정보를 조회하여 fboardDto에 담아줌
+	    // 게시물 번호를 통해 게시물 정보를 조회하여 aboardDto에 담아줌
 	    model.addAttribute("aboardDto", dto);
 	    
 	    List<AupDTO> aupDto = asv.uploadview(Integer.parseInt(a_num));
@@ -262,15 +260,12 @@ public class AboardController {
 	public String aboard7(aboardDTO aboardDto, MultipartFile[] user_file, 
 			Model model, 
 			MultipartHttpServletRequest req, HttpServletRequest request) {
-		int a_num = Integer.parseInt(req.getParameter("a_num"));
-		aboardDto = asv.selectOneA(String.valueOf(a_num));
-		
+		int result = asv.updateA(aboardDto); 
 		
 		if (!user_file[0].isEmpty()) {
 			if (multipartResolver.isMultipart(req)) {
 			    MultipartHttpServletRequest multipartRequest = multipartResolver.resolveMultipart(req);
 			    //파일외 폼값을 받는다. MultipartHttpServletRequest객체를 사용.	
-			    a_num = asv.uploadnum(aboardDto);
 			    String title = req.getParameter("title");
 			    System.out.println("제목:"+ title);
 			    //파일을 처리한다. 
@@ -300,7 +295,7 @@ public class AboardController {
 			        }
 			        
 			        AupDTO aupDto = new AupDTO();
-			        aupDto.setA_num(a_num);
+			        aupDto.setA_num(aboardDto.getA_num());
 			        aupDto.setOfile(originalName);
 			        aupDto.setSfile(savedName);
 			        
@@ -316,7 +311,7 @@ public class AboardController {
 		if (files != null && files.length > 0) { // 체크된 첨부파일이 있을 경우
 		    for (String f : files) {
 		        String sfile = req.getParameter("sfile");
-		        List<AupDTO> fileList = asv.uploadview(a_num);
+		        List<AupDTO> fileList = asv.uploadview(aboardDto.getA_num());
 		        AupDTO file = null;
 		        if (fileList != null && !fileList.isEmpty()) {
 		            file = fileList.get(0);
@@ -337,17 +332,17 @@ public class AboardController {
 		        	
 		        }
 		        // 파일 정보를 DB에서 삭제합니다.
-		        asv.deleteFile(a_num, f);
+		        asv.deleteFile(aboardDto.getA_num(), f);
 		        }
 		    }
 		}
-		int result = asv.updateA(aboardDto); 
+		
 		if(result==1) {
 			
 			System.out.println("수정되었습니다."); 
 		}
 		
-		return "redirect:/aboard/aboardedit.do?a_num=" + aboardDto.getA_num(); 
+		return "redirect:/aboard/aboardview.do?a_num=" + aboardDto.getA_num(); 
 	} 
 	
 	// 공지사항 게시글 삭제 기능
@@ -405,8 +400,39 @@ public class AboardController {
 	    }
 	}
 	
+	// 첨부파일 삭제 요청 처리
+	@RequestMapping(value="/aboard/deleteFiles.do", method=RequestMethod.POST)
+	public @ResponseBody String deleteFiles(@RequestParam("a_num") int a_num, 
+	                                        @RequestParam(value="files[]") List<String> files,
+	                                        HttpServletRequest req) {
+	    for (String f : files) {
+	        String sfile = req.getParameter("sfile");
+	        List<AupDTO> fileList = asv.uploadview(a_num);
+	        AupDTO file = null;
+	        if (fileList != null && !fileList.isEmpty()) {
+	            file = fileList.get(0);
+	        }
+	        if (file != null) {
+	            // 파일 경로를 가져옵니다.
+	            try {
+	                String filePath = ResourceUtils.getFile("classpath:static/aUpload").toPath().toString();
+	                // 파일을 삭제합니다.
+	                File deleteFile = new File(filePath, file.getSfile());
+	                if (deleteFile.exists()) {
+	                    deleteFile.delete();
+	                }
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	            // 파일 정보를 DB에서 삭제합니다.
+	            asv.deleteFile(a_num, f);
+	        }
+	    }
+	    return "success";
+	}
+	
 	// 좋아요 기능
-	@PostMapping("/aboard/like.do")
+	/*@PostMapping("/aboard/like.do")
 	public String addLike(HttpServletRequest req, HttpSession session) {
 	    int a_num = Integer.parseInt(req.getParameter("a_num"));
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -424,10 +450,34 @@ public class AboardController {
 	    
 	    int a_like = asv.getLikeCount(a_num);
 	    return "redirect:/aboard/aboardview.do?a_num=" + a_num;
+	}*/
+	
+	@PostMapping("/aboard/like.do")
+	@ResponseBody
+	public Map<String, Object> addLike(HttpServletRequest req, HttpSession session) {
+	    Map<String, Object> result = new HashMap<>();
+	    int a_num = Integer.parseInt(req.getParameter("a_num"));
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String u_id = authentication.getName();
+
+	    if (u_id == null) {
+	        result.put("error", "로그인이 필요합니다.");
+	        return result;
+	    }
+
+	    try {
+	        asv.addLike(a_num, u_id);
+	    } catch (DuplicateKeyException e) {
+	        // 이미 좋아요가 추가된 경우, 무시하고 계속 진행합니다.
+	    }
+
+	    int a_like = asv.getLikeCount(a_num);
+	    result.put("like_count", a_like);
+	    return result;
 	}
-	 
+	
 	// 싫어요 기능
-	@PostMapping("/aboard/unlike.do")
+	/*@PostMapping("/aboard/unlike.do")
 	public String removeLike(HttpServletRequest req, HttpSession session) {
 		int a_num = Integer.parseInt(req.getParameter("a_num"));
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -442,17 +492,37 @@ public class AboardController {
 	        int a_like = asv.getLikeCount(a_num);
 	        return "redirect:/aboard/aboardview.do?a_num=" + a_num;
 	    }
+	}*/
+	
+	@ResponseBody
+	@PostMapping("/aboard/unlike.do")
+	public Map<String, Object> removeLike(HttpServletRequest req, HttpSession session) {
+	    Map<String, Object> result = new HashMap<>();
+	    int a_num = Integer.parseInt(req.getParameter("a_num"));
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String u_id = authentication.getName();
+
+	    if (u_id == null) {
+	        result.put("status", "error");
+	        result.put("message", "로그인이 필요합니다.");
+	        return result;
+	    }
+
+	    asv.removeLike(a_num, u_id);
+	    int a_like = asv.getLikeCount(a_num);
+	    result.put("status", "success");
+	    result.put("like_count", a_like);  // 감소된 좋아요 수 반환
+	    return result;
 	}
 	
-	@PostMapping("/aboard/checkLike.do")
+	@GetMapping("/aboard/getLikeCount.do")
 	@ResponseBody
-	public boolean checkLike(HttpServletRequest request, HttpServletResponse response) throws Exception {
-	    int a_num = Integer.parseInt(request.getParameter("a_num"));
-	    String u_id = (String) request.getSession().getAttribute("userId");
-
-	    boolean result = asv.checkLike(a_num, u_id);
-
-	    return result;
+	public Map<String, Object> getLikeCountAjax(HttpServletRequest req) {
+	    Map<String, Object> map = new HashMap<>();
+	    int a_num = Integer.parseInt(req.getParameter("a_num"));
+	    int a_like = asv.getLikeCount(a_num);
+	    map.put("like_count", a_like);
+	    return map;
 	}
 	
 }
