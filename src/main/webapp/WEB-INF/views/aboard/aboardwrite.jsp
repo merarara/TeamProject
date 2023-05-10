@@ -11,6 +11,19 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
+<script>
+function validateForm() {
+    var a_title = document.getElementById("a_title").value;
+    var a_content = document.getElementById("a_content").value;
+
+    if (!a_title || !a_content) {
+      alert("제목 및 내용을 입력해주세요.");
+      return false;
+    }
+    
+    return true;
+  }
+</script>
 </head>
 <body>
 
@@ -18,7 +31,7 @@
 <div id="content">
 
 <h2>공지사항 게시판 - 글쓰기(write)</h2>
-<form action="/aboard/aboardwrite.do" method="post" modelAttribute="aboardDto" enctype="multipart/form-data" class="p-4">
+<form action="/aboard/aboardwrite.do" method="post" modelAttribute="aboardDto" enctype="multipart/form-data" class="p-4" onsubmit="return validateForm()">
   <!-- 게시물 수정을 위한 일련번호 -->	
   <input type="hid_den" name="u_id" value="${ udto.u_id }"/>
 

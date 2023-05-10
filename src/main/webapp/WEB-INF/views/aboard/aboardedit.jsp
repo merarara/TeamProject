@@ -11,6 +11,34 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+var urlParams = new URLSearchParams(window.location.search);
+var a_num = urlParams.get('a_num');
+
+function deleteSelectedFiles() {
+    var files = $("input:checkbox[name='file']:checked").map(function() {
+        return this.value;
+    }).get();
+    if (files.length == 0) {
+        alert("삭제할 파일을 선택해주세요.");
+        return;
+    }
+    $.ajax({
+        type: "POST",
+        url: "/aboard/deleteFiles.do?a_num=" + a_num,
+        data: {a_num: a_num, files: files},
+        success: function(response) {
+            alert("파일이 삭제되었습니다.");
+            window.location.reload();
+        },
+        error: function(xhr, status, error) {
+            alert("서버 통신 중 에러가 발생했습니다.");
+            console.log(xhr.responseText);
+        }
+    });
+}
+</script>
 </head>
 <body>
 <%@ include file="../header.jsp" %>	
@@ -57,6 +85,7 @@
                                     <td>${file.ofile}</td>
                                 </tr>
                             </c:forEach>
+                            <button type="button" class="btn btn-danger" onclick="deleteSelectedFiles()">선택한 파일 삭제</button>
                         </tbody>
                     </table>
                 </div>
