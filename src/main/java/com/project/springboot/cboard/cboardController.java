@@ -122,6 +122,7 @@ public class cboardController {
 		      //파일외 폼값을 받는다. MultipartHttpServletRequest객체를 사용.	
 		        
 		        int c_num = asv.uploadnum(cboardDto);
+		        System.out.println(c_num);
 				String title = req.getParameter("title");
 				System.out.println("제목:"+ title);
 				

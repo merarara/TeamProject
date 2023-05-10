@@ -110,8 +110,7 @@
 	<select id="uploadnum" parameterType="com.project.springboot.cboard.cboardDTO" resultType="int">
 		select c_num from c_board
  			where u_id = #{u_id}
-   			and rownum = 1
-		order by c_num desc
+   			and rownum = 1 order by c_num desc
 	</select>
 	
 	<select id="uploadview" parameterType="int" resultType="com.project.springboot.cboard.upDTO">
