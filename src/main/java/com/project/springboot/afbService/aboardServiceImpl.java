@@ -166,4 +166,10 @@ public class aboardServiceImpl implements IAboardService {
 	public int selectLikeCount(int a_num, String u_id) {
 	    return abs.selectLikeCount(a_num, u_id);
 	}
+	
+	@Override
+	public String alCheck(String a_num, String u_id) {
+		String alCheck = abs.alCheck(a_num, u_id); 
+		return  alCheck;
+	}
 }
