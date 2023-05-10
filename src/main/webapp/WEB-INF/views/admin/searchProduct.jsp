@@ -5,46 +5,47 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>재고 검색</title>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 <style>
+/* 재고 목록 스타일링 */
 .list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  	list-style: none;
+  	margin: 0;
+  	padding: 0;
 }
 
 .list-item {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
+  	border: 1px solid #ccc;
+  	border-radius: 5px;
+  	padding: 10px;
+  	margin-bottom: 10px;
 }
 
 .list-item h3 {
-  margin-top: 0;
-  font-size: 20px;
-  cursor: pointer;
+  	margin-top: 0;
+  	font-size: 20px;
+  	cursor: pointer;
 }
 
 .list-item p {
-  margin: 0;
+  	margin: 0;
 }
 
 .barcodes {
-  display: none;
+  	display: none;
 }
 
 .barcodes ul {
-  margin: 0;
-  padding: 0;
+  	margin: 0;
+  	padding: 0;
 }
 
 .barcodes li {
-  list-style-type: none;
+  	list-style-type: none;
 }
 </style>
 <script>
@@ -163,9 +164,9 @@ function goToAdminPage() {
 	      		<div class="barcodes">
 	      			재고: <span id="count_${i.p_num}">${i.p_count}</span>
 	      			<br>
-					  <label for="barcode" style="font-size: 11px; color: #ccc">※ 등록하실 바코드 번호를 입력해주세요</label><br>
-					  <input type="text" class="form-control" id="barcode_${i.p_num }" placeholder="바코드 번호를 입력해주세요" style="width: 250px; display: inline-block;">
-					  <button type="button" class="btn btn-outline-primary" onclick="doAddCnt('${i.p_num}')">등록</button>
+				  	<label for="barcode" style="font-size: 11px; color: #ccc">※ 등록하실 바코드 번호를 입력해주세요</label><br>
+				  	<input type="text" class="form-control" id="barcode_${i.p_num }" placeholder="바코드 번호를 입력해주세요" style="width: 250px; display: inline-block;">
+				  	<button type="button" class="btn btn-outline-primary" onclick="doAddCnt('${i.p_num}')">등록</button>
 			  		<table class="table" style="margin-top: 10px; margin-bottom: 10px;">
 			    		<thead>
 			      			<tr>

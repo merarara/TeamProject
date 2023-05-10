@@ -142,4 +142,47 @@
 		   set p_scount = p_scount + 1
 		 where p_num = #{param1}
 	</update>
+	
+	<!-- 홈 화면 상품 이미지 선출 -->
+	<select id="homeProductDao" resultType="com.project.springboot.productdto.ProductlistDTO">
+		SELECT p_num, p_name, p_price, p_rating, p_listimg
+		FROM (
+		  SELECT p_num, p_name, p_price, p_listimg, p_rating, p_scount,
+		    AVG(p_rating) OVER () AS avg_rating,
+		    AVG(p_scount) OVER () AS avg_scount
+		   FROM product_list
+		  WHERE p_scount != 0
+            AND p_rating != 0
+		)
+		WHERE p_rating <![CDATA[>=]]> (SELECT AVG(p_rating) FROM product_list)
+		  AND p_scount <![CDATA[>=]]> (SELECT AVG(p_scount) FROM product_list)
+		  AND ROWNUM <![CDATA[<=]]> 3
+		ORDER BY (p_rating + p_scount) DESC
+	</select>
+	
+	<!-- 홈 화면 공지사항 선출 -->
+	<select id="getNoticeDao" resultType="com.project.springboot.aboard.aboardDTO">
+		SELECT * 
+		  FROM (
+		    SELECT * FROM a_board
+		             ORDER BY a_like DESC
+		        )
+		WHERE rownum <![CDATA[<=]]> 3
+	</select>
+	
+	<!-- 홈 화면 커뮤니티 선출 -->
+	<select id="getBoardDao" resultType="com.project.springboot.cboard.cboardDTO">
+		SELECT * 
+		  FROM (
+		    SELECT * FROM c_board
+		             ORDER BY c_like DESC
+		        )
+		WHERE rownum <![CDATA[<=]]> 3
+	</select> 
+	
+	<!-- 장바구니 체크 -->
+	<select id="bascketCheckDao" resultType="String">
+		SELECT DISTINCT u_id FROM p_bascket
+		 WHERE u_id = #{param1}
+	</select>
 </mapper>

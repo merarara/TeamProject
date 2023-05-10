@@ -57,12 +57,6 @@ public class UserController {
 		return "/user/myinfo";
 	}
 	
-	// 홈으로 이동하는 맵핑
-	@RequestMapping("/home.do")
-	public String home(Model model, HttpSession session) {
-		return "home";
-	}
-	
 	// 회원가입 맵핑
 	@RequestMapping("/user/join.do")
 	public String join() {

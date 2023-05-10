@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>상품 상세 정보</title>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -40,7 +40,7 @@ $(document).ready(function() {
      	// 해당 요소의 위치로 스크롤 이동
         var offset = $(target).offset().top;
         $('html, body').animate({scrollTop: offset}, 500);
-   });
+   	});
     
    	$("#displayList").hide();
 	$('#searchword').on('keyup', function() {
@@ -189,6 +189,16 @@ function doAddBascket() {
 		return false;
 	}
 	
+	if('${bascketCheck}' != null && '${bascketCheck}' != '') {
+		alert('이미 장바구니에 추가된 상품입니다.');
+		if (confirm('장바구니를 확인하러 가시겠습니까?')) {
+			location.href = '/product/productbascket.do';
+		} else {
+			return false;			
+		}
+		return false;
+	}
+	
 	if(confirm('장바구니에 담으시겠습니까?')) {
 		$.ajax({
 			type: 'POST',
@@ -207,6 +217,8 @@ function doAddBascket() {
 				if (data.status === 'success') {
 					if (confirm('장바구니에 성공적으로 추가되었습니다. 장바구니 페이지로 이동하시겠습니까?')) {
 						location.href = "/product/productbascket.do";
+					} else {
+						location.reload();
 					}
 				} else {
 					alert('장바구니 추가에 실패하였습니다.');
