@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.project.springboot.aboard.aboardDTO;
+import com.project.springboot.cboard.cboardDTO;
 import com.project.springboot.productdto.PCountVO;
 import com.project.springboot.productdto.ProductinfoDTO;
 import com.project.springboot.productdto.ProductlistDTO;
@@ -46,4 +47,6 @@ public interface PListDao {
 	
 	// 상품 상세 장바구니 체크
 	public String bascketCheckDao(String u_id);
+	
+	public List<cboardDTO> getBoardDao();
 }

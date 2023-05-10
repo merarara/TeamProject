@@ -344,7 +344,19 @@ $(document).click(function(event) {
 	      		</div>
 	    	</div>
 	    	<div class="col-lg-6">
-	    		자유게시판
+	    		<div class="card">
+	        		<div class="card-body">
+	          			<h4 class="card-title text-center">커뮤니티</h4>
+	          			<ul class="list-group list-group-flush">
+	            		<c:forEach items="${clist}" var="c">
+	              			<li class="list-group-item py-2">
+	                			<a href="/aboard/aboardview.do?a_num=${c.c_num}">${c.c_title}</a>
+	                			<small class="text-muted float-right">${c.c_regdate}</small>
+	              			</li>
+	            		</c:forEach>
+	          			</ul>
+	        		</div>
+	      		</div>
 	    	</div>
 	  	</div>
 	</div>

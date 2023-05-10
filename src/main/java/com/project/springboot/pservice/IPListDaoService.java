@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.project.springboot.aboard.aboardDTO;
+import com.project.springboot.cboard.cboardDTO;
 import com.project.springboot.ppageinfo.PPageInfo;
 import com.project.springboot.productdto.PCountVO;
 import com.project.springboot.productdto.ProductinfoDTO;
@@ -43,4 +44,7 @@ public interface IPListDaoService {
 	
 	// 상품상세 장바구니 체크
 	public String bascketCheck(String u_id);
+	
+	// 홈화면 커뮤니티
+	public List<cboardDTO> getBoard();
 }

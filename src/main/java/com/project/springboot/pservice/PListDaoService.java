@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.project.springboot.aboard.aboardDTO;
+import com.project.springboot.cboard.cboardDTO;
 import com.project.springboot.ppageinfo.PPageInfo;
 import com.project.springboot.productdto.PCountVO;
 import com.project.springboot.productdto.ProductinfoDTO;
@@ -101,6 +102,12 @@ public class PListDaoService implements IPListDaoService {
 	public String bascketCheck(String u_id) {
 		String bascketChk = dao.bascketCheckDao(u_id);
 		return bascketChk;
+	}
+	
+	@Override
+	public List<cboardDTO> getBoard() {
+		List<cboardDTO> clist = dao.getBoardDao();
+		return clist;
 	}
 	
 	// 페이지 설정 service & dao

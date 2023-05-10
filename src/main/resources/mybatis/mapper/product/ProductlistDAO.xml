@@ -162,10 +162,23 @@
 	
 	<!-- 홈 화면 공지사항 선출 -->
 	<select id="getNoticeDao" resultType="com.project.springboot.aboard.aboardDTO">
-		SELECT * FROM a_board
-		 WHERE rownum <![CDATA[<=]]> 3
-		 ORDER BY a_like
+		SELECT * 
+		  FROM (
+		    SELECT * FROM a_board
+		             ORDER BY a_like DESC
+		        )
+		WHERE rownum <![CDATA[<=]]> 3
 	</select>
+	
+	<!-- 홈 화면 커뮤니티 선출 -->
+	<select id="getBoardDao" resultType="com.project.springboot.cboard.cboardDTO">
+		SELECT * 
+		  FROM (
+		    SELECT * FROM c_board
+		             ORDER BY c_like DESC
+		        )
+		WHERE rownum <![CDATA[<=]]> 3
+	</select> 
 	
 	<!-- 장바구니 체크 -->
 	<select id="bascketCheckDao" resultType="String">

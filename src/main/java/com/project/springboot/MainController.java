@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.project.springboot.aboard.aboardDTO;
+import com.project.springboot.cboard.cboardDTO;
 import com.project.springboot.productdto.ProductlistDTO;
 import com.project.springboot.pservice.IPListDaoService;
 
@@ -31,7 +32,9 @@ public class MainController {
 	public String goHome(Model model, HttpSession session) {
 		List<ProductlistDTO> plist = pldao.homeProduct();
 		List<aboardDTO> nlist = pldao.getNotice();
-		
+		List<cboardDTO> clist = pldao.getBoard();
+				
+		model.addAttribute("clist", clist);
 		model.addAttribute("plist", plist);
 		model.addAttribute("nlist", nlist);
 		
