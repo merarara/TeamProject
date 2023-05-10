@@ -23,6 +23,8 @@ public class MainController {
 	public String home() {
 		return "redirect:/home.do";
 	}
+	
+	
 
 	// 홈으로 이동하는 맵핑
 	@RequestMapping("/home.do")

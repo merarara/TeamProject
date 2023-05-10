@@ -13,20 +13,18 @@
 <link rel="stylesheet" type="text/css" href="/css/content.css">
 </head>
 <script type="text/javascript">
-	/* 패스워드 검증을 통해 수정페이지로 진입하므로 해당 페이지에서는
-	추가로 패스워드를 입력하지 않는다. */
-    function validateForm(form) {
-        if (form.title.value == "") {
-            alert("제목을 입력하세요.");
-            form.title.focus();
-            return false;
-        }
-        if (form.content.value == "") {
-            alert("내용을 입력하세요.");
-            form.content.focus();
-            return false;
-        }
+function validateForm() {
+    var f_title = document.getElementById("f_title").value;
+    var f_content = document.getElementById("f_content").value;
+
+    if (!f_title || !f_content) {
+      alert("제목 및 내용을 입력해주세요.");
+      return false;
     }
+    
+    return true;
+  }
+ 
 </script>
 <body>
 
@@ -35,7 +33,7 @@
 
 <div class="container">
   <h2 class="text-center">FAQ게시판 - 글쓰기(write)</h2>
-  <form action="/fboard/fboardwrite.do" method="post" enctype="multipart/form-data">
+  <form action="/fboard/fboardwrite.do" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
     <!-- 게시물 수정을 위한 일련번호 -->	
     <input type="hidden" name="u_id" value="${ udto.u_id }">
     <div class="form-group row">

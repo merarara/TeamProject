@@ -46,6 +46,7 @@ public interface aboardService {
 	public int deleteFileAll(String a_num);
 	public int deleteAcAll(String a_num);
 
-	public boolean checkLike(int a_num, String u_id);
+	public String checkLike(String a_num, String u_id);
 	int selectLikeCount(@Param("a_num") int a_num, @Param("u_id") String u_id);
+	public String alCheck(String a_num, String u_id);
 }

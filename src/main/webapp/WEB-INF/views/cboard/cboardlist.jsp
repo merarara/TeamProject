@@ -16,7 +16,7 @@
 <%@ include file="../header.jsp" %>
 <!-- 게시판 영역 -->
 <div class="container py-5 text-center">
-  <h2>파일 첨부형 게시판 - 목록 보기(List)</h2>
+  <h2>❀커뮤니티 게시판❀</h2>
   <!-- 목록 테이블 -->
   <div class="table-responsive overflow-x-auto">
     <table class="table table-striped table-bordered" style="width: 1110px; border-left: transparent; border-right: transparent;">

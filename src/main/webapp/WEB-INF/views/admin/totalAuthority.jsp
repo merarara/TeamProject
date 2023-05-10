@@ -67,7 +67,7 @@ body {
 <div>
 	<a href="/admin/userManagement.do" class="back">뒤로가기</a>
 </div>
-	<h1>회원 권환 수정</h1>
+	<h1>회원 권한 수정</h1>
  <form id="blacklistForm" action="/updateAuthority" method="post">
    <label for="u_id">아이디:</label>
    <input type="text" name="u_id" id="u_id">

@@ -41,8 +41,8 @@
 	<insert id="insert" parameterType="com.project.springboot.cboard.cboardDTO"> 
 	
 	insert into
-			c_board(u_id, u_nick, c_title, c_content)
-				values(#{u_id}, #{u_nick}, #{c_title}, #{c_content})
+			c_board(c_num, u_id, u_nick, c_title, c_content)
+				values(c_num_seq.NEXTVAL, #{u_id}, #{u_nick}, #{c_title}, #{c_content})
 	</insert>
 
 	
@@ -68,18 +68,24 @@
 	
 	<!-- 조회수 증가 -->
 	<update id="updateVisitCount" parameterType="java.lang.String">
-    UPDATE c_board SET c_visitcount=c_visitcount+1 WHERE c_num=#{c_num}
+    UPDATE c_board SET c_visitcount=c_visitcount+1 WHERE c_num=#{c_num, jdbcType=INTEGER}
 	</update>
+	
+	<!-- 좋아요 증가 -->
+<update id="addlike" parameterType="java.lang.Integer">
+  UPDATE c_board SET c_like = c_like + 1 WHERE c_num = #{c_num, jdbcType=INTEGER}
+</update>
+
+<!-- 좋아요 감소 -->
+<update id="minlike" parameterType="java.lang.Integer">
+  UPDATE c_board SET c_like = c_like - 1 WHERE c_num = #{c_num, jdbcType=INTEGER}
+</update>
+
 	
 	<!-- 좋아요 추가 -->
 <insert id="insertLike" parameterType="map">
   INSERT INTO c_board_like (c_num, u_id) VALUES (#{c_num}, #{u_id})
 </insert>
-
-<!-- 좋아요 삭제 -->
-<delete id="removeLike" parameterType="map">
-  DELETE FROM c_board_like WHERE c_num = #{c_num} AND u_id = #{u_id}
-</delete>
 
 <!-- 좋아요 수 조회 -->
 <select id="getLikeCount" resultType="int" parameterType="int">
@@ -94,6 +100,7 @@
   )
 </select>
 
+<update id=""></update>
 
 	<insert id="upload" parameterType="com.project.springboot.cboard.upDTO">
 		insert into up (c_num, ofile, sfile)
@@ -103,8 +110,7 @@
 	<select id="uploadnum" parameterType="com.project.springboot.cboard.cboardDTO" resultType="int">
 		select c_num from c_board
  			where u_id = #{u_id}
-   			and rownum = 1
-		order by c_num desc
+   			and rownum = 1 order by c_num desc
 	</select>
 	
 	<select id="uploadview" parameterType="int" resultType="com.project.springboot.cboard.upDTO">

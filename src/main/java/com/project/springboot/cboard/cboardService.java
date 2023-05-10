@@ -27,10 +27,10 @@ public interface cboardService {
 	
 	// 조회수 증가
 	public void updateVisitCount(String c_num);
-	// 좋아요 증가
+	// 좋아요
 	public int insertLike(@Param("c_num") int c_num, @Param("u_id") String u_id);
-	public int deleteLike(@Param("c_num") int c_num, @Param("u_id") String u_id);
-	
+	public int addlike(int c_like);
+	public int minlike(int c_like);
 	// 좋아요 수 가져오기
 	public int getLikeCount(@Param("c_num") int c_num);
 	
@@ -43,10 +43,10 @@ public interface cboardService {
 	
 	public List<upDTO> getUploadList(int c_num);
 	public void updateCBoard(cboardDTO cboardDto);
-	public cboardDTO selectOne(int getc_num);
 	
 	public int deleteFile(@Param("c_num") int c_num, @Param("sfile") String sfile);
 	public int deleteFileAll(String c_num);
 	public int deleteAll(String c_num);
-
+	int selectLikeCount(@Param("c_num") int c_num, @Param("u_id") String u_id);
+	public cboardDTO selectOne(int c_num);
 }
