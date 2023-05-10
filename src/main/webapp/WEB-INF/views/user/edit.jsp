@@ -191,8 +191,8 @@ function validateForm() {
                                         </select>
                                         <!-- 이메일 인증 버튼 -->
                                     </div>
-                                    <button type="button" class="btn-certi">인증하기</button>
-                        </div>
+                                   		<!--  <button type="button" class="btn-certi">인증하기</button> -->
+                        			</div>
                         <div class="address_wrap form_group">
                             <div class="address_input_wrap ">
                                 <label for="adress_num">우편번호</label>
