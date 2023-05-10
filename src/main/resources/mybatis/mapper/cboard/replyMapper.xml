@@ -19,13 +19,14 @@
 
 		
 	<!-- 댓글 수정 -->
-	<update id="replyModify" parameterType="com.project.springboot.cboard.ReplyVO">
-		update c_reply set
-			u_id = #{u_id, jdbcType=VARCHAR},
-			c_content = #{c_content}
-		where c_rno = #{c_rno}
-			and c_num = #{c_num}	
-	</update>
+<update id="replyModify" parameterType="com.project.springboot.cboard.ReplyVO">
+    update c_reply set
+        u_id = #{u_id, jdbcType=VARCHAR},
+        c_content = #{c_content}
+    where c_num = #{c_num}	
+        and c_rno = #{c_rno}
+</update>
+
 	
 	<!-- 댓글 삭제 -->
 	<delete id="replyDelete" parameterType="com.project.springboot.cboard.ReplyVO">

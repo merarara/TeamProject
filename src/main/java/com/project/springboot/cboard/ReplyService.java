@@ -21,4 +21,8 @@ public interface ReplyService {
 	public ReplyVO replySelect(ReplyVO vo) throws Exception;
 
 	public List<ReplyVO> list(String c_num);
+
+	public int delete(int c_num, int c_rno);
+
+
 }

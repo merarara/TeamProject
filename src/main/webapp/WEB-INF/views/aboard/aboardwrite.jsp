@@ -33,7 +33,7 @@ function validateForm() {
 <h2>공지사항 게시판 - 글쓰기(write)</h2>
 <form action="/aboard/aboardwrite.do" method="post" modelAttribute="aboardDto" enctype="multipart/form-data" class="p-4" onsubmit="return validateForm()">
   <!-- 게시물 수정을 위한 일련번호 -->	
-  <input type="hid_den" name="u_id" value="${ udto.u_id }"/>
+  <input type="hidden" name="u_id" value="${ udto.u_id }"/>
 
   <div class="form-group row">
     <label for="u_nick" class="col-sm-2 col-form-label">작성자</label>

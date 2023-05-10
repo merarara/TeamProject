@@ -19,4 +19,6 @@ public interface ReplyDAO {
 
 	// 단일 댓글 조회
 	public ReplyVO replySelect(ReplyVO vo) throws Exception;
+
+	public void delete(int c_num);
 }
